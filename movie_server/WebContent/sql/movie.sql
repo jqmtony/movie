@@ -1,131 +1,249 @@
-CREATE DATABASE movie	DEFAULT CHARACTER SET utf8;
-USE movie;
+/*
+Navicat MySQL Data Transfer
 
-/*管理员*/
-create table `admins`(
-	`adminId` int(11) NOT NULL AUTO_INCREMENT, /*ID*/
-	`adminRegisterCode` varchar(255),  /*注册码*/
-	`adminName` varchar(255),  /*姓名*/
-	`adminTel` varchar(255),	/*手机号*/
-	`adminAddr` varchar(255), /*地址*/
-	`adminCreateTime` datetime,  /*创建时间*/
-	`adminWeight` int(11),  /*权值*/
-	`adminEmail` varchar(255), /*邮箱地址*/
-	`adminPwd` varchar(255)  /*密码*/
-	PRIMARY KEY (`adminId`)
-)ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8;
+Source Server         : user
+Source Server Version : 50561
+Source Host           : localhost:3306
+Source Database       : movie
 
-/*管理员登录日志表*/
-create table `adminLoginRecord`(
-	`alrId` int(11) NOT NULL AUTO_INCREMENT, /*ID*/
-	`alrLoginTime` datetime,  /*登录时间*/
-	`alrLoginIp` varchar(255), /*登录IP*/
-	`alrAdminId` int(11),  /*管理员Id*/
-	`alrStatus` varchar(255) /*登录状态*/
-);
+Target Server Type    : MYSQL
+Target Server Version : 50561
+File Encoding         : 65001
 
-/*用户*/
-create table `users`(
-	`userId` int(11) NOT NULL AUTO_INCREMENT, /*ID*/
-	`userName` varchar(255),  /*姓名*/
-	`userEmail` varchar(255),  /*邮箱地址*/
-	`userPwd` varchar(255),  /*密码*/
-	`userCreateTime` datetime  /*创建时间*/
-);
+Date: 2018-11-25 15:32:55
+*/
 
-/*管理员登录日志表*/
-create table `userLoginRecord`(
-	`ulrId` int(11) NOT NULL AUTO_INCREMENT, /*ID*/
-	`ulrLoginTime` datetime,  /*登录时间*/
-	`ulrLoginIp` varchar(255), /*登录IP*/
-	`ulrAdminId` int(11),  /*管理员Id*/
-	`ulrStatus` varchar(255) /*登录状态*/
-);
+SET FOREIGN_KEY_CHECKS=0;
 
-/*商户表*/
-create table `merchant`(
-	`merId` int(11) NOT NULL AUTO_INCREMENT, /*ID*/
-	`merName` varchar(255),  /*姓名*/
-	`merCompanyId` int(11),  /*所在公司ID*/
-	`merDescribe` varchar(500)  /*商户描述*/
-);
+-- ----------------------------
+-- Table structure for `adminloginrecord`
+-- ----------------------------
+DROP TABLE IF EXISTS `adminloginrecord`;
+CREATE TABLE `adminloginrecord` (
+  `alrId` int(11) NOT NULL AUTO_INCREMENT,
+  `alrLoginTime` datetime DEFAULT NULL,
+  `alrLoginIp` varchar(255) DEFAULT NULL,
+  `alrAdminId` int(11) DEFAULT NULL,
+  `alrStatus` varchar(255) DEFAULT NULL,
+  PRIMARY KEY (`alrId`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
-/*电影公司表*/
-create table `companys`(
-	`companyId` int(11) NOT NULL AUTO_INCREMENT, /*ID*/
-	`companyNumberCard` varchar(255),  /*公司编号*/
-	`companyAddr` varchar(255),  /*公司地址*/
-	`companyPostcode` varchar(255), /*公司邮编*/
-	`companyCreateTime` datetime,  /*公司创建时间*/
-	`companyEmail` varchar(255),   /*公司邮箱*/
-	`companyDescribe` varchar(500)  /*公司描述*/
-);
+-- ----------------------------
+-- Records of adminloginrecord
+-- ----------------------------
 
-/*电影票*/
-create table `ticket`(
-	`ticketId` int(11) NOT NULL AUTO_INCREMENT, /*ID*/
-	`ticketMovieId` int(11),  /*对应电影的ID*/
-	`ticketStatus` varchar(255),  /*电影票的状态*/
-);
+-- ----------------------------
+-- Table structure for `admins`
+-- ----------------------------
+DROP TABLE IF EXISTS `admins`;
+CREATE TABLE `admins` (
+  `adminId` int(11) NOT NULL AUTO_INCREMENT,
+  `adminRegisterCode` varchar(255) DEFAULT NULL,
+  `adminName` varchar(255) DEFAULT NULL,
+  `adminTel` varchar(255) DEFAULT NULL,
+  `adminAddr` varchar(255) DEFAULT NULL,
+  `adminCreateTime` datetime DEFAULT NULL,
+  `adminWeight` int(11) DEFAULT NULL,
+  `adminEmail` varchar(255) DEFAULT NULL,
+  PRIMARY KEY (`adminId`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
-/*积分卡*/
-create table `integral`(
-	`integralId` int(11) NOT NULL AUTO_INCREMENT, /*ID*/
-	`integralUserId` int(11), /*对应用户ID*/
-	`integralCount` int(11),  /*积分数量*/
-	`integralGrade` int(11),  /*积分卡等级*/
-);
+-- ----------------------------
+-- Records of admins
+-- ----------------------------
 
-/*订单*/
-create table `indent`(
-	`indentId` int(11) NOT NULL AUTO_INCREMENT, /*ID*/
-	`indentUserId` int(11), /*对应用户ID*/
-	`indentTicketId` int(11),  /*对应电影票ID*/
-	`indentStatus` varchar(255)  /*订单状态*/
-);
+-- ----------------------------
+-- Table structure for `companys`
+-- ----------------------------
+DROP TABLE IF EXISTS `companys`;
+CREATE TABLE `companys` (
+  `companyId` int(11) NOT NULL AUTO_INCREMENT,
+  `companyNumberCard` varchar(255) DEFAULT NULL,
+  `companyAddr` varchar(255) DEFAULT NULL,
+  `companyPostcode` varchar(255) DEFAULT NULL,
+  `companyCreateTime` datetime DEFAULT NULL,
+  `companyEmail` varchar(255) DEFAULT NULL,
+  `companyDescribe` varchar(500) DEFAULT NULL,
+  PRIMARY KEY (`companyId`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
-/*管理员收到或发出的信息*/
-create table information(
-	int(11) informId,
-);
+-- ----------------------------
+-- Records of companys
+-- ----------------------------
 
-/*电影*/
-create table `movies`(
-	`movieId` int(11) NOT NULL AUTO_INCREMENT, /*ID*/
-	`movieMerId` int(11), /*所在商户ID*/
-	`movieIntegralNum` int(11), /*积分数*/、
-	`movieName` varchar(255),  /*电影名*/
-	`movieProId` varchar(255), /*主演ID*/
-	`movieGradeNum` int(11), /*评分数*/
-	`movieDescribe` varchar(500),  /*电影描述*/
-	`movieImgPath` varchar(500),  /*电影封面图片路径*/
-	`moviePath` varchar(500),  /*电影观看链接*/
-	`moviePrice` decimal(7,2)  /*价格*/
-);
+-- ----------------------------
+-- Table structure for `images`
+-- ----------------------------
+DROP TABLE IF EXISTS `images`;
+CREATE TABLE `images` (
+  `imgId` int(11) NOT NULL AUTO_INCREMENT,
+  `imgMovieId` int(11) DEFAULT NULL,
+  `imgTeleplayId` int(11) DEFAULT NULL,
+  `imgStatus` varchar(255) DEFAULT NULL,
+  `imgPath` varchar(255) DEFAULT NULL,
+  PRIMARY KEY (`imgId`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
-/*电视剧*/
-create table `teleplay`(
-	`teleplayId` int(11) NOT NULL AUTO_INCREMENT, /*ID*/
-	`teleplayMerId` int(11), /*所在商户ID*/
-	`teleplayIntegralNum` int(11), /*积分数*/
-	`teleplayName` varchar(255),  /*电视剧名*/
-	`teleplayProId` int(11), /*主演ID*/
-	`teleplayGradeNum` int(11), /*评分数*/
-	`teleplayDescribe` varchar(500),  /*电视剧描述*/
-	`teleplayImgPath` varchar(500),  /*电视剧封面图片路径*/
-	`teleplayPath` varchar(500)  /*电视剧观看链接*/
-);
+-- ----------------------------
+-- Records of images
+-- ----------------------------
 
-/*主演表*/
-create table `protagonists`(
-	`proId` int(11) NOT NULL AUTO_INCREMENT, /*ID*/
-	`proMovieId` int(11), /*对应电影ID*/
-	`proTeleplayId` int(11),  /*对应电视剧ID*/
-	`proName` varchar(255), /*主演姓名*/
-	`proLink` varchar(255) /*主演者介绍链接*/
-);
+-- ----------------------------
+-- Table structure for `indent`
+-- ----------------------------
+DROP TABLE IF EXISTS `indent`;
+CREATE TABLE `indent` (
+  `indentId` int(11) NOT NULL AUTO_INCREMENT,
+  `indentUserId` int(11) DEFAULT NULL,
+  `indentTicketId` int(11) DEFAULT NULL,
+  `indentStatus` varchar(255) DEFAULT NULL,
+  PRIMARY KEY (`indentId`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
-/*新闻*/
-create table news(
-	int(11) newId,
-);
+-- ----------------------------
+-- Records of indent
+-- ----------------------------
+
+-- ----------------------------
+-- Table structure for `integral`
+-- ----------------------------
+DROP TABLE IF EXISTS `integral`;
+CREATE TABLE `integral` (
+  `integralId` int(11) NOT NULL AUTO_INCREMENT,
+  `integralUserId` int(11) DEFAULT NULL,
+  `integralCount` int(11) DEFAULT NULL,
+  `integralGrade` int(11) DEFAULT NULL,
+  PRIMARY KEY (`integralId`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+-- ----------------------------
+-- Records of integral
+-- ----------------------------
+
+-- ----------------------------
+-- Table structure for `merchant`
+-- ----------------------------
+DROP TABLE IF EXISTS `merchant`;
+CREATE TABLE `merchant` (
+  `merId` int(11) NOT NULL AUTO_INCREMENT,
+  ` merName` varchar(255) DEFAULT NULL,
+  `merCompanyId` int(11) DEFAULT NULL,
+  `merDescribe` varchar(500) DEFAULT NULL,
+  PRIMARY KEY (`merId`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+-- ----------------------------
+-- Records of merchant
+-- ----------------------------
+
+-- ----------------------------
+-- Table structure for `movies`
+-- ----------------------------
+DROP TABLE IF EXISTS `movies`;
+CREATE TABLE `movies` (
+  `movieId` int(11) NOT NULL AUTO_INCREMENT,
+  `movieMerId` int(11) DEFAULT NULL,
+  `movieIntegralNum` int(11) DEFAULT NULL,
+  `movieName` varchar(255) DEFAULT NULL,
+  `movieProId` varchar(255) DEFAULT NULL,
+  `movieGradeNum` int(11) DEFAULT NULL,
+  `movieDescribe` varchar(500) DEFAULT NULL,
+  `movieImgId` int(11) DEFAULT NULL,
+  `moviePath` varchar(500) DEFAULT NULL,
+  `moviePrice` decimal(7,2) DEFAULT NULL,
+  `movieStatus` varchar(255) DEFAULT NULL,
+  `movieCreateTime` datetime DEFAULT NULL,
+  PRIMARY KEY (`movieId`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+-- ----------------------------
+-- Records of movies
+-- ----------------------------
+
+-- ----------------------------
+-- Table structure for `protagonists`
+-- ----------------------------
+DROP TABLE IF EXISTS `protagonists`;
+CREATE TABLE `protagonists` (
+  `proId` int(11) NOT NULL AUTO_INCREMENT,
+  `proMovieId` int(11) DEFAULT NULL,
+  `proTeleplayId` int(11) DEFAULT NULL,
+  `proName` varchar(255) DEFAULT NULL,
+  `proLink` varchar(255) DEFAULT NULL,
+  PRIMARY KEY (`proId`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+-- ----------------------------
+-- Records of protagonists
+-- ----------------------------
+
+-- ----------------------------
+-- Table structure for `teleplay`
+-- ----------------------------
+DROP TABLE IF EXISTS `teleplay`;
+CREATE TABLE `teleplay` (
+  `teleplayId` int(11) NOT NULL AUTO_INCREMENT,
+  `teleplayMerId` int(11) DEFAULT NULL,
+  `teleplayIntegralNum` int(11) DEFAULT NULL,
+  `teleplayName` varchar(255) DEFAULT NULL,
+  `teleplayProId` int(11) DEFAULT NULL,
+  `teleplayGradeNum` int(11) DEFAULT NULL,
+  `teleplayDescribe` varchar(500) DEFAULT NULL,
+  `teleplayImgId` int(11) DEFAULT NULL,
+  `teleplayPath` varchar(500) DEFAULT NULL,
+  `teleplayCreateTime` datetime DEFAULT NULL,
+  PRIMARY KEY (`teleplayId`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+-- ----------------------------
+-- Records of teleplay
+-- ----------------------------
+
+-- ----------------------------
+-- Table structure for `ticket`
+-- ----------------------------
+DROP TABLE IF EXISTS `ticket`;
+CREATE TABLE `ticket` (
+  `ticketId` int(11) NOT NULL AUTO_INCREMENT,
+  `ticketMovieId` int(11) DEFAULT NULL,
+  `ticketStatus` varchar(255) DEFAULT NULL,
+  PRIMARY KEY (`ticketId`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+-- ----------------------------
+-- Records of ticket
+-- ----------------------------
+
+-- ----------------------------
+-- Table structure for `userloginrecord`
+-- ----------------------------
+DROP TABLE IF EXISTS `userloginrecord`;
+CREATE TABLE `userloginrecord` (
+  `ulrId` int(11) NOT NULL AUTO_INCREMENT,
+  `ulrLoginTime` datetime DEFAULT NULL,
+  `ulrLoginIp` varchar(255) DEFAULT NULL,
+  `ulrAdminId` int(11) DEFAULT NULL,
+  `ulrStatus` varchar(255) DEFAULT NULL,
+  PRIMARY KEY (`ulrId`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+-- ----------------------------
+-- Records of userloginrecord
+-- ----------------------------
+
+-- ----------------------------
+-- Table structure for `users`
+-- ----------------------------
+DROP TABLE IF EXISTS `users`;
+CREATE TABLE `users` (
+  `userId` int(11) NOT NULL AUTO_INCREMENT,
+  `userName` varchar(255) DEFAULT NULL,
+  `userEmail` varchar(255) DEFAULT NULL,
+  `userPwd` varchar(255) DEFAULT NULL,
+  `userCreateTime` datetime DEFAULT NULL,
+  PRIMARY KEY (`userId`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+-- ----------------------------
+-- Records of users
+-- ----------------------------
