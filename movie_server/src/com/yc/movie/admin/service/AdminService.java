@@ -38,7 +38,7 @@ public class AdminService {
 		// TODO Auto-generated method stub
 		
 		//登录成功，发送邮箱提醒   
-		//尊敬的管理员：{0},您于{0}登录了电影网站管理系统！<a href="http://localhost:8080/movie_server/AdminServlet?method=alterPwd&alterId={0}">不是自己登录?</a>
+		//尊敬的管理员：{0},您于{0}登录了电影网站管理系统！<a href="http://localhost:8080/movie_server/AdminServlet?method=alterPwd&alterId={0}">不是自己登录?修改密码！</a>
 		Object[] code = {admin.getAdminName(),DateUtils.format(new Date(), "yyyy-MM-dd HH:mm:ss"),admin.getAdminId()};
 		MailUtils.send(this.getClass(), admin.getAdminEmail(), code,MailUtils.LOGINED_EMAIL_FILENAME);
 		
@@ -65,5 +65,69 @@ public class AdminService {
 				throw new AdminException("系统异常，请稍后再试！");
 			} 
 		}  
+	}
+
+	/**
+	 * 发送邮件给管理员  让他通过邮箱链接修改密码
+	 * @param adminEmail
+	 * @throws AdminException 
+	 */
+	public Admins fotPwdSendEmail(String adminEmail) throws AdminException {
+		Admins adm = ad.findAdminByEmail(adminEmail);  //得到要修改密码的管理员
+		if(adm == null){   //这个邮箱还没有注册
+			throw new AdminException("该邮箱还没有注册，请先注册！");
+		}
+		//尊敬的管理员：{0}，<a href="http://localhost:8080/movie_server/AdminServlet?method=alterPwd&alterId={0}">点击修改密码</a>
+		Object[] code = {adm.getAdminName(),adm.getAdminId()};  //填充补位
+		MailUtils.send(this.getClass(), adminEmail, code,MailUtils.ALTER_PWD_EMAIL_FILENAME);	//发送邮件
+		return adm;
+	}
+
+	/**
+	 * 根据Id获得Admins对象
+	 * @param alterId
+	 * @return
+	 */
+	public Admins findById(Long alterId) {
+		return ad.findAdminById(alterId);
+	}
+
+	/**
+	 * 修改密码
+	 * @param form
+	 * @param adminPwd2
+	 * @return
+	 * @throws AdminException 
+	 */
+	public Admins alterPwd(Admins form, String adminPwd2) throws AdminException {
+		//判断数据是否为null   form.getAdminPwd()   adminPwd2
+		// TODO Auto-generated method stub
+		
+		//判断新密码格式是否正确
+		// TODO Auto-generated method stub
+		
+		//判断新密码和确认密码是否相同
+		// TODO Auto-generated method stub
+		
+		//将新密码加密
+		// TODO Auto-generated method stub
+		
+		//修改数据库
+		try {
+			JdbcUtils.beginTransaction();
+			
+			ad.alterPwd(form);
+			
+			JdbcUtils.commitTransaction();
+		} catch (SQLException e) {
+			try {
+				JdbcUtils.roolbackTransaction();
+			} catch (SQLException e1) {
+				throw new AdminException("系统异常，请稍后再试！");
+			}
+		}
+		//修改成功，得到修改完成的Admins对象并返回
+		Admins adm = ad.findAdminByEmail(form.getAdminEmail());
+		return adm;
 	}
 }

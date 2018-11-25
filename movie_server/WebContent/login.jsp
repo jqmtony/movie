@@ -37,7 +37,7 @@
             <form class="m-t" role="form" action="<c:url value='/admin.s' />">
             	<input type="hidden" name="method" value="login">
                 <div class="form-group">
-                    <input type="email" name="adminEmail" class="form-control" placeholder="用户名(邮箱地址)" required="" value="${param.adminEmail }">
+                    <input type="email" name="adminEmail" id="adminEmail" class="form-control" placeholder="用户名(邮箱地址)" required="" value="${param.adminEmail }">
                 </div>
                 <div class="form-group">
                     <input type="password" name="adminPwd" class="form-control" placeholder="密码" required="">
@@ -45,7 +45,7 @@
                 <button type="submit" class="btn btn-primary block full-width m-b">登 录</button>
 
 
-                <p class="text-muted text-center"> <a href="login.html#"><small>忘记密码了？</small></a> | <a href="#">注册一个新账号</a>
+                <p class="text-muted text-center"> <a onclick="fotPwd()"><small>忘记密码了？</small></a> | <a href="#">注册一个新账号</a>
                 </p>
 
             </form>
@@ -53,6 +53,16 @@
     </div>
     <script src="js/jquery.min.js?v=2.1.4"></script>
     <script src="js/bootstrap.min.js?v=3.3.5"></script>   
+    <script type="text/javascript">
+    	function fotPwd(){
+    		var data = {
+    				adminEmail:$('#adminEmail').val()
+    		};
+    		$.post("<c:url value='admin.s?method=fotPwdSendEmail' />",data,function(data){
+    			alert(data);
+    		});
+    	}
+    </script>
 </body>
 
 </html>

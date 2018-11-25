@@ -19,6 +19,7 @@ import javax.mail.internet.MimeMessage.RecipientType;
 
 public class MailUtils {
 	public static final String LOGINED_EMAIL_FILENAME = "loginedEmail.properties";
+	public static final String ALTER_PWD_EMAIL_FILENAME = "fotPwdEmail.properties";
 	/**
 	 * 获取一个javax.mail.Session的实例对象
 	 * @param mailHost	服务器主机名

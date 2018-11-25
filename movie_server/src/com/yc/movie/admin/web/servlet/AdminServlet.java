@@ -28,6 +28,61 @@ public class AdminServlet extends BaseServlet {
 	private AdminService as = new AdminService();
 	
 	/**
+	 * 修改密码
+	 * @param request
+	 * @param response
+	 * @return
+	 * @throws ServletException
+	 * @throws IOException
+	 */
+	public String alterPwd(HttpServletRequest request, HttpServletResponse response)throws ServletException, IOException {
+		Admins form = FormUtils.toBean(request, Admins.class);//将表单数据封装成javabean对象
+		String adminPwd2 = request.getParameter("adminPwd2");  //得到确认密码
+		try {
+			as.alterPwd(form,adminPwd2);  //修改密码
+			request.setAttribute("go", "<br />5 秒后自动跳转 。。。<a href='login.jsp'>点击跳转登录页面-></a>");
+			request.setAttribute("msg", "修改成功！请使用新密码登录！");  //将成功信息添加到request域中
+		} catch (AdminException e) {
+			//修改失败
+			request.setAttribute("msg", "修改失败！"+e.getMessage());  //将失败信息添加到request域中
+		}
+		return "f:/alterPwd.jsp";  //转发
+	}
+	/**
+	 * 修改密码之前的页面跳转
+	 * @param request
+	 * @param response
+	 * @return
+	 * @throws ServletException
+	 * @throws IOException
+	 */
+	public String alterPwdBefore(HttpServletRequest request, HttpServletResponse response)throws ServletException, IOException {
+		String alterIdStr = request.getParameter("alterId");  //获取要修改的管理员Id
+		if(alterIdStr == null)
+			return "r:/server404.jsp";
+		Long alterId = Long.parseLong(alterIdStr);	//将Id转换成Long类型
+		Admins alterAdmin = as.findById(alterId);	//得到要修改的管理员对象
+		request.setAttribute("alterAdmin", alterAdmin);
+		return "f:/alterPwd.jsp";  //转发到alterPwd.jsp页面
+	}
+	
+	/**
+	 * 发送修改密码链接的邮件  ajax
+	 * @param request
+	 * @param response
+	 * @throws ServletException
+	 * @throws IOException
+	 */
+	public void fotPwdSendEmail(HttpServletRequest request, HttpServletResponse response)throws ServletException, IOException {
+		String adminEmail = request.getParameter("adminEmail").trim();  //得到输入的邮箱
+		try {
+			Admins admin = as.fotPwdSendEmail(adminEmail);//发送邮件
+			response.getWriter().append("修改密码链接已经发送到您的邮箱："+admin.getAdminEmail()+" 中，请打开邮件根据链接修改密码！");
+		} catch (AdminException e) {
+			response.getWriter().append(e.getMessage());
+		}  
+	}
+	/**
 	 * 登录
 	 * @param request
 	 * @param response

@@ -12,7 +12,7 @@ public class AdminDao {
 	private QueryRunner qr = new TxQueryRunner();
 
 	/**
-	 * 根据邮箱地址查询Admins对象
+	 * 根据邮箱地址查询Admins对象    没有查到返回null
 	 * @param adminEmail	邮箱地址
 	 * @return Admins对象
 	 */
@@ -22,7 +22,7 @@ public class AdminDao {
 	}
 
 	/**
-	 * 根据邮箱地址和密码查询Admins对象
+	 * 根据邮箱地址和密码查询Admins对象   没有查到返回null
 	 * @param adminEmail	邮箱地址
 	 * @param adminPwd	密码
 	 * @return	Admins对象
@@ -41,5 +41,23 @@ public class AdminDao {
 		String sql = "insert into adminLoginRecord values(?,?,?,?,?)";
 		Object[] params = {alr.getAlrId(),alr.getAlrLoginTime(),alr.getAlrLoginIp(),alr.getAlrAdmin().getAdminId(),alr.getAlrStatus()};
 		qr.update(sql, params);
+	}
+
+	/**
+	 * 根据Id查询Admins对象  没有查到返回null
+	 * @param alterId	ID
+	 * @return	Admins对象
+	 */
+	public Admins findAdminById(Long alterId) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	/**
+	 * 修改密码
+	 * @param form	Admins对象
+	 */
+	public void alterPwd(Admins form) {
+		// TODO Auto-generated method stub
 	}
 }
