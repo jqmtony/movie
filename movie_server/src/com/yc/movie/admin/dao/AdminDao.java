@@ -78,4 +78,19 @@ public class AdminDao {
 		Object[] params = {form.getAdminPwd(),form.getAdminEmail()};
 		qr.update(sql,params);
 	}
+
+	/**
+	 * 通过注册码查找管理员对象   如果没找到就返回null
+	 * @param adminRegisterCode
+	 * @return
+	 * @throws SQLException 
+	 */
+	public Admins findAdminByRegisterCode(String adminRegisterCode) throws SQLException {
+		String sql="select * from admins where adminRegisterCode=?";
+		List<Admins> result = qr.query(sql, new BeanListHandler<Admins>(Admins.class),adminRegisterCode);
+		if(result.size() > 0)
+			return result.get(0);
+		return null;
+	}
+	
 }

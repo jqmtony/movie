@@ -38,9 +38,10 @@ public class AdminServlet extends BaseServlet {
 	 */
 	public String registerBlur(HttpServletRequest request, HttpServletResponse response)throws ServletException, IOException {
 		Admins form = FormUtils.toBean(request, Admins.class);  //将表单数据封装成javabean 对象
+		String pwd2 = request.getParameter("adminPwd2");
 		String status = request.getParameter("status");	//获取到是哪个注册属性
 		try {
-			as.registerBlur(form,status);
+			as.registerBlur(form,status,pwd2);
 		} catch (AdminException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

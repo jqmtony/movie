@@ -1,7 +1,13 @@
 package com.yc.movie.admin.service;
 
+import java.io.IOException;
 import java.sql.SQLException;
 import java.util.Date;
+import java.util.Iterator;
+import java.util.Map;
+import java.util.Map.Entry;
+import java.util.Properties;
+import java.util.Set;
 
 import com.sun.jmx.snmp.Timestamp;
 import com.yc.movie.admin.bean.AdminLoginRecord;
@@ -86,7 +92,7 @@ public class AdminService {
 		}  
 	}
 
-	/**
+	/** 
 	 * 发送邮件给管理员  让他通过邮箱链接修改密码
 	 * @param adminEmail
 	 * @throws AdminException 
@@ -179,51 +185,93 @@ public class AdminService {
 	 * @param status
 	 * @throws AdminException 
 	 */
-	public void registerBlur(Admins form, String status) throws AdminException {
+	public void registerBlur(Admins form, String status,String pwd2) throws AdminException {
 		switch(status){
 		case "1":
 			//注册码
 			//1.正则表达式判断  不正确抛异常
-			// TODO 
+			if(!form.getAdminRegisterCode().matches(RegxUtils.REGISTER_CODE_REGX)){
+				throw new AdminException("注册码格式不正确！");
+			}
 			
 			//2.配置文件查询   判断是否存在此注册码   不存在就抛异常
-			// TODO
+			boolean flag = false;
+			Properties p = new Properties();	//创建Properties流  这个流是集合中可以和IO流相关连的流   和Map相似
+			try {
+				p.load(this.getClass().getResourceAsStream("registerCode.properties"));  //加载配置文件
+				Set<Object> keySet = p.keySet();	//p<Object,Object>   得到p的key集合
+				for(Object key:keySet){	//遍历所有的注册码
+					String str = String.valueOf(p.get(key)); //通过键取值    得到一个注册码
+					if(str.equals(form.getAdminRegisterCode())){	//判断是否相同
+						flag = true;
+					}
+				}
+				if(flag == false){
+					throw new AdminException("注册码不存在！");
+				}
+			} catch (IOException e) {
+				throw new AdminException("系统异常，请稍后再试！");
+			}
 			
 			//3.数据库查询  判断此注册码是否已被使用  如果已经被使用就抛异常
-			// TODO
+			try {
+				Admins admin = ad.findAdminByRegisterCode(form.getAdminRegisterCode());
+				if(admin != null){
+					throw new AdminException("该注册码已被使用！");
+				}
+			} catch (SQLException e) {
+				throw new AdminException("系统异常，请稍后再试！");
+			}
 	
 			break;
 		case "2":
 			//姓名
 			//1.正则表达式判断  不正确抛异常
-			// TODO 
+			if(!form.getAdminName().matches(RegxUtils.NAME_REGX)){
+				throw new AdminException("姓名格式不正确！");
+			}
 			
 			break;
 		case "3":
 			//电话
 			//1.正则表达式判断  不正确抛异常
-			// TODO 
+			if(!form.getAdminTel().matches(RegxUtils.TEL_NUM_REGX)){
+				throw new AdminException("电话格式不正确！");
+			}
 			
 			break;
 		case "4":
 			//邮箱
 			//1.正则表达式判断  不正确抛异常
-			// TODO 
+			if(!form.getAdminEmail().matches(RegxUtils.EMAIL_REGX)){
+				throw new AdminException("邮箱格式不正确！");
+			}
 			
 			//2.查询数据库  判断是否已存在此邮箱  如果已存在就抛异常
-			//TODO
+			try {
+				Admins admin = ad.findAdminByEmail(form.getAdminEmail());
+				if(admin != null){
+					throw new AdminException("该邮箱已被使用！");
+				}
+			} catch (SQLException e) {
+				throw new AdminException("系统异常，请稍后再试！");
+			}
 			
 			break;
 		case "5":
 			//密码
 			//1.正则表达式判断  不正确抛异常
-			// TODO 
+			if(!form.getAdminPwd().matches(RegxUtils.PWD_REGX)){
+				throw new AdminException("密码格式不正确！");
+			}
 			
 			break;
 		case "6":
 			//确认密码
 			//1.判断确认密码是否与新密码相同   不相同就抛异常
-			// TODO
+			if(!form.getAdminPwd().equals(pwd2)){
+				throw new AdminException("两次输入的密码不相同！");
+			}
 			
 			break;
 		default:throw new AdminException("系统异常，请稍后再试！");
