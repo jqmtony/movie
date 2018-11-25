@@ -17,7 +17,7 @@ import com.yc.movie.utils.MailUtils;
 public class AdminService {
 	private AdminDao ad = new AdminDao();
 	public static final String EMAIL_REGX = "^[A-Za-z\\d]+([-_.][A-Za-z\\d]+)*@([A-Za-z\\d]+[-.])+[A-Za-z\\d]{2,4}$";
-	public static final String PWD_REGX = "[0-9A-Za-z_]{6-12}";
+	public static final String PWD_REGX = "[0-9A-Za-z_]{6,12}";
 	/**
 	 * 登录业务
 	 * @param form	
@@ -95,7 +95,7 @@ public class AdminService {
 		try {
 			adm = ad.findAdminByEmail(adminEmail);
 		} catch (SQLException e) {
-			throw new AdminException("系统异常，请稍后再试！");
+			throw new AdminException("该邮箱还没有注册，请先注册！");
 		}  //得到要修改密码的管理员
 		if(adm == null){   //这个邮箱还没有注册
 			throw new AdminException("该邮箱还没有注册，请先注册！");

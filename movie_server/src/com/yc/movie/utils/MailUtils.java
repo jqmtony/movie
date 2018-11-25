@@ -50,9 +50,9 @@ public class MailUtils {
 		try {
 			msg.setFrom(new InternetAddress(mail.getFromMailAddress()));	//设置发件人
 			msg.setRecipients(RecipientType.TO, mail.getToMailAddress());  //设置收件人
-			if(!mail.getCcMailAddress().isEmpty())
+			if(mail.getCcMailAddress()!= null && !mail.getCcMailAddress().isEmpty())
 				msg.setRecipients(RecipientType.CC, mail.getCcMailAddress());  //设置抄送
-			if(!mail.getBccMailAddress().isEmpty())
+			if(mail.getBccMailAddress() !=null && !mail.getBccMailAddress().isEmpty())
 				msg.setRecipients(RecipientType.BCC, mail.getBccMailAddress());  //设置暗送
 			msg.setSubject(mail.getMailSubject());	//设置主题
 			
@@ -103,17 +103,17 @@ public class MailUtils {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-		String host = props.getProperty("host");  //获取服务器主机
-		String uname = props.getProperty("uname");  //获取邮箱用户名
-		String pwd = props.getProperty("pwd");   //获取第三方登录授权密码
-		String from = props.getProperty("from");   //获取发件人
-//		String to = user.getEmail();  //获取收件人
-		String subject = props.getProperty("subject");  //获取主题
+		String host = props.getProperty("host").trim();  //获取服务器主机
+		String uname = props.getProperty("uname").trim();  //获取邮箱用户名
+		String pwd = props.getProperty("pwd").trim();   //获取第三方登录授权密码
+		String from = props.getProperty("from").trim();   //获取发件人
+		String subject = props.getProperty("subject").trim();  //获取主题
 		String content = props.getProperty("content");  //获取邮件内容
 		if(code!=null && code.length>0)
 			content = MessageFormat.format(content,code);  //替换占位符
-		Session session = MailUtils.createSession(host,uname,pwd);  //用自己的工具获取session
 		Mail mail = new Mail(from,to,subject,content);  //创建邮件对象
-		MailUtils.send(session,mail);  //发邮件
+		System.out.println(mail);
+		Session session = MailUtils.createSession(host,uname,pwd);  //用自己的工具获取session
+		send(session,mail);  //发邮件
 	}
 }

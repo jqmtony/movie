@@ -58,6 +58,7 @@ public class AdminServlet extends BaseServlet {
 	 */
 	public String alterPwdBefore(HttpServletRequest request, HttpServletResponse response)throws ServletException, IOException {
 		String alterIdStr = request.getParameter("alterId");  //获取要修改的管理员Id
+		System.out.println("alterIdStr:"+alterIdStr);
 		if(alterIdStr == null)
 			return "r:/server404.jsp";
 		Long alterId = Long.parseLong(alterIdStr);	//将Id转换成Long类型
@@ -80,6 +81,7 @@ public class AdminServlet extends BaseServlet {
 	 */
 	public void fotPwdSendEmail(HttpServletRequest request, HttpServletResponse response)throws ServletException, IOException {
 		String adminEmail = request.getParameter("adminEmail").trim();  //得到输入的邮箱
+		System.out.println("1"+adminEmail);
 		try {
 			Admins admin = as.fotPwdSendEmail(adminEmail);//发送邮件
 			response.getWriter().append("修改密码链接已经发送到您的邮箱："+admin.getAdminEmail()+" 中，请打开邮件根据链接修改密码！");

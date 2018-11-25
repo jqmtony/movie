@@ -14,14 +14,14 @@
 			<h1>修改密码</h1>
 			邮箱：<input type="text" name="adminEmail" value="${alterAdmin.adminEmail}"><br/>
 			密码：<input type="password" name="adminPwd" /><br />
-			确认密码：<input type="password" name="addminPwd2" /><br/>
+			确认密码：<input type="password" name="adminPwd2" /><br/>
 			<input type="submit" value="确认修改" />
 			<br />
 			${go}
 		</form>
 		<c:if test="${! empty msg}">
 			<script type="text/javascript">
-				alter('${msg}');
+				alert('${msg}');
 			</script>
 		</c:if>
 	</body>

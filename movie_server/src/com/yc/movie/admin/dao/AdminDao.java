@@ -20,7 +20,7 @@ public class AdminDao {
 	 * @throws SQLException 
 	 */
 	public Admins findAdminByEmail(String adminEmail) throws SQLException {
-		String sql = "selcet * from admins where adminEmail=?";
+		String sql = "select * from admins where adminEmail=?";
 		List<Admins> result = qr.query(sql, new BeanListHandler<Admins>(Admins.class),adminEmail);
 		if(result.size() > 0) return result.get(0);
 			return null;
@@ -60,7 +60,7 @@ public class AdminDao {
 	 * @throws SQLException 
 	 */
 	public Admins findAdminById(Long alterId) throws SQLException {
-		String sql = "select * from admins where id=?";
+		String sql = "select * from admins where adminId=?";
 		List<Admins> result = qr.query(sql, new BeanListHandler<Admins>(Admins.class),alterId);
 		if(result.size()>0){
 			return result.get(0);
