@@ -23,27 +23,44 @@ public class AdminService {
 	 * @return 登陆成功的Admins对象(信息完整的)
 	 */
 	public Admins login(Admins form,Verification v) throws AdminException{
-		//如果验证码不为null，判断验证码是否正确
-		// TODO Auto-generated method stub
+		try{
+			//如果验证码不为null，判断验证码是否正确
+			if(v != null){
+				if(v.getInCode() == null || v.getInCode().trim().isEmpty())
+					throw new AdminException("请输入验证码!");
+				if(!v.getInCode().equalsIgnoreCase(v.getText())){
+					throw new AdminException("验证码错误!");
+				}
+			}
+			
+			//用户名格式(邮箱)验证  正则表达式
+			if(!form.getAdminEmail().matches(EMAIL_REGX)){
+				throw new AdminException("邮箱格式不正确!");
+			}
+			
+			//调用ad的findAdminByEmail()方法判断用户名(邮箱)是否存在
+			Admins admin = ad.findAdminByEmail(form.getAdminEmail());
+			if(admin == null){
+				throw new AdminException("该用户未注册!");
+			}
+			
+			//调用ad的findAdminByPwd()方法判断密码是否正确
+			admin = ad.findAdminByPwd(form.getAdminEmail(),form.getAdminPwd());
+			if(admin == null){
+				throw new AdminException("密码错误!");
+			}
+			
+			//登录成功，发送邮箱提醒   
+			//尊敬的管理员：{0},您于{0}登录了电影网站管理系统！<a href="http://localhost:8080/movie_server/AdminServlet?method=alterPwd&alterId={0}">不是自己登录?修改密码！</a>
+			Object[] code = {admin.getAdminName(),DateUtils.format(new Date(), "yyyy-MM-dd HH:mm:ss"),admin.getAdminId()};
+			MailUtils.send(this.getClass(), admin.getAdminEmail(), code,MailUtils.LOGINED_EMAIL_FILENAME);
+			
+			
+			return admin;
+		}catch(SQLException e){
+			throw new AdminException("系统异常，请稍后再试！");
+		}
 		
-		//用户名格式(邮箱)验证  正则表达式
-		// TODO Auto-generated method stub
-		
-		//调用ad的findAdminByEmail()方法判断用户名(邮箱)是否存在
-		Admins admin = ad.findAdminByEmail(form.getAdminEmail());
-		// TODO Auto-generated method stub
-		
-		//调用ad的findAdminByPwd()方法判断密码是否正确
-		admin = ad.findAdminByPwd(form.getAdminEmail(),form.getAdminPwd());
-		// TODO Auto-generated method stub
-		
-		//登录成功，发送邮箱提醒   
-		//尊敬的管理员：{0},您于{0}登录了电影网站管理系统！<a href="http://localhost:8080/movie_server/AdminServlet?method=alterPwd&alterId={0}">不是自己登录?修改密码！</a>
-		Object[] code = {admin.getAdminName(),DateUtils.format(new Date(), "yyyy-MM-dd HH:mm:ss"),admin.getAdminId()};
-		MailUtils.send(this.getClass(), admin.getAdminEmail(), code,MailUtils.LOGINED_EMAIL_FILENAME);
-		
-		
-		return admin;
 	}
 
 	/**
@@ -73,7 +90,12 @@ public class AdminService {
 	 * @throws AdminException 
 	 */
 	public Admins fotPwdSendEmail(String adminEmail) throws AdminException {
-		Admins adm = ad.findAdminByEmail(adminEmail);  //得到要修改密码的管理员
+		Admins adm=null;
+		try {
+			adm = ad.findAdminByEmail(adminEmail);
+		} catch (SQLException e) {
+			throw new AdminException("系统异常，请稍后再试！");
+		}  //得到要修改密码的管理员
 		if(adm == null){   //这个邮箱还没有注册
 			throw new AdminException("该邮箱还没有注册，请先注册！");
 		}
@@ -87,9 +109,14 @@ public class AdminService {
 	 * 根据Id获得Admins对象
 	 * @param alterId
 	 * @return
+	 * @throws AdminException 
 	 */
-	public Admins findById(Long alterId) {
-		return ad.findAdminById(alterId);
+	public Admins findById(Long alterId) throws AdminException {
+		try {
+			return ad.findAdminById(alterId);
+		} catch (SQLException e) {
+			throw new AdminException("系统异常，请稍后再试！");
+		}
 	}
 
 	/**
@@ -101,8 +128,12 @@ public class AdminService {
 	 */
 	public Admins alterPwd(Admins form, String adminPwd2) throws AdminException {
 		//判断数据是否为null   form.getAdminPwd()   adminPwd2
-		// TODO Auto-generated method stub
-		
+		if(form.getAdminPwd() == null || form.getAdminPwd().trim().isEmpty()){
+			throw new AdminException("新密码不能为空");
+		}
+		if(adminPwd2 == null || adminPwd2.trim().isEmpty()){
+			throw new AdminException("确认密码不能为空");
+		}
 		//判断新密码格式是否正确
 		// TODO Auto-generated method stub
 		
@@ -127,7 +158,12 @@ public class AdminService {
 			}
 		}
 		//修改成功，得到修改完成的Admins对象并返回
-		Admins adm = ad.findAdminByEmail(form.getAdminEmail());
+		Admins adm=null;
+		try {
+			adm = ad.findAdminByEmail(form.getAdminEmail());
+		} catch (SQLException e) {
+			throw new AdminException("系统异常，请稍后再试！");
+		}
 		return adm;
 	}
 }

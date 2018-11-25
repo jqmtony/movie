@@ -1,8 +1,10 @@
 package com.yc.movie.admin.dao;
 
 import java.sql.SQLException;
+import java.util.List;
 
 import org.apache.commons.dbutils.QueryRunner;
+import org.apache.commons.dbutils.handlers.BeanListHandler;
 
 import com.yc.movie.admin.bean.AdminLoginRecord;
 import com.yc.movie.admin.bean.Admins;
@@ -15,10 +17,13 @@ public class AdminDao {
 	 * 根据邮箱地址查询Admins对象    没有查到返回null
 	 * @param adminEmail	邮箱地址
 	 * @return Admins对象
+	 * @throws SQLException 
 	 */
-	public Admins findAdminByEmail(String adminEmail) {
-		// TODO Auto-generated method stub
-		return null;
+	public Admins findAdminByEmail(String adminEmail) throws SQLException {
+		String sql = "selcet * from admins where adminEmail=?";
+		List<Admins> result = qr.query(sql, new BeanListHandler<Admins>(Admins.class),adminEmail);
+		if(result.size() > 0) return result.get(0);
+			return null;
 	}
 
 	/**
@@ -26,9 +31,14 @@ public class AdminDao {
 	 * @param adminEmail	邮箱地址
 	 * @param adminPwd	密码
 	 * @return	Admins对象
+	 * @throws SQLException 
 	 */
-	public Admins findAdminByPwd(String adminEmail, String adminPwd) {
-		// TODO Auto-generated method stub
+	public Admins findAdminByPwd(String adminEmail, String adminPwd) throws SQLException {
+		String sql = "selecet * from admins where adminEmail=? and adminPwd=?";
+		List<Admins> result = qr.query(sql,new BeanListHandler<Admins>(Admins.class),adminEmail,adminPwd);
+		if(result.size()>0){
+			return result.get(0);
+		}
 		return null;
 	}
 
@@ -47,17 +57,25 @@ public class AdminDao {
 	 * 根据Id查询Admins对象  没有查到返回null
 	 * @param alterId	ID
 	 * @return	Admins对象
+	 * @throws SQLException 
 	 */
-	public Admins findAdminById(Long alterId) {
-		// TODO Auto-generated method stub
+	public Admins findAdminById(Long alterId) throws SQLException {
+		String sql = "select * from admins where id=?";
+		List<Admins> result = qr.query(sql, new BeanListHandler<Admins>(Admins.class),alterId);
+		if(result.size()>0){
+			return result.get(0);
+		}
 		return null;
 	}
 
 	/**
 	 * 修改密码
 	 * @param form	Admins对象
+	 * @throws SQLException 
 	 */
-	public void alterPwd(Admins form) {
-		// TODO Auto-generated method stub
+	public void alterPwd(Admins form) throws SQLException {
+		String sql ="update admins set adminPwd=? where adminEmail=?";
+		Object[] params = {form.getAdminPwd(),form.getAdminEmail()};
+		qr.update(sql,params);
 	}
 }

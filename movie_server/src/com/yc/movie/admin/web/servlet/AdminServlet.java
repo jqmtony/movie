@@ -61,9 +61,14 @@ public class AdminServlet extends BaseServlet {
 		if(alterIdStr == null)
 			return "r:/server404.jsp";
 		Long alterId = Long.parseLong(alterIdStr);	//将Id转换成Long类型
-		Admins alterAdmin = as.findById(alterId);	//得到要修改的管理员对象
-		request.setAttribute("alterAdmin", alterAdmin);
-		return "f:/alterPwd.jsp";  //转发到alterPwd.jsp页面
+		try {
+			Admins alterAdmin = as.findById(alterId);	//得到要修改的管理员对象
+			request.setAttribute("alterAdmin", alterAdmin);
+			return "f:/alterPwd.jsp";  //转发到alterPwd.jsp页面
+		} catch (AdminException e) {
+			throw new RuntimeException();
+		}	
+		
 	}
 	
 	/**
