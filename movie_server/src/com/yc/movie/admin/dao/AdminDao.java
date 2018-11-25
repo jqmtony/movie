@@ -1,5 +1,7 @@
 package com.yc.movie.admin.dao;
 
+import java.sql.SQLException;
+
 import org.apache.commons.dbutils.QueryRunner;
 
 import com.yc.movie.admin.bean.AdminLoginRecord;
@@ -33,8 +35,11 @@ public class AdminDao {
 	/**
 	 * 将AdminLoginRecord添加到数据库
 	 * @param alr
+	 * @throws SQLException 
 	 */
-	public void addALR(AdminLoginRecord alr) {
-		// TODO Auto-generated method stub
+	public void addALR(AdminLoginRecord alr) throws SQLException {
+		String sql = "insert into adminLoginRecord values(?,?,?,?,?)";
+		Object[] params = {alr.getAlrId(),alr.getAlrLoginTime(),alr.getAlrLoginIp(),alr.getAlrAdmin().getAdminId(),alr.getAlrStatus()};
+		qr.update(sql, params);
 	}
 }
