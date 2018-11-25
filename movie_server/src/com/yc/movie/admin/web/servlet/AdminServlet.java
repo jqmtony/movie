@@ -27,6 +27,27 @@ public class AdminServlet extends BaseServlet {
 	private static final long serialVersionUID = 1L;
 	private AdminService as = new AdminService();
 	
+	
+	/**
+	 * 注册页面的失焦事件
+	 * @param request
+	 * @param response
+	 * @return
+	 * @throws ServletException
+	 * @throws IOException
+	 */
+	public String registerBlur(HttpServletRequest request, HttpServletResponse response)throws ServletException, IOException {
+		Admins form = FormUtils.toBean(request, Admins.class);  //将表单数据封装成javabean 对象
+		String status = request.getParameter("status");	//获取到是哪个注册属性
+		try {
+			as.registerBlur(form,status);
+		} catch (AdminException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return null;
+	}
+	
 	/**
 	 * 修改密码
 	 * @param request
@@ -48,6 +69,8 @@ public class AdminServlet extends BaseServlet {
 		}
 		return "f:/alterPwd.jsp";  //转发
 	}
+	
+	
 	/**
 	 * 修改密码之前的页面跳转
 	 * @param request

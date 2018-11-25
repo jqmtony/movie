@@ -13,11 +13,12 @@ import com.yc.movie.utils.DateUtils;
 import com.yc.movie.utils.JdbcUtils;
 import com.yc.movie.utils.MD5;
 import com.yc.movie.utils.MailUtils;
+import com.yc.movie.utils.RegxUtils;
 
 public class AdminService {
 	private AdminDao ad = new AdminDao();
-	public static final String EMAIL_REGX = "^[A-Za-z\\d]+([-_.][A-Za-z\\d]+)*@([A-Za-z\\d]+[-.])+[A-Za-z\\d]{2,4}$";
-	public static final String PWD_REGX = "[0-9A-Za-z_]{6,12}";
+	
+	
 	/**
 	 * 登录业务
 	 * @param form	
@@ -35,7 +36,7 @@ public class AdminService {
 			}
 			
 			//用户名格式(邮箱)验证  正则表达式
-			if(!form.getAdminEmail().matches(EMAIL_REGX)){
+			if(!form.getAdminEmail().matches(RegxUtils.EMAIL_REGX)){
 				throw new AdminException("邮箱格式不正确!");
 			}
 			
@@ -136,7 +137,7 @@ public class AdminService {
 			throw new AdminException("确认密码不能为空");
 		}
 		//判断新密码格式是否正确
-		if(!form.getAdminPwd().trim().matches(PWD_REGX)){
+		if(!form.getAdminPwd().trim().matches(RegxUtils.PWD_REGX)){
 			throw new AdminException("新密码格式不正确");
 		}
 		
@@ -170,5 +171,62 @@ public class AdminService {
 			throw new AdminException("系统异常，请稍后再试！");
 		}
 		return adm;
+	}
+
+	/**
+	 * 注册管理员时失焦进行校验
+	 * @param form
+	 * @param status
+	 * @throws AdminException 
+	 */
+	public void registerBlur(Admins form, String status) throws AdminException {
+		switch(status){
+		case "1":
+			//注册码
+			//1.正则表达式判断  不正确抛异常
+			// TODO 
+			
+			//2.配置文件查询   判断是否存在此注册码   不存在就抛异常
+			// TODO
+			
+			//3.数据库查询  判断此注册码是否已被使用  如果已经被使用就抛异常
+			// TODO
+	
+			break;
+		case "2":
+			//姓名
+			//1.正则表达式判断  不正确抛异常
+			// TODO 
+			
+			break;
+		case "3":
+			//电话
+			//1.正则表达式判断  不正确抛异常
+			// TODO 
+			
+			break;
+		case "4":
+			//邮箱
+			//1.正则表达式判断  不正确抛异常
+			// TODO 
+			
+			//2.查询数据库  判断是否已存在此邮箱  如果已存在就抛异常
+			//TODO
+			
+			break;
+		case "5":
+			//密码
+			//1.正则表达式判断  不正确抛异常
+			// TODO 
+			
+			break;
+		case "6":
+			//确认密码
+			//1.判断确认密码是否与新密码相同   不相同就抛异常
+			// TODO
+			
+			break;
+		default:throw new AdminException("系统异常，请稍后再试！");
+		}
 	}
 }

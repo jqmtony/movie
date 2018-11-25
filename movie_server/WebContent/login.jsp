@@ -45,7 +45,7 @@
                 <button type="submit" class="btn btn-primary block full-width m-b">登 录</button>
 
 
-                <p class="text-muted text-center"> <a onclick="fotPwd()"><small>忘记密码了？</small></a> | <a href="#">注册一个新账号</a>
+                <p class="text-muted text-center"> <a onclick="fotPwd()"><small>忘记密码了？</small></a> | <a href="add.jsp">注册一个新账号</a>
                 </p>
 
             </form>
