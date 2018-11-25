@@ -16,6 +16,7 @@ import java.util.Date;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -27,7 +28,22 @@ public class AdminServlet extends BaseServlet {
 	private static final long serialVersionUID = 1L;
 	private AdminService as = new AdminService();
 	
-	
+	/**
+	 * 管理员登录前Email校验  失焦ajax
+	 * @param request
+	 * @param response
+	 * @throws ServletException
+	 * @throws IOException
+	 */
+	public void loginAdminEmailRegx(HttpServletRequest request, HttpServletResponse response)throws ServletException, IOException {
+		String adminEmail = request.getParameter("adminEmail").trim();  //得到输入的Email
+		try {
+			as.loginAdminEmailRegx(adminEmail);
+			response.getWriter().append("");
+		} catch (AdminException e) {
+			response.getWriter().append(e.getMessage());
+		}
+	}
 	/**
 	 * 注册页面的失焦事件
 	 * @param request
@@ -123,6 +139,11 @@ public class AdminServlet extends BaseServlet {
 	 */
 	public String login(HttpServletRequest request, HttpServletResponse response)throws ServletException, IOException {
 		Admins form = FormUtils.toBean(request, Admins.class);	//将表单数据封装成javabean对象
+		String ch = request.getParameter("rememberAdminEmail");  //获取是否记住账号  on / null
+		if(ch == null){
+			request.setAttribute("isRemember", "false");
+		}
+		
 		form.setAdminPwd(MD5.parseMD5(form.getAdminPwd()));	//加密
 		
 		Verification v = null;	//定义一个验证码变量
@@ -136,14 +157,20 @@ public class AdminServlet extends BaseServlet {
 			loginedAdmin = as.login(form,v);  //调用AdminService的login()方法
 			
 			//没有异常  登录成功
+			if(ch.equals("on")){
+				Cookie cookie = new Cookie("rememberAdmin", loginedAdmin.getAdminEmail());
+				cookie.setMaxAge(60*60*24*7);	//七天
+				response.addCookie(cookie);
+			}
 			AdminLoginRecord alr = getALR(request,loginedAdmin,"成功");  //获取到AdminLoginRecord登录记录对象
 			as.addALR(alr);	//将登录记录对象添加到数据库
 			session.setAttribute("loginedAdmin", loginedAdmin);  //将登陆的管理员对象存入session域中
 			session.removeAttribute("loginErrorNum");  //将登录错误次数属性从session域中移除
+			session.removeAttribute("session_loginMsg");
 			return "r:/index.jsp";  //重定向到index.jsp
 		}catch(AdminException e){
 			//有异常  登录失败
-			AdminLoginRecord alr = getALR(request,loginedAdmin,"成功");  //获取到AdminLoginRecord登录记录对象
+			AdminLoginRecord alr = getALR(request,loginedAdmin,"失败");  //获取到AdminLoginRecord登录记录对象
 			try {as.addALR(alr);//将登录记录对象添加到数据库
 			} catch (AdminException e1) {throw new RuntimeException();}	
 			
@@ -166,7 +193,7 @@ public class AdminServlet extends BaseServlet {
 								+ "<input style='margin:0 0 0 20px;' type='text' placeholder='请输入验证码' name='codeText' class=''/>");
 			}
 			
-			return "f:/login.jsp";  //转发到登录页面
+			return "f:/adminLogin.jsp";  //转发到登录页面
 		}
 		
 		

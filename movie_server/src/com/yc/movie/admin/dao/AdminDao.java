@@ -34,7 +34,7 @@ public class AdminDao {
 	 * @throws SQLException 
 	 */
 	public Admins findAdminByPwd(String adminEmail, String adminPwd) throws SQLException {
-		String sql = "selecet * from admins where adminEmail=? and adminPwd=?";
+		String sql = "select * from admins where adminEmail=? and adminPwd=?";
 		List<Admins> result = qr.query(sql,new BeanListHandler<Admins>(Admins.class),adminEmail,adminPwd);
 		if(result.size()>0){
 			return result.get(0);

@@ -112,7 +112,6 @@ public class MailUtils {
 		if(code!=null && code.length>0)
 			content = MessageFormat.format(content,code);  //替换占位符
 		Mail mail = new Mail(from,to,subject,content);  //创建邮件对象
-		System.out.println(mail);
 		Session session = MailUtils.createSession(host,uname,pwd);  //用自己的工具获取session
 		send(session,mail);  //发邮件
 	}

@@ -42,14 +42,16 @@ public class AdminService {
 			}
 			
 			//用户名格式(邮箱)验证  正则表达式
+			if(form.getAdminEmail()==null || form.getAdminEmail().trim().isEmpty())
+				throw new AdminException("请输入邮箱地址!");
 			if(!form.getAdminEmail().matches(RegxUtils.EMAIL_REGX)){
-				throw new AdminException("邮箱格式不正确!");
+				throw new AdminException("邮箱格式必须是:xxx@xxx.xxx!");
 			}
 			
 			//调用ad的findAdminByEmail()方法判断用户名(邮箱)是否存在
 			Admins admin = ad.findAdminByEmail(form.getAdminEmail());
 			if(admin == null){
-				throw new AdminException("该用户未注册!");
+				throw new AdminException("此邮箱未注册，请先去注册!");
 			}
 			
 			//调用ad的findAdminByPwd()方法判断密码是否正确
@@ -276,5 +278,26 @@ public class AdminService {
 			break;
 		default:throw new AdminException("系统异常，请稍后再试！");
 		}
+	}
+
+	/**
+	 * 管理员登录之前的Email校验  ajax失焦
+	 * @param adminEmail
+	 * @throws AdminException 
+	 */
+	public void loginAdminEmailRegx(String adminEmail) throws AdminException {
+		//判断格式是否正确
+		if(adminEmail==null || adminEmail.isEmpty())
+			throw new AdminException("请输入邮箱地址!");
+		if(!adminEmail.matches(RegxUtils.EMAIL_REGX))
+			throw new AdminException("邮箱格式必须是:xxx@xxx.xxx!");
+		try {
+			Admins adm = ad.findAdminByEmail(adminEmail);
+			if(adm == null)
+				throw new AdminException("此邮箱未注册，请先去注册!");
+		} catch (SQLException e) {
+			throw new AdminException("系统异常，请稍后再试！");
+		}
+		
 	}
 }
