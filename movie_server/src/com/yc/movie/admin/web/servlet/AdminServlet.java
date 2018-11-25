@@ -156,7 +156,7 @@ public class AdminServlet extends BaseServlet {
 		 alr.setAlrLoginIp(request.getRemoteAddr());  //设置登录IP
 		 alr.setAlrLoginTime(new Timestamp(new Date().getTime()));  //设置登录时间
 		 alr.setAlrStatus(status);   //设置登录状态
-		 alr.setAlrAdmin(loginedAdmin);   //设置登录管理员对象
+		 alr.setAlrAdmin(loginedAdmin);    //设置登录管理员对象
 		return alr;
 	}
 
