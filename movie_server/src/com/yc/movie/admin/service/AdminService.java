@@ -11,12 +11,13 @@ import com.yc.movie.admin.dao.AdminDao;
 import com.yc.movie.admin.exception.AdminException;
 import com.yc.movie.utils.DateUtils;
 import com.yc.movie.utils.JdbcUtils;
+import com.yc.movie.utils.MD5;
 import com.yc.movie.utils.MailUtils;
 
 public class AdminService {
 	private AdminDao ad = new AdminDao();
 	public static final String EMAIL_REGX = "^[A-Za-z\\d]+([-_.][A-Za-z\\d]+)*@([A-Za-z\\d]+[-.])+[A-Za-z\\d]{2,4}$";
-	
+	public static final String PWD_REGX = "[0-9A-Za-z_]{6-12}";
 	/**
 	 * 登录业务
 	 * @param form	
@@ -135,13 +136,17 @@ public class AdminService {
 			throw new AdminException("确认密码不能为空");
 		}
 		//判断新密码格式是否正确
-		// TODO Auto-generated method stub
+		if(!form.getAdminPwd().trim().matches(PWD_REGX)){
+			throw new AdminException("新密码格式不正确");
+		}
 		
 		//判断新密码和确认密码是否相同
-		// TODO Auto-generated method stub
+		if(!form.getAdminPwd().equals(adminPwd2)){
+			throw new AdminException("两次输入密码不相同");
+		}
 		
 		//将新密码加密
-		// TODO Auto-generated method stub
+		form.setAdminPwd(MD5.parseMD5(form.getAdminPwd()));
 		
 		//修改数据库
 		try {
