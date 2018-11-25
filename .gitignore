@@ -1,0 +1,10 @@
+/.metadata/
+/.recommenders/
+/RemoteSystemsTempFiles/
+/Servers/*/*
+/Servers/.*
+!/Servers/*/context.xml
+/demo-*
+/libraries
+/_stu-demo
+/*/target
