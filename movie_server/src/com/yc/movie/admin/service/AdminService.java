@@ -15,11 +15,8 @@ import com.yc.movie.admin.bean.Admins;
 import com.yc.movie.admin.bean.Verification;
 import com.yc.movie.admin.dao.AdminDao;
 import com.yc.movie.admin.exception.AdminException;
-import com.yc.movie.utils.DateUtils;
 import com.yc.movie.utils.JdbcUtils;
-import com.yc.movie.utils.MD5;
-import com.yc.movie.utils.MailUtils;
-import com.yc.movie.utils.RegxUtils;
+import com.yc.movie.utils.CommonsUtils;
 
 public class AdminService {
 	private AdminDao ad = new AdminDao();
@@ -44,7 +41,7 @@ public class AdminService {
 			//用户名格式(邮箱)验证  正则表达式
 			if(form.getAdminEmail()==null || form.getAdminEmail().trim().isEmpty())
 				throw new AdminException("请输入邮箱地址!");
-			if(!form.getAdminEmail().matches(RegxUtils.EMAIL_REGX)){
+			if(!form.getAdminEmail().matches(CommonsUtils.EMAIL_REGX)){
 				throw new AdminException("邮箱格式必须是:xxx@xxx.xxx!");
 			}
 			
@@ -59,13 +56,6 @@ public class AdminService {
 			if(admin == null){
 				throw new AdminException("密码错误!");
 			}
-			
-			//登录成功，发送邮箱提醒   
-			//尊敬的管理员：{0},您于{0}登录了电影网站管理系统！<a href="http://localhost:8080/movie_server/AdminServlet?method=alterPwd&alterId={0}">不是自己登录?修改密码！</a>
-			Object[] code = {admin.getAdminName(),DateUtils.format(new Date(), "yyyy-MM-dd HH:mm:ss"),admin.getAdminId()};
-			MailUtils.send(this.getClass(), admin.getAdminEmail(), code,MailUtils.LOGINED_EMAIL_FILENAME);
-			
-			
 			return admin;
 		}catch(SQLException e){
 			throw new AdminException("系统异常，请稍后再试！");
@@ -118,7 +108,7 @@ public class AdminService {
 		case "4":
 			//注册码
 			//1.正则表达式判断  不正确抛异常
-			if(form.getAdminRegisterCode() == null || !form.getAdminRegisterCode().matches(RegxUtils.REGISTER_CODE_REGX)){
+			if(form.getAdminRegisterCode() == null || !form.getAdminRegisterCode().matches(CommonsUtils.REGISTER_CODE_REGX)){
 				throw new AdminException("注册码格式不正确！");
 			}
 			
@@ -155,7 +145,7 @@ public class AdminService {
 		case "1":
 			//邮箱
 			//1.正则表达式判断  不正确抛异常
-			if(form.getAdminEmail() == null || !form.getAdminEmail().matches(RegxUtils.EMAIL_REGX)){
+			if(form.getAdminEmail() == null || !form.getAdminEmail().matches(CommonsUtils.EMAIL_REGX)){
 				throw new AdminException("邮箱格式不正确！");
 			}
 			
@@ -173,7 +163,7 @@ public class AdminService {
 		case "2":
 			//密码
 			//1.正则表达式判断  不正确抛异常
-			if(form.getAdminPwd() == null || !form.getAdminPwd().matches(RegxUtils.PWD_REGX)){
+			if(form.getAdminPwd() == null || !form.getAdminPwd().matches(CommonsUtils.PWD_REGX)){
 				throw new AdminException("密码格式不正确:必须是字母数字或下划线！");
 			}
 			
@@ -199,7 +189,7 @@ public class AdminService {
 		//判断格式是否正确
 		if(adminEmail==null || adminEmail.isEmpty())
 			throw new AdminException("请输入邮箱地址!");
-		if(!adminEmail.matches(RegxUtils.EMAIL_REGX))
+		if(!adminEmail.matches(CommonsUtils.EMAIL_REGX))
 			throw new AdminException("邮箱格式必须是:xxx@xxx.xxx!");
 		try {
 			Admins adm = ad.findAdminByEmail(adminEmail);
@@ -224,7 +214,7 @@ public class AdminService {
 		registerBlur(form,"4",pwd2);
 		
 		//2.密码加密
-		form.setAdminPwd(MD5.parseMD5(form.getAdminPwd()));
+		form.setAdminPwd(CommonsUtils.parseMD5(form.getAdminPwd()));
 		
 		//3.设置权值
 		//  根据注册码来设置权值   根据首字母来确定是什么管理员
@@ -254,6 +244,12 @@ public class AdminService {
 				throw new AdminException("系统异常，请稍后再试！");
 			}
 		}
+		
+		//注册成功  发送注册成功邮件
+		String to = form.getAdminEmail();  //设置收件人
+		Object[] codes = {form.getAdminEmail(),CommonsUtils.dateFormat(new Date(), "yyyy-MM-dd HH:mm:ss")};  //替换补位   管理员  时间
+		String fileName = "register_admin_email.properties";
+		CommonsUtils.sendMail(this.getClass(), to, codes, fileName);
 	}
 
 	/**
@@ -268,7 +264,7 @@ public class AdminService {
 		case "4":
 			//注册码
 			//1.正则表达式判断  不正确抛异常
-			if(form.getAdminRegisterCode() == null || !form.getAdminRegisterCode().matches(RegxUtils.REGISTER_CODE_REGX)){
+			if(form.getAdminRegisterCode() == null || !form.getAdminRegisterCode().matches(CommonsUtils.REGISTER_CODE_REGX)){
 				throw new AdminException("注册码格式不正确！");
 			}
 			
@@ -293,7 +289,7 @@ public class AdminService {
 		case "1":
 			//邮箱
 			//1.正则表达式判断  不正确抛异常
-			if(form.getAdminEmail() == null || !form.getAdminEmail().matches(RegxUtils.EMAIL_REGX)){
+			if(form.getAdminEmail() == null || !form.getAdminEmail().matches(CommonsUtils.EMAIL_REGX)){
 				throw new AdminException("邮箱格式不正确！");
 			}
 			
@@ -311,7 +307,7 @@ public class AdminService {
 		case "2":
 			//密码
 			//1.正则表达式判断  不正确抛异常
-			if(form.getAdminPwd() == null || !form.getAdminPwd().matches(RegxUtils.PWD_REGX)){
+			if(form.getAdminPwd() == null || !form.getAdminPwd().matches(CommonsUtils.PWD_REGX)){
 				throw new AdminException("密码格式不正确:必须是字母数字或下划线！");
 			}
 			
@@ -326,5 +322,46 @@ public class AdminService {
 			break;
 		default:throw new AdminException("系统异常，请稍后再试！");
 		}
+	}
+
+	/**
+	 * 修改密码
+	 * @param form
+	 * @param pwd2
+	 * @throws AdminException 
+	 */
+	public void resetPwd(Admins form, String pwd2) throws AdminException {
+		//1.数据校验
+		resetPwdBlur(form,"1",pwd2);
+		resetPwdBlur(form,"2",pwd2);
+		resetPwdBlur(form,"3",pwd2);
+		resetPwdBlur(form,"4",pwd2);
+		
+		//2.密码加密
+		form.setAdminPwd(CommonsUtils.parseMD5(form.getAdminPwd()));
+		
+		
+		//3.修改事务
+		try {
+			JdbcUtils.beginTransaction();	//开启事务
+			
+			ad.resetPwd(form.getAdminEmail(),form.getAdminPwd());  //修改密码
+			
+			JdbcUtils.commitTransaction();  //提交事务
+		} catch (SQLException e) {
+			try {
+				JdbcUtils.roolbackTransaction();  //回滚
+			} catch (SQLException e1) {
+				throw new AdminException("系统异常，请稍后再试！");
+			}
+		}
+		
+		//修改成功  发送邮件
+		//localhost:8080/movie_server
+		//
+		String to = form.getAdminEmail();  //设置收件人
+		Object[] codes = {form.getAdminEmail(),CommonsUtils.dateFormat(new Date(), "yyyy-MM-dd HH:mm:ss")};  //替换补位   管理员  时间
+		String fileName = "reset_password_email.properties";
+		CommonsUtils.sendMail(this.getClass(), to, codes, fileName);
 	}
 }

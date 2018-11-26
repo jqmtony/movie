@@ -6,8 +6,7 @@ import com.yc.movie.admin.bean.Verification;
 import com.yc.movie.admin.exception.AdminException;
 import com.yc.movie.admin.service.AdminService;
 import com.yc.movie.utils.BaseServlet;
-import com.yc.movie.utils.FormUtils;
-import com.yc.movie.utils.MD5;
+import com.yc.movie.utils.CommonsUtils;
 
 import java.awt.image.BufferedImage;
 import java.io.IOException;
@@ -53,7 +52,7 @@ public class AdminServlet extends BaseServlet {
 	 * @throws IOException
 	 */
 	public void register(HttpServletRequest request, HttpServletResponse response)throws ServletException, IOException {
-		Admins form = FormUtils.toBean(request, Admins.class);  //将表单数据封装成javabean 对象
+		Admins form = CommonsUtils.toBean(request, Admins.class);  //将表单数据封装成javabean 对象
 		String pwd2 = request.getParameter("adminPwd2");	//得到确认密码
 		try {
 			//注册
@@ -73,7 +72,7 @@ public class AdminServlet extends BaseServlet {
 	 * @throws IOException
 	 */
 	public void registerBlur(HttpServletRequest request, HttpServletResponse response)throws ServletException, IOException {
-		Admins form = FormUtils.toBean(request, Admins.class);  //将表单数据封装成javabean 对象
+		Admins form = CommonsUtils.toBean(request, Admins.class);  //将表单数据封装成javabean 对象
 		String pwd2 = request.getParameter("adminPwd2");	//得到确认密码
 		String status = request.getParameter("status");	//获取到是哪个注册属性
 		String chose = "";	//这个属性是注册表单中的数据Id
@@ -96,6 +95,26 @@ public class AdminServlet extends BaseServlet {
 	}
 	
 	/**
+	 * 修改密码 ajax
+	 * @param request
+	 * @param response
+	 * @throws ServletException
+	 * @throws IOException
+	 */
+	public void resetPwd(HttpServletRequest request, HttpServletResponse response)throws ServletException, IOException {
+		Admins form = CommonsUtils.toBean(request, Admins.class);  //将表单数据封装成javabean 对象
+		String pwd2 = request.getParameter("adminPwd2");	//得到确认密码
+		try {
+			//修改密码
+			as.resetPwd(form,pwd2);
+			response.getWriter().append("修改成功");  
+		} catch (AdminException e) {
+			//如果修改失败
+			response.getWriter().append(e.getMessage());
+		}
+	}
+	
+	/**
 	 * 修改密码校验  ajax
 	 * @param request
 	 * @param response
@@ -103,7 +122,7 @@ public class AdminServlet extends BaseServlet {
 	 * @throws IOException
 	 */
 	public void resetPwdBlur(HttpServletRequest request, HttpServletResponse response)throws ServletException, IOException {
-		Admins form = FormUtils.toBean(request, Admins.class);  //将表单数据封装成javabean 对象
+		Admins form = CommonsUtils.toBean(request, Admins.class);  //将表单数据封装成javabean 对象
 		String pwd2 = request.getParameter("adminPwd2");	//得到确认密码
 		String status = request.getParameter("status");	//获取到是哪个注册属性
 		String chose = "";	//这个属性是注册表单中的数据Id
@@ -134,13 +153,13 @@ public class AdminServlet extends BaseServlet {
 	 * @throws IOException
 	 */
 	public String login(HttpServletRequest request, HttpServletResponse response)throws ServletException, IOException {
-		Admins form = FormUtils.toBean(request, Admins.class);	//将表单数据封装成javabean对象
+		Admins form = CommonsUtils.toBean(request, Admins.class);	//将表单数据封装成javabean对象
 		String ch = request.getParameter("rememberAdminEmail");  //获取是否记住账号  on / null
 		if(ch == null){
 			request.setAttribute("isRemember", "false");
 		}
 		
-		form.setAdminPwd(MD5.parseMD5(form.getAdminPwd()));	//加密
+		form.setAdminPwd(CommonsUtils.parseMD5(form.getAdminPwd()));	//加密
 		
 		Verification v = null;	//定义一个验证码变量
 		Object obj = session.getAttribute("verificationObject");	//取出session中的验证码对象

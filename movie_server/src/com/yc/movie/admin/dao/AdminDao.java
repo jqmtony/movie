@@ -121,5 +121,16 @@ public class AdminDao {
 			return result.get(0);
 		return null;
 	}
+
+	/**
+	 * ĞŞ¸ÄÃÜÂë
+	 * @param form
+	 * @throws SQLException 
+	 */
+	public void resetPwd(String email,String newPwd) throws SQLException {
+		String sql = "update admins set adminPwd=? where adminEmail=?";
+		Object[] params = {newPwd,email};
+		qr.update(sql,params);
+	}
 	
 }

@@ -1,1 +1,6 @@
 /com/
+/registerAdminEmail.properties
+/register_admin_email.properties
+/reset_password_email.properties
+/ip_address_and_projectName.properties
+/address_and_projectName.properties

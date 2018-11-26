@@ -169,7 +169,7 @@ body {
 			</div>
 			<div class="layui-form-item">
 				<div class="beg-pull-left beg-login-remember" style="color:#FFFFFF;margin-top: 6%;">
-					<button class="layui-btn" onclick="reset_pwd();return false;">
+					<button class="layui-btn" onclick="resetPwd();return false;">
 					<i class="layui-icon">&#xe650;</i> 重置
 					</button>
 				</div>
@@ -476,7 +476,7 @@ function goto_forget(){
 	$("#reset").show();
 }
 
-//修改密码
+//修改密码校验
 function resetPwdBlur(num){
 	var data = {
 			status:num,
@@ -502,61 +502,43 @@ function resetPwdBlur(num){
 		}
 	});
 }
-/* function reset_pwd(){
-	var regcode_reset = $("#regcode_reset").val();
-	var username_reset = $("#username_reset").val();
-	var password_reset = $("#password_reset").val();
-	var determine_password_reset = $("#determine_password_reset").val();
-	if(username_reset.trim().length < 6){
-		$.pt({
-			target: $("#username_reset"),
-			position: 'r',
-			align: 't',
-			width: 'auto',
-			height: 'auto',
-			content:"用户名不能少于6位"
-		});
-		return false;
-	}
-	//注册码不能为空
-	if(regcode_reset == ""){
-		$.pt({
-			target: $("#regcode_reset"),
-			position: 'r',
-			align: 't',
-			width: 'auto',
-			height: 'auto',
-			content:"注册码不能为空"
-		});
-		return false;
-	}
-	//密码只能是5-15位
-	var regExp = new RegExp("^.{5,15}$");
-	if(!regExp.test(password_reset)){
-		$.pt({
-			target: $("#password_reset"),
-			position: 'r',
-			align: 't',
-			width: 'auto',
-			height: 'auto',
-			content:"密码只能是5-15位"
-		});
-		return false;
-	}
-	//两次输入的密码要一致
-	if(password_reset != determine_password_reset){
-		$.pt({
-			target: $("#determine_password_reset"),
-			position: 'r',
-			align: 't',
-			width: 'auto',
-			height: 'auto',
-			content:"两次输入的密码不一致"
-		});
-		return false;
-	}
-	alert("密码重置成功");
-} */
+
+//修改密码
+function resetPwd(){
+	var data = {
+			adminEmail:$('#adminFoEmail').val(),
+			adminPwd:$('#adminFoPwd').val(),
+			adminPwd2:$('#adminFoPwd2').val(),
+			adminRegisterCode:$('#adminFoRegisterCode').val()
+	};
+	$.post("<c:url value='/admin.s?method=resetPwd' />",data,function(data){
+		var str = data;
+		var tar;
+		if(str.indexOf("两次输入的密码不相同")!=-1){  //返回值是关于密码的
+			tar = $('#adminRePwd2');
+		}else if(str.indexOf("邮箱")!=-1){
+			tar = $('#adminReEmail');
+		}else  if(str.indexOf("注册码")!=-1){
+			tar = $('#adminRegisterCode');
+		}else if(str.indexOf("密码格式不正确")!=-1){
+			tar = $('#adminRePwd');
+		}
+		if(tar != null){
+			$.pt({
+				target:tar,
+				position: 'r',
+				align: 't',
+				width: 'auto',
+				height: 'auto',
+				content:str
+			});
+		}else{
+			alert(str);
+			history.go(0);
+		}
+	});
+}
+
 animloop();
 </script>
 <c:if test="${! empty loginMsg }">   
@@ -589,42 +571,6 @@ animloop();
 		}
 	</script>
 </c:if>
-
-<%-- <c:if test="${! empty registerMsg }">
-	<script type="text/javascript">
-		var str = "${registerMsg}";
-		var tar = $("#register");
-		if(str.indexOf("两次输入的密码不相同")!=-1){  //返回值是关于密码的
-			tar = $('#adminRePwd2');
-		}else if(str.indexOf("邮箱")!=-1){
-			tar = $('#adminReEmail');
-		}else  if(str.indexOf("注册码")!=-1){
-			tar = $('#adminRegisterCode');
-		}else if(str.indexOf("密码格式不正确")!=-1){
-			tar = $('#adminRePwd');
-		}
-		if(tar === $("#register")){
-			$.pt({
-				target:tar,
-				position: 't',
-				align: 't',
-				width: 'auto',
-				height: 'auto',
-				content:str
-			});
-		}else if(tar != null){
-			$.pt({
-				target:tar,
-				position: 'r',
-				align: 't',
-				width: 'auto',
-				height: 'auto',
-				content:str
-			});
-		}
-	</script>
-</c:if> --%>
-
 
 <c:if test="${! empty isRemember}">
 	<script type="text/javascript">
