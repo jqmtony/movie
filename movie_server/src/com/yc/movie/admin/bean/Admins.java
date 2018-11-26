@@ -3,7 +3,7 @@ package com.yc.movie.admin.bean;
 import java.io.Serializable;
 import java.sql.Timestamp;
 
-public class Admins implements Serializable{
+public class Admins implements Serializable{    //如果要改属性   就要全部更改
 	private Long adminId; //管理员id
 	private String adminRegisterCode;	//管理员注册码
 	private String adminName;	//管理员姓名

@@ -2,6 +2,7 @@ package com.yc.movie.admin.service;
 
 import java.io.IOException;
 import java.sql.SQLException;
+import java.sql.Timestamp;
 import java.util.Date;
 import java.util.Iterator;
 import java.util.Map;
@@ -9,7 +10,6 @@ import java.util.Map.Entry;
 import java.util.Properties;
 import java.util.Set;
 
-import com.sun.jmx.snmp.Timestamp;
 import com.yc.movie.admin.bean.AdminLoginRecord;
 import com.yc.movie.admin.bean.Admins;
 import com.yc.movie.admin.bean.Verification;
@@ -93,28 +93,6 @@ public class AdminService {
 			} 
 		}  
 	}
-
-	/** 
-	 * 发送邮件给管理员  让他通过邮箱链接修改密码
-	 * @param adminEmail
-	 * @throws AdminException 
-	 */
-	public Admins fotPwdSendEmail(String adminEmail) throws AdminException {
-		Admins adm=null;
-		try {
-			adm = ad.findAdminByEmail(adminEmail);
-		} catch (SQLException e) {
-			throw new AdminException("该邮箱还没有注册，请先注册！");
-		}  //得到要修改密码的管理员
-		if(adm == null){   //这个邮箱还没有注册
-			throw new AdminException("该邮箱还没有注册，请先注册！");
-		}
-		//尊敬的管理员：{0}，<a href="http://localhost:8080/movie_server/AdminServlet?method=alterPwd&alterId={0}">点击修改密码</a>
-		Object[] code = {adm.getAdminName(),adm.getAdminId()};  //填充补位
-		MailUtils.send(this.getClass(), adminEmail, code,MailUtils.ALTER_PWD_EMAIL_FILENAME);	//发送邮件
-		return adm;
-	}
-
 	/**
 	 * 根据Id获得Admins对象
 	 * @param alterId
@@ -130,69 +108,17 @@ public class AdminService {
 	}
 
 	/**
-	 * 修改密码
-	 * @param form
-	 * @param adminPwd2
-	 * @return
-	 * @throws AdminException 
-	 */
-	public Admins alterPwd(Admins form, String adminPwd2) throws AdminException {
-		//判断数据是否为null   form.getAdminPwd()   adminPwd2
-		if(form.getAdminPwd() == null || form.getAdminPwd().trim().isEmpty()){
-			throw new AdminException("新密码不能为空");
-		}
-		if(adminPwd2 == null || adminPwd2.trim().isEmpty()){
-			throw new AdminException("确认密码不能为空");
-		}
-		//判断新密码格式是否正确
-		if(!form.getAdminPwd().trim().matches(RegxUtils.PWD_REGX)){
-			throw new AdminException("新密码格式不正确");
-		}
-		
-		//判断新密码和确认密码是否相同
-		if(!form.getAdminPwd().equals(adminPwd2)){
-			throw new AdminException("两次输入密码不相同");
-		}
-		
-		//将新密码加密
-		form.setAdminPwd(MD5.parseMD5(form.getAdminPwd()));
-		
-		//修改数据库
-		try {
-			JdbcUtils.beginTransaction();
-			
-			ad.alterPwd(form);
-			
-			JdbcUtils.commitTransaction();
-		} catch (SQLException e) {
-			try {
-				JdbcUtils.roolbackTransaction();
-			} catch (SQLException e1) {
-				throw new AdminException("系统异常，请稍后再试！");
-			}
-		}
-		//修改成功，得到修改完成的Admins对象并返回
-		Admins adm=null;
-		try {
-			adm = ad.findAdminByEmail(form.getAdminEmail());
-		} catch (SQLException e) {
-			throw new AdminException("系统异常，请稍后再试！");
-		}
-		return adm;
-	}
-
-	/**
-	 * 注册管理员时失焦进行校验
+	 * 注册管理员时失焦进行校验  ajax
 	 * @param form
 	 * @param status
 	 * @throws AdminException 
 	 */
 	public void registerBlur(Admins form, String status,String pwd2) throws AdminException {
 		switch(status){
-		case "1":
+		case "4":
 			//注册码
 			//1.正则表达式判断  不正确抛异常
-			if(!form.getAdminRegisterCode().matches(RegxUtils.REGISTER_CODE_REGX)){
+			if(form.getAdminRegisterCode() == null || !form.getAdminRegisterCode().matches(RegxUtils.REGISTER_CODE_REGX)){
 				throw new AdminException("注册码格式不正确！");
 			}
 			
@@ -200,7 +126,7 @@ public class AdminService {
 			boolean flag = false;
 			Properties p = new Properties();	//创建Properties流  这个流是集合中可以和IO流相关连的流   和Map相似
 			try {
-				p.load(this.getClass().getResourceAsStream("registerCode.properties"));  //加载配置文件
+				p.load(this.getClass().getClassLoader().getResourceAsStream("registerCode.properties"));  //加载配置文件
 				Set<Object> keySet = p.keySet();	//p<Object,Object>   得到p的key集合
 				for(Object key:keySet){	//遍历所有的注册码
 					String str = String.valueOf(p.get(key)); //通过键取值    得到一个注册码
@@ -226,26 +152,10 @@ public class AdminService {
 			}
 	
 			break;
-		case "2":
-			//姓名
-			//1.正则表达式判断  不正确抛异常
-			if(!form.getAdminName().matches(RegxUtils.NAME_REGX)){
-				throw new AdminException("姓名格式不正确！");
-			}
-			
-			break;
-		case "3":
-			//电话
-			//1.正则表达式判断  不正确抛异常
-			if(!form.getAdminTel().matches(RegxUtils.TEL_NUM_REGX)){
-				throw new AdminException("电话格式不正确！");
-			}
-			
-			break;
-		case "4":
+		case "1":
 			//邮箱
 			//1.正则表达式判断  不正确抛异常
-			if(!form.getAdminEmail().matches(RegxUtils.EMAIL_REGX)){
+			if(form.getAdminEmail() == null || !form.getAdminEmail().matches(RegxUtils.EMAIL_REGX)){
 				throw new AdminException("邮箱格式不正确！");
 			}
 			
@@ -260,18 +170,18 @@ public class AdminService {
 			}
 			
 			break;
-		case "5":
+		case "2":
 			//密码
 			//1.正则表达式判断  不正确抛异常
-			if(!form.getAdminPwd().matches(RegxUtils.PWD_REGX)){
-				throw new AdminException("密码格式不正确！");
+			if(form.getAdminPwd() == null || !form.getAdminPwd().matches(RegxUtils.PWD_REGX)){
+				throw new AdminException("密码格式不正确:必须是字母数字或下划线！");
 			}
 			
 			break;
-		case "6":
+		case "3":
 			//确认密码
 			//1.判断确认密码是否与新密码相同   不相同就抛异常
-			if(!form.getAdminPwd().equals(pwd2)){
+			if(pwd2 == null || !form.getAdminPwd().trim().equals(pwd2)){
 				throw new AdminException("两次输入的密码不相同！");
 			}
 			
@@ -299,5 +209,122 @@ public class AdminService {
 			throw new AdminException("系统异常，请稍后再试！");
 		}
 		
+	}
+
+	/**
+	 * 注册
+	 * @param form
+	 * @throws AdminException 
+	 */
+	public void register(Admins form,String pwd2) throws AdminException {
+		//1.数据校验
+		registerBlur(form,"1",pwd2);
+		registerBlur(form,"2",pwd2);
+		registerBlur(form,"3",pwd2);
+		registerBlur(form,"4",pwd2);
+		
+		//2.密码加密
+		form.setAdminPwd(MD5.parseMD5(form.getAdminPwd()));
+		
+		//3.设置权值
+		//  根据注册码来设置权值   根据首字母来确定是什么管理员
+		Integer str = Integer.parseInt(form.getAdminRegisterCode().substring(0, 1));  //得到首字母
+		Long weight = 0l;
+		switch(str){
+		case 0:weight=10000l;break;
+		case 1:weight=1000l;break;
+		case 2:weight=100l;break;
+		}
+		form.setAdminWeight(weight);
+		
+		//4.设置注册时间
+		form.setAdminCreateTime(new Timestamp(new Date().getTime()));
+		
+		//5.注册事务
+		try {
+			JdbcUtils.beginTransaction();	//开启事务
+			
+			ad.addAdmin(form);  //将admin添加到数据库
+			
+			JdbcUtils.commitTransaction();  //提交事务
+		} catch (SQLException e) {
+			try {
+				JdbcUtils.roolbackTransaction();  //回滚
+			} catch (SQLException e1) {
+				throw new AdminException("系统异常，请稍后再试！");
+			}
+		}
+	}
+
+	/**
+	 * 修改密码之前的校验    ajax
+	 * @param form
+	 * @param status
+	 * @param pwd2
+	 * @throws AdminException 
+	 */
+	public void resetPwdBlur(Admins form, String status, String pwd2) throws AdminException {
+		switch(status){
+		case "4":
+			//注册码
+			//1.正则表达式判断  不正确抛异常
+			if(form.getAdminRegisterCode() == null || !form.getAdminRegisterCode().matches(RegxUtils.REGISTER_CODE_REGX)){
+				throw new AdminException("注册码格式不正确！");
+			}
+			
+			try {
+				//2.通过注册码查询数据库中是否存在admin对象   不存在就抛异常
+				Admins admin = ad.findAdminByRegisterCode(form.getAdminRegisterCode());
+				if(admin == null){
+					throw new AdminException("注册码不存在或未被使用！");
+				}
+				
+				//3.通过邮箱和注册码同时查询
+				if(form.getAdminEmail() == null)
+					throw new AdminException("请先填写邮箱！");
+				admin = ad.findAdminByRegisterCodeAndEmail(form.getAdminRegisterCode(),form.getAdminEmail());
+				if(admin == null)
+					throw new AdminException("注册码与邮箱不匹配！");
+			} catch (SQLException e) {
+				throw new AdminException("系统异常，请稍后再试！");
+			}
+	
+			break;
+		case "1":
+			//邮箱
+			//1.正则表达式判断  不正确抛异常
+			if(form.getAdminEmail() == null || !form.getAdminEmail().matches(RegxUtils.EMAIL_REGX)){
+				throw new AdminException("邮箱格式不正确！");
+			}
+			
+			//2.查询数据库  判断是否已存在此邮箱  如果已存在就抛异常
+			try {
+				Admins admin = ad.findAdminByEmail(form.getAdminEmail());
+				if(admin == null){
+					throw new AdminException("该邮箱未被注册！");
+				}
+			} catch (SQLException e) {
+				throw new AdminException("系统异常，请稍后再试！");
+			}
+			
+			break;
+		case "2":
+			//密码
+			//1.正则表达式判断  不正确抛异常
+			if(form.getAdminPwd() == null || !form.getAdminPwd().matches(RegxUtils.PWD_REGX)){
+				throw new AdminException("密码格式不正确:必须是字母数字或下划线！");
+			}
+			
+			break;
+		case "3":
+			//确认密码
+			//1.判断确认密码是否与新密码相同   不相同就抛异常
+			if(pwd2 == null || !form.getAdminPwd().trim().equals(pwd2)){
+				throw new AdminException("两次输入的密码不相同！");
+			}
+			
+			break;
+		default:throw new AdminException("系统异常，请稍后再试！");
+		}
 	}
 }

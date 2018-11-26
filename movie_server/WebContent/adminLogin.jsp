@@ -11,7 +11,7 @@
 <link rel="stylesheet" href="adminCss/tooltips.css" />
 
 
-<script type="text/javascript" src="adminJs/jquery.min.js"></script>
+<script type="text/javascript" src="adminJs/jquery-1.9.1.js"></script>
 <script type="text/javascript" src="adminJs/jquery.pure.tooltips.js"></script>
 <script type="text/javascript" src="adminLib/layui/layui.js"></script>
 <style>
@@ -77,6 +77,7 @@ body {
 				<div class="beg-pull-left beg-login-remember" style="color:#FFFFFF;margin-top: -2%;">
 					<button class="layui-btn layui-btn-radius layui-btn-primary" onclick="goto_register();return false;">
 					<i class="layui-icon">&#xe650;</i> 注册
+					</button>
 				</div>
 				
 				<div class="beg-pull-right">
@@ -99,30 +100,31 @@ body {
 				<label class="beg-login-icon">
 				<i class="layui-icon">&#xe612;</i>
 			</label>
-				<input id="username_register" type="text" name="userName" lay-verify="userName" autocomplete="off" placeholder="请输入用户名" class="layui-input">
+				<input id="adminReEmail" type="text" name="adminReEmail" lay-verify="userName" value="${param.adminEmail }" autocomplete="off" placeholder="请输入邮箱" class="layui-input" onblur="registerBlur(1)">
 			</div>
 			<div class="layui-form-item">
 				<label class="beg-login-icon">
 					<i class="layui-icon">&#xe642;</i>
 				</label>
-				<input id="password_register" type="password" name="password" lay-verify="password" autocomplete="off" placeholder="请输入密码" class="layui-input">
+				<input id="adminRePwd" type="password" name="adminRePwd" lay-verify="password" autocomplete="off" placeholder="请输入密码" class="layui-input" onblur="registerBlur(2)">
 			</div>
 			<div class="layui-form-item">
 				<label class="beg-login-icon">
 					<i class="layui-icon">&#xe642;</i>
 				</label>
-				<input id="determine_password_register" type="password" name="password" lay-verify="password" autocomplete="off" placeholder="确认密码" class="layui-input">
+				<input id="adminRePwd2" type="password" name="adminRePwd2" lay-verify="password" autocomplete="off" placeholder="确认密码" class="layui-input" onblur="registerBlur(3)">
 			</div>
 			<div class="layui-form-item">
 				<label class="beg-login-icon">
 					<i class="layui-icon">&#xe6b2;</i>
 				</label>
-				<input id="regcode_register" type="text" name="regcode" lay-verify="regcode" autocomplete="off" placeholder="请输入注册码" class="layui-input">
+				<input id="adminRegisterCode" type="text" name="adminRegisterCode" lay-verify="regcode" value="${param.adminRegisterCode }" autocomplete="off" placeholder="请输入注册码" class="layui-input" onblur="registerBlur(4)">
 			</div>
 			<div class="layui-form-item">
 				<div class="beg-pull-left beg-login-remember" style="color:#FFFFFF;margin-top: 6%;">
 					<button class="layui-btn" onclick="register();return false;">
 					<i class="layui-icon">&#xe650;</i> 注册
+					</button>
 				</div>
 				
 				<div class="beg-pull-right">
@@ -145,30 +147,31 @@ body {
 				<label class="beg-login-icon">
 				<i class="layui-icon">&#xe612;</i>
 			</label>
-				<input id="username_reset" type="text" name="userName" lay-verify="userName" autocomplete="off" placeholder="请输入用户名" class="layui-input">
+				<input id="adminFoEmail" type="text" name="adminFoEmail" lay-verify="userName" autocomplete="off" placeholder="请输入邮箱" class="layui-input" onblur="resetPwdBlur(1)">
 			</div>
 			<div class="layui-form-item">
 				<label class="beg-login-icon">
 					<i class="layui-icon">&#xe6b2;</i>
 				</label>
-				<input id="regcode_reset" type="text" name="regcode" lay-verify="regcode" autocomplete="off" placeholder="请输入注册码" class="layui-input">
+				<input id="adminFoRegisterCode" type="text" name="adminFoRegisterCode" lay-verify="regcode" autocomplete="off" placeholder="请输入注册码" class="layui-input" onblur="resetPwdBlur(4)">
 			</div>
 			<div class="layui-form-item">
 				<label class="beg-login-icon">
 					<i class="layui-icon">&#xe642;</i>
 				</label>
-				<input id="password_reset" type="password" name="password" lay-verify="password" autocomplete="off" placeholder="请输入重置密码" class="layui-input">
+				<input id="adminFoPwd" type="password" name="adminFoPwd" lay-verify="password" autocomplete="off" placeholder="请输入重置密码" class="layui-input" onblur="resetPwdBlur(2)">
 			</div>
 			<div class="layui-form-item">
 				<label class="beg-login-icon">
 					<i class="layui-icon">&#xe642;</i>
 				</label>
-				<input id="determine_password_reset" type="password" name="password" lay-verify="password" autocomplete="off" placeholder="确认密码" class="layui-input">
+				<input id="adminFoPwd2" type="password" name="adminFoPwd2" lay-verify="password" autocomplete="off" placeholder="确认密码" class="layui-input" onblur="resetPwdBlur(3)">
 			</div>
 			<div class="layui-form-item">
 				<div class="beg-pull-left beg-login-remember" style="color:#FFFFFF;margin-top: 6%;">
 					<button class="layui-btn" onclick="reset_pwd();return false;">
 					<i class="layui-icon">&#xe650;</i> 重置
+					</button>
 				</div>
 				
 				<div class="beg-pull-right">
@@ -398,62 +401,70 @@ function goto_register(){
 	$("#login").hide();
 	$("#reset").hide();
 }
-//注册
-function register(){
-	var regcode_register = $("#regcode_register").val();
-	var username_register = $("#username_register").val();
-	var password_register = $("#password_register").val();
-	var determine_password_register = $("#determine_password_register").val();
-	if(username_register.trim().length < 6){
-		$.pt({
-			target: $("#username_register"),
-			position: 'r',
-			align: 't',
-			width: 'auto',
-			height: 'auto',
-			content:"用户名不能少于6位"
-		});
-		return false;
-	}
-	//密码只能是5-15位
-	var regExp = new RegExp("^.{5,15}$");
-	if(!regExp.test(password_register)){
-		$.pt({
-			target: $("#password_register"),
-			position: 'r',
-			align: 't',
-			width: 'auto',
-			height: 'auto',
-			content:"密码只能是5-15位"
-		});
-		return false;
-	}
-	//两次输入的密码要一致
-	if(password_register != determine_password_register){
-		$.pt({
-			target: $("#determine_password_register"),
-			position: 'r',
-			align: 't',
-			width: 'auto',
-			height: 'auto',
-			content:"两次输入的密码不一致"
-		});
-		return false;
-	}
-	//注册码不能为空
-	if(regcode_register == ""){
-		$.pt({
-			target: $("#regcode_register"),
-			position: 'r',
-			align: 't',
-			width: 'auto',
-			height: 'auto',
-			content:"注册码不能为空"
-		});
-		return false;
-	}
-	alert("注册成功");
+
+//注册前校验  ajax
+function registerBlur(num){
+	var data = {
+			status:num,
+			adminEmail:$('#adminReEmail').val(),
+			adminPwd:$('#adminRePwd').val(),
+			adminPwd2:$('#adminRePwd2').val(),
+			adminRegisterCode:$('#adminRegisterCode').val()
+	};
+	$.post("<c:url value='/admin.s?method=registerBlur' />",data,function(data){
+		if(data != ""){
+			var dataJson = eval("("+data+")");
+			var tar = dataJson.chose;
+			if(dataJson.msg != ""){
+				$.pt({
+					target: $("#"+tar),
+					position: 'r',
+					align: 't',
+					width: 'auto',
+					height: 'auto',
+					content:dataJson.msg
+				});
+			}
+		}
+	});
 }
+
+ //注册
+function register(){
+	var data = {
+			adminEmail:$('#adminReEmail').val(),
+			adminPwd:$('#adminRePwd').val(),
+			adminPwd2:$('#adminRePwd2').val(),
+			adminRegisterCode:$('#adminRegisterCode').val()
+	};
+	$.post("<c:url value='/admin.s?method=register' />",data,function(data){
+		var str = data;
+		var tar;
+		if(str.indexOf("两次输入的密码不相同")!=-1){  //返回值是关于密码的
+			tar = $('#adminRePwd2');
+		}else if(str.indexOf("邮箱")!=-1){
+			tar = $('#adminReEmail');
+		}else  if(str.indexOf("注册码")!=-1){
+			tar = $('#adminRegisterCode');
+		}else if(str.indexOf("密码格式不正确")!=-1){
+			tar = $('#adminRePwd');
+		}
+		if(tar != null){
+			$.pt({
+				target:tar,
+				position: 'r',
+				align: 't',
+				width: 'auto',
+				height: 'auto',
+				content:str
+			});
+		}else{
+			alert(str);
+			history.go(0);
+		}
+	});
+} 
+
 function goto_login(){
 	$("#register").hide();
 	$("#login").show();
@@ -466,7 +477,32 @@ function goto_forget(){
 }
 
 //修改密码
-function reset_pwd(){
+function resetPwdBlur(num){
+	var data = {
+			status:num,
+			adminEmail:$('#adminFoEmail').val(),
+			adminPwd:$('#adminFoPwd').val(),
+			adminPwd2:$('#adminFoPwd2').val(),
+			adminRegisterCode:$('#adminFoRegisterCode').val()
+	};
+	$.post("<c:url value='/admin.s?method=resetPwdBlur' />",data,function(data){
+		if(data != ""){
+			var dataJson = eval("("+data+")");
+			var tar = dataJson.chose;
+			if(dataJson.msg != ""){
+				$.pt({
+					target: $("#"+tar),
+					position: 'r',
+					align: 't',
+					width: 'auto',
+					height: 'auto',
+					content:dataJson.msg
+				});
+			}
+		}
+	});
+}
+/* function reset_pwd(){
 	var regcode_reset = $("#regcode_reset").val();
 	var username_reset = $("#username_reset").val();
 	var password_reset = $("#password_reset").val();
@@ -520,26 +556,76 @@ function reset_pwd(){
 		return false;
 	}
 	alert("密码重置成功");
-}
+} */
 animloop();
 </script>
-<c:if test="${! empty msg }">
+<c:if test="${! empty loginMsg }">   
 	<script type="text/javascript">
-		var str = "${msg}";
-		var tar = $("#adminEmail");
+		var str = "${loginMsg}";
+		var tar = $("#login");
 		if(str.indexOf("密码")!=-1){  //返回值是关于密码的
 			tar = $('#adminPwd');
+		}else if(str.indexOf("邮箱")!=-1){
+			tar = $('#adminEmail');
 		}
-		$.pt({
-			target:tar,
-			position: 'r',
-			align: 't',
-			width: 'auto',
-			height: 'auto',
-			content:str
-		});
+		if(tar === $("#login")){
+			$.pt({
+				target:tar,
+				position: 't',
+				align: 't',
+				width: 'auto',
+				height: 'auto',
+				content:str
+			});
+		}else if(tar != null){
+			$.pt({
+				target:tar,
+				position: 'r',
+				align: 't',
+				width: 'auto',
+				height: 'auto',
+				content:str
+			});
+		}
 	</script>
 </c:if>
+
+<%-- <c:if test="${! empty registerMsg }">
+	<script type="text/javascript">
+		var str = "${registerMsg}";
+		var tar = $("#register");
+		if(str.indexOf("两次输入的密码不相同")!=-1){  //返回值是关于密码的
+			tar = $('#adminRePwd2');
+		}else if(str.indexOf("邮箱")!=-1){
+			tar = $('#adminReEmail');
+		}else  if(str.indexOf("注册码")!=-1){
+			tar = $('#adminRegisterCode');
+		}else if(str.indexOf("密码格式不正确")!=-1){
+			tar = $('#adminRePwd');
+		}
+		if(tar === $("#register")){
+			$.pt({
+				target:tar,
+				position: 't',
+				align: 't',
+				width: 'auto',
+				height: 'auto',
+				content:str
+			});
+		}else if(tar != null){
+			$.pt({
+				target:tar,
+				position: 'r',
+				align: 't',
+				width: 'auto',
+				height: 'auto',
+				content:str
+			});
+		}
+	</script>
+</c:if> --%>
+
+
 <c:if test="${! empty isRemember}">
 	<script type="text/javascript">
 		$('#rememberAdminEmail').attr("checked",false);

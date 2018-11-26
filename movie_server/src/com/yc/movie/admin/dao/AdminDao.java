@@ -92,5 +92,34 @@ public class AdminDao {
 			return result.get(0);
 		return null;
 	}
+
+	/**
+	 * 将admin添加到数据库
+	 * @param form
+	 * @throws SQLException 
+	 */
+	public void addAdmin(Admins admin) throws SQLException {
+		String sql = "insert into admins values(?,?,?,?,?,?,?,?,?)";
+		Object[] params = {admin.getAdminId(),admin.getAdminRegisterCode(),admin.getAdminName(),
+				admin.getAdminTel(),admin.getAdminAddr(),admin.getAdminCreateTime(),
+				admin.getAdminWeight(),admin.getAdminEmail(),admin.getAdminPwd()};
+		qr.update(sql,params);
+	}
+
+	/**
+	 * 通过邮箱和注册码查询admin对象   不存在就返回null
+	 * @param adminRegisterCode
+	 * @param adminEmail
+	 * @return
+	 * @throws SQLException 
+	 */
+	public Admins findAdminByRegisterCodeAndEmail(String adminRegisterCode, String adminEmail) throws SQLException {
+		String sql = "select from admins where adminRegisterCode=? and adminEmail=?";
+		Object[] params = {adminRegisterCode,adminEmail};
+		List<Admins> result = qr.query(sql, new BeanListHandler<Admins>(Admins.class),params);
+		if(result.size() > 0)
+			return result.get(0);
+		return null;
+	}
 	
 }

@@ -44,91 +44,87 @@ public class AdminServlet extends BaseServlet {
 			response.getWriter().append(e.getMessage());
 		}
 	}
+	
 	/**
-	 * 注册页面的失焦事件
+	 * 注册  ajax
 	 * @param request
 	 * @param response
-	 * @return
 	 * @throws ServletException
 	 * @throws IOException
 	 */
-	public String registerBlur(HttpServletRequest request, HttpServletResponse response)throws ServletException, IOException {
+	public void register(HttpServletRequest request, HttpServletResponse response)throws ServletException, IOException {
 		Admins form = FormUtils.toBean(request, Admins.class);  //将表单数据封装成javabean 对象
-		String pwd2 = request.getParameter("adminPwd2");
-		String status = request.getParameter("status");	//获取到是哪个注册属性
+		String pwd2 = request.getParameter("adminPwd2");	//得到确认密码
 		try {
-			as.registerBlur(form,status,pwd2);
+			//注册
+			as.register(form,pwd2);
+			response.getWriter().append("注册成功,账号："+form.getAdminEmail());  
 		} catch (AdminException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		return null;
-	}
-	
-	/**
-	 * 修改密码
-	 * @param request
-	 * @param response
-	 * @return
-	 * @throws ServletException
-	 * @throws IOException
-	 */
-	public String alterPwd(HttpServletRequest request, HttpServletResponse response)throws ServletException, IOException {
-		Admins form = FormUtils.toBean(request, Admins.class);//将表单数据封装成javabean对象
-		String adminPwd2 = request.getParameter("adminPwd2");  //得到确认密码
-		try {
-			as.alterPwd(form,adminPwd2);  //修改密码
-			request.setAttribute("go", "<br />5 秒后自动跳转 。。。<a href='login.jsp'>点击跳转登录页面-></a>");
-			request.setAttribute("msg", "修改成功！请使用新密码登录！");  //将成功信息添加到request域中
-		} catch (AdminException e) {
-			//修改失败
-			request.setAttribute("msg", "修改失败！"+e.getMessage());  //将失败信息添加到request域中
-		}
-		return "f:/alterPwd.jsp";  //转发
-	}
-	
-	
-	/**
-	 * 修改密码之前的页面跳转
-	 * @param request
-	 * @param response
-	 * @return
-	 * @throws ServletException
-	 * @throws IOException
-	 */
-	public String alterPwdBefore(HttpServletRequest request, HttpServletResponse response)throws ServletException, IOException {
-		String alterIdStr = request.getParameter("alterId");  //获取要修改的管理员Id
-		System.out.println("alterIdStr:"+alterIdStr);
-		if(alterIdStr == null)
-			return "r:/server404.jsp";
-		Long alterId = Long.parseLong(alterIdStr);	//将Id转换成Long类型
-		try {
-			Admins alterAdmin = as.findById(alterId);	//得到要修改的管理员对象
-			request.setAttribute("alterAdmin", alterAdmin);
-			return "f:/alterPwd.jsp";  //转发到alterPwd.jsp页面
-		} catch (AdminException e) {
-			throw new RuntimeException();
-		}	
-		
-	}
-	
-	/**
-	 * 发送修改密码链接的邮件  ajax
-	 * @param request
-	 * @param response
-	 * @throws ServletException
-	 * @throws IOException
-	 */
-	public void fotPwdSendEmail(HttpServletRequest request, HttpServletResponse response)throws ServletException, IOException {
-		String adminEmail = request.getParameter("adminEmail").trim();  //得到输入的邮箱
-		System.out.println("1"+adminEmail);
-		try {
-			Admins admin = as.fotPwdSendEmail(adminEmail);//发送邮件
-			response.getWriter().append("修改密码链接已经发送到您的邮箱："+admin.getAdminEmail()+" 中，请打开邮件根据链接修改密码！");
-		} catch (AdminException e) {
+			//如果注册失败
 			response.getWriter().append(e.getMessage());
-		}  
+		}
 	}
+	/**
+	 * 注册页面的失焦事件   ajax
+	 * @param request
+	 * @param response
+	 * @return
+	 * @throws ServletException
+	 * @throws IOException
+	 */
+	public void registerBlur(HttpServletRequest request, HttpServletResponse response)throws ServletException, IOException {
+		Admins form = FormUtils.toBean(request, Admins.class);  //将表单数据封装成javabean 对象
+		String pwd2 = request.getParameter("adminPwd2");	//得到确认密码
+		String status = request.getParameter("status");	//获取到是哪个注册属性
+		String chose = "";	//这个属性是注册表单中的数据Id
+		switch(status){
+		case "1":chose="adminReEmail";break;
+		case "2":chose="adminRePwd";break;
+		case "3":chose="adminRePwd2";break;
+		case "4":chose="adminRegisterCode";break;
+		}
+		String jsonMsg = null;
+		try {
+			as.registerBlur(form,status,pwd2);  //调用AdminService的校验格式方法
+			//如果没有异常 
+			jsonMsg = "";  
+			
+		} catch (AdminException e) {
+			jsonMsg = "{\"msg\":\""+e.getMessage()+"\",\"chose\":\""+chose+"\"}";
+		}
+		response.getWriter().append(jsonMsg); // {"msg":"","chose":"chose"}
+	}
+	
+	/**
+	 * 修改密码校验  ajax
+	 * @param request
+	 * @param response
+	 * @throws ServletException
+	 * @throws IOException
+	 */
+	public void resetPwdBlur(HttpServletRequest request, HttpServletResponse response)throws ServletException, IOException {
+		Admins form = FormUtils.toBean(request, Admins.class);  //将表单数据封装成javabean 对象
+		String pwd2 = request.getParameter("adminPwd2");	//得到确认密码
+		String status = request.getParameter("status");	//获取到是哪个注册属性
+		String chose = "";	//这个属性是注册表单中的数据Id
+		switch(status){
+		case "1":chose="adminFoEmail";break;
+		case "2":chose="adminFoPwd";break;
+		case "3":chose="adminFoPwd2";break;
+		case "4":chose="adminFoRegisterCode";break;
+		}
+		String jsonMsg = null;
+		try {
+			as.resetPwdBlur(form,status,pwd2);  //调用AdminService的校验格式方法
+			//如果没有异常 
+			jsonMsg = "";  
+			
+		} catch (AdminException e) {
+			jsonMsg = "{\"msg\":\""+e.getMessage()+"\",\"chose\":\""+chose+"\"}";
+		}
+		response.getWriter().append(jsonMsg); // {"msg":"","chose":"chose"}
+	}
+	
 	/**
 	 * 登录
 	 * @param request
@@ -166,7 +162,6 @@ public class AdminServlet extends BaseServlet {
 			as.addALR(alr);	//将登录记录对象添加到数据库
 			session.setAttribute("loginedAdmin", loginedAdmin);  //将登陆的管理员对象存入session域中
 			session.removeAttribute("loginErrorNum");  //将登录错误次数属性从session域中移除
-			session.removeAttribute("session_loginMsg");
 			return "r:/index.jsp";  //重定向到index.jsp
 		}catch(AdminException e){
 			//有异常  登录失败
@@ -174,7 +169,7 @@ public class AdminServlet extends BaseServlet {
 			try {as.addALR(alr);//将登录记录对象添加到数据库
 			} catch (AdminException e1) {throw new RuntimeException();}	
 			
-			request.setAttribute("msg", e.getMessage());  //将登录错误信息保存在request域中
+			request.setAttribute("loginMsg", e.getMessage());  //将登录错误信息保存在request域中
 			int loginErrorNum = 0;
 			try{
 				loginErrorNum = (int)session.getAttribute("loginErrorNum");  //强制类型转换  可能会抛异常
