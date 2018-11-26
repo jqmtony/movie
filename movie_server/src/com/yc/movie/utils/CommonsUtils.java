@@ -27,7 +27,9 @@ import javax.mail.internet.MimeMessage;
 import javax.mail.internet.MimeMultipart;
 import javax.mail.internet.MimeUtility;
 import javax.mail.internet.MimeMessage.RecipientType;
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 import sun.misc.BASE64Decoder;
 import sun.misc.BASE64Encoder;
@@ -43,8 +45,35 @@ public class CommonsUtils {
 	public static final String AGE_REGX = "\\d{1,3}"; // 年龄
 	public static final String SEX_REGX = "[男女]"; // 性别
 	public static final String TEL_NUM_REGX = "[1-9]\\d{10}"; // 手机号码
-	private static Random ra = new Random(); // 随机数对象
+	private static final String IP_ADDR_AND_PRO_NAME = "address_and_projectName.properties";  //项目的IP地址和项目名所在的配置文件
+	public static Random ra = new Random(); // 随机数对象
 	
+	/**
+	 * 移除cookie
+	 * @param request
+	 * @param response
+	 * @param cookieName	cookie的名字
+	 */
+	public static void removeCookie(HttpServletRequest request,HttpServletResponse response,String cookieName){
+		Cookie[] cookies = request.getCookies();  //得到当前请求对象中的所有cookie
+		for(Cookie cookie:cookies){  //遍历
+			if(cookie.getName().equals(cookieName)){
+				cookie.setMaxAge(0);
+			}
+		}
+	}
+	/**
+	 * 从配置文件中获取项目的IP地址和项目名
+	 * @return	localhost:8080/movie_server/
+	 * @throws IOException 
+	 */
+	public static String getAddressAndProName(Class thisClass) throws IOException{
+		Properties p = new Properties();
+		p.load(thisClass.getClassLoader().getResourceAsStream(IP_ADDR_AND_PRO_NAME));
+		String addr = p.getProperty("address");
+		String proName = p.getProperty("projectName");
+		return addr+proName;
+	}
 	/**
 	 * 根据指定的日期字符串和掩码，返回日期值
 	 * @param dateString	2018-01-01
@@ -315,7 +344,7 @@ public class CommonsUtils {
 	}
 	
 	/**
-	 * 发送注册激活码到邮箱
+	 * 通过配置文件发送邮件
 	 * @param c	当前类
 	 * @param to	发送到
 	 * @param code	激活码

@@ -171,8 +171,12 @@ public class AdminServlet extends BaseServlet {
 		try{
 			loginedAdmin = as.login(form,v);  //调用AdminService的login()方法
 			
+			if(ch == null){
+				//移除cookie
+				CommonsUtils.removeCookie(request, response, "rememberAdmin");
+			}
 			//没有异常  登录成功
-			if(ch.equals("on")){
+			if(ch != null && ch.equals("on")){
 				Cookie cookie = new Cookie("rememberAdmin", loginedAdmin.getAdminEmail());
 				cookie.setMaxAge(60*60*24*7);	//七天
 				response.addCookie(cookie);
@@ -184,7 +188,7 @@ public class AdminServlet extends BaseServlet {
 			return "r:/index.jsp";  //重定向到index.jsp
 		}catch(AdminException e){
 			//有异常  登录失败
-			AdminLoginRecord alr = getALR(request,loginedAdmin,"失败");  //获取到AdminLoginRecord登录记录对象
+			AdminLoginRecord alr = getALR(request,form,"失败");  //获取到AdminLoginRecord登录记录对象
 			try {as.addALR(alr);//将登录记录对象添加到数据库
 			} catch (AdminException e1) {throw new RuntimeException();}	
 			
@@ -215,7 +219,7 @@ public class AdminServlet extends BaseServlet {
 	/**
 	 * 获取AdminLoginRecord对象
 	 */
-	 private AdminLoginRecord getALR(HttpServletRequest request, Admins loginedAdmin,String status) {
+	 private AdminLoginRecord getALR(HttpServletRequest request, Admins form,String status) {
 		 //创建AdminLoginRecord对象
 		 AdminLoginRecord alr = new AdminLoginRecord();
 		 
@@ -223,7 +227,7 @@ public class AdminServlet extends BaseServlet {
 		 alr.setAlrLoginIp(request.getRemoteAddr());  //设置登录IP
 		 alr.setAlrLoginTime(new Timestamp(new Date().getTime()));  //设置登录时间
 		 alr.setAlrStatus(status);   //设置登录状态
-		 alr.setAlrAdmin(loginedAdmin);    //设置登录管理员对象
+		 alr.setAlrAdmin(form);    //设置登录管理员对象
 		return alr;
 	}
 

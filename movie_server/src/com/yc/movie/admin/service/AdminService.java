@@ -245,11 +245,17 @@ public class AdminService {
 			}
 		}
 		
-		//注册成功  发送注册成功邮件
-		String to = form.getAdminEmail();  //设置收件人
-		Object[] codes = {form.getAdminEmail(),CommonsUtils.dateFormat(new Date(), "yyyy-MM-dd HH:mm:ss")};  //替换补位   管理员  时间
-		String fileName = "register_admin_email.properties";
-		CommonsUtils.sendMail(this.getClass(), to, codes, fileName);
+		//注册成功  发送注册成功邮件  
+		try{
+			String to = form.getAdminEmail();  //设置收件人邮箱地址
+			Object[] codes = {form.getAdminEmail(),
+					CommonsUtils.dateFormat(new Date(), "yyyy-MM-dd HH:mm:ss"),
+					CommonsUtils.getAddressAndProName(this.getClass())};  //替换补位   管理员  时间
+			String fileName = "register_admin_email.properties";
+			CommonsUtils.sendMail(this.getClass(), to, codes, fileName);
+		}catch(IOException e){
+			throw new AdminException("系统异常，本地配置文件已损坏！");
+		}
 	}
 
 	/**
@@ -263,14 +269,15 @@ public class AdminService {
 		switch(status){
 		case "4":
 			//注册码
+			String code = form.getAdminRegisterCode();
 			//1.正则表达式判断  不正确抛异常
-			if(form.getAdminRegisterCode() == null || !form.getAdminRegisterCode().matches(CommonsUtils.REGISTER_CODE_REGX)){
+			if(code == null || !code.matches(CommonsUtils.REGISTER_CODE_REGX)){
 				throw new AdminException("注册码格式不正确！");
 			}
 			
 			try {
 				//2.通过注册码查询数据库中是否存在admin对象   不存在就抛异常
-				Admins admin = ad.findAdminByRegisterCode(form.getAdminRegisterCode());
+				Admins admin = ad.findAdminByRegisterCode(code);
 				if(admin == null){
 					throw new AdminException("注册码不存在或未被使用！");
 				}
@@ -278,7 +285,7 @@ public class AdminService {
 				//3.通过邮箱和注册码同时查询
 				if(form.getAdminEmail() == null)
 					throw new AdminException("请先填写邮箱！");
-				admin = ad.findAdminByRegisterCodeAndEmail(form.getAdminRegisterCode(),form.getAdminEmail());
+				admin = ad.findAdminByRegisterCodeAndEmail(code,form.getAdminEmail());
 				if(admin == null)
 					throw new AdminException("注册码与邮箱不匹配！");
 			} catch (SQLException e) {
@@ -357,11 +364,15 @@ public class AdminService {
 		}
 		
 		//修改成功  发送邮件
-		//localhost:8080/movie_server
-		//
-		String to = form.getAdminEmail();  //设置收件人
-		Object[] codes = {form.getAdminEmail(),CommonsUtils.dateFormat(new Date(), "yyyy-MM-dd HH:mm:ss")};  //替换补位   管理员  时间
-		String fileName = "reset_password_email.properties";
-		CommonsUtils.sendMail(this.getClass(), to, codes, fileName);
+		try{
+			String to = form.getAdminEmail();  //设置收件人
+			Object[] codes = {form.getAdminEmail(),
+					CommonsUtils.dateFormat(new Date(), "yyyy-MM-dd HH:mm:ss"),
+					CommonsUtils.getAddressAndProName(this.getClass())};  //替换补位   管理员  时间   网址
+			String fileName = "reset_password_email.properties";
+			CommonsUtils.sendMail(this.getClass(), to, codes, fileName);
+		}catch(IOException e){
+			throw new AdminException("系统异常，本地配置文件已损坏！");
+		}
 	}
 }

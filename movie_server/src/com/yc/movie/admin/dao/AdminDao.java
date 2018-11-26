@@ -114,7 +114,7 @@ public class AdminDao {
 	 * @throws SQLException 
 	 */
 	public Admins findAdminByRegisterCodeAndEmail(String adminRegisterCode, String adminEmail) throws SQLException {
-		String sql = "select from admins where adminRegisterCode=? and adminEmail=?";
+		String sql = "select * from admins where adminRegisterCode=? and adminEmail=?";
 		Object[] params = {adminRegisterCode,adminEmail};
 		List<Admins> result = qr.query(sql, new BeanListHandler<Admins>(Admins.class),params);
 		if(result.size() > 0)
