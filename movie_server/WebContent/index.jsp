@@ -1,10 +1,11 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <!DOCTYPE html>
 <html>
 <head>
     <meta charset="UTF-8">
-    <title>某某影视管理平台</title>
+    <title>影视天堂管理平台</title>
     <link rel="stylesheet" type="text/css" href="easyui/themes/default/easyui.css">
     <link rel="stylesheet" type="text/css" href="easyui/themes/icon.css">
     <link rel="stylesheet" type="text/css" href="easyui/themes/color.css">
@@ -79,8 +80,8 @@
 					<ul style="float:right;position: relative;right:0;margin:0;">
 						<li><a href="#"><i class="xyy-xinxi" style="position: absolute;display:block;width: 16px;height: 16px;top: 50%;margin: -8px 12px;"></i>信息中心</a></li>						
 						<li><a href="#"><i class="xyy-ziliao" style="position: absolute;display:block;width: 16px;height: 16px;top: 50%;margin: -8px 12px;"></i>资料设置</a></li>						
-						<li><a href="#"><i class="xyy-mima" style="position: absolute;display:block;width: 16px;height: 16px;top: 50%;margin: -8px 12px;"></i>修改密码</a></li>				
-						<li><a href="#"><i class="xyy-tuichu" style="position: absolute;display:block;width: 16px;height: 16px;top: 50%;margin: -8px 12px;"></i>退出登录</a></li>
+						<li><a href="javascript:;" onclick = "resetPwd()"><i class="xyy-mima" style="position: absolute;display:block;width: 16px;height: 16px;top: 50%;margin: -8px 12px;"></i>修改密码</a></li>				
+						<li><a href="<c:url value='/admin.s?method=exit' />"><i class="xyy-tuichu" style="position: absolute;display:block;width: 16px;height: 16px;top: 50%;margin: -8px 12px;"></i>退出登录</a></li>
 					</ul>
 				</div>				
 			</div>			
@@ -158,10 +159,19 @@
 					<div data-options="region:'north',border:false" style="height:130px;border-bottom:1px #a7b1c2 dashed;padding:5px;">
 						<div class="easyui-layout" data-options="fit:true">
 							<div data-options="region:'west',border:false" style="width:350px;height:150px;border-right:1px #a7b1c2 dashed;padding:5px;color:#2f4050;">
-								<h1 style="margin:0 0 10px 0;">欢迎使用西域游！</h1>
+								<h1 style="margin:0 0 10px 0;">欢迎使用影视天堂！</h1>
 								<ul style="list-style-type:none;padding:0;">
 									<li style="margin-bottom:10px;">
-										<a href="#" style="text-decoration:none;font-size:16px;color:#2f4050;"><i class="xyy-hello" style="display:block;width: 16px;height:16px;float:left;margin:2px 3px;"></i>您好,<span class="tag" style="color:red;">ADMIN</span>!</a>
+										<a href="#" style="text-decoration:none;font-size:16px;color:#2f4050;"><i class="xyy-hello" style="display:block;width: 16px;height:16px;float:left;margin:2px 3px;"></i>您好,<span class="tag" style="color:red;">
+											<c:choose>
+												<c:when test="${empty loginedAdmin.adminName }">
+													${loginedAdmin.adminEmail }
+												</c:when>
+												<c:otherwise>
+													${loginedAdmin.adminName}
+												</c:otherwise>
+											</c:choose>
+										</span>!</a>
 									</li>	
 									<li style="margin-bottom:10px;"><a href="#" style="text-decoration:none;font-size:16px;color:#2f4050;"><i class="xyy-time" style="display:block;width: 16px;height:16px;float:left;margin:2px 3px;"></i>现在是：<span id="timer" style="color:#19aa8d;font:16px tahoma;height:17px;"><script>setInterval("timeStr=new Date().toLocaleString();timer.innerText=timeStr;",1000)</script></span></a>
                                     </li>	
@@ -226,7 +236,7 @@
 									<span>丨选择模式: </span>
 									<select onchange="$('#dg').datagrid({singleSelect:(this.value==1)})">
 										<option value="1">单选</option>
-										<option value="0">全选</option>
+										<option value="0">多选</option>
 									</select>
 								</a>
 								<a href="#" class="easyui-linkbutton" iconCls="icon-add" plain="true" onclick="addTab('新增用户','add.html')">新增teg</a>

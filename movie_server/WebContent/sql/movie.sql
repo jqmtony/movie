@@ -10,7 +10,7 @@ Target Server Type    : MYSQL
 Target Server Version : 50561
 File Encoding         : 65001
 
-Date: 2018-11-26 20:18:41
+Date: 2018-11-27 10:01:15
 */
 
 SET FOREIGN_KEY_CHECKS=0;
@@ -26,11 +26,27 @@ CREATE TABLE `adminloginrecord` (
   `alrAdminId` int(11) DEFAULT NULL,
   `alrStatus` varchar(255) DEFAULT NULL,
   PRIMARY KEY (`alrId`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=17 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Records of adminloginrecord
 -- ----------------------------
+INSERT INTO `adminloginrecord` VALUES ('1', '2018-11-26 20:27:00', '0:0:0:0:0:0:0:1', null, '失败');
+INSERT INTO `adminloginrecord` VALUES ('2', '2018-11-26 20:28:10', '0:0:0:0:0:0:0:1', '1', '成功');
+INSERT INTO `adminloginrecord` VALUES ('3', '2018-11-26 20:37:54', '0:0:0:0:0:0:0:1', '1', '成功');
+INSERT INTO `adminloginrecord` VALUES ('4', '2018-11-26 20:58:27', '0:0:0:0:0:0:0:1', '1', '成功');
+INSERT INTO `adminloginrecord` VALUES ('5', '2018-11-26 20:59:19', '0:0:0:0:0:0:0:1', '1', '成功');
+INSERT INTO `adminloginrecord` VALUES ('6', '2018-11-26 21:01:11', '0:0:0:0:0:0:0:1', '1', '成功');
+INSERT INTO `adminloginrecord` VALUES ('7', '2018-11-26 21:01:30', '0:0:0:0:0:0:0:1', '1', '成功');
+INSERT INTO `adminloginrecord` VALUES ('8', '2018-11-26 21:05:24', '0:0:0:0:0:0:0:1', '1', '成功');
+INSERT INTO `adminloginrecord` VALUES ('9', '2018-11-26 21:07:28', '0:0:0:0:0:0:0:1', '1', '成功');
+INSERT INTO `adminloginrecord` VALUES ('10', '2018-11-26 21:20:01', '0:0:0:0:0:0:0:1', '1', '成功');
+INSERT INTO `adminloginrecord` VALUES ('11', '2018-11-26 21:20:57', '0:0:0:0:0:0:0:1', '1', '成功');
+INSERT INTO `adminloginrecord` VALUES ('12', '2018-11-26 21:21:22', '0:0:0:0:0:0:0:1', '1', '成功');
+INSERT INTO `adminloginrecord` VALUES ('13', '2018-11-26 21:25:33', '0:0:0:0:0:0:0:1', '1', '成功');
+INSERT INTO `adminloginrecord` VALUES ('14', '2018-11-26 21:27:37', '0:0:0:0:0:0:0:1', '1', '成功');
+INSERT INTO `adminloginrecord` VALUES ('15', '2018-11-26 21:42:37', '0:0:0:0:0:0:0:1', '1', '成功');
+INSERT INTO `adminloginrecord` VALUES ('16', '2018-11-26 21:52:17', '0:0:0:0:0:0:0:1', '1', '成功');
 
 -- ----------------------------
 -- Table structure for `admins`
@@ -47,29 +63,26 @@ CREATE TABLE `admins` (
   `adminEmail` varchar(255) DEFAULT NULL,
   `adminPwd` varchar(255) DEFAULT NULL,
   PRIMARY KEY (`adminId`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Records of admins
 -- ----------------------------
+INSERT INTO `admins` VALUES ('1', '0000-0000-0000-0000', null, null, null, '2018-11-26 20:26:38', '10000', 'naivestruggle@126.com', 'e10adc3949ba59abbe56e057f20f883e');
 
 -- ----------------------------
--- Table structure for `companys`
+-- Table structure for `classifys`
 -- ----------------------------
-DROP TABLE IF EXISTS `companys`;
-CREATE TABLE `companys` (
-  `companyId` int(11) NOT NULL AUTO_INCREMENT,
-  `companyNumberCard` varchar(255) DEFAULT NULL,
-  `companyAddr` varchar(255) DEFAULT NULL,
-  `companyPostcode` varchar(255) DEFAULT NULL,
-  `companyCreateTime` datetime DEFAULT NULL,
-  `companyEmail` varchar(255) DEFAULT NULL,
-  `companyDescribe` varchar(500) DEFAULT NULL,
-  PRIMARY KEY (`companyId`)
+DROP TABLE IF EXISTS `classifys`;
+CREATE TABLE `classifys` (
+  `classifyId` int(11) NOT NULL AUTO_INCREMENT,
+  `classifyName` varchar(255) DEFAULT NULL,
+  `classifyDescribe` varchar(255) DEFAULT NULL,
+  PRIMARY KEY (`classifyId`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- ----------------------------
--- Records of companys
+-- Records of classifys
 -- ----------------------------
 
 -- ----------------------------
@@ -98,6 +111,7 @@ CREATE TABLE `indent` (
   `indentUserId` int(11) DEFAULT NULL,
   `indentTicketId` int(11) DEFAULT NULL,
   `indentStatus` varchar(255) DEFAULT NULL,
+  `indentRemark` varchar(500) DEFAULT NULL,
   PRIMARY KEY (`indentId`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
@@ -128,7 +142,6 @@ DROP TABLE IF EXISTS `merchant`;
 CREATE TABLE `merchant` (
   `merId` int(11) NOT NULL AUTO_INCREMENT,
   ` merName` varchar(255) DEFAULT NULL,
-  `merCompanyId` int(11) DEFAULT NULL,
   `merDescribe` varchar(500) DEFAULT NULL,
   PRIMARY KEY (`merId`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
@@ -154,6 +167,7 @@ CREATE TABLE `movies` (
   `moviePrice` decimal(7,2) DEFAULT NULL,
   `movieStatus` varchar(255) DEFAULT NULL,
   `movieCreateTime` datetime DEFAULT NULL,
+  `movieClassifyId` int(11) DEFAULT NULL,
   PRIMARY KEY (`movieId`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
@@ -193,6 +207,7 @@ CREATE TABLE `teleplay` (
   `teleplayImgId` int(11) DEFAULT NULL,
   `teleplayPath` varchar(500) DEFAULT NULL,
   `teleplayCreateTime` datetime DEFAULT NULL,
+  `teleplayClassifyId` int(11) DEFAULT NULL,
   PRIMARY KEY (`teleplayId`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 

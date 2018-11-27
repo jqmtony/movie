@@ -46,19 +46,7 @@ create table `userLoginRecord`(
 create table `merchant`(
 	`merId` int(11) NOT NULL AUTO_INCREMENT, /*ID*/
 	`merName` varchar(255),  /*姓名*/
-	`merCompanyId` int(11),  /*所在公司ID*/
 	`merDescribe` varchar(500)  /*商户描述*/
-);
-
-/*电影公司表*/
-create table `companys`(
-	`companyId` int(11) NOT NULL AUTO_INCREMENT, /*ID*/
-	`companyNumberCard` varchar(255),  /*公司编号*/
-	`companyAddr` varchar(255),  /*公司地址*/
-	`companyPostcode` varchar(255), /*公司邮编*/
-	`companyCreateTime` datetime,  /*公司创建时间*/
-	`companyEmail` varchar(255),   /*公司邮箱*/
-	`companyDescribe` varchar(500)  /*公司描述*/
 );
 
 /*电影票*/
@@ -81,7 +69,8 @@ create table `indent`(
 	`indentId` int(11) NOT NULL AUTO_INCREMENT, /*ID*/
 	`indentUserId` int(11), /*对应用户ID*/
 	`indentTicketId` int(11),  /*对应电影票ID*/
-	`indentStatus` varchar(255)  /*订单状态*/
+	`indentStatus` varchar(255),  /*订单状态*/
+	`indentRemark` varchar(500)  /*订单备注*/
 );
 
 /*管理员收到或发出的信息*/
@@ -102,7 +91,8 @@ create table `movies`(
 	`moviePath` varchar(500),  /*电影观看链接*/
 	`moviePrice` decimal(7,2),  /*价格*/
 	`movieStatus` varchar(255),	/*电影状态  0表示下架（卖完了） 1表示上架*/
-	`movieCreateTime` datetime	/*创建时间*/
+	`movieCreateTime` datetime,	/*创建时间*/
+	`movieClassifyId` int(11)  /*分类Id*/
 );
 
 /*电视剧*/
@@ -116,7 +106,8 @@ create table `teleplay`(
 	`teleplayDescribe` varchar(500),  /*电视剧描述*/
 	`teleplayImgId` int(11),  /*图片Id*/
 	`teleplayPath` varchar(500),  /*电视剧观看链接*/
-	`teleplayCreateTime` datetime	/*创建时间*/
+	`teleplayCreateTime` datetime,	/*创建时间*/
+	`teleplayClassifyId` int(11)  /*分类id*/
 );
 
 /*图片表*/
@@ -140,4 +131,11 @@ create table `protagonists`(
 /*新闻*/
 create table news(
 	int(11) newId,
+);
+
+/*分类表*/
+create table `classifys`(
+	`classifyId` int(11) NOT NULL AUTO_INCREMENT, /*ID*/
+	`classifyName` varchar(255),  /*类别名称*/
+	`classifyDescribe` varchar(255) /*类别描述*/
 );

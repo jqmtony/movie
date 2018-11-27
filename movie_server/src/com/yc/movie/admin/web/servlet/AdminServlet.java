@@ -28,6 +28,19 @@ public class AdminServlet extends BaseServlet {
 	private AdminService as = new AdminService();
 	
 	/**
+	 * 退出登录
+	 * @param request
+	 * @param response
+	 * @return
+	 * @throws ServletException
+	 * @throws IOException
+	 */
+	public String exit(HttpServletRequest request, HttpServletResponse response)throws ServletException, IOException {
+		session.removeAttribute("loginedAdmin");  //将session中的loginedAdmin删除
+		return "r:/adminLogin.jsp";  //重定向到登录界面
+	}
+	
+	/**
 	 * 管理员登录前Email校验  失焦ajax
 	 * @param request
 	 * @param response
@@ -160,16 +173,10 @@ public class AdminServlet extends BaseServlet {
 		}
 		
 		form.setAdminPwd(CommonsUtils.parseMD5(form.getAdminPwd()));	//加密
-		
-		Verification v = null;	//定义一个验证码变量
-		Object obj = session.getAttribute("verificationObject");	//取出session中的验证码对象
-		if(obj != null){	//如果session存在验证码对象
-			v = (Verification)obj;	//将obj向下转型成验证码类型
-			v.setInCode(request.getParameter("inCode"));	//得到客户端输入的验证码
-		}
+	
 		Admins loginedAdmin = form;
 		try{
-			loginedAdmin = as.login(form,v);  //调用AdminService的login()方法
+			loginedAdmin = as.login(form);  //调用AdminService的login()方法
 			
 			if(ch == null){
 				//移除cookie
@@ -193,24 +200,6 @@ public class AdminServlet extends BaseServlet {
 			} catch (AdminException e1) {throw new RuntimeException();}	
 			
 			request.setAttribute("loginMsg", e.getMessage());  //将登录错误信息保存在request域中
-			int loginErrorNum = 0;
-			try{
-				loginErrorNum = (int)session.getAttribute("loginErrorNum");  //强制类型转换  可能会抛异常
-				//没有异常  说明session域中有loginErrorNum
-				session.setAttribute("loginErrorNum", loginErrorNum+1);  //将登录错误次数+1
-			}catch(Exception e2){
-				//有异常  说明session域中没有loginErrorNum
-				session.setAttribute("loginErrorNum", 1);  //将登录错误次数初始化为
-			}
-			
-			if(loginErrorNum >= 2){  //如果登录次数大于等于3次
-				//将验证码存在request域中
-				request.setAttribute("verificationCode",
-						"<img id='codeImg' style=\"margin:0 20px 20px 20px;\" alt=\"你的浏览器版本过低\" src=\"" + request.getContextPath()
-								+ "/user.s?method=createVerification\" onclick='againCode()'/>"
-								+ "<input style='margin:0 0 0 20px;' type='text' placeholder='请输入验证码' name='codeText' class=''/>");
-			}
-			
 			return "f:/adminLogin.jsp";  //转发到登录页面
 		}
 		

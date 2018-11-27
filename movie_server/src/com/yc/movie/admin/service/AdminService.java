@@ -27,17 +27,8 @@ public class AdminService {
 	 * @param form	
 	 * @return 登陆成功的Admins对象(信息完整的)
 	 */
-	public Admins login(Admins form,Verification v) throws AdminException{
-		try{
-			//如果验证码不为null，判断验证码是否正确
-			if(v != null){
-				if(v.getInCode() == null || v.getInCode().trim().isEmpty())
-					throw new AdminException("请输入验证码!");
-				if(!v.getInCode().equalsIgnoreCase(v.getText())){
-					throw new AdminException("验证码错误!");
-				}
-			}
-			
+	public Admins login(Admins form) throws AdminException{
+		try{			
 			//用户名格式(邮箱)验证  正则表达式
 			if(form.getAdminEmail()==null || form.getAdminEmail().trim().isEmpty())
 				throw new AdminException("请输入邮箱地址!");
