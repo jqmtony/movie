@@ -1,5 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <!DOCTYPE html>
 <html>
 <head>
@@ -29,7 +30,7 @@
 <body>
 <!--/main-header-->
   <!--/banner-section-->
-  <jsp:include page="head.jsp"></jsp:include>
+  <%@ include file="head.jsp"%>
 			<!--/content-inner-section-->
 				<div class="w3_content_agilleinfo_inner">
 					<div class="agile_featured_movies">
@@ -578,7 +579,7 @@
 			<!--//content-inner-section-->
 		
 	<!--/footer-bottom-->
-	<jsp:include page="footer.jsp"></jsp:include>
+	<%@ include file="footer.jsp"%>
 
  
 

@@ -1,4 +1,4 @@
-package com.yc.movie;
+package com.yc.movie.system.web.filter;
 
 import java.io.IOException;
 import java.util.Locale;
@@ -18,7 +18,7 @@ import javax.servlet.http.HttpSession;
  * Servlet Filter implementation class filter
  */
 @WebFilter(urlPatterns={"*.jsp"})
-public class filter implements Filter {
+public class SystemFilter implements Filter {
 	public void destroy() {
 		// TODO Auto-generated method stub
 	}
@@ -30,9 +30,10 @@ public class filter implements Filter {
 		HttpSession session = httpRequest.getSession();		//得到session对象
 		Object obj = session.getAttribute("lg");	//得到language属性
 		if(obj == null){	//如果session中没有lg
-			Locale locale = Locale.CHINA;	//得到主机对象
+			Locale locale = Locale.getDefault();	//得到主机对象
 			ResourceBundle rb = ResourceBundle.getBundle("res",locale);	//加载配置文件
 			session.setAttribute("lg", rb);	//将配置文件对象存在session域中
+			session.setAttribute("lgType", rb.getLocale().getLanguage());
 		}
 		
 		// pass the request along the filter chain

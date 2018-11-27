@@ -1,7 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
-<!--/footer-bottom-->
-		<div class="contact-w3ls" id="contact">
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<div class="contact-w3ls" id="contact">
 			<div class="footer-w3lagile-inner">
 				<h2>Sign up for our <span>Newsletter</span></h2>
 				<p class="para">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Praesent vitae eros eget tellus 
@@ -28,12 +28,12 @@
 						<h4>Movies</h4>
 							<ul>
 								
-								<li><a href="genre.jsp">ADVENTURE</a></li>
-								<li><a href="comedy.jsp">COMEDY</a></li>
-								<li><a href="series.jsp">FANTASY</a></li>
-								<li><a href="series.jsp">ACTION  </a></li>
-								<li><a href="genre.jsp">MOVIES  </a></li>
-								<li><a href="horror.jsp">HORROR  </a></li>
+								<li><a href="genre.html">ADVENTURE</a></li>
+								<li><a href="comedy.html">COMEDY</a></li>
+								<li><a href="series.html">FANTASY</a></li>
+								<li><a href="series.html">ACTION  </a></li>
+								<li><a href="genre.html">MOVIES  </a></li>
+								<li><a href="horror.html">HORROR  </a></li>
 								
 							</ul>
 						</div>
@@ -42,21 +42,21 @@
 							<div class="col-md-2 footer-grid">
 								<h4>Review Movies</h4>
 									<ul class="w3-tag2">
-									<li><a href="comedy.jsp">Comedy</a></li>
-									<li><a href="horror.jsp">Horror</a></li>
-									<li><a href="series.jsp">Historical</a></li>
-									<li><a href="series.jsp">Romantic</a></li>
-									<li><a href="series.jsp">Love</a></li>
-									<li><a href="genre.jsp">Action</a></li>
-									<li><a href="single.jsp">Reviews</a></li>
-									<li><a href="comedy.jsp">Comedy</a></li>
-									<li><a href="horror.jsp">Horror</a></li>
-									<li><a href="series.jsp">Historical</a></li>
-									<li><a href="series.jsp">Romantic</a></li>
-									<li><a href="genre.jsp">Love</a></li>
-									<li><a href="comedy.jsp">Comedy</a></li>
-									<li><a href="horror.jsp">Horror</a></li>
-									<li><a href="genre.jsp">Historical</a></li>
+									<li><a href="comedy.html">Comedy</a></li>
+									<li><a href="horror.html">Horror</a></li>
+									<li><a href="series.html">Historical</a></li>
+									<li><a href="series.html">Romantic</a></li>
+									<li><a href="series.html">Love</a></li>
+									<li><a href="genre.html">Action</a></li>
+									<li><a href="single.html">Reviews</a></li>
+									<li><a href="comedy.html">Comedy</a></li>
+									<li><a href="horror.html">Horror</a></li>
+									<li><a href="series.html">Historical</a></li>
+									<li><a href="series.html">Romantic</a></li>
+									<li><a href="genre.html">Love</a></li>
+									<li><a href="comedy.html">Comedy</a></li>
+									<li><a href="horror.html">Horror</a></li>
+									<li><a href="genre.html">Historical</a></li>
 									
 								</ul>
 
@@ -66,20 +66,20 @@
 						<h4>Latest Movies</h4>
 							<div class="footer-grid1">
 								<div class="footer-grid1-left">
-									<a href="single.jsp"><img src="images/1.jpg" alt=" " class="img-responsive"></a>
+									<a href="single.html"><img src="images/1.jpg" alt=" " class="img-responsive"></a>
 								</div>
 								<div class="footer-grid1-right">
-									<a href="single.jsp">eveniet ut molesti</a>
+									<a href="single.html">eveniet ut molesti</a>
 									
 								</div>
 								<div class="clearfix"> </div>
 							</div>
 							<div class="footer-grid1">
 								<div class="footer-grid1-left">
-									<a href="single.jsp"><img src="images/2.jpg" alt=" " class="img-responsive"></a>
+									<a href="single.html"><img src="images/2.jpg" alt=" " class="img-responsive"></a>
 								</div>
 								<div class="footer-grid1-right">
-									<a href="single.jsp">earum rerum tenet</a>
+									<a href="single.html">earum rerum tenet</a>
 									
 								</div>
 								<div class="clearfix"> </div>
@@ -87,20 +87,20 @@
 							<div class="footer-grid1">
 							
 								<div class="footer-grid1-left">
-									<a href="single.jsp"><img src="images/4.jpg" alt=" " class="img-responsive"></a>
+									<a href="single.html"><img src="images/4.jpg" alt=" " class="img-responsive"></a>
 								</div>
 								<div class="footer-grid1-right">
-									<a href="single.jsp">eveniet ut molesti</a>
+									<a href="single.html">eveniet ut molesti</a>
 									
 								</div>
 								<div class="clearfix"> </div>
 							</div>
 							<div class="footer-grid1">
 								<div class="footer-grid1-left">
-									<a href="single.jsp"><img src="images/3.jpg" alt=" " class="img-responsive"></a>
+									<a href="single.html"><img src="images/3.jpg" alt=" " class="img-responsive"></a>
 								</div>
 								<div class="footer-grid1-right">
-									<a href="single.jsp">earum rerum tenet</a>
+									<a href="single.html">earum rerum tenet</a>
 									
 								</div>
 								<div class="clearfix"> </div>
@@ -109,33 +109,33 @@
 
 						</div>
 						<div class="col-md-2 footer-grid">
-						   <h4 class="b-log"><a href="index.jsp"><span>M</span>ovies <span>P</span>ro</a></h4>
+						   <h4 class="b-log"><a href="index.html"><span>M</span>ovies <span>P</span>ro</a></h4>
 							<div class="footer-grid-instagram">
-							<a href="single.jsp"><img src="images/m1.jpg" alt=" " class="img-responsive"></a>
+							<a href="single.html"><img src="images/m1.jpg" alt=" " class="img-responsive"></a>
 							</div>
 							<div class="footer-grid-instagram">
-							<a href="single.jsp"><img src="images/m2.jpg" alt=" " class="img-responsive"></a>
+							<a href="single.html"><img src="images/m2.jpg" alt=" " class="img-responsive"></a>
 							</div>
 							<div class="footer-grid-instagram">
-								<a href="single.jsp"><img src="images/m3.jpg" alt=" " class="img-responsive"></a>
+								<a href="single.html"><img src="images/m3.jpg" alt=" " class="img-responsive"></a>
 							</div>
 							<div class="footer-grid-instagram">
-							<a href="single.jsp"><img src="images/m4.jpg" alt=" " class="img-responsive"></a>
+							<a href="single.html"><img src="images/m4.jpg" alt=" " class="img-responsive"></a>
 							</div>
 							<div class="footer-grid-instagram">
-								<a href="single.jsp"><img src="images/m5.jpg" alt=" " class="img-responsive"></a>
+								<a href="single.html"><img src="images/m5.jpg" alt=" " class="img-responsive"></a>
 							</div>
 							<div class="footer-grid-instagram">
-							<a href="single.jsp"><img src="images/m6.jpg" alt=" " class="img-responsive"></a>
+							<a href="single.html"><img src="images/m6.jpg" alt=" " class="img-responsive"></a>
 							</div>
 								
 							<div class="clearfix"> </div>
 						</div>
 						<div class="clearfix"> </div>
 						<ul class="bottom-links-agile">
-								<li><a href="icons.jsp" title="Font Icons">Icons</a></li> 
-								<li><a href="short-codes.jsp" title="Short Codes">Short Codes</a></li> 
-								<li><a href="contact.jsp" title="contact">Contact</a></li> 
+								<li><a href="icons.html" title="Font Icons">Icons</a></li> 
+								<li><a href="short-codes.html" title="Short Codes">Short Codes</a></li> 
+								<li><a href="contact.html" title="contact">Contact</a></li> 
 								
 							</ul>
 					</div>
@@ -173,9 +173,11 @@
 				});
 			</script>
 		<!-- //Dropdown-Menu-JavaScript -->
+
+
+<script type="text/javascript" src="js/jquery.zoomslider.min.js"></script>
 		<!-- search-jQuery -->
 				<script src="js/main.js"></script>
-			
 			<script src="js/simplePlayer.js"></script>
 			<script>
 				$("document").ready(function() {
@@ -197,33 +199,13 @@
 					$("#video3").simplePlayer();
 				});
 			</script>
-			<script>
-				$("document").ready(function() {
-					$("#video4").simplePlayer();
-				});
-			</script>
-			<script>
-				$("document").ready(function() {
-					$("#video5").simplePlayer();
-				});
-			</script>
-			<script>
-				$("document").ready(function() {
-					$("#video6").simplePlayer();
-				});
-			</script>
-			<script>
-				$("document").ready(function() {
-					$("#video6").simplePlayer();
-				});
-			</script>
 
 			<!-- pop-up-box -->  
 		<script src="js/jquery.magnific-popup.js" type="text/javascript"></script>
 	<!--//pop-up-box -->
 
 			<div id="small-dialog1" class="mfp-hide">
-		<iframe src=""></iframe>
+			<iframe src=""></iframe>
 	</div>
 	<div id="small-dialog2" class="mfp-hide">
 		<iframe src=""></iframe>
@@ -315,3 +297,19 @@ fit: true
 					</script>
 <!--end-smooth-scrolling-->
 	<script src="js/bootstrap.js"></script>
+	
+	
+	<%-- 选择语言事件 --%>
+<script type="text/javascript">
+	$(document).ready(function() {
+		var selector = $('#languageChose');
+		selector.on("change",function(){
+			var name = $("option:selected",this).val();
+			var data = {name:name};
+			$.post("<c:url value='/sys.s?method=alterLanguage'/>",data,function(data){
+				history.go(0);
+			});
+		});
+		
+	});
+</script>

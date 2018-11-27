@@ -1,5 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <!DOCTYPE html>
 <html>
 <head>
@@ -42,7 +43,7 @@
 							<span class="icon-bar"></span>
 							<span class="icon-bar"></span>
 						</button>
-						<h1><a  href="index.jsp"><span>M</span>ovies <span>P</span>ro</a></h1>
+						<h1><a  href="index.html"><span>M</span>ovies <span>P</span>ro</a></h1>
 					</div>
 					<!-- navbar-header -->
 					<div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
@@ -123,6 +124,20 @@
 							</li>
 							<li><a href="list.jsp">${lg["indexMenuAZList"]}</a></li>
 							<li><a href="contact.jsp">${lg["indexMenuContact"]}</a></li>
+							<li>
+								<select style="margin:13px 10px 0 10px; width:80px;cursor:pointer;" id="languageChose">
+								<c:choose>
+									<c:when test="${lgType eq 'zh'}">
+										<option name="china" selected="selected">中文</option>
+										<option name="english">English</option>
+									</c:when>
+									<c:otherwise>
+										<option name="china">中文</option>
+										<option name="english" selected="selected">English</option>
+									</c:otherwise>
+								</c:choose>
+								</select><font style="color:#ffffff;">${lg["language"]}</font>
+							</li>
 						</ul>
 
 					</div>
@@ -1784,8 +1799,7 @@ Storks Official Trailer 3 (2016) - Andy Samberg Movie  the company's top deliver
 			<!--//content-inner-section-->
 		
 	<!--/footer-bottom-->
-	<jsp:include page="footer.jsp"></jsp:include>
- 
+	<%@ include file="footer.jsp"%>
 
 </body>
 </html>

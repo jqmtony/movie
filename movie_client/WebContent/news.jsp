@@ -1,5 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <!DOCTYPE html>
 <html>
 <head>
@@ -241,7 +242,7 @@ A girl in a small town forms an unlikely....</p>
 			<!--//content-inner-section-->
 
 
-	<jsp:include page="footer.jsp"></jsp:include>
+	<%@ include file="footer.jsp"%>
  
 
 </body>

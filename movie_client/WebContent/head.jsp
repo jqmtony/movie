@@ -1,5 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <div id="demo-1" class="banner-inner">
 	 <div class="banner-inner-dott">
 		<!--/header-w3l-->
@@ -18,82 +19,96 @@
 					<!-- navbar-header -->
 					<div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
 							<ul class="nav navbar-nav">
-							<li><a href="index.jsp">Home</a></li>
-							<li class="dropdown active">
-								<a href="#" class="dropdown-toggle" data-toggle="dropdown">Genre <b class="caret"></b></a>
+							<li class="active"><a href="index.jsp">${lg["indexMenuHome"]}</a></li>
+							<li class="dropdown">
+								<a href="#" class="dropdown-toggle" data-toggle="dropdown">${lg["indexMenuGenre"] } <b class="caret"></b></a>
 								<ul class="dropdown-menu multi-column columns-3">
 									<li>
 									<div class="col-sm-4">
 										<ul class="multi-column-dropdown">
-											<li><a href="genre.jsp">Action</a></li>
-											<li><a href="genre.jsp">Biography</a></li>
-											<li><a href="genre.jsp">Crime</a></li>
-											<li><a href="genre.jsp">Family</a></li>
-											<li><a href="horror.jsp">Horror</a></li>
-											<li><a href="genre.jsp">Romance</a></li>
-											<li><a href="genre.jsp">Sports</a></li>
-											<li><a href="genre.jsp">War</a></li>
+											<li><a href="genre.jsp">${lg["indexMenuGenreAction"] }</a></li>
+											<li><a href="genre.jsp">${lg["indexMenuGenreBiography"] }</a></li>
+											<li><a href="genre.jsp">${lg["indexMenuGenreCrime"] }</a></li>
+											<li><a href="genre.jsp">${lg["indexMenuGenreFamily"] }</a></li>
+											<li><a href="horror.jsp">${lg["indexMenuGenreHorror"] }</a></li>
+											<li><a href="genre.jsp">${lg["indexMenuGenreRomance"] }</a></li>
+											<li><a href="genre.jsp">${lg["indexMenuGenreSports"] }</a></li>
+											<li><a href="genre.jsp">${lg["indexMenuGenreWar"] }</a></li>
 										</ul>
 									</div>
 									<div class="col-sm-4">
 										<ul class="multi-column-dropdown">
-											<li><a href="genre.jsp">Adventure</a></li>
-											<li><a href="comedy.jsp">Comedy</a></li>
-											<li><a href="genre.jsp">Documentary</a></li>
-											<li><a href="genre.jsp">Fantasy</a></li>
-											<li><a href="genre.jsp">Thriller</a></li>
+											<li><a href="genre.jsp">${lg["indexMenuGenreAdventure"] }</a></li>
+											<li><a href="comedy.jsp">${lg["indexMenuGenreComedy"] }</a></li>
+											<li><a href="genre.jsp">${lg["indexMenuGenreDocumentary"] }</a></li>
+											<li><a href="genre.jsp">${lg["indexMenuGenreFantasy"] }</a></li>
+											<li><a href="genre.jsp">${lg["indexMenuGenreThriller"] }</a></li>
 										</ul>
 									</div>
 									<div class="col-sm-4">
 										<ul class="multi-column-dropdown">
-											<li><a href="genre.jsp">Animation</a></li>
-											<li><a href="genre.jsp">Costume</a></li>
-											<li><a href="genre.jsp">Drama</a></li>
-											<li><a href="genre.jsp">History</a></li>
-											<li><a href="genre.jsp">Musical</a></li>
-											<li><a href="genre.jsp">Psychological</a></li>
+											<li><a href="genre.jsp">${lg["indexMenuGenreAnimation"] }</a></li>
+											<li><a href="genre.jsp">${lg["indexMenuGenreCostume"] }</a></li>
+											<li><a href="genre.jsp">${lg["indexMenuGenreDrama"] }</a></li>
+											<li><a href="genre.jsp">${lg["indexMenuGenreHistory"] }</a></li>
+											<li><a href="genre.jsp">${lg["indexMenuGenreMusical"] }</a></li>
+											<li><a href="genre.jsp">${lg["indexMenuGenrePsychological"] }</a></li>
 										</ul>
 									</div>
 									<div class="clearfix"></div>
 									</li>
 								</ul>
 							</li>
-							<li><a href="series.jsp">tv - series</a></li>
-							<li><a href="news.jsp">news</a></li>
+							<li><a href="series.jsp">${lg["indexMenuTvSeries"]}</a></li>
+							<li><a href="news.jsp">${lg["indexMenuNews"]}</a></li>
 							<li class="dropdown">
-								<a href="#" class="dropdown-toggle" data-toggle="dropdown">Country <b class="caret"></b></a>
+								<a href="#" class="dropdown-toggle" data-toggle="dropdown">${lg["indexMenuCountry"]}<b class="caret"></b></a>
 								<ul class="dropdown-menu multi-column columns-3">
 									<li>
 										<div class="col-sm-4">
 											<ul class="multi-column-dropdown">
-												<li><a href="genre.jsp">Asia</a></li>
-												<li><a href="genre.jsp">France</a></li>
-												<li><a href="genre.jsp">Taiwan</a></li>
-												<li><a href="genre.jsp">United States</a></li>
+												<li><a href="genre.jsp">${lg["indexMenuCountryAsia"]}</a></li>
+												<li><a href="genre.jsp">${lg["indexMenuCountryFrance"]}</a></li>
+												<li><a href="genre.jsp">${lg["indexMenuCountryTaiwan"]}</a></li>
+												<li><a href="genre.jsp">${lg["indexMenuCountryUnitedStates"]}</a></li>
 											</ul>
 										</div>
 										<div class="col-sm-4">
 											<ul class="multi-column-dropdown">
-												<li><a href="genre.jsp">China</a></li>
-												<li><a href="genre.jsp">HongCong</a></li>
-												<li><a href="genre.jsp">Japan</a></li>
-												<li><a href="genre.jsp">Thailand</a></li>
+												<li><a href="genre.jsp">${lg["indexMenuCountryChina"]}</a></li>
+												<li><a href="genre.jsp">${lg["indexMenuCountryHongCong"]}</a></li>
+												<li><a href="genre.jsp">${lg["indexMenuCountryJapan"]}</a></li>
+												<li><a href="genre.jsp">${lg["indexMenuCountryThailand"]}</a></li>
 											</ul>
 										</div>
 										<div class="col-sm-4">
 											<ul class="multi-column-dropdown">
-												<li><a href="genre.jsp">Euro</a></li>
-												<li><a href="genre.jsp">India</a></li>
-												<li><a href="genre.jsp">Korea</a></li>
-												<li><a href="genre.jsp">United Kingdom</a></li>
+												<li><a href="genre.jsp">${lg["indexMenuCountryEuro"]}</a></li>
+												<li><a href="genre.jsp">${lg["indexMenuCountryIndia"]}</a></li>
+												<li><a href="genre.jsp">${lg["indexMenuCountryKorea"]}</a></li>
+												<li><a href="genre.jsp">${lg["indexMenuCountryUnitedKingdom"]}</a></li>
 											</ul>
 										</div>
 										<div class="clearfix"></div>
 									</li>
 								</ul>
 							</li>
-								<li><a href="list.jsp">A - z list</a></li>
-							    <li><a href="contact.jsp">Contact</a></li>
+							<li><a href="list.jsp">${lg["indexMenuAZList"]}</a></li>
+							<li><a href="contact.jsp">${lg["indexMenuContact"]}</a></li>
+							<li>
+								<select style="margin:13px 10px 0 10px; width:80px;cursor:pointer;" id="languageChose">
+								<c:choose>
+									<c:when test="${lgType eq 'zh'}">
+										<option name="china" selected="selected">中文</option>
+										<option name="english">English</option>
+									</c:when>
+									<c:otherwise>
+										<option name="china">中文</option>
+										<option name="english" selected="selected">English</option>
+									</c:otherwise>
+								</c:choose>
+								</select><font style="color:#ffffff;">${lg["language"]}</font>
+							</li>
 						</ul>
 
 					</div>
@@ -121,13 +136,13 @@
   <!--/banner-section-->
  <!--//main-header-->
 	         <!--/banner-bottom-->
-			  <div class="w3_agilits_banner_bootm">
+			   <div class="w3_agilits_banner_bootm">
 			     <div class="w3_agilits_inner_bottom">
 			            <div class="col-md-6 wthree_agile_login">
 						     <ul>
 									<li><i class="fa fa-phone" aria-hidden="true"></i> (+000) 009 455 4088</li>
-									<li><a href="#" class="login"  data-toggle="modal" data-target="#myModal4">Login</a></li>
-									<li><a href="#" class="login reg"  data-toggle="modal" data-target="#myModal5">Register</a></li>
+									<li><a href="#" class="login"  data-toggle="modal" data-target="#myModal4">${lg["indexLogin"]}</a></li>
+									<li><a href="#" class="login reg"  data-toggle="modal" data-target="#myModal5">${lg["indexRegister"]}</a></li>
 
 								</ul>
 						</div>
@@ -140,7 +155,7 @@
 									
 								</li>
 								<li>
-									<div class="fb-share-button" data-href="" data-layout="button_count" data-size="small" data-mobile-iframe="true"><a class="fb-xfbml-parse-ignore" target="_blank" href="">Share</a></div>
+									<div class="fb-share-button" data-href="" data-layout="button_count" data-size="small" data-mobile-iframe="true"><a class="fb-xfbml-parse-ignore" target="_blank" href="">${lg["indexShare"]}</a></div>
 								</li>
 								
 							</ul>
@@ -157,20 +172,20 @@
 								<div class="modal-content">
 									<div class="modal-header">
 										<button type="button" class="close" data-dismiss="modal">&times;</button>
-										<h4>Login</h4>
+										<h4>${lg["indexLogin"]}</h4>
 										<div class="login-form">
 											<form action="#" method="post">
-												<input type="email" name="email" placeholder="E-mail" required="">
-												<input type="password" name="password" placeholder="Password" required="">
+												<input type="email" name="email" placeholder='${lg["indexLoginEmail"]}' required="">
+												<input type="password" name="password" placeholder='${lg["indexLoginPassword"]}' required="">
 												<div class="tp">
-													<input type="submit" value="LOGIN NOW">
+													<input type="submit" value='${lg["indexLoginString"]}'>
 												</div>
 												<div class="forgot-grid">
 												       <div class="log-check">
-														<label class="checkbox"><input type="checkbox" name="checkbox">Remember me</label>
+														<label class="checkbox"><input type="checkbox" name="checkbox">${lg["indexLoginRememberMe"]}</label>
 														</div>
 														<div class="forgot">
-															<a href="#" data-toggle="modal" data-target="#myModal2">Forgot Password?</a>
+															<a href="#" data-toggle="modal" data-target="#myModal2">${lg["indexLoginForgotPassword"]}</a>
 														</div>
 														<div class="clearfix"></div>
 													</div>
@@ -190,20 +205,20 @@
 								<div class="modal-content">
 									<div class="modal-header">
 										<button type="button" class="close" data-dismiss="modal">&times;</button>
-										<h4>Register</h4>
+										<h4>${lg["indexRegister"] }</h4>
 										<div class="login-form">
 											<form action="#" method="post">
-											    <input type="text" name="name" placeholder="Name" required="">
-												<input type="email" name="email" placeholder="E-mail" required="">
-												<input type="password" name="password" placeholder="Password" required="">
-												<input type="password" name="conform password" placeholder="Confirm Password" required="">
+											    <input type="text" name="name" placeholder='${lg["indexRegisterName"]}' required="">
+												<input type="email" name="email" placeholder='${lg["indexLoginEmail"]}' required="">
+												<input type="password" name="password" placeholder='${lg["indexLoginPassword"]}' required="">
+												<input type="password" name="conform password" placeholder='${lg["indexRegisterConfirmPassword"] }' required="">
 												<div class="signin-rit">
-														<span class="agree-checkbox">
-														<label class="checkbox"><input type="checkbox" name="checkbox">I agree to your <a class="w3layouts-t" href="#" target="_blank">Terms of Use</a> and <a class="w3layouts-t" href="#" target="_blank">Privacy Policy</a></label>
+													<span class="agree-checkbox">
+														<label class="checkbox"><input type="checkbox" name="checkbox">${lg["indexRegisterAgree1"] } <a class="w3layouts-t" href="#" target="_blank">${lg["indexRegisterAgree2"] }</a> ${lg["indexRegisterAgree3"] } <a class="w3layouts-t" href="#" target="_blank">${lg["indexRegisterAgree4"] }</a></label>
 													</span>
 												</div>
 												<div class="tp">
-													<input type="submit" value="REGISTER NOW">
+													<input type="submit" value='${lg["indexRegisterString"] }'>
 												</div>
 											</form>
 										</div>
@@ -222,3 +237,5 @@
 					</div>
 				</div>
 			<!-- //breadcrumb -->
+			
+			
