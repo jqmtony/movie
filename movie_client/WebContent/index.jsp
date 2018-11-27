@@ -1,6 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%> 
 <!DOCTYPE html>
 <html>
 <head>
@@ -28,7 +29,7 @@
 <!--//web-fonts-->
 </head>
 <c:if test="${empty movieBeanList }">
-	<jsp:forward page="mover.s?method=findAllMovie"></jsp:forward>
+	<jsp:forward page="movie.s?method=findAllMovie"></jsp:forward>
 </c:if>
 <body>
 <!--/main-header-->
@@ -286,21 +287,21 @@
 										<div class="w3_agile_featured_movies">
 											<div class="col-md-5 video_agile_player">
 										            <div class="video-grid-single-page-agileits">
-														<div data-video="f2Z65fobH2I" id="video"> <img src="images/11.jpg" alt="" class="img-responsive" /> </div>
+														<div data-video="f2Z65fobH2I" id="video"> <img src="${movieBeanList[0].imgList[0].imgPath}" alt="" class="img-responsive" /> </div>
 													</div>
 
 
 										
 	        <div class="player-text">
 												<p class="fexi_header">Force 2</p>
-												<p class="fexi_header_para"><span class="conjuring_w3">Story Line<label>:</label></span>${movieBeanList[0].movieDescribe }</p>
+												<p class="fexi_header_para"><span class="conjuring_w3">Story Line<label>:</label></span>这是我们的电影非常好看的电影好吧这里只是字数太少了可能需要三行字才能保证页面不乱只能说明做这个原型的前端人员太不负责任了
+												${movieBeanList[0].movieDescribe }</p>
 												<p class="fexi_header_para"><span>Release On<label>:</label></span>${movieBeanList[0].movieCreateTime }</p>
-												<p class="fexi_header_para">
-													<span>Genres<label>:</label> </span>
-													
-													<a href="genre.jsp">Drama</a> | 
-													<a href="genre.jsp">Adventure</a> | 
-													<a href="genre.jsp">Family</a>								
+												<p class="fexi_header_para"><span>Genres<label>:</label> </span>
+													<c:forEach items="${movieBeanList[0].classifysList }" var="bean" begin="0" end="${fn:length(movieBeanList[0].classifysList)-2}">
+														<a href="genre.jsp">${bean.classifyName }</a> | 
+													</c:forEach>
+													<a href="genre.jsp">${movieBeanList[0].classifysList[fn:length(movieBeanList[0].classifysList)-1].classifyName }</a>								
 												</p>
 												<p class="fexi_header_para fexi_header_para1"><span>Star Rating<label>:</label></span>
 													<a href="#"><i class="fa fa-star" aria-hidden="true"></i></a>
