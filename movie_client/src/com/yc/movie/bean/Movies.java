@@ -16,6 +16,34 @@ public class Movies implements Serializable{
 	private BigDecimal moviePrice; //单价
 	private String movieStatus;  /*电影状态  0表示下架（卖完了） 1表示上架*/
 	private Timestamp movieCreateTime; //上架时间
+	private List<Ticket> ticketList;  //对应电影票对象集合
+	private List<Classifys> classifysList;  //对应的类型集合
+	private List<Images> imgList;  //对应的图片集合
+	private List<Protagonists> proList;  //对应主演集合
+	public List<Ticket> getTicketList() {
+		return ticketList;
+	}
+	public void setTicketList(List<Ticket> ticketList) {
+		this.ticketList = ticketList;
+	}
+	public List<Classifys> getClassifysList() {
+		return classifysList;
+	}
+	public void setClassifysList(List<Classifys> classifysList) {
+		this.classifysList = classifysList;
+	}
+	public List<Images> getImgList() {
+		return imgList;
+	}
+	public void setImgList(List<Images> imgList) {
+		this.imgList = imgList;
+	}
+	public List<Protagonists> getProList() {
+		return proList;
+	}
+	public void setProList(List<Protagonists> proList) {
+		this.proList = proList;
+	}
 	public Long getMovieId() {
 		return movieId;
 	}

@@ -223,26 +223,26 @@ public class CommonsUtils {
 				
 				//找到属性的类型
 				String attrType = me.getParameterTypes()[0].getName();  //java.lang.String
-				Object params = map.get(attrName);
+				String params = String.valueOf(map.get(attrName));
 				if(params == null)
 					continue g1;
 				try {
 					g2:switch(attrType){
 					case "java.lang.Integer":
-						me.invoke(bean, params);
+						me.invoke(bean, Integer.parseInt(params));
 						break g2;
 					case "java.lang.String":
 						me.invoke(bean, params); 
 						break g2;
 					case "java.lang.Long":
-						me.invoke(bean, params); 
+						me.invoke(bean, Long.parseLong(params)); 
 						break g2;
 					case "java.sql.Date":
 						DateFormat dateformat = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
-						me.invoke(bean, new java.sql.Date(dateformat.parse(String.valueOf(params)).getTime())); 
+						me.invoke(bean, new java.sql.Date(dateformat.parse(params).getTime())); 
 						break g2;
 					case "java.sql.Timestamp":
-						me.invoke(bean,Timestamp.valueOf(String.valueOf(params))); 
+						me.invoke(bean,Timestamp.valueOf(params)); 
 						break g2;
 					}
 				} catch (NumberFormatException e) {

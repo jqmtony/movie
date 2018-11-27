@@ -17,6 +17,13 @@ public class Merchant implements Serializable {
 	private String merPwd;  //商户登录密码
 	private String merIDCard;	//商户身份证号码
 	private String merStatus;  //商户状态  0禁用  1正常使用
+	private List<Images> imgList;  //对应图片集合
+	public List<Images> getImgList() {
+		return imgList;
+	}
+	public void setImgList(List<Images> imgList) {
+		this.imgList = imgList;
+	}
 	public Long getMerId() {
 		return merId;
 	}

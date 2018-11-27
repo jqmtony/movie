@@ -27,6 +27,9 @@
 <link href='http://fonts.googleapis.com/css?family=Montserrat:400,700' rel='stylesheet' type='text/css'>
 <!--//web-fonts-->
 </head>
+<c:if test="${empty movieBeanList }">
+	<jsp:forward page="mover.s?method=findAllMovie"></jsp:forward>
+</c:if>
 <body>
 <!--/main-header-->
   <!--/banner-section-->
@@ -290,12 +293,11 @@
 										
 	        <div class="player-text">
 												<p class="fexi_header">Force 2</p>
-												<p class="fexi_header_para"><span class="conjuring_w3">Story Line<label>:</label></span>Presenting the official trailer of Force 2 starring John Abraham, Sonakshi Sinha and Tahir Raj Bhasin
-
-A film by Abhinay Deo, Produced by Vipul Amrutlal Shah, JA entertainment Pvt. Ltd....</p>
-												<p class="fexi_header_para"><span>Release On<label>:</label></span>Sep 29, 2016 </p>
+												<p class="fexi_header_para"><span class="conjuring_w3">Story Line<label>:</label></span>${movieBeanList[0].movieDescribe }</p>
+												<p class="fexi_header_para"><span>Release On<label>:</label></span>${movieBeanList[0].movieCreateTime }</p>
 												<p class="fexi_header_para">
 													<span>Genres<label>:</label> </span>
+													
 													<a href="genre.jsp">Drama</a> | 
 													<a href="genre.jsp">Adventure</a> | 
 													<a href="genre.jsp">Family</a>								

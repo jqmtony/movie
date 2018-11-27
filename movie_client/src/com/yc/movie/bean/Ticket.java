@@ -2,6 +2,7 @@ package com.yc.movie.bean;
 
 import java.io.Serializable;
 import java.sql.Timestamp;
+import java.util.List;
 
 /**
  * 电影票
@@ -15,6 +16,13 @@ public class Ticket implements Serializable {
 	private Users user; //对应买该票的用户
 	private Timestamp ticketStartTime; //电影开始时间
 	private Indent indent;  //对应订单
+	private List<Images> imgList;  //对应图片集合
+	public List<Images> getImgList() {
+		return imgList;
+	}
+	public void setImgList(List<Images> imgList) {
+		this.imgList = imgList;
+	}
 	public Long getTicketId() {
 		return ticketId;
 	}

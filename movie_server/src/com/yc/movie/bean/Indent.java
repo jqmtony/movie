@@ -2,6 +2,7 @@ package com.yc.movie.bean;
 
 import java.io.Serializable;
 import java.sql.Timestamp;
+import java.util.List;
 
 /**
  * 订单
@@ -14,6 +15,13 @@ public class Indent implements Serializable {
 	private String indentStatus; //订单状态
 	private String indentRemark;  //订单备注
 	private Timestamp indentCreateTime; //订单创建时间
+	private List<Ticket> ticketList;  //对应电影票集合
+	public List<Ticket> getTicketList() {
+		return ticketList;
+	}
+	public void setTicketList(List<Ticket> ticketList) {
+		this.ticketList = ticketList;
+	}
 	public Long getIndentId() {
 		return indentId;
 	}

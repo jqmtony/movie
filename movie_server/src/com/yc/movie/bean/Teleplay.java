@@ -2,6 +2,7 @@ package com.yc.movie.bean;
 
 import java.io.Serializable;
 import java.sql.Timestamp;
+import java.util.List;
 
 /**
  * 电视剧
@@ -17,6 +18,27 @@ public class Teleplay implements Serializable {
 	private String teleplayDescribe; //电视剧描述
 	private String teleplayPath; //电视剧观看链接
 	private Timestamp teleplayCreateTime; //电视剧上架时间
+	private List<Classifys> classifysList;  //对应的类型集合
+	private List<Images> classifyList;  //对应的图片集合
+	private List<Protagonists> proList;  //对应主演集合
+	public List<Classifys> getClassifysList() {
+		return classifysList;
+	}
+	public void setClassifysList(List<Classifys> classifysList) {
+		this.classifysList = classifysList;
+	}
+	public List<Images> getClassifyList() {
+		return classifyList;
+	}
+	public void setClassifyList(List<Images> classifyList) {
+		this.classifyList = classifyList;
+	}
+	public List<Protagonists> getProList() {
+		return proList;
+	}
+	public void setProList(List<Protagonists> proList) {
+		this.proList = proList;
+	}
 	public Long getTeleplayId() {
 		return teleplayId;
 	}

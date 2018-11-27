@@ -2,6 +2,7 @@ package com.yc.movie.bean;
 
 import java.io.Serializable;
 import java.sql.Timestamp;
+import java.util.List;
 
 /**
  * 用户
@@ -17,6 +18,34 @@ public class Users implements Serializable {
 	private String userTel;  //用户手机号
 	private String userPayNum; //用户支付账号
 	private String userPayPwd;  //支付密码
+	private List<Ticket> ticketList;  //对应的电影票集合
+	private List<Images> imgList;  //对应图片集合
+	private List<Indent> indentList;  //对应订单集合
+	private Integral integral;	//对应积分卡
+	public List<Ticket> getTicketList() {
+		return ticketList;
+	}
+	public void setTicketList(List<Ticket> ticketList) {
+		this.ticketList = ticketList;
+	}
+	public List<Images> getImgList() {
+		return imgList;
+	}
+	public void setImgList(List<Images> imgList) {
+		this.imgList = imgList;
+	}
+	public List<Indent> getIndentList() {
+		return indentList;
+	}
+	public void setIndentList(List<Indent> indentList) {
+		this.indentList = indentList;
+	}
+	public Integral getIntegral() {
+		return integral;
+	}
+	public void setIntegral(Integral integral) {
+		this.integral = integral;
+	}
 	@Override
 	public String toString() {
 		return "Users [userId=" + userId + ", userName=" + userName + ", userEmail=" + userEmail + ", userPwd="

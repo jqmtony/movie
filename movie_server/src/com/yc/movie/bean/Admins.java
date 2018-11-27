@@ -19,6 +19,20 @@ public class Admins implements Serializable{    //如果要改属性   就要全部更改
 	private Long adminWeight;	//管理员权值
 	private String adminEmail;	//管理员邮箱地址
 	private String adminPwd;	//管理员密码
+	private List<AdminLoginRecord> alrList;  //对应的登录记录对象集合
+	private List<Images> imgList;  //对应图片对象集合
+	public List<AdminLoginRecord> getAlrList() {
+		return alrList;
+	}
+	public void setAlrList(List<AdminLoginRecord> alrList) {
+		this.alrList = alrList;
+	}
+	public List<Images> getImgList() {
+		return imgList;
+	}
+	public void setImgList(List<Images> imgList) {
+		this.imgList = imgList;
+	}
 	public Long getAdminId() {
 		return adminId;
 	}
