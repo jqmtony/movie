@@ -1,8 +1,6 @@
 package com.yc.movie.admin.web.servlet;
 
-import com.yc.movie.admin.bean.AdminLoginRecord;
-import com.yc.movie.admin.bean.Admins;
-import com.yc.movie.admin.bean.Verification;
+import com.yc.movie.bean.*;
 import com.yc.movie.admin.exception.AdminException;
 import com.yc.movie.admin.service.AdminService;
 import com.yc.movie.utils.BaseServlet;

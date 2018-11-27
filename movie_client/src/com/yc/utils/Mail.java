@@ -1,4 +1,4 @@
-package com.yc.movie.utils;
+package com.yc.utils;
 
 import java.util.List;
 import java.util.Vector;

@@ -1,6 +1,4 @@
-package com.yc.movie.system.web.servlet;
-
-import com.yc.movie.utils.BaseServlet;
+package com.yc.system.web.servlet;
 
 import java.io.IOException;
 import java.util.Locale;
@@ -13,6 +11,8 @@ import javax.servlet.ServletResponse;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+
+import com.yc.utils.BaseServlet;
 
 /**
  * Servlet implementation class SystemServlet

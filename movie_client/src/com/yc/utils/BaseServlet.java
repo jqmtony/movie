@@ -1,4 +1,4 @@
-package com.yc.movie.utils;
+package com.yc.utils;
 
 import java.io.IOException;
 import java.lang.reflect.Method;

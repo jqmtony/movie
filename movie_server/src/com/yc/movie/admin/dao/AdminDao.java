@@ -6,8 +6,7 @@ import java.util.List;
 import org.apache.commons.dbutils.QueryRunner;
 import org.apache.commons.dbutils.handlers.BeanListHandler;
 
-import com.yc.movie.admin.bean.AdminLoginRecord;
-import com.yc.movie.admin.bean.Admins;
+import com.yc.movie.bean.*;
 import com.yc.movie.utils.TxQueryRunner;
 
 public class AdminDao {
@@ -99,6 +98,7 @@ public class AdminDao {
 	 * @throws SQLException 
 	 */
 	public void addAdmin(Admins admin) throws SQLException {
+		
 		String sql = "insert into admins values(?,?,?,?,?,?,?,?,?)";
 		Object[] params = {admin.getAdminId(),admin.getAdminRegisterCode(),admin.getAdminName(),
 				admin.getAdminTel(),admin.getAdminAddr(),admin.getAdminCreateTime(),

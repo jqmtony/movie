@@ -1,0 +1,60 @@
+package com.yc.movie.bean;
+
+import java.io.Serializable;
+import java.sql.Timestamp;
+
+/**
+ * 电影票
+ * @author yxh
+ *
+ */
+public class Ticket implements Serializable {
+	private Long ticketId; //电影票ID
+	private Movies movie; //对应电影
+	private String ticketStatus; //电影票状态  1为可用  0为禁用
+	private Users user; //对应买该票的用户
+	private Timestamp ticketStartTime; //电影开始时间
+	private Indent indent;  //对应订单
+	public Long getTicketId() {
+		return ticketId;
+	}
+	public void setTicketId(Long ticketId) {
+		this.ticketId = ticketId;
+	}
+	public Movies getMovie() {
+		return movie;
+	}
+	public void setMovie(Movies movie) {
+		this.movie = movie;
+	}
+	public String getTicketStatus() {
+		return ticketStatus;
+	}
+	public void setTicketStatus(String ticketStatus) {
+		this.ticketStatus = ticketStatus;
+	}
+	public Users getUser() {
+		return user;
+	}
+	public void setUser(Users user) {
+		this.user = user;
+	}
+	public Timestamp getTicketStartTime() {
+		return ticketStartTime;
+	}
+	public void setTicketStartTime(Timestamp ticketStartTime) {
+		this.ticketStartTime = ticketStartTime;
+	}
+	public Indent getIndent() {
+		return indent;
+	}
+	public void setIndent(Indent indent) {
+		this.indent = indent;
+	}
+	@Override
+	public String toString() {
+		return "Ticket [ticketId=" + ticketId + ", movie=" + movie + ", ticketStatus=" + ticketStatus + ", user=" + user
+				+ ", ticketStartTime=" + ticketStartTime + ", indent=" + indent + "]";
+	}
+	
+}

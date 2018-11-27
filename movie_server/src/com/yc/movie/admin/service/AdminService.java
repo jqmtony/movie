@@ -10,9 +10,7 @@ import java.util.Map.Entry;
 import java.util.Properties;
 import java.util.Set;
 
-import com.yc.movie.admin.bean.AdminLoginRecord;
-import com.yc.movie.admin.bean.Admins;
-import com.yc.movie.admin.bean.Verification;
+import com.yc.movie.bean.*;
 import com.yc.movie.admin.dao.AdminDao;
 import com.yc.movie.admin.exception.AdminException;
 import com.yc.movie.utils.JdbcUtils;

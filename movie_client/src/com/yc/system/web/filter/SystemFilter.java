@@ -1,4 +1,4 @@
-package com.yc.movie.system.web.filter;
+package com.yc.system.web.filter;
 
 import java.io.IOException;
 import java.util.Locale;

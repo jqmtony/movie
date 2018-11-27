@@ -1,5 +1,6 @@
-package com.yc.movie.utils;
+package com.yc.utils;
 
+import java.io.File;
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
@@ -31,6 +32,8 @@ import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.commons.fileupload.FileItem;
+
 import sun.misc.BASE64Decoder;
 import sun.misc.BASE64Encoder;
 
@@ -47,6 +50,49 @@ public class CommonsUtils {
 	public static final String TEL_NUM_REGX = "[1-9]\\d{10}"; // 手机号码
 	private static final String IP_ADDR_AND_PRO_NAME = "address_and_projectName.properties";  //项目的IP地址和项目名所在的配置文件
 	public static Random ra = new Random(); // 随机数对象
+	
+	/**
+	 * 上传文件  返回要保存在数据库的路径
+	 * @param root	存储文件的根目录
+	 * @param fi	文件表单项对象
+	 * @return	保存在数据库的路径
+	 * @throws Exception
+	 */
+	public static String uploadFile(String root, FileItem fi) throws Exception {
+		//得到文件名
+		String filename = fi.getName();
+		
+		//处理文件名的绝对路径问题
+		int index = filename.lastIndexOf("\\");
+		if(index != -1){
+			filename = filename.substring(index+1);
+		}
+		
+		//处理文件同名问题，给文件名称添加uuid前缀。
+		String savename = getUUID() + "_" + filename;
+		
+		//得到hashCode
+		int hCode = filename.hashCode();
+		//转化成16进制
+		String hex = Integer.toHexString(hCode);
+		
+		//获取hex的前两个字母，与root连接在一起，生成一个完整的路径
+		File dirFile = new File(root,"/"+hex.charAt(0)+"/"+hex.charAt(1));
+		
+		//创建目录链
+		dirFile.mkdirs();
+		
+		//创建目标文件
+		File destFile = new File(dirFile,savename);
+		
+//					File sqlFile = new File("/WEB-INF/files","/"+hex.charAt(0)+"/"+hex.charAt(1));
+		String sqlPath = dirFile+"\\"+savename;
+		
+		
+		//保存
+		fi.write(destFile);
+		return sqlPath;
+	}
 	
 	/**
 	 * 移除cookie

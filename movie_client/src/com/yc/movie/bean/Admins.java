@@ -1,8 +1,14 @@
-package com.yc.movie.admin.bean;
+package com.yc.movie.bean;
 
 import java.io.Serializable;
 import java.sql.Timestamp;
+import java.util.List;
 
+/**
+ * 管理员
+ * @author yxh
+ *
+ */
 public class Admins implements Serializable{    //如果要改属性   就要全部更改
 	private Long adminId; //管理员id
 	private String adminRegisterCode;	//管理员注册码
@@ -69,9 +75,9 @@ public class Admins implements Serializable{    //如果要改属性   就要全部更改
 	}
 	@Override
 	public String toString() {
-		return "admins [adminId=" + adminId + ", adminRegisterCode=" + adminRegisterCode + ", adminName=" + adminName
+		return "Admins [adminId=" + adminId + ", adminRegisterCode=" + adminRegisterCode + ", adminName=" + adminName
 				+ ", adminTel=" + adminTel + ", adminAddr=" + adminAddr + ", adminCreateTime=" + adminCreateTime
 				+ ", adminWeight=" + adminWeight + ", adminEmail=" + adminEmail + ", adminPwd=" + adminPwd + "]";
 	}
-	
+
 }

@@ -1,4 +1,4 @@
-package com.yc.movie.utils;
+package com.yc.utils;
 
 import java.io.File;
 
