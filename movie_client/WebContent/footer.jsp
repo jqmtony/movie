@@ -3,143 +3,100 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <div class="contact-w3ls" id="contact">
 			<div class="footer-w3lagile-inner">
-				<h2>Sign up for our <span>Newsletter</span></h2>
+				<h2>${lg["foot_1"] } <span>${lg["foot_2"] }</span></h2>
 				<p class="para">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Praesent vitae eros eget tellus 
 					tristique bibendum. Donec rutrum sed sem quis venenatis.</p>
 				<div class="footer-contact">
 					<form action="#" method="post">
-						<input type="email" name="Email" placeholder="Enter your email...." required=" ">
-						<input type="submit" value="Subscribe">
+						<input type="email" name="Email" placeholder="${lg['foot_24'] }" required=" ">
+						<input type="submit" value="${lg['foot_25']}">
 					</form>
 				</div>
 					<div class="footer-grids w3-agileits">
 						<div class="col-md-2 footer-grid">
-						<h4>Release</h4>
+						<h4>${lg["foot_3"] }</h4>
 							<ul> 
+								<li><a href="#" title="Release 2018">2018</a></li> 
+								<li><a href="#" title="Release 2017">2017</a></li>
 								<li><a href="#" title="Release 2016">2016</a></li> 
-								<li><a href="#" title="Release 2015">2015</a></li>
-								<li><a href="#" title="Release 2014">2014</a></li> 
+								<li><a href="#" title="Release 2015">2015</a></li> 
+								<li><a href="#" title="Release 2014">2014</a></li>
 								<li><a href="#" title="Release 2013">2013</a></li> 
-								<li><a href="#" title="Release 2012">2012</a></li>
-								<li><a href="#" title="Release 2011">2011</a></li> 
 							</ul>
 						</div>
 							<div class="col-md-2 footer-grid">
-						<h4>Movies</h4>
+						<h4>${lg["Movies"] }</h4>
 							<ul>
 								
-								<li><a href="genre.html">ADVENTURE</a></li>
-								<li><a href="comedy.html">COMEDY</a></li>
-								<li><a href="series.html">FANTASY</a></li>
-								<li><a href="series.html">ACTION  </a></li>
-								<li><a href="genre.html">MOVIES  </a></li>
-								<li><a href="horror.html">HORROR  </a></li>
+								<li><a href="genre.html">${lg["foot_4"] }</a></li>
+								<li><a href="comedy.html">${lg["foot_5"] }</a></li>
+								<li><a href="series.html">${lg["foot_6"] }</a></li>
+								<li><a href="series.html">${lg["foot_7"] }  </a></li>
+								<li><a href="genre.html">${lg["foot_8"] }  </a></li>
+								<li><a href="horror.html">${lg["foot_9"] }  </a></li>
 								
 							</ul>
 						</div>
 				
 
 							<div class="col-md-2 footer-grid">
-								<h4>Review Movies</h4>
+								<h4>${lg["foot_10"] }</h4>
 									<ul class="w3-tag2">
-									<li><a href="comedy.html">Comedy</a></li>
-									<li><a href="horror.html">Horror</a></li>
-									<li><a href="series.html">Historical</a></li>
-									<li><a href="series.html">Romantic</a></li>
-									<li><a href="series.html">Love</a></li>
-									<li><a href="genre.html">Action</a></li>
-									<li><a href="single.html">Reviews</a></li>
-									<li><a href="comedy.html">Comedy</a></li>
-									<li><a href="horror.html">Horror</a></li>
-									<li><a href="series.html">Historical</a></li>
-									<li><a href="series.html">Romantic</a></li>
-									<li><a href="genre.html">Love</a></li>
-									<li><a href="comedy.html">Comedy</a></li>
-									<li><a href="horror.html">Horror</a></li>
-									<li><a href="genre.html">Historical</a></li>
+									<li><a href="comedy.html">${lg["foot_11"] }</a></li>
+									<li><a href="horror.html">${lg["foot_12"] }</a></li>
+									<li><a href="series.html">${lg["foot_13"] }</a></li>
+									<li><a href="series.html">${lg["foot_14"] }</a></li>
+									<li><a href="series.html">${lg["foot_15"] }</a></li>
+									<li><a href="genre.html">${lg["foot_16"] }</a></li>
+									<li><a href="single.html">${lg["foot_17"] }</a></li>
+									<li><a href="comedy.html">${lg["foot_11"] }</a></li>
+									<li><a href="horror.html">${lg["foot_12"] }</a></li>
+									<li><a href="series.html">${lg["foot_13"] }</a></li>
+									<li><a href="series.html">${lg["foot_14"] }</a></li>
+									<li><a href="genre.html">${lg["foot_15"] }</a></li>
+									<li><a href="comedy.html">${lg["foot_16"] }</a></li>
+									<li><a href="horror.html">${lg["foot_17"] }</a></li>
+									<li><a href="genre.html">${lg["foot_17"] }</a></li>
 									
 								</ul>
 
 
 						</div>
 								<div class="col-md-2 footer-grid">
-						<h4>Latest Movies</h4>
-							<div class="footer-grid1">
-								<div class="footer-grid1-left">
-									<a href="single.html"><img src="images/1.jpg" alt=" " class="img-responsive"></a>
+						<h4>${lg["foot_18"] }</h4>
+							<c:forEach items="${movieListByTime }" var="movie">
+								<div class="footer-grid1">
+									<div class="footer-grid1-left">
+										<a href="single.html"><img src="${movie.imgList[0].imgPath }" alt=" " class="img-responsive"></a>
+									</div>
+									<div class="footer-grid1-right">
+										<a href="single.html">${movie.movieName}</a>
+										
+									</div>
+									<div class="clearfix"> </div>
 								</div>
-								<div class="footer-grid1-right">
-									<a href="single.html">eveniet ut molesti</a>
-									
-								</div>
-								<div class="clearfix"> </div>
-							</div>
-							<div class="footer-grid1">
-								<div class="footer-grid1-left">
-									<a href="single.html"><img src="images/2.jpg" alt=" " class="img-responsive"></a>
-								</div>
-								<div class="footer-grid1-right">
-									<a href="single.html">earum rerum tenet</a>
-									
-								</div>
-								<div class="clearfix"> </div>
-							</div>
-							<div class="footer-grid1">
-							
-								<div class="footer-grid1-left">
-									<a href="single.html"><img src="images/4.jpg" alt=" " class="img-responsive"></a>
-								</div>
-								<div class="footer-grid1-right">
-									<a href="single.html">eveniet ut molesti</a>
-									
-								</div>
-								<div class="clearfix"> </div>
-							</div>
-							<div class="footer-grid1">
-								<div class="footer-grid1-left">
-									<a href="single.html"><img src="images/3.jpg" alt=" " class="img-responsive"></a>
-								</div>
-								<div class="footer-grid1-right">
-									<a href="single.html">earum rerum tenet</a>
-									
-								</div>
-								<div class="clearfix"> </div>
-							</div>
-
+							</c:forEach>
 
 						</div>
 						<div class="col-md-2 footer-grid">
-						   <h4 class="b-log"><a href="index.html"><span>M</span>ovies <span>P</span>ro</a></h4>
-							<div class="footer-grid-instagram">
-							<a href="single.html"><img src="images/m1.jpg" alt=" " class="img-responsive"></a>
-							</div>
-							<div class="footer-grid-instagram">
-							<a href="single.html"><img src="images/m2.jpg" alt=" " class="img-responsive"></a>
-							</div>
-							<div class="footer-grid-instagram">
-								<a href="single.html"><img src="images/m3.jpg" alt=" " class="img-responsive"></a>
-							</div>
-							<div class="footer-grid-instagram">
-							<a href="single.html"><img src="images/m4.jpg" alt=" " class="img-responsive"></a>
-							</div>
-							<div class="footer-grid-instagram">
-								<a href="single.html"><img src="images/m5.jpg" alt=" " class="img-responsive"></a>
-							</div>
-							<div class="footer-grid-instagram">
-							<a href="single.html"><img src="images/m6.jpg" alt=" " class="img-responsive"></a>
-							</div>
-								
+						   <h4 class="b-log"><a href="index.html"><span>${lg["indexTitle_1"] }</span>${lg["indexTitle_2"] } <span>${lg["indexTitle_3"] }</span>${lg["indexTitle_4"] }</a></h4>
+							
+							<c:forEach items="${movieListByCount }" var="movie">
+								<div class="footer-grid-instagram">
+									<a href="single.html"><img src="${movie.imgList[0].imgPath }" alt=" " class="img-responsive"></a>
+								</div>
+							</c:forEach>
 							<div class="clearfix"> </div>
 						</div>
 						<div class="clearfix"> </div>
 						<ul class="bottom-links-agile">
-								<li><a href="icons.html" title="Font Icons">Icons</a></li> 
-								<li><a href="short-codes.html" title="Short Codes">Short Codes</a></li> 
-								<li><a href="contact.html" title="contact">Contact</a></li> 
+								<li><a href="icons.html" title="Font Icons">${lg["foot_19"] }</a></li> 
+								<li><a href="short-codes.html" title="Short Codes">${lg["foot_20"] }</a></li> 
+								<li><a href="contact.html" title="contact">${lg["foot_21"] }</a></li> 
 								
 							</ul>
 					</div>
-					<h3 class="text-center follow">Connect <span>Us</span></h3>
+					<h3 class="text-center follow">${lg["foot_22"] } <span>${lg["foot_23"] }</span></h3>
 						<ul class="social-icons1 agileinfo">
 							<li><a href="#"><i class="fa fa-facebook"></i></a></li>
 							<li><a href="#"><i class="fa fa-twitter"></i></a></li>
@@ -151,9 +108,7 @@
 			 </div>
 						
 			</div>
-			<div class="w3agile_footer_copy">
-				    <p>Copyright &copy; 2017.Company name All rights reserved.<a target="_blank" href="http://www.17sucai.com/">&#x7F51;&#x9875;&#x6A21;&#x677F;</a></p>
-			</div>
+			
 		<a href="#home" id="toTop" class="scroll" style="display: block;"> <span id="toTopHover" style="opacity: 1;"> </span></a>
 
 <script src="js/jquery-1.11.1.min.js"></script>
@@ -229,18 +184,18 @@
 <script src="js/easy-responsive-tabs.js"></script>
 <script>
 $(document).ready(function () {
-$('#horizontalTab').easyResponsiveTabs({
-type: 'default', //Types: default, vertical, accordion           
-width: 'auto', //auto or any width like 600px
-fit: true,   // 100% fit in a container
-closed: 'accordion', // Start closed if in accordion view
-activate: function(event) { // Callback function if tab is switched
-var $tab = $(this);
-var $info = $('#tabInfo');
-var $name = $('span', $info);
-$name.text($tab.text());
-$info.show();
-}
+	$('#horizontalTab').easyResponsiveTabs({
+		type: 'default', //Types: default, vertical, accordion           
+		width: 'auto', //auto or any width like 600px
+		fit: true,   // 100% fit in a container
+		closed: 'accordion', // Start closed if in accordion view
+		activate: function(event) { // Callback function if tab is switched
+		var $tab = $(this);
+		var $info = $('#tabInfo');
+		var $name = $('span', $info);
+		$name.text($tab.text());
+		$info.show();
+	}
 });
 $('#verticalTab').easyResponsiveTabs({
 type: 'vertical',

@@ -228,6 +228,9 @@ public class CommonsUtils {
 					continue g1;
 				try {
 					g2:switch(attrType){
+					case "java.lang.Double":
+						me.invoke(bean, Double.parseDouble(params));
+						break g2;
 					case "java.lang.Integer":
 						me.invoke(bean, Integer.parseInt(params));
 						break g2;
@@ -264,7 +267,7 @@ public class CommonsUtils {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		return null;
+		return bean;
 	}
 	
 	/**

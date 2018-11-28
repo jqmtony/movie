@@ -5,7 +5,12 @@ import com.yc.movie.bean.Movies;
 import com.yc.utils.BaseServlet;
 
 import java.io.IOException;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.Vector;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -30,8 +35,11 @@ public class MovieServlet extends BaseServlet {
 		// 将allMovieBeanList集合存在request域中
 		//1.描述  2.时间  3.分类(类型表) 4.评分数 5.图片封面(图片表)
 		try {
-			List<Movies> movieBeanList = ms.findAllMovie();
-			request.setAttribute("movieBeanList", movieBeanList);
+			session.setAttribute("movieListByTime", ms.findAllMovie("movieCreateTime"));
+		
+			session.setAttribute("movieListByCount",  ms.findAllMovie("movieVisitCount"));
+			
+			session.setAttribute("movieListByGrade",  ms.findAllMovie("movieGradeNum"));
 		} catch (MovieException e) {
 			request.setAttribute("msg", e.getMessage());
 		}

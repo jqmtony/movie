@@ -10,7 +10,7 @@ public class Movies implements Serializable{
 	private Merchant merchant;  //对应商户
 	private Long movieIntegralNum;  //积分数
 	private String movieName;	//电影名
-	private Long movieGradeNum;	//评分数
+	private Double movieGradeNum;	//评分数
 	private String movieDescribe;  //电影描述
 	private String moviePath;	//观看地址
 	private BigDecimal moviePrice; //单价
@@ -68,10 +68,11 @@ public class Movies implements Serializable{
 	public void setMovieName(String movieName) {
 		this.movieName = movieName;
 	}
-	public Long getMovieGradeNum() {
+
+	public Double getMovieGradeNum() {
 		return movieGradeNum;
 	}
-	public void setMovieGradeNum(Long movieGradeNum) {
+	public void setMovieGradeNum(Double movieGradeNum) {
 		this.movieGradeNum = movieGradeNum;
 	}
 	public String getMovieDescribe() {
