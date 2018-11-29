@@ -1,4 +1,4 @@
-package com.yc.movie.web.servlet;
+package com.yc.movie.service;
 
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -14,6 +14,7 @@ import java.util.Vector;
 
 import com.yc.exception.MovieException;
 import com.yc.movie.bean.Movies;
+import com.yc.movie.dao.MovieDao;
 
 public class MovieService{
 	private MovieDao md = new MovieDao();
@@ -23,10 +24,10 @@ public class MovieService{
 	 * @return
 	 * @throws MovieException 
 	 */
-	public List<Movies> findAllMovie(String byName) throws MovieException {
+	public List<Movies> findAllMovie() throws MovieException {
 		try {
 			
-			return md.findAllMovie(byName);
+			return md.findAllMovie();
 		} catch (SQLException e) {
 			throw new MovieException("系统异常，请稍后再试！");
 		}

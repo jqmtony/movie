@@ -11,7 +11,8 @@ import java.util.Map;
 import org.junit.Test;
 
 import com.yc.movie.bean.Movies;
-import com.yc.movie.web.servlet.MovieDao;
+import com.yc.movie.dao.MovieDao;
+import com.yc.movie.dao.UserDao;
 
 public class DemoTest {
 	@Test
@@ -21,10 +22,16 @@ public class DemoTest {
 	}
 	
 	@Test
+	public void fun2() throws SQLException{
+		String[] s = {"userId","userName"};
+		System.out.println(new UserDao().findUserBySelectConf(s, 1l,"ÑîöÎ»¢"));
+	}
+	
+	@Test
 	public void fun3(){
-		Student s1 = new Student(1, 432,"zhangsan");
-		Student s2 = new Student(2, 112,"lisi");
-		Student s3 = new Student(3, 574,"wangwu");
+		Student s1 = new Student(1l, 432d,"zhangsan");
+		Student s2 = new Student(2l, 112d,"lisi");
+		Student s3 = new Student(3l, 574d,"wangwu");
 		List<Student> list = new ArrayList<Student>();
 		list.add(s1);
 		list.add(s2);
@@ -46,10 +53,10 @@ public class DemoTest {
 
 
 class Student{
-	public int age;
-	public int num;
+	public Long age;
+	public Double num;
 	public String Name;
-	public Student(int age, int num, String name) {
+	public Student(Long age, Double num, String name) {
 		super();
 		this.age = age;
 		this.num = num;

@@ -1,4 +1,4 @@
-package com.yc.movie.web.servlet;
+package com.yc.movie.dao;
 
 import java.sql.SQLException;
 import java.util.List;
@@ -20,9 +20,9 @@ public class MovieDao {
 	 * @return
 	 * @throws SQLException 
 	 */
-	public List<Movies> findAllMovie(String byName) throws SQLException {
-		String sql = "select * from movies order by ?";
-		List<Movies> movieList = qr.query(sql, new BeanListHandler<Movies>(Movies.class),byName);
+	public List<Movies> findAllMovie() throws SQLException {
+		String sql = "select * from movies";
+		List<Movies> movieList = qr.query(sql, new BeanListHandler<Movies>(Movies.class));
 		if(movieList.size() < 1)
 			return null;
 		for(Movies movie : movieList){

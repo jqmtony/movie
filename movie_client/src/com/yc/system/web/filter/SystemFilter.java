@@ -2,6 +2,7 @@ package com.yc.system.web.filter;
 
 import java.io.IOException;
 import java.util.Locale;
+import java.util.Properties;
 import java.util.ResourceBundle;
 
 import javax.servlet.Filter;
@@ -13,6 +14,8 @@ import javax.servlet.ServletResponse;
 import javax.servlet.annotation.WebFilter;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
+
+import com.yc.utils.CommonsUtils;
 
 /**
  * Servlet Filter implementation class filter
@@ -35,6 +38,13 @@ public class SystemFilter implements Filter {
 			session.setAttribute("lg", rb);	//将配置文件对象存在session域中
 			session.setAttribute("lgType", rb.getLocale().getLanguage());
 		}
+		
+		Properties p = new Properties();
+		p.load(this.getClass().getClassLoader().getResourceAsStream(CommonsUtils.IP_ADDR_AND_PRO_NAME));
+		String addr = p.getProperty("address");
+		String proName = p.getProperty("projectName");
+		session.setAttribute("addrIp", addr+proName);
+		
 		
 		// pass the request along the filter chain
 		chain.doFilter(request, response);	//放行

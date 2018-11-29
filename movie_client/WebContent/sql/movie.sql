@@ -10,7 +10,7 @@ Target Server Type    : MYSQL
 Target Server Version : 50561
 File Encoding         : 65001
 
-Date: 2018-11-27 17:02:27
+Date: 2018-11-29 18:54:02
 */
 
 SET FOREIGN_KEY_CHECKS=0;
@@ -26,7 +26,7 @@ CREATE TABLE `adminloginrecord` (
   `alrAdminId` int(11) DEFAULT NULL,
   `alrStatus` varchar(255) DEFAULT NULL,
   PRIMARY KEY (`alrId`)
-) ENGINE=InnoDB AUTO_INCREMENT=17 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=19 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Records of adminloginrecord
@@ -47,6 +47,8 @@ INSERT INTO `adminloginrecord` VALUES ('13', '2018-11-26 21:25:33', '0:0:0:0:0:0
 INSERT INTO `adminloginrecord` VALUES ('14', '2018-11-26 21:27:37', '0:0:0:0:0:0:0:1', '1', '成功');
 INSERT INTO `adminloginrecord` VALUES ('15', '2018-11-26 21:42:37', '0:0:0:0:0:0:0:1', '1', '成功');
 INSERT INTO `adminloginrecord` VALUES ('16', '2018-11-26 21:52:17', '0:0:0:0:0:0:0:1', '1', '成功');
+INSERT INTO `adminloginrecord` VALUES ('17', '2018-11-29 14:42:13', '0:0:0:0:0:0:0:1', null, '失败');
+INSERT INTO `adminloginrecord` VALUES ('18', '2018-11-29 14:42:16', '0:0:0:0:0:0:0:1', null, '失败');
 
 -- ----------------------------
 -- Table structure for `admins`
@@ -82,11 +84,17 @@ CREATE TABLE `classifys` (
   `classifyDescribe` varchar(255) DEFAULT NULL,
   `classifyParentId` int(11) DEFAULT NULL,
   PRIMARY KEY (`classifyId`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Records of classifys
 -- ----------------------------
+INSERT INTO `classifys` VALUES ('1', '1', null, '历史', '这是关于历史的影片', null);
+INSERT INTO `classifys` VALUES ('2', '1', null, '地理', '这是关于地理的影片', null);
+INSERT INTO `classifys` VALUES ('3', '1', null, '人文', '这是关于人文的影片', null);
+INSERT INTO `classifys` VALUES ('4', '2', null, '文化', '这是关于文化的影片', null);
+INSERT INTO `classifys` VALUES ('5', '2', null, '历史', '这是关于文化的影片', null);
+INSERT INTO `classifys` VALUES ('6', '3', null, '历史', '这是关于历史的影片', null);
 
 -- ----------------------------
 -- Table structure for `images`
@@ -104,11 +112,14 @@ CREATE TABLE `images` (
   `imgStatus` varchar(255) DEFAULT NULL,
   `imgPath` varchar(255) DEFAULT NULL,
   PRIMARY KEY (`imgId`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Records of images
 -- ----------------------------
+INSERT INTO `images` VALUES ('1', '1', null, null, null, null, null, null, '封面', 'images/11.jpg');
+INSERT INTO `images` VALUES ('2', '2', null, null, null, null, null, null, '封面', 'images/m1.jpg');
+INSERT INTO `images` VALUES ('3', '3', null, null, null, null, null, null, '封面', 'images/m1.jpg');
 
 -- ----------------------------
 -- Table structure for `indent`
@@ -156,11 +167,12 @@ CREATE TABLE `merchant` (
   `merIDCard` varchar(255) DEFAULT NULL,
   `merStatus` varchar(255) DEFAULT NULL,
   PRIMARY KEY (`merId`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Records of merchant
 -- ----------------------------
+INSERT INTO `merchant` VALUES ('1', '杨鑫虎', '15570906290', 'naivestruggle@126.com', '湖南省', '123456', '15570906290', '1');
 
 -- ----------------------------
 -- Table structure for `movies`
@@ -171,18 +183,22 @@ CREATE TABLE `movies` (
   `movieMerId` int(11) DEFAULT NULL,
   `movieIntegralNum` int(11) DEFAULT NULL,
   `movieName` varchar(255) DEFAULT NULL,
-  `movieGradeNum` int(11) DEFAULT NULL,
+  `movieGradeNum` double(4,2) DEFAULT NULL,
+  `movieVisitCount` int(11) DEFAULT NULL,
   `movieDescribe` varchar(500) DEFAULT NULL,
   `moviePath` varchar(500) DEFAULT NULL,
   `moviePrice` decimal(7,2) DEFAULT NULL,
   `movieStatus` varchar(255) DEFAULT NULL,
   `movieCreateTime` datetime DEFAULT NULL,
   PRIMARY KEY (`movieId`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Records of movies
 -- ----------------------------
+INSERT INTO `movies` VALUES ('1', '1', '0', '《江南》', '8.00', '100', '江南电影', 'http://www.baidu.com', '15.00', '1', '2018-11-27 18:04:07');
+INSERT INTO `movies` VALUES ('2', '1', null, '《style》', '7.00', '5', '这里是描述这里是描述这里是描述这里是描述这里是描述这里是描述这里是描述这里是描述这里是描述这里是描述这里是描述这里是描述这里是描述这里是描述这里是描述这里是描述这里是描述', 'http://www.baidu.com', '17.00', '1', '2018-11-28 11:19:17');
+INSERT INTO `movies` VALUES ('3', '1', null, '《一千零二夜》', '6.00', '12', '这是描述', 'http://www.baidu.com', '16.00', '1', '2018-11-28 21:15:20');
 
 -- ----------------------------
 -- Table structure for `protagonists`
@@ -247,14 +263,18 @@ CREATE TABLE `userloginrecord` (
   `ulrId` int(11) NOT NULL AUTO_INCREMENT,
   `ulrLoginTime` datetime DEFAULT NULL,
   `ulrLoginIp` varchar(255) DEFAULT NULL,
-  `ulrAdminId` int(11) DEFAULT NULL,
-  `ulrStatus` varchar(255) DEFAULT NULL,
+  `ulrUserId` int(11) DEFAULT NULL,
   PRIMARY KEY (`ulrId`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Records of userloginrecord
 -- ----------------------------
+INSERT INTO `userloginrecord` VALUES ('1', '2018-11-29 17:16:41', '0:0:0:0:0:0:0:1', '1');
+INSERT INTO `userloginrecord` VALUES ('2', '2018-11-29 17:16:49', '0:0:0:0:0:0:0:1', '1');
+INSERT INTO `userloginrecord` VALUES ('3', '2018-11-29 17:18:42', '0:0:0:0:0:0:0:1', '1');
+INSERT INTO `userloginrecord` VALUES ('4', '2018-11-29 17:20:54', '0:0:0:0:0:0:0:1', '2');
+INSERT INTO `userloginrecord` VALUES ('5', '2018-11-29 17:21:04', '0:0:0:0:0:0:0:1', '1');
 
 -- ----------------------------
 -- Table structure for `users`
@@ -263,6 +283,7 @@ DROP TABLE IF EXISTS `users`;
 CREATE TABLE `users` (
   `userId` int(11) NOT NULL AUTO_INCREMENT,
   `userName` varchar(255) DEFAULT NULL,
+  `userAccount` varchar(255) DEFAULT NULL,
   `userEmail` varchar(255) DEFAULT NULL,
   `userPwd` varchar(255) DEFAULT NULL,
   `userCreateTime` datetime DEFAULT NULL,
@@ -270,8 +291,10 @@ CREATE TABLE `users` (
   `userPayNum` varchar(255) DEFAULT NULL,
   `userPayPwd` varchar(255) DEFAULT NULL,
   PRIMARY KEY (`userId`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Records of users
 -- ----------------------------
+INSERT INTO `users` VALUES ('1', '杨鑫虎', 'yangxinhu', 'naivestruuglee@126.com', 'e10adc3949ba59abbe56e057f20f883e', null, '15570906290', null, null);
+INSERT INTO `users` VALUES ('2', '杨鑫虎', null, 'naivestruggle@126.com', 'e10adc3949ba59abbe56e057f20f883e', null, null, null, null);

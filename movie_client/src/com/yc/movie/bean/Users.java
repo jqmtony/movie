@@ -12,6 +12,7 @@ import java.util.List;
 public class Users implements Serializable {
 	private Long userId; //用户ID
 	private String userName; //用户姓名
+	private String userAccount;  //用户名
 	private String userEmail;  //用户邮箱
 	private String userPwd; //用户登录密码
 	private Timestamp userCreateTime; //注册时间
@@ -22,35 +23,13 @@ public class Users implements Serializable {
 	private List<Images> imgList;  //对应图片集合
 	private List<Indent> indentList;  //对应订单集合
 	private Integral integral;	//对应积分卡
-	public List<Ticket> getTicketList() {
-		return ticketList;
+	private List<UserLoginRecord> ulrList;  //对应登录日志
+	
+	public List<UserLoginRecord> getUlrList() {
+		return ulrList;
 	}
-	public void setTicketList(List<Ticket> ticketList) {
-		this.ticketList = ticketList;
-	}
-	public List<Images> getImgList() {
-		return imgList;
-	}
-	public void setImgList(List<Images> imgList) {
-		this.imgList = imgList;
-	}
-	public List<Indent> getIndentList() {
-		return indentList;
-	}
-	public void setIndentList(List<Indent> indentList) {
-		this.indentList = indentList;
-	}
-	public Integral getIntegral() {
-		return integral;
-	}
-	public void setIntegral(Integral integral) {
-		this.integral = integral;
-	}
-	@Override
-	public String toString() {
-		return "Users [userId=" + userId + ", userName=" + userName + ", userEmail=" + userEmail + ", userPwd="
-				+ userPwd + ", userCreateTime=" + userCreateTime + ", userTel=" + userTel + ", userPayNum=" + userPayNum
-				+ ", userPayPwd=" + userPayPwd + "]";
+	public void setUlrList(List<UserLoginRecord> ulrList) {
+		this.ulrList = ulrList;
 	}
 	public Long getUserId() {
 		return userId;
@@ -63,6 +42,12 @@ public class Users implements Serializable {
 	}
 	public void setUserName(String userName) {
 		this.userName = userName;
+	}
+	public String getUserAccount() {
+		return userAccount;
+	}
+	public void setUserAccount(String userAccount) {
+		this.userAccount = userAccount;
 	}
 	public String getUserEmail() {
 		return userEmail;
@@ -100,4 +85,35 @@ public class Users implements Serializable {
 	public void setUserPayPwd(String userPayPwd) {
 		this.userPayPwd = userPayPwd;
 	}
+	public List<Ticket> getTicketList() {
+		return ticketList;
+	}
+	public void setTicketList(List<Ticket> ticketList) {
+		this.ticketList = ticketList;
+	}
+	public List<Images> getImgList() {
+		return imgList;
+	}
+	public void setImgList(List<Images> imgList) {
+		this.imgList = imgList;
+	}
+	public List<Indent> getIndentList() {
+		return indentList;
+	}
+	public void setIndentList(List<Indent> indentList) {
+		this.indentList = indentList;
+	}
+	public Integral getIntegral() {
+		return integral;
+	}
+	public void setIntegral(Integral integral) {
+		this.integral = integral;
+	}
+	@Override
+	public String toString() {
+		return "Users [userId=" + userId + ", userName=" + userName + ", userAccount=" + userAccount + ", userEmail="
+				+ userEmail + ", userPwd=" + userPwd + ", userCreateTime=" + userCreateTime + ", userTel=" + userTel
+				+ ", userPayNum=" + userPayNum + ", userPayPwd=" + userPayPwd + ", integral=" + integral + "]";
+	}
+	
 }

@@ -31,6 +31,17 @@
 <c:if test="${empty movieListByTime }">
 	<jsp:forward page="movie.s?method=findAllMovie"></jsp:forward>
 </c:if>
+<%-- <%
+	List<Movies> list1 = (List<Movies>)request.getAttribute("movieListByTime");
+	List<Movies> list2 = (List<Movies>)request.getAttribute("movieListByCount");
+	List<Movies> list3 = (List<Movies>)request.getAttribute("movieListByGrade");
+	/*System.out.println("jsp1"+list1.hashCode());
+	System.out.println("jsp2"+list2.hashCode());
+	System.out.println("jsp3"+list3.hashCode()); */
+	System.out.println("jsp1"+list1);
+	System.out.println("jsp2"+list2);
+	System.out.println("jsp3"+list1);
+%> --%>
 <body>
 <!--/main-header-->
   <!--/banner-section-->
@@ -183,8 +194,10 @@
 			            <div class="col-md-6 wthree_agile_login">
 						     <ul>
 									<li><i class="fa fa-phone" aria-hidden="true"></i> (+000) 009 455 4088</li>
-									<li><a href="#" class="login"  data-toggle="modal" data-target="#myModal4">${lg["indexLogin"]}</a></li>
-									<li><a href="#" class="login reg"  data-toggle="modal" data-target="#myModal5">${lg["indexRegister"]}</a></li>
+									<%-- <li><a href="#" class="login"  data-toggle="modal" data-target="#myModal4">${lg["indexLogin"]}</a></li>
+									<li><a href="#" class="login reg"  data-toggle="modal" data-target="#myModal5">${lg["indexRegister"]}</a></li> --%>
+									<li><a href="userLogin.jsp" class="login">${lg["indexLogin"]}</a></li>
+									<%-- <li><a href="userLogin.jsp" class="login reg">${lg["indexRegister"]}</a></li> --%>
 
 								</ul>
 						</div>
@@ -206,7 +219,7 @@
 				</div>
 			</div>
 			<!--//banner-bottom-->
-		     <!-- Modal1 -->
+		     <%-- <!-- Modal1 -->
 					<div class="modal fade" id="myModal4" tabindex="-1" role="dialog" >
 
 							<div class="modal-dialog">
@@ -217,8 +230,41 @@
 										<h4>${lg["indexLogin"]}</h4>
 										<div class="login-form">
 											<form action="#" method="post">
-												<input type="email" name="email" placeholder='${lg["indexLoginEmail"]}' required="">
-												<input type="password" name="password" placeholder='${lg["indexLoginPassword"]}' required="">
+												<input type="email" name="123" placeholder='${lg["indexLoginEmail"]}' required="">
+												<input type="password" name="123" placeholder='${lg["indexLoginPassword"]}' required="">
+												<div class="tp">
+													<input type="submit" value='${lg["indexLoginString"]}'>
+												</div>
+												<div class="forgot-grid">
+												       <div class="log-check">
+														<label class="checkbox"><input type="checkbox" name="checkbox">${lg["indexLoginRememberMe"]}</label>
+														</div>
+														<div class="forgot">
+															<a href="#" data-toggle="modal" data-target="#myModal2">${lg["indexLoginForgotPassword"]}</a>
+														</div>
+														<div class="clearfix"></div>
+													</div>
+												
+											</form>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+				<!-- //Modal1 --> 
+				<!-- Modal1 -->
+					<div class="modal fade" id="myModal2" tabindex="-1" role="dialog" >
+
+							<div class="modal-dialog">
+				<!-- Modal content-->
+								<div class="modal-content">
+									<div class="modal-header">
+										<button type="button" class="close" data-dismiss="modal">&times;</button>
+										<h4>123${lg["indexLogin"]}</h4>
+										<div class="login-form">
+											<form action="#" method="post">
+												<input type="email" name="123" placeholder='${lg["indexLoginEmail"]}' required="">
+												<input type="password" name="123" placeholder='${lg["indexLoginPassword"]}' required="">
 												<div class="tp">
 													<input type="submit" value='${lg["indexLoginString"]}'>
 												</div>
@@ -249,7 +295,8 @@
 										<button type="button" class="close" data-dismiss="modal">&times;</button>
 										<h4>${lg["indexRegister"] }</h4>
 										<div class="login-form">
-											<form action="#" method="post">
+											<form action="<c:url value='/user.s?method=register' />" method="post">
+											
 											    <input type="text" id="userName" name="userName" placeholder='${lg["indexRegisterName"]}' required="">
 												<input type="email" id="userEmail" name="userEmail" placeholder='${lg["indexLoginEmail"]}' required="">
 												<input type="password" id="userPwd" name="userPwd" placeholder='${lg["indexLoginPassword"]}' required="">
@@ -257,27 +304,37 @@
 												<div class="signin-rit">
 													<span class="agree-checkbox">
 														<label class="checkbox">
-														<input type="checkbox" name="checkbox">${lg["indexRegisterAgree1"] } 
+														<input id="userRegisterAgree" type="checkbox" name="checkbox">${lg["indexRegisterAgree1"] } 
 														<a class="w3layouts-t" href="window.open()" target="_blank">${lg["indexRegisterAgree2"] }</a> 
 														${lg["indexRegisterAgree3"] } 
 														<a class="w3layouts-t" href="window.open()" target="_blank">${lg["indexRegisterAgree4"] }</a></label>
 													</span>
 												</div>
 												<div class="tp">
-													<input type="button" value='${lg["indexRegisterString"] }' onclick="register()">
+													<input type="submit" value='${lg["indexRegisterString"] }'>
 												</div>
 											</form>
-											<script type="text/javascript">
+											<!-- <script type="text/javascript">
+												//注册
 												function register(){
-													
+													var data = {
+															userName:$('#userName').val(),
+															userEmail:$('#userEmail').val(),
+															userPwd:$('#userPwd').val(),
+															userPwd2:$('#userPwd2').val(),
+															userRegisterAgree:$('#userRegisterAgree').val()
+													};
+													$.post("<c:url value='/user.s?method=register' />",data,function(data){
+														
+													});
 												}
-											</script>
+											</script> -->
 										</div>
 									</div>
 								</div>
 							</div>
 						</div>
-				<!-- //Modal1 -->
+				<!-- //Modal1 --> --%>
 			<!--/content-inner-section-->
 				<div class="w3_content_agilleinfo_inner">
 					<div class="agile_featured_movies">
