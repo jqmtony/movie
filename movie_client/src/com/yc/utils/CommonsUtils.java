@@ -34,6 +34,8 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.fileupload.FileItem;
 
+import com.yc.movie.bean.Verification;
+
 import sun.misc.BASE64Decoder;
 import sun.misc.BASE64Encoder;
 
@@ -49,8 +51,48 @@ public class CommonsUtils {
 	public static final String SEX_REGX = "[男女]"; // 性别
 	public static final String TEL_NUM_REGX = "[1][34578]\\d{9}"; // 手机号码
 	public static final String IP_ADDR_AND_PRO_NAME = "address_and_projectName.properties";  //项目的IP地址和项目名所在的配置文件
+	public static final String VERIFY_TEL_REGX = "[0-9]{6}";
+	public static final String VERIFY_EMAIL_REGX = "[a-zA-Z0-9]{6}";
+	public static final int VERIFY_CODE_TYPE_EMAIL = 1;
+	public static final int VERIFY_CODE_TYPE_TEL = 2;
+	private static String codes = "23456789ABCDEFGHJKMNPQRSTUVWXYZ";
 	public static Random ra = new Random(); // 随机数对象
 	
+	/**
+	 * 通过cookie名获取request中的cookie对象   如果没有就返回null
+	 * @param request
+	 * @param cookieName
+	 * @return
+	 */
+	public static Cookie getCookie(HttpServletRequest request,String cookieName){
+		Cookie[] cookies = request.getCookies();
+    	for(Cookie c:cookies)
+    		if(c.getName().equals(cookieName))
+    			return c;
+    	return null;
+	}
+	/**
+	 * 生成一个长度为len的验证码文本
+	 * @param len 验证码长度
+	 * @param type 验证码类型  邮箱验证码  手机验证码
+	 * @return
+	 */
+	public static String createVerifyCode(int len,int type){
+		StringBuilder sb = new StringBuilder();
+		switch(type){
+		case 1:
+			for(int i=0;i<len;i++){
+				int index = ra.nextInt(codes.length());
+				sb.append(codes.charAt(index));
+			}
+			return sb.toString();
+		case 2:
+			for(int i=0;i<len;i++)
+				sb.append(ra.nextInt(10));
+			return sb.toString();
+		default:throw new RuntimeException();
+		}
+	}
 	/**
 	 * 上传文件  返回要保存在数据库的路径
 	 * @param root	存储文件的根目录

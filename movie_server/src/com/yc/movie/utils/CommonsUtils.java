@@ -1,5 +1,6 @@
 package com.yc.movie.utils;
 
+import java.io.File;
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
@@ -31,12 +32,16 @@ import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.commons.fileupload.FileItem;
+
+import com.yc.movie.bean.Verification;
+
 import sun.misc.BASE64Decoder;
 import sun.misc.BASE64Encoder;
 
 public class CommonsUtils {
 	public static final String PWD_REGX = "[A-Za-z\\d.!@#$%^&*]{6,18}"; // 密码
-	public static final String USERNAME_REGX = "[A-Za-z\\d_]{6,18}"; // 用户名
+	public static final String USERNAME_REGX = "[A-Za-z][A-Za-z\\d_]{5,18}"; // 用户名
 	public static final String REGISTER_CODE_REGX = "[A-Z\\d]{4}[-][A-Z\\d]{4}[-][A-Z\\d]{4}[-][A-Z\\d]{4}"; // 注册码
 	public static final String NAME_REGX = "^(([\\u4e00-\\u9fa5]{2,8}))$"; // 姓名
 	public static final String ID_NUM_REGX = "[1-9]\\d{16}[0-9X]"; // 身份证号
@@ -44,9 +49,79 @@ public class CommonsUtils {
 	public static final String EMAIL_REGX = "^[A-Za-z\\d]+([-_.][A-Za-z\\d]+)*@([A-Za-z\\d]+[-.])+[A-Za-z\\d]{2,4}$"; // 邮箱
 	public static final String AGE_REGX = "\\d{1,3}"; // 年龄
 	public static final String SEX_REGX = "[男女]"; // 性别
-	public static final String TEL_NUM_REGX = "[1-9]\\d{10}"; // 手机号码
-	private static final String IP_ADDR_AND_PRO_NAME = "address_and_projectName.properties";  //项目的IP地址和项目名所在的配置文件
+	public static final String TEL_NUM_REGX = "[1][34578]\\d{9}"; // 手机号码
+	public static final String IP_ADDR_AND_PRO_NAME = "address_and_projectName.properties";  //项目的IP地址和项目名所在的配置文件
+	public static final String VERIFY_TEL_REGX = "[0-9]{6}";
+	public static final String VERIFY_EMAIL_REGX = "[a-zA-Z0-9]{6}";
+	public static final int VERIFY_CODE_TYPE_EMAIL = 1;
+	public static final int VERIFY_CODE_TYPE_TEL = 2;
+	private static String codes = "23456789ABCDEFGHJKMNPQRSTUVWXYZ";
 	public static Random ra = new Random(); // 随机数对象
+	
+	/**
+	 * 生成一个长度为len的验证码文本
+	 * @param len 验证码长度
+	 * @param type 验证码类型  邮箱验证码  手机验证码
+	 * @return
+	 */
+	public static String createVerifyCode(int len,int type){
+		StringBuilder sb = new StringBuilder();
+		switch(type){
+		case 1:
+			for(int i=0;i<len;i++){
+				int index = ra.nextInt(codes.length());
+				sb.append(codes.charAt(index));
+			}
+			return sb.toString();
+		case 2:
+			for(int i=0;i<len;i++)
+				sb.append(ra.nextInt(10));
+			return sb.toString();
+		default:throw new RuntimeException();
+		}
+	}
+	/**
+	 * 上传文件  返回要保存在数据库的路径
+	 * @param root	存储文件的根目录
+	 * @param fi	文件表单项对象
+	 * @return	保存在数据库的路径
+	 * @throws Exception
+	 */
+	public static String uploadFile(String root, FileItem fi) throws Exception {
+		//得到文件名
+		String filename = fi.getName();
+		
+		//处理文件名的绝对路径问题
+		int index = filename.lastIndexOf("\\");
+		if(index != -1){
+			filename = filename.substring(index+1);
+		}
+		
+		//处理文件同名问题，给文件名称添加uuid前缀。
+		String savename = getUUID() + "_" + filename;
+		
+		//得到hashCode
+		int hCode = filename.hashCode();
+		//转化成16进制
+		String hex = Integer.toHexString(hCode);
+		
+		//获取hex的前两个字母，与root连接在一起，生成一个完整的路径
+		File dirFile = new File(root,"/"+hex.charAt(0)+"/"+hex.charAt(1));
+		
+		//创建目录链
+		dirFile.mkdirs();
+		
+		//创建目标文件
+		File destFile = new File(dirFile,savename);
+		
+//					File sqlFile = new File("/WEB-INF/files","/"+hex.charAt(0)+"/"+hex.charAt(1));
+		String sqlPath = dirFile+"\\"+savename;
+		
+		
+		//保存
+		fi.write(destFile);
+		return sqlPath;
+	}
 	
 	/**
 	 * 移除cookie

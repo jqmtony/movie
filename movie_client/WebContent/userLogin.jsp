@@ -371,10 +371,86 @@
 		}
 	}
 	
+	//发送验证码
+	function sendVerify(){
+		var code = $("#forget-code").val();
+		var username = $("#forget-username").val();
+		var flag = false;
+		if(username == ""){
+			$.pt({
+        		target: $("#forget-username"),
+        		position: 'r',
+        		align: 't',
+        		width: 'auto',
+        		height: 'auto',
+        		content:'请填写要修改密码的用户名'
+        	});
+			flag = true;
+		}
+		if(code == ""){
+			$.pt({
+        		target: $("#forget-code"),
+        		position: 'r',
+        		align: 't',
+        		width: 'auto',
+        		height: 'auto',
+        		content:'请填写接收验证码的手机号或者邮箱'
+        	});
+			flag = true;
+		}
+		
+		if(flag){
+			return false;
+		}else{
+			var data = {
+					code : code,
+					userAccount :  username
+			};
+			$.post("<c:url value='/user.s?method=sendVerify' />",data,function(data){
+				if(data != null && data != ""){
+					var tar;
+					if(data.indexOf("手机号/邮箱 与用户名不匹配") != -1){
+						tar = $("#forget-code");
+					}else if(data.indexOf("用户名") != -1){
+						tar = $("#forget-username");
+					}else if(data.indexOf("手机号/邮箱") != -1){
+						tar = $("#forget-code");
+					}else{
+						alert(data);
+					}
+					if(tar != null && tar != ""){
+						$.pt({
+			        		target: tar,
+			        		position: 'r',
+			        		align: 't',
+			        		width: 'auto',
+			        		height: 'auto',
+			        		content:data
+			        	});
+					}
+					return false;
+				}else{
+					//验证码发送成功
+					$("#verifyBtn").attr("disabled", true); 
+					out(60);
+				}
+			});
+			return false;
+		}
+	}
 	
-	
-	
-	
+	function out(obj){
+		var i = obj ;
+		var btn = $('#verifyBtn');
+		if(i==0){
+			btn.val("发送验证码");
+			btn.attr("disabled", false);
+			return;
+		}
+		btn.val(" " + i+" s ");
+		i--;
+		setTimeout("out("+i+")",1000);
+	}
 	
 	
 </script>
@@ -502,7 +578,7 @@ body{
 					</div>
 					<div class="form-actions">
 						<a class="btn pull-left btn-link text-muted" onClick="goto_login()">返回登录</a>
-						<input class="btn btn-primary" type="button" onClick="forget()" value="发送验证" 
+						<input id="verifyBtn" class="btn btn-primary" type="button" onClick="sendVerify()" value="发送验证码" 
 							style="color:white;"/>
 						<input class="btn btn-primary" type="button" onClick="forget()" value="重置密码" 
 							style="color:white;"/>

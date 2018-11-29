@@ -39,6 +39,7 @@ public class UserDao {
 		for(String s:selectConfs)
 			sb.append(" and "+s+"=?");
 		String sql = "select * from users where 1=1"+sb.toString();
+		System.out.println("sql:"+sql);
 		List<Users> result = qr.query(sql, new BeanListHandler<Users>(Users.class),params);
 		if(result.size() > 0)
 			return result.get(0);
@@ -53,6 +54,17 @@ public class UserDao {
 	public void insertULR(UserLoginRecord ulr) throws SQLException {
 		String sql = "insert into userloginrecord values(?,?,?,?)";
 		Object[] params = {ulr.getUlrId(),ulr.getUlrLoginTime(),ulr.getUlrLoginIp(),ulr.getUser().getUserId()};
+		qr.update(sql, params);
+	}
+
+	/**
+	 * ÐÞ¸ÄÃÜÂë
+	 * @param user
+	 * @throws SQLException 
+	 */
+	public void alterPwd(Users user) throws SQLException {
+		String sql = "update users set userPwd=? where userId=?";
+		Object[] params = {user.getUserPwd(),user.getUserId()};
 		qr.update(sql, params);
 	}
 }

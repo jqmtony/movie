@@ -3,6 +3,7 @@ package com.yc.movie.web.servlet;
 import com.yc.exception.UserException;
 import com.yc.movie.bean.UserLoginRecord;
 import com.yc.movie.bean.Users;
+import com.yc.movie.bean.Verify;
 import com.yc.movie.service.UserService;
 import com.yc.utils.BaseServlet;
 import com.yc.utils.CommonsUtils;
@@ -13,6 +14,7 @@ import java.util.Date;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -35,6 +37,28 @@ public class UserServlet extends BaseServlet {
     }
 
     /**
+     * 发送验证码
+     * @param request
+     * @param response
+     * @throws ServletException
+     * @throws IOException
+     */
+    public void sendVerify(HttpServletRequest request, HttpServletResponse response)throws ServletException, IOException {
+    	String code = request.getParameter("code");  //获取手机号/验证码
+    	String userAccount = request.getParameter("userAccount"); //获取用户名
+    	try {
+			String createVerify = us.sentVerify(code,userAccount);
+			Cookie cookie = new Cookie("verifyCode", createVerify);  //将生成的验证码存在cookie中
+			cookie.setMaxAge(60*10);  //设置有效期为10分钟
+			response.addCookie(cookie); //将cookie添加
+		} catch (UserException e) {
+			response.getWriter().append(e.getMessage());  //将错误信息响应给客户端
+		}
+    	
+    }
+    
+    
+    /**
      * 忘记密码
      * @param request
      * @param response
@@ -45,13 +69,17 @@ public class UserServlet extends BaseServlet {
     	Users form = CommonsUtils.toBean(request, Users.class); //获取表单数据   userAccount  userPwd
     	String code = request.getParameter("code");  //手机号或者邮箱
     	String userPwd2 = request.getParameter("userPwd2");  //确认密码
-    	String verify = request.getParameter("verify");	//验证码
+    	String inputVerify = request.getParameter("verify");	//用户输入的验证码
+    	Cookie cookie = CommonsUtils.getCookie(request, "verifyCode");  //获取验证码对应的cookie
+    	String createVerify = cookie.getValue(); //当前发送的验证码
+    	Verify verify = new Verify();	//创建验证码对象
+    	verify.setInputVerify(inputVerify);
+    	verify.setCreateVerify(createVerify);
     	
     	try {
-			us.alterPwd(form,code,userPwd2,verify);
+			us.alterPwd(form,code,userPwd2,verify);  //修改密码
 		} catch (UserException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			response.getWriter().append(e.getMessage());
 		}
     }
     
