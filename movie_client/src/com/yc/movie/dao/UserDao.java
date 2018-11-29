@@ -6,6 +6,7 @@ import java.util.List;
 import org.apache.commons.dbutils.QueryRunner;
 import org.apache.commons.dbutils.handlers.BeanListHandler;
 
+import com.yc.movie.bean.Integral;
 import com.yc.movie.bean.UserLoginRecord;
 import com.yc.movie.bean.Users;
 import com.yc.utils.TxQueryRunner;
@@ -19,8 +20,8 @@ public class UserDao {
 	 * @throws SQLException 
 	 */
 	public void insertUser(Users user) throws SQLException {
-		String sql = "insert into users values(?,?,?,?,?,?,?,?)";
-		Object[] params = {user.getUserId(),user.getUserName(),
+		String sql = "insert into users values(?,?,?,?,?,?,?,?,?)";
+		Object[] params = {user.getUserId(),user.getUserName(),user.getUserAccount(),
 				user.getUserEmail(),user.getUserPwd(),
 				user.getUserCreateTime(),user.getUserTel(),
 				user.getUserPayNum(),user.getUserPayPwd()};
@@ -39,7 +40,7 @@ public class UserDao {
 		for(String s:selectConfs)
 			sb.append(" and "+s+"=?");
 		String sql = "select * from users where 1=1"+sb.toString();
-		System.out.println("sql:"+sql);
+//		System.out.println("sql:"+sql);
 		List<Users> result = qr.query(sql, new BeanListHandler<Users>(Users.class),params);
 		if(result.size() > 0)
 			return result.get(0);
@@ -63,8 +64,19 @@ public class UserDao {
 	 * @throws SQLException 
 	 */
 	public void alterPwd(Users user) throws SQLException {
-		String sql = "update users set userPwd=? where userId=?";
-		Object[] params = {user.getUserPwd(),user.getUserId()};
+		String sql = "update users set userPwd=? where userAccount=?";
+		Object[] params = {user.getUserPwd(),user.getUserAccount()};
+		qr.update(sql, params);
+	}
+
+	/**
+	 * 添加积分卡
+	 * @param in 积分卡对象
+	 * @throws SQLException 
+	 */
+	public void insertIntegral(Integral in) throws SQLException {
+		String sql = "insert into integral values(?,?,?)";
+		Object[] params = {in.getIntegralId(),in.getUser().getUserId(),in.getIntegralCount()};
 		qr.update(sql, params);
 	}
 }

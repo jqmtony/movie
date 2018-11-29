@@ -2,10 +2,13 @@ package com.yc.movie.service;
 
 import java.io.IOException;
 import java.sql.SQLException;
+import java.sql.Timestamp;
+import java.util.Date;
 
 import javax.mail.Session;
 
 import com.yc.exception.UserException;
+import com.yc.movie.bean.Integral;
 import com.yc.movie.bean.UserLoginRecord;
 import com.yc.movie.bean.Users;
 import com.yc.movie.bean.Verify;
@@ -15,6 +18,8 @@ import com.yc.utils.JdbcUtils;
 
 public class UserService {
 	private UserDao ud = new UserDao();
+	public static final int UPDATE_TYPE_PWD = 1;
+	public static final int UPDATE_TYPE_REGISTER = 2;
 
 	/**
 	 * 注册
@@ -174,14 +179,15 @@ public class UserService {
 	}
 
 	/**
-	 * 修改密码
-	 * @param form
-	 * @param code
-	 * @param userPwd2
-	 * @param verify
+	 * 修改用户
+	 * @param form 表单数据  userAccount  userPwd
+	 * @param code	手机号/邮箱
+	 * @param userPwd2	确认密码
+	 * @param verify	验证码对象
+	 * @param type  类型   修改密码/注册用户
 	 * @throws UserException 
 	 */
-	public void alterPwd(Users form, String code, String userPwd2, Verify verify) throws UserException {
+	public void updateUser(Users form, String code, String userPwd2, Verify verify,int type) throws UserException {
 		String account = form.getUserAccount();    //得到用户名
 		String userPwd = form.getUserPwd();        //得到密码
 		
@@ -214,8 +220,8 @@ public class UserService {
 		if(!code.matches(CommonsUtils.TEL_NUM_REGX))
 			if(!code.matches(CommonsUtils.EMAIL_REGX))
 				throw new UserException("手机号/邮箱 格式不正确");
-			else selectCode = "userEmail";
-		else selectCode = "userTel";
+			else{selectCode = "userEmail";form.setUserEmail(code);}
+		else{selectCode = "userTel";form.setUserTel(code);}
 		
 		//判断密码格式是否正确
 		if(!userPwd.matches(CommonsUtils.PWD_REGX))
@@ -229,22 +235,40 @@ public class UserService {
 		try {
 			//判断用户名是否存在
 			user = ud.findUserBySelectConf(new String[]{"userAccount"}, account);
-			if(user == null)
-				throw new UserException("该用户不存在");
+			if(type == 1){  //修改密码
+				if(user == null)
+					throw new UserException("该用户名不存在");
+			}else if(type == 2){  //注册
+				if(user != null)
+					throw new UserException("该用户名已存在");
+			}
+			
 			
 			//判断手机号/邮箱是否存在
 			user = ud.findUserBySelectConf(new String[]{selectCode}, code);
-			if(user == null)
-				throw new UserException("手机号/邮箱 不存在或未绑定用户");
+			if(type == 1){  //修改密码
+				if(user == null)
+					throw new UserException("手机号/邮箱 不存在或未绑定用户");
+			}else if(type == 2){  //注册
+				if(user != null)
+					throw new UserException("手机号/邮箱 已被其他用户绑定");
+			}
 			
-			//判断用户名和手机号/邮箱是否匹配
-			String[] selectConfs = {"userAccount",selectCode};
-			Object[] params = {account,code};
-			user = ud.findUserBySelectConf(selectConfs, params);
-			if(user == null)
-				throw new UserException("手机号/邮箱 与用户名不匹配");
+			if(type == 1){  //修改密码
+				//判断用户名和手机号/邮箱是否匹配
+				String[] selectConfs = {"userAccount",selectCode};
+				Object[] params = {account,code};
+				user = ud.findUserBySelectConf(selectConfs, params);
+				if(user == null)
+					throw new UserException("手机号/邮箱 与用户名不匹配");
+			}
 			
+			//判断密码和确认密码是否相同
+			if(!userPwd.equals(userPwd2))
+				throw new UserException("两次输入的密码不相同");
+				
 			//判断验证码是否正确
+			System.out.println(verify.getInputVerify()+"+"+verify.getCreateVerify());
 			if(!verify.getInputVerify().equalsIgnoreCase(verify.getCreateVerify()))
 				throw new UserException("验证码不正确");
 			
@@ -252,10 +276,21 @@ public class UserService {
 			throw new UserException("系统异常，请稍后再试！");
 		}
 		
-		//都正确  修改密码
+		//都正确  
+		form.setUserPwd(CommonsUtils.parseMD5(userPwd));  //加密
+		
 		try {
 			JdbcUtils.beginTransaction();
-			ud.alterPwd(user);
+			if(type == 1){  //修改密码
+				ud.alterPwd(form);
+			}else if(type == 2){  //添加用户
+				form.setUserCreateTime(new Timestamp(new Date().getTime())); //设置创建时间
+				ud.insertUser(form);  //添加用户
+				Integral in = new Integral();  //创建积分卡对象
+				in.setIntegralCount(0l);  //设置初始积分数
+				in.setUser(form);  //设置对应用户
+				ud.insertIntegral(in);  //插入积分卡到数据库
+			}
 			JdbcUtils.commitTransaction();
 		} catch (SQLException e) {
 			try {
@@ -273,18 +308,22 @@ public class UserService {
 	 * @return
 	 * @throws UserException 
 	 */
-	public String sentVerify(String code, String account) throws UserException {
-		//判断用户名是否为空
-		if(account == null || account.isEmpty())
-			throw new UserException("请输入要修改密码的用户名");
+	public String sentVerify(String code, String account,int type) throws UserException {
+		if(type == 1){ //修改密码的邮件
+			//判断用户名是否为空
+			if(account == null || account.isEmpty())
+				throw new UserException("请输入要修改密码的用户名");
+		}
 		
 		//判断手机号/邮箱是否为空
 		if(code == null || code.isEmpty())
 			throw new UserException("请输入接收验证码的手机号/邮箱");
 		
-		//判断用户名格式是否正确
-		if(!account.matches(CommonsUtils.USERNAME_REGX))
-			throw new UserException("用户名格式不正确");
+		if(type == 1){
+			//判断用户名格式是否正确
+			if(!account.matches(CommonsUtils.USERNAME_REGX))
+				throw new UserException("用户名格式不正确");
+		}
 		
 		//判断手机号/邮箱格式是否正确
 		String selectCode = null;
@@ -296,32 +335,49 @@ public class UserService {
 		
 		Users user = null;
 		try{
-			//判断用户名是否存在
-			user = ud.findUserBySelectConf(new String[]{"userAccount"}, account);
-			if(user == null)
-				throw new UserException("该用户名不存在");
+			if(type == 1){
+				//判断用户名是否存在
+				user = ud.findUserBySelectConf(new String[]{"userAccount"}, account);
+				if(user == null)
+					throw new UserException("该用户名不存在");
+			}
 			
 			//判断手机号/邮箱是否存在
 			user = ud.findUserBySelectConf(new String[]{selectCode}, code);
-			if(user == null)
-				throw new UserException("手机号/邮箱 不存在或未绑定用户");
+			if(type == 1){
+				if(user == null)
+					throw new UserException("手机号/邮箱 不存在或未绑定用户");
+			}else if(type == 2){
+				if(user != null)
+					throw new UserException("手机号/邮箱 已被其他用户绑定");
+			}
 			
-			//判断手机号/邮箱是否与输入的用户名匹配
-			String[] selectConfs = {"userAccount",selectCode};
-			Object[] params = {account,code};
-			System.out.println(account+"+"+code);
-			user = ud.findUserBySelectConf(selectConfs, params);
-			if(user == null)
-				throw new UserException("手机号/邮箱 与用户名不匹配");
+			if(type == 1){
+				//判断手机号/邮箱是否与输入的用户名匹配
+				String[] selectConfs = {"userAccount",selectCode};
+				Object[] params = {account,code};
+	//			System.out.println(account+"+"+code);
+				user = ud.findUserBySelectConf(selectConfs, params);
+				if(user == null)
+					throw new UserException("手机号/邮箱 与用户名不匹配");
+			}
 			
 			//发送手机验证码/邮箱验证码
 			String text = null;
 			if("userEmail".equals(selectCode)){
 				//发送邮箱验证码   
 				text = CommonsUtils.createVerifyCode(4, CommonsUtils.VERIFY_CODE_TYPE_EMAIL); //生成验证码
+				String fileName = null;
+				Object[] codes = null;
+				if(type == 1){
+					fileName = "alter_user_email.properties";
+					codes = new Object[]{user.getUserName(),text};  //设置补位
+				}else if(type == 2){
+					fileName = "register_user_email.properties";
+					codes = new Object[]{text};  //设置补位
+				}
 				String to = code; //设置收件人
-				Object[] codes = {user.getUserName(),text};  //设置补位
-				CommonsUtils.sendMail(this.getClass(), to, codes, "alter_user_email.properties");  //发送邮件
+				CommonsUtils.sendMail(this.getClass(), to, codes,fileName );  //发送邮件
 			}else if("userTel".equals(selectCode)){
 				//发送手机验证码
 				text = CommonsUtils.createVerifyCode(6, CommonsUtils.VERIFY_CODE_TYPE_TEL);

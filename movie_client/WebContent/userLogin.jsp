@@ -196,7 +196,7 @@
 		}
 	}
 	
-	//注册
+	/* //注册
 	function register(){
 		var username = $("#register-username").val(),
 			password = $("#register-password").val(),
@@ -294,34 +294,48 @@
 			});
 			return false;
 		}
-	}
+	} */
 	
 	//重置密码
-	function forget(){
-		var username = $("#forget-username").val(),
-			code = $("#forget-code").val(),
-			password = $("#forget-password").val(),
-			password2 = $("#forget-password2").val(),
-			verify = $("#forget-verify").val(),
+	function updateUser(num){
+		var objName,objCode,objPwd,objPwd2,objVerify;
+		if(num == 1){
+			objName = $("#forget-username");
+			objCode = $("#forget-code");
+			objPwd = $("#forget-password");
+			objPwd2 = $("#forget-password2");
+			objVerify = $("#forget-verify");
+		}else if(num == 2){
+			objName = $("#register-username");
+			objCode = $("#register-code");
+			objPwd = $("#register-password");
+			objPwd2 = $("#register-password2");
+			objVerify = $("#register-verify");
+		}
+		var username = objName.val(),
+			code = objCode.val(),
+			password = objPwd.val(),
+			password2 = objPwd2.val(),
+			verify = objVerify.val(),
 			flag = false,
 			validatecode = null;
 		//判断用户名密码是否为空
 		var tar;
 		var text;
 		if(username == ""){
-			tar = $("#forget-username");
+			tar = objName;
 			text = "用户名不能为空";
 		}else if(code == ""){
-			tar = $("#forget-code");
+			tar = objCode;
 			text = "手机号或邮箱不能为空";
 		}else if(password == ""){
-			tar = $("#forget-password");
+			tar = objPwd;
 			text = "密码不能为空";
 		}else if(password2 == ""){
-			tar = $("#forget-password2");
+			tar = objPwd2;
 			text = "确认密码不能为空";
 		}else if(verify == ""){
-			tar = $("#forget-verify");
+			tar = objVerify;
 			text = "验证码不能为空";
 		}
 		if(tar != null){
@@ -345,26 +359,67 @@
 				userPwd2 : password2,
 				verify : verify
 			};
-			$.post("<c:url value='/user.s?method=forgetPwd' />",data,function(data){
-				
-			});
-			spop({			
-				template: '<h4 class="spop-title">重置密码成功</h4>即将于3秒后返回登录',
-				position: 'top-center',
-				style: 'success',
-				autoclose: 3000,
-				onOpen : function(){
-					var second = 2;
-					var showPop = setInterval(function(){
-						if(second == 0){
-							clearInterval(showPop);
+			$.post("<c:url value='/user.s?method=updateUser&num="+num+"' />",data,function(data){
+				if(data != null && data != ""){
+					var tar1;
+					if(data.indexOf("手机号/邮箱 与用户名不匹配") != -1){
+						tar1 = objCode;
+					}else if(data.indexOf("手机号/邮箱 已被其他用户绑定") != -1){
+						tar1 = objCode;
+					}else if(data.indexOf("手机号/邮箱 不存在或未绑定用户") != -1){
+						tar1 = objCode;
+					}else if(data.indexOf("用户名") != -1){
+						tar1 = objName;
+					}else if(data.indexOf("手机号/邮箱") != -1){
+						tar = objCode;
+					}else if(data.indexOf("确认密码") != -1){
+						tar1 = objPwd2;
+					}else if(data.indexOf("两次输入的密码不相同") != -1){
+						tar1 = objPwd2;
+					}else if(data.indexOf("密码") != -1){
+						tar1 = objPwd;
+					}else if(data.indexOf("验证码") != -1){
+						tar1 = objVerify;
+					}else{
+						alert(data);
+						return false;
+					}
+					if(tar1 != null && tar1 != ""){
+						$.pt({
+			        		target: tar1,
+			        		position: 'r',
+			        		align: 't',
+			        		width: 'auto',
+			        		height: 'auto',
+			        		content:data
+			        	});
+					}
+				}else{
+					var str;
+					if(num == 1){
+						str = "重置密码";
+					}else if(num == 2){
+						str = "注册";
+					}
+					spop({			
+						template: '<h4 class="spop-title">'+str+'成功</h4>即将于5秒后返回登录',
+						position: 'top-center',
+						style: 'success',
+						autoclose: 5000,
+						onOpen : function(){
+							var second = 4;
+							var showPop = setInterval(function(){
+								if(second == 0){
+									clearInterval(showPop);
+								}
+								$('.spop-body').html('<h4 class="spop-title">'+str+'成功</h4>即将于'+second+'秒后返回登录');
+								second--;
+								},1000);
+						},
+						onClose : function(){
+							goto_login();
 						}
-						$('.spop-body').html('<h4 class="spop-title">重置密码成功</h4>即将于'+second+'秒后返回登录');
-						second--;
-						},1000);
-				},
-				onClose : function(){
-					goto_login();
+					});
 				}
 			});
 			return false;
@@ -372,13 +427,29 @@
 	}
 	
 	//发送验证码
-	function sendVerify(){
-		var code = $("#forget-code").val();
-		var username = $("#forget-username").val();
+	function sendVerify(num){
+		var code;
+		var username;
+		var objCode;
+		var objName;
+		var objBtn;
+		if(num == 1){
+			code = $("#forget-code").val();
+			username = $("#forget-username").val()
+			objCode = $("#forget-code");
+			objName = $("#forget-username");
+			objBtn = $("#verifyBtn");
+		}else if(num == 2){
+			code = $("#register-code").val();
+			username = $("#register-username").val()
+			objCode = $("#register-code");
+			objName = $("#register-username");
+			objBtn = $("#verifyBtn2");
+		}
 		var flag = false;
 		if(username == ""){
 			$.pt({
-        		target: $("#forget-username"),
+        		target: objName,
         		position: 'r',
         		align: 't',
         		width: 'auto',
@@ -389,7 +460,7 @@
 		}
 		if(code == ""){
 			$.pt({
-        		target: $("#forget-code"),
+        		target: objCode,
         		position: 'r',
         		align: 't',
         		width: 'auto',
@@ -406,17 +477,18 @@
 					code : code,
 					userAccount :  username
 			};
-			$.post("<c:url value='/user.s?method=sendVerify' />",data,function(data){
+			$.post("<c:url value='/user.s?method=sendVerify&num="+num+"' />",data,function(data){
 				if(data != null && data != ""){
 					var tar;
 					if(data.indexOf("手机号/邮箱 与用户名不匹配") != -1){
-						tar = $("#forget-code");
+						tar = objCode;
 					}else if(data.indexOf("用户名") != -1){
-						tar = $("#forget-username");
+						tar = objName;
 					}else if(data.indexOf("手机号/邮箱") != -1){
-						tar = $("#forget-code");
+						tar = objCode;
 					}else{
 						alert(data);
+						return false;
 					}
 					if(tar != null && tar != ""){
 						$.pt({
@@ -431,16 +503,21 @@
 					return false;
 				}else{
 					//验证码发送成功
-					$("#verifyBtn").attr("disabled", true); 
-					out(60);
+					objBtn.attr("disabled", true); 
+					if(num == 1){
+						out1(60);
+					}else if(num == 2){
+						out2(60);
+					}
+						
 				}
 			});
 			return false;
 		}
 	}
 	
-	function out(obj){
-		var i = obj ;
+	function out1(t){
+		var i = t ;
 		var btn = $('#verifyBtn');
 		if(i==0){
 			btn.val("发送验证码");
@@ -449,7 +526,19 @@
 		}
 		btn.val(" " + i+" s ");
 		i--;
-		setTimeout("out("+i+")",1000);
+		setTimeout("out1("+i+")",1000);
+	}
+	function out2(t){
+		var i = t ;
+		var btn = $('#verifyBtn2');
+		if(i==0){
+			btn.val("发送验证码");
+			btn.attr("disabled", false);
+			return;
+		}
+		btn.val(" " + i+" s ");
+		i--;
+		setTimeout("out2("+i+")",1000);
 	}
 	
 	
@@ -578,9 +667,9 @@ body{
 					</div>
 					<div class="form-actions">
 						<a class="btn pull-left btn-link text-muted" onClick="goto_login()">返回登录</a>
-						<input id="verifyBtn" class="btn btn-primary" type="button" onClick="sendVerify()" value="发送验证码" 
+						<input id="verifyBtn" class="btn btn-primary" type="button" onClick="sendVerify(1)" value="发送验证码" 
 							style="color:white;"/>
-						<input class="btn btn-primary" type="button" onClick="forget()" value="重置密码" 
+						<input class="btn btn-primary" type="button" onClick="updateUser(1)" value="重置密码" 
 							style="color:white;"/>
 					</div>
 				</form>
@@ -601,30 +690,37 @@ body{
 						<section class="content">
 							<span class="input input--hideo">
 								<input class="input__field input__field--hideo" type="text" id="register-username" 
-									autocomplete="off" placeholder="请输入用户名" maxlength="15"/>
+									autocomplete="off" placeholder="请输入用户名" maxlength="20"/>
 								<label class="input__label input__label--hideo" for="register-username">
 									<i class="fa fa-fw fa-user icon icon--hideo"></i>
 									<span class="input__label-content input__label-content--hideo"></span>
 								</label>
 							</span>
 							<span class="input input--hideo">
-								<input class="input__field input__field--hideo" type="password" id="register-password" placeholder="请输入密码" maxlength="15"/>
+								<input class="input__field input__field--hideo" type="password" id="register-password" placeholder="请输入密码" maxlength="20"/>
 								<label class="input__label input__label--hideo" for="register-password">
 									<i class="fa fa-fw fa-lock icon icon--hideo"></i>
 									<span class="input__label-content input__label-content--hideo"></span>
 								</label>
 							</span>
 							<span class="input input--hideo">
-								<input class="input__field input__field--hideo" type="password" id="register-repassword" placeholder="请确认密码" maxlength="15"/>
-								<label class="input__label input__label--hideo" for="register-repassword">
+								<input class="input__field input__field--hideo" type="password" id="register-password2" placeholder="请确认密码" maxlength="20"/>
+								<label class="input__label input__label--hideo" for="register-password2">
 									<i class="fa fa-fw fa-lock icon icon--hideo"></i>
 									<span class="input__label-content input__label-content--hideo"></span>
 								</label>
 							</span>
 							<span class="input input--hideo">
-								<input class="input__field input__field--hideo" type="text" id="register-code" autocomplete="off" placeholder="请输入注册码"/>
+								<input class="input__field input__field--hideo" type="text" id="register-code" autocomplete="off" placeholder="请输入邮箱/手机号"/>
 								<label class="input__label input__label--hideo" for="register-code">
 									<i class="fa fa-fw fa-wifi icon icon--hideo"></i>
+									<span class="input__label-content input__label-content--hideo"></span>
+								</label>
+							</span>
+							<span class="input input--hideo">
+								<input class="input__field input__field--hideo" type="text" id="register-verify" placeholder="请输入验证码"/>
+								<label class="input__label input__label--hideo" for="register-verify">
+									<i class="fa fa-fw fa-lock icon icon--hideo"></i>
 									<span class="input__label-content input__label-content--hideo"></span>
 								</label>
 							</span>
@@ -632,7 +728,9 @@ body{
 					</div>
 					<div class="form-actions">
 						<a class="btn pull-left btn-link text-muted" onClick="goto_login()">返回登录</a>
-						<input class="btn btn-primary" type="button" onClick="register()" value="注册" 
+						<input id="verifyBtn2" class="btn btn-primary" type="button" onClick="sendVerify(2)" value="发送验证码" 
+							style="color:white;"/>
+						<input class="btn btn-primary" type="button" onClick="updateUser(2)" value="注册" 
 							style="color:white;"/>
 					</div>
 				</form>

@@ -147,6 +147,8 @@ public class CommonsUtils {
 		for(Cookie cookie:cookies){  //±éÀú
 			if(cookie.getName().equals(cookieName)){
 				cookie.setMaxAge(0);
+				cookie.setValue("");
+				response.addCookie(cookie);
 			}
 		}
 	}

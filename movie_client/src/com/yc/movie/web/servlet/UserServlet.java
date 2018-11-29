@@ -46,8 +46,9 @@ public class UserServlet extends BaseServlet {
     public void sendVerify(HttpServletRequest request, HttpServletResponse response)throws ServletException, IOException {
     	String code = request.getParameter("code");  //获取手机号/验证码
     	String userAccount = request.getParameter("userAccount"); //获取用户名
+    	Integer num = Integer.parseInt(request.getParameter("num"));
     	try {
-			String createVerify = us.sentVerify(code,userAccount);
+			String createVerify = us.sentVerify(code,userAccount,num);
 			Cookie cookie = new Cookie("verifyCode", createVerify);  //将生成的验证码存在cookie中
 			cookie.setMaxAge(60*10);  //设置有效期为10分钟
 			response.addCookie(cookie); //将cookie添加
@@ -59,25 +60,36 @@ public class UserServlet extends BaseServlet {
     
     
     /**
-     * 忘记密码
+     * 更新用户   忘记密码/用户注册
      * @param request
      * @param response
      * @throws ServletException
      * @throws IOException
      */
-    public void forgetPwd(HttpServletRequest request, HttpServletResponse response)throws ServletException, IOException {
+    public void updateUser(HttpServletRequest request, HttpServletResponse response)throws ServletException, IOException {
     	Users form = CommonsUtils.toBean(request, Users.class); //获取表单数据   userAccount  userPwd
     	String code = request.getParameter("code");  //手机号或者邮箱
     	String userPwd2 = request.getParameter("userPwd2");  //确认密码
     	String inputVerify = request.getParameter("verify");	//用户输入的验证码
     	Cookie cookie = CommonsUtils.getCookie(request, "verifyCode");  //获取验证码对应的cookie
+    	Integer num = Integer.parseInt(request.getParameter("num"));  //是注册还是修改密码
+    	if(cookie == null){
+    		response.getWriter().append("你还没有发送验证码");
+    		return;
+    	}
     	String createVerify = cookie.getValue(); //当前发送的验证码
     	Verify verify = new Verify();	//创建验证码对象
     	verify.setInputVerify(inputVerify);
     	verify.setCreateVerify(createVerify);
     	
     	try {
-			us.alterPwd(form,code,userPwd2,verify);  //修改密码
+    		if(num == 1){
+    			us.updateUser(form,code,userPwd2,verify,UserService.UPDATE_TYPE_PWD);  //修改密码
+    		}else if(num == 2){
+    			us.updateUser(form,code,userPwd2,verify,UserService.UPDATE_TYPE_REGISTER);  //用户注册
+    		}
+			CommonsUtils.removeCookie(request, response, "verifyCode");  //删除cookie中的验证码
+			response.getWriter().append("");
 		} catch (UserException e) {
 			response.getWriter().append(e.getMessage());
 		}
