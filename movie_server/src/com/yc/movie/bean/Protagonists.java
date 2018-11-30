@@ -10,7 +10,9 @@ import java.io.Serializable;
 public class Protagonists implements Serializable {
 	private Long proId;  //主演ID
 	private Movies movie; //对应电影
+	private Long proMovieId;  //对应电影ID
 	private Teleplay teleplay;  //对应电视剧
+	private Long proTeleplayId; //对应电视剧ID
 	private String proName;  //主演姓名
 	private String proLink;  //主演介绍链接
 	public Long getProId() {
@@ -25,11 +27,23 @@ public class Protagonists implements Serializable {
 	public void setMovie(Movies movie) {
 		this.movie = movie;
 	}
+	public Long getProMovieId() {
+		return proMovieId;
+	}
+	public void setProMovieId(Long proMovieId) {
+		this.proMovieId = proMovieId;
+	}
 	public Teleplay getTeleplay() {
 		return teleplay;
 	}
 	public void setTeleplay(Teleplay teleplay) {
 		this.teleplay = teleplay;
+	}
+	public Long getProTeleplayId() {
+		return proTeleplayId;
+	}
+	public void setProTeleplayId(Long proTeleplayId) {
+		this.proTeleplayId = proTeleplayId;
 	}
 	public String getProName() {
 		return proName;
@@ -45,8 +59,8 @@ public class Protagonists implements Serializable {
 	}
 	@Override
 	public String toString() {
-		return "Protagonists [proId=" + proId + ", movie=" + movie + ", teleplay=" + teleplay + ", proName=" + proName
-				+ ", proLink=" + proLink + "]";
+		return "Protagonists [proId=" + proId + ", movie=" + movie + ", proMovieId=" + proMovieId + ", teleplay="
+				+ teleplay + ", proTeleplayId=" + proTeleplayId + ", proName=" + proName + ", proLink=" + proLink + "]";
 	}
-
+	
 }

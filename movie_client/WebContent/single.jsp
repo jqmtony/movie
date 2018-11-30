@@ -27,6 +27,9 @@
 <link href='http://fonts.googleapis.com/css?family=Montserrat:400,700' rel='stylesheet' type='text/css'>
 <!--//web-fonts-->
 </head>
+<c:if test="${empty singleShow}">
+	<jsp:forward page="index.jsp"></jsp:forward>
+</c:if>
 <body>
 <!--/main-header-->
   <!--/banner-section-->

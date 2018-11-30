@@ -14,7 +14,7 @@
 							<span class="icon-bar"></span>
 							<span class="icon-bar"></span>
 						</button>
-						<h1><a  href="index.jsp"><span>M</span>ovies <span>P</span>ro</a></h1>
+						<h1><a  href="index.html"><span>${lg["indexTitle_1"] }</span>${lg["indexTitle_2"] } <span>${lg["indexTitle_3"] }</span>${lg["indexTitle_4"] }</a></h1>
 					</div>
 					<!-- navbar-header -->
 					<div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
@@ -141,8 +141,26 @@
 			            <div class="col-md-6 wthree_agile_login">
 						     <ul>
 									<li><i class="fa fa-phone" aria-hidden="true"></i> (+000) 009 455 4088</li>
-									<li><a href="#" class="login"  data-toggle="modal" data-target="#myModal4">${lg["indexLogin"]}</a></li>
-									<li><a href="#" class="login reg"  data-toggle="modal" data-target="#myModal5">${lg["indexRegister"]}</a></li>
+									<c:choose>
+										<c:when test="${empty loginedUser }">
+											<li><a href="userLogin.jsp" class="login">${lg["indexLogin"]}</a></li>
+										</c:when>
+										<c:otherwise>
+											<li style="margin-left:30px;">
+												<img id="headImg" src="" alt="图片">
+												<font>${loginedUser.userAccount}</font>
+											</li>
+											<li style="margin-left:20px;">
+												<select id="infoChange" style="color:#000000;" onchange="infoChange()">
+													<option selected="selected">个人中心</option>
+													<option>修改信息</option>
+													<option>退出登录</option>
+												</select>
+											</li>
+										</c:otherwise>
+									</c:choose>
+									<%-- <li><a href="#" class="login"  data-toggle="modal" data-target="#myModal4">${lg["indexLogin"]}</a></li> --%>
+									<%-- <li><a href="#" class="login reg"  data-toggle="modal" data-target="#myModal5">${lg["indexRegister"]}</a></li> --%>
 
 								</ul>
 						</div>

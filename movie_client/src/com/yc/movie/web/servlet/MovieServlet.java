@@ -2,6 +2,7 @@ package com.yc.movie.web.servlet;
 
 import com.yc.exception.MovieException;
 import com.yc.movie.bean.Movies;
+import com.yc.movie.bean.Teleplay;
 import com.yc.movie.service.MovieService;
 import com.yc.utils.BaseServlet;
 
@@ -25,6 +26,32 @@ import javax.servlet.http.HttpServletResponse;
 public class MovieServlet extends BaseServlet {
 	private static final long serialVersionUID = 1L;
 	private MovieService ms = new MovieService();
+	
+	/**
+	 * 单个电影/电视剧展示  （用户点击某个电影/电视剧）
+	 * @param request
+	 * @param response
+	 * @return
+	 * @throws ServletException
+	 * @throws IOException
+	 */
+	public String singleShow(HttpServletRequest request, HttpServletResponse response)throws ServletException, IOException {
+		String type = request.getParameter("type");  //获取类型  电影/电视剧
+		Long id = Long.parseLong(request.getParameter("id"));	//获取选择的id
+		try{
+			if("movie".equals(type)){  //电影
+				Movies singleShow = ms.findMovieById(id);
+				request.setAttribute("singleShow", singleShow);
+			}else if("teleplay".equals(type)){  //电视剧
+				Teleplay singleShow = ms.findTeleplayById(id);
+				request.setAttribute("singleShow", singleShow);
+			}
+			return "f:/single.jsp";
+		}catch(MovieException e){
+			request.setAttribute("msg", e.getMessage());
+			return "f/:index.jsp";
+		}
+	}
 	/**
 	 * 主页最新电影显示
 	 * @param request

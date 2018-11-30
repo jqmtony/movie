@@ -17,20 +17,13 @@ public class Users implements Serializable {
 	private String userPwd; //用户登录密码
 	private Timestamp userCreateTime; //注册时间
 	private String userTel;  //用户手机号
-	private String userPayNum; //用户支付账号
-	private String userPayPwd;  //支付密码
+	private String userAddr;  //用户地址
+	private String userStatus;  //用户状态  0禁用  1正常使用
 	private List<Ticket> ticketList;  //对应的电影票集合
 	private List<Images> imgList;  //对应图片集合
 	private List<Indent> indentList;  //对应订单集合
 	private Integral integral;	//对应积分卡
 	private List<UserLoginRecord> ulrList;  //对应登录日志
-	
-	public List<UserLoginRecord> getUlrList() {
-		return ulrList;
-	}
-	public void setUlrList(List<UserLoginRecord> ulrList) {
-		this.ulrList = ulrList;
-	}
 	public Long getUserId() {
 		return userId;
 	}
@@ -73,17 +66,11 @@ public class Users implements Serializable {
 	public void setUserTel(String userTel) {
 		this.userTel = userTel;
 	}
-	public String getUserPayNum() {
-		return userPayNum;
+	public String getUserAddr() {
+		return userAddr;
 	}
-	public void setUserPayNum(String userPayNum) {
-		this.userPayNum = userPayNum;
-	}
-	public String getUserPayPwd() {
-		return userPayPwd;
-	}
-	public void setUserPayPwd(String userPayPwd) {
-		this.userPayPwd = userPayPwd;
+	public void setUserAddr(String userAddr) {
+		this.userAddr = userAddr;
 	}
 	public List<Ticket> getTicketList() {
 		return ticketList;
@@ -109,11 +96,25 @@ public class Users implements Serializable {
 	public void setIntegral(Integral integral) {
 		this.integral = integral;
 	}
+	public List<UserLoginRecord> getUlrList() {
+		return ulrList;
+	}
+	public void setUlrList(List<UserLoginRecord> ulrList) {
+		this.ulrList = ulrList;
+	}
+	public String getUserStatus() {
+		return userStatus;
+	}
+	public void setUserStatus(String userStatus) {
+		this.userStatus = userStatus;
+	}
 	@Override
 	public String toString() {
 		return "Users [userId=" + userId + ", userName=" + userName + ", userAccount=" + userAccount + ", userEmail="
 				+ userEmail + ", userPwd=" + userPwd + ", userCreateTime=" + userCreateTime + ", userTel=" + userTel
-				+ ", userPayNum=" + userPayNum + ", userPayPwd=" + userPayPwd + ", integral=" + integral + "]";
+				+ ", userAddr=" + userAddr + ", userStatus=" + userStatus + "]";
 	}
+	
+	
 	
 }

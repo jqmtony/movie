@@ -7,6 +7,7 @@ import java.util.List;
 
 public class Movies implements Serializable{
 	private Long movieId;	//电影id
+	private Long movieMerId;  //对应商户id
 	private Merchant merchant;  //对应商户
 	private Long movieIntegralNum;  //积分数
 	private String movieName;	//电影名
@@ -22,6 +23,13 @@ public class Movies implements Serializable{
 	private List<Images> imgList;  //对应的图片集合
 	private List<Protagonists> proList;  //对应主演集合
 	
+
+	public Long getMovieMerId() {
+		return movieMerId;
+	}
+	public void setMovieMerId(Long movieMerId) {
+		this.movieMerId = movieMerId;
+	}
 	public Long getMovieVisitCount() {
 		return movieVisitCount;
 	}
@@ -115,10 +123,10 @@ public class Movies implements Serializable{
 	}
 	@Override
 	public String toString() {
-		return "Movies [movieId=" + movieId + ", merchant=" + merchant + ", movieIntegralNum=" + movieIntegralNum
-				+ ", movieName=" + movieName + ", movieGradeNum=" + movieGradeNum + ", movieDescribe=" + movieDescribe
-				+ ", moviePath=" + moviePath + ", moviePrice=" + moviePrice + ", movieStatus=" + movieStatus
-				+ ", movieCreateTime=" + movieCreateTime + "]";
+		return "Movies [movieId=" + movieId + ", movieMerId=" + movieMerId + ", movieIntegralNum=" + movieIntegralNum
+				+ ", movieName=" + movieName + ", movieGradeNum=" + movieGradeNum + ", movieVisitCount="
+				+ movieVisitCount + ", movieDescribe=" + movieDescribe + ", moviePath=" + moviePath + ", moviePrice="
+				+ moviePrice + ", movieStatus=" + movieStatus + ", movieCreateTime=" + movieCreateTime + "]";
 	}
 	
 }

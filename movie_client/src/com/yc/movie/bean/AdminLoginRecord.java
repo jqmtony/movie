@@ -7,8 +7,16 @@ public class AdminLoginRecord implements Serializable{
 	private Long alrId;  //登录记录ID
 	private Timestamp alrLoginTime;	//登陆时间
 	private String alrLoginIp;	//登录IP
+	private Long alrAdminId;  //登录管理员的ID
 	private Admins alrAdmin;	//登录的管理员对象
 	private String alrStatus;	//登录状态
+	
+	public Long getAlrAdminId() {
+		return alrAdminId;
+	}
+	public void setAlrAdminId(Long alrAdminId) {
+		this.alrAdminId = alrAdminId;
+	}
 	public Long getAlrId() {
 		return alrId;
 	}
@@ -42,7 +50,8 @@ public class AdminLoginRecord implements Serializable{
 	@Override
 	public String toString() {
 		return "AdminLoginRecord [alrId=" + alrId + ", alrLoginTime=" + alrLoginTime + ", alrLoginIp=" + alrLoginIp
-				+ ", alrAdmin=" + alrAdmin + ", alrStatus=" + alrStatus + "]";
+				+ ", alrAdminId=" + alrAdminId + ", alrStatus=" + alrStatus + "]";
 	}
+	
 	
 }

@@ -12,16 +12,11 @@ import java.util.List;
 public class Indent implements Serializable {
 	private Long indentId; //订单ID
 	private Users user; //对应用户
+	private Long indentUserID; //对应用户ID
 	private String indentStatus; //订单状态
 	private String indentRemark;  //订单备注
 	private Timestamp indentCreateTime; //订单创建时间
 	private List<Ticket> ticketList;  //对应电影票集合
-	public List<Ticket> getTicketList() {
-		return ticketList;
-	}
-	public void setTicketList(List<Ticket> ticketList) {
-		this.ticketList = ticketList;
-	}
 	public Long getIndentId() {
 		return indentId;
 	}
@@ -33,6 +28,12 @@ public class Indent implements Serializable {
 	}
 	public void setUser(Users user) {
 		this.user = user;
+	}
+	public Long getIndentUserID() {
+		return indentUserID;
+	}
+	public void setIndentUserID(Long indentUserID) {
+		this.indentUserID = indentUserID;
 	}
 	public String getIndentStatus() {
 		return indentStatus;
@@ -52,10 +53,17 @@ public class Indent implements Serializable {
 	public void setIndentCreateTime(Timestamp indentCreateTime) {
 		this.indentCreateTime = indentCreateTime;
 	}
+	public List<Ticket> getTicketList() {
+		return ticketList;
+	}
+	public void setTicketList(List<Ticket> ticketList) {
+		this.ticketList = ticketList;
+	}
 	@Override
 	public String toString() {
-		return "Indent [indentId=" + indentId + ", user=" + user + ", indentStatus=" + indentStatus + ", indentRemark="
-				+ indentRemark + ", indentCreateTime=" + indentCreateTime + "]";
+		return "Indent [indentId=" + indentId + ", user=" + user + ", indentUserID=" + indentUserID + ", indentStatus="
+				+ indentStatus + ", indentRemark=" + indentRemark + ", indentCreateTime=" + indentCreateTime
+				+ ", ticketList=" + ticketList + "]";
 	}
 	
 }

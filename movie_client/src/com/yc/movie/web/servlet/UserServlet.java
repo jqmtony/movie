@@ -25,15 +25,26 @@ import javax.servlet.http.HttpServletResponse;
 public class UserServlet extends BaseServlet {
 	private static final long serialVersionUID = 1L;
 	private UserService us = new UserService();
+	
+	/**
+	 * 退出登录
+	 * @param request
+	 * @param response
+	 * @throws ServletException
+	 * @throws IOException
+	 */
+    public void exit(HttpServletRequest request, HttpServletResponse response)throws ServletException, IOException {
+    	session.removeAttribute("loginedUser");
+    }
     /**
-     * 注册
+     * 修改信息
      * @param request
      * @param response
      * @throws ServletException
      * @throws IOException
      */
-    public void register(HttpServletRequest request, HttpServletResponse response)throws ServletException, IOException {
-    	System.out.println(12312);
+    public void alterInfo(HttpServletRequest request, HttpServletResponse response)throws ServletException, IOException {
+    	//需求   1.姓名  2.手机号 3.邮箱  4.地址 5.出生日期  7.头像
     }
 
     /**

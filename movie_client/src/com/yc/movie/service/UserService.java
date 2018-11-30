@@ -173,10 +173,16 @@ public class UserService {
 			}  
 		} 
 		
+		try {
+			user = ud.createUser(user);//将对应的集合装到user对象中
+		} catch (SQLException e) {
+			throw new UserException("系统异常，请稍后再试");
+		}  
 		
 		//都通过了就登录成功  返回当前登录对象
 		return user;
 	}
+
 
 	/**
 	 * 修改用户

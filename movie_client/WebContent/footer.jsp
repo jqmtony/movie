@@ -265,6 +265,19 @@ fit: true
 				history.go(0);
 			});
 		});
-		
 	});
+</script>
+
+<script type="text/javascript">
+	//选择个人管理事件
+	function infoChange(){
+		var selector = $('#infoChange');
+		if(selector.val() == "修改信息"){
+			window.location.href = "userAlterInfo.jsp";
+		}else if(selector.val() == "退出登录"){
+			var data;
+			$.post("<c:url value='/user.s?method=exit' />",data,function(data){})
+			window.location.href = "index.jsp";
+		}
+	}
 </script>

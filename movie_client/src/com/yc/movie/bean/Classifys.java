@@ -9,11 +9,26 @@ import java.io.Serializable;
  */
 public class Classifys implements Serializable {
 	private Long classifyId;  //类型ID
+	private Long classifyMovieId; //对应电影ID
+	private Long classifyTeleplayId;  //对应电视剧ID
 	private Movies movie;  //对应电影
 	private Teleplay teleplay; //对应电视剧
 	private String classifyName; //类型名
 	private String classifyDescribe; //类型描述
 	private Classifys parentClassify; //父类型
+	
+	public Long getClassifyMovieId() {
+		return classifyMovieId;
+	}
+	public void setClassifyMovieId(Long classifyMovieId) {
+		this.classifyMovieId = classifyMovieId;
+	}
+	public Long getClassifyTeleplayId() {
+		return classifyTeleplayId;
+	}
+	public void setClassifyTeleplayId(Long classifyTeleplayId) {
+		this.classifyTeleplayId = classifyTeleplayId;
+	}
 	public Long getClassifyId() {
 		return classifyId;
 	}
@@ -52,8 +67,10 @@ public class Classifys implements Serializable {
 	}
 	@Override
 	public String toString() {
-		return "Classifys [classifyId=" + classifyId + ", movie=" + movie + ", teleplay=" + teleplay + ", classifyName="
-				+ classifyName + ", classifyDescribe=" + classifyDescribe + ", parentClassify=" + parentClassify + "]";
+		return "Classifys [classifyId=" + classifyId + ", classifyMovieId=" + classifyMovieId + ", classifyTeleplayId="
+				+ classifyTeleplayId + ", movie=" + movie + ", teleplay=" + teleplay + ", classifyName=" + classifyName
+				+ ", classifyDescribe=" + classifyDescribe + ", parentClassify=" + parentClassify + "]";
 	}
+	
 	
 }

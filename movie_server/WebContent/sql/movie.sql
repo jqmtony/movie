@@ -10,7 +10,7 @@ Target Server Type    : MYSQL
 Target Server Version : 50561
 File Encoding         : 65001
 
-Date: 2018-11-29 18:54:02
+Date: 2018-11-30 15:42:44
 */
 
 SET FOREIGN_KEY_CHECKS=0;
@@ -119,7 +119,7 @@ CREATE TABLE `images` (
 -- ----------------------------
 INSERT INTO `images` VALUES ('1', '1', null, null, null, null, null, null, '封面', 'images/11.jpg');
 INSERT INTO `images` VALUES ('2', '2', null, null, null, null, null, null, '封面', 'images/m1.jpg');
-INSERT INTO `images` VALUES ('3', '3', null, null, null, null, null, null, '封面', 'images/m1.jpg');
+INSERT INTO `images` VALUES ('3', null, null, '1', null, null, null, null, '封面', 'images/m1.jpg');
 
 -- ----------------------------
 -- Table structure for `indent`
@@ -147,11 +147,12 @@ CREATE TABLE `integral` (
   `integralUserId` int(11) DEFAULT NULL,
   `integralCount` int(11) DEFAULT NULL,
   PRIMARY KEY (`integralId`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Records of integral
 -- ----------------------------
+INSERT INTO `integral` VALUES ('1', null, '0');
 
 -- ----------------------------
 -- Table structure for `merchant`
@@ -265,7 +266,7 @@ CREATE TABLE `userloginrecord` (
   `ulrLoginIp` varchar(255) DEFAULT NULL,
   `ulrUserId` int(11) DEFAULT NULL,
   PRIMARY KEY (`ulrId`)
-) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=37 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Records of userloginrecord
@@ -275,6 +276,37 @@ INSERT INTO `userloginrecord` VALUES ('2', '2018-11-29 17:16:49', '0:0:0:0:0:0:0
 INSERT INTO `userloginrecord` VALUES ('3', '2018-11-29 17:18:42', '0:0:0:0:0:0:0:1', '1');
 INSERT INTO `userloginrecord` VALUES ('4', '2018-11-29 17:20:54', '0:0:0:0:0:0:0:1', '2');
 INSERT INTO `userloginrecord` VALUES ('5', '2018-11-29 17:21:04', '0:0:0:0:0:0:0:1', '1');
+INSERT INTO `userloginrecord` VALUES ('6', '2018-11-29 19:01:23', '0:0:0:0:0:0:0:1', '2');
+INSERT INTO `userloginrecord` VALUES ('7', '2018-11-29 19:01:36', '0:0:0:0:0:0:0:1', '1');
+INSERT INTO `userloginrecord` VALUES ('8', '2018-11-29 19:01:58', '0:0:0:0:0:0:0:1', '1');
+INSERT INTO `userloginrecord` VALUES ('9', '2018-11-29 23:10:48', '0:0:0:0:0:0:0:1', '1');
+INSERT INTO `userloginrecord` VALUES ('10', '2018-11-29 23:46:14', '0:0:0:0:0:0:0:1', '1');
+INSERT INTO `userloginrecord` VALUES ('11', '2018-11-29 23:54:20', '0:0:0:0:0:0:0:1', '1');
+INSERT INTO `userloginrecord` VALUES ('12', '2018-11-29 23:57:32', '0:0:0:0:0:0:0:1', '1');
+INSERT INTO `userloginrecord` VALUES ('13', '2018-11-29 23:59:26', '0:0:0:0:0:0:0:1', '1');
+INSERT INTO `userloginrecord` VALUES ('14', '2018-11-30 01:55:51', '0:0:0:0:0:0:0:1', '1');
+INSERT INTO `userloginrecord` VALUES ('15', '2018-11-30 02:05:22', '0:0:0:0:0:0:0:1', '1');
+INSERT INTO `userloginrecord` VALUES ('16', '2018-11-30 02:07:50', '0:0:0:0:0:0:0:1', '1');
+INSERT INTO `userloginrecord` VALUES ('17', '2018-11-30 09:45:23', '0:0:0:0:0:0:0:1', '1');
+INSERT INTO `userloginrecord` VALUES ('18', '2018-11-30 09:49:22', '0:0:0:0:0:0:0:1', '1');
+INSERT INTO `userloginrecord` VALUES ('19', '2018-11-30 10:26:13', '0:0:0:0:0:0:0:1', '1');
+INSERT INTO `userloginrecord` VALUES ('20', '2018-11-30 12:54:51', '0:0:0:0:0:0:0:1', '1');
+INSERT INTO `userloginrecord` VALUES ('21', '2018-11-30 12:56:52', '0:0:0:0:0:0:0:1', '1');
+INSERT INTO `userloginrecord` VALUES ('22', '2018-11-30 13:03:43', '0:0:0:0:0:0:0:1', '1');
+INSERT INTO `userloginrecord` VALUES ('23', '2018-11-30 13:27:13', '0:0:0:0:0:0:0:1', '1');
+INSERT INTO `userloginrecord` VALUES ('24', '2018-11-30 13:28:56', '0:0:0:0:0:0:0:1', '1');
+INSERT INTO `userloginrecord` VALUES ('25', '2018-11-30 13:33:29', '0:0:0:0:0:0:0:1', '1');
+INSERT INTO `userloginrecord` VALUES ('26', '2018-11-30 13:34:59', '0:0:0:0:0:0:0:1', '1');
+INSERT INTO `userloginrecord` VALUES ('27', '2018-11-30 14:00:54', '0:0:0:0:0:0:0:1', '1');
+INSERT INTO `userloginrecord` VALUES ('28', '2018-11-30 14:09:57', '0:0:0:0:0:0:0:1', '1');
+INSERT INTO `userloginrecord` VALUES ('29', '2018-11-30 14:10:00', '0:0:0:0:0:0:0:1', '1');
+INSERT INTO `userloginrecord` VALUES ('30', '2018-11-30 14:10:44', '0:0:0:0:0:0:0:1', '1');
+INSERT INTO `userloginrecord` VALUES ('31', '2018-11-30 14:11:48', '0:0:0:0:0:0:0:1', '1');
+INSERT INTO `userloginrecord` VALUES ('32', '2018-11-30 14:12:12', '0:0:0:0:0:0:0:1', '1');
+INSERT INTO `userloginrecord` VALUES ('33', '2018-11-30 14:15:39', '0:0:0:0:0:0:0:1', '1');
+INSERT INTO `userloginrecord` VALUES ('34', '2018-11-30 14:15:59', '0:0:0:0:0:0:0:1', '1');
+INSERT INTO `userloginrecord` VALUES ('35', '2018-11-30 14:16:55', '0:0:0:0:0:0:0:1', '1');
+INSERT INTO `userloginrecord` VALUES ('36', '2018-11-30 14:17:08', '0:0:0:0:0:0:0:1', '1');
 
 -- ----------------------------
 -- Table structure for `users`
@@ -288,13 +320,14 @@ CREATE TABLE `users` (
   `userPwd` varchar(255) DEFAULT NULL,
   `userCreateTime` datetime DEFAULT NULL,
   `userTel` varchar(255) DEFAULT NULL,
-  `userPayNum` varchar(255) DEFAULT NULL,
-  `userPayPwd` varchar(255) DEFAULT NULL,
+  `userAddr` varchar(255) DEFAULT NULL,
+  `userStatus` varchar(255) DEFAULT NULL,
   PRIMARY KEY (`userId`)
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Records of users
 -- ----------------------------
-INSERT INTO `users` VALUES ('1', '杨鑫虎', 'yangxinhu', 'naivestruuglee@126.com', 'e10adc3949ba59abbe56e057f20f883e', null, '15570906290', null, null);
-INSERT INTO `users` VALUES ('2', '杨鑫虎', null, 'naivestruggle@126.com', 'e10adc3949ba59abbe56e057f20f883e', null, null, null, null);
+INSERT INTO `users` VALUES ('1', '杨鑫虎', 'yangxinhu', 'naivestruggle@126.com', 'e10adc3949ba59abbe56e057f20f883e', null, '15570906290', null, null);
+INSERT INTO `users` VALUES ('2', '杨鑫虎', null, 'naivestruggle@126.co', '123456', null, null, null, null);
+INSERT INTO `users` VALUES ('3', null, 'yangxinhu2', '2550438618@qq.com', '4297f44b13955235245b2497399d7a93', '2018-11-30 01:42:48', null, null, null);

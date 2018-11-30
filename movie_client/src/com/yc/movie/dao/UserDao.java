@@ -6,7 +6,10 @@ import java.util.List;
 import org.apache.commons.dbutils.QueryRunner;
 import org.apache.commons.dbutils.handlers.BeanListHandler;
 
+import com.yc.movie.bean.Images;
+import com.yc.movie.bean.Indent;
 import com.yc.movie.bean.Integral;
+import com.yc.movie.bean.Ticket;
 import com.yc.movie.bean.UserLoginRecord;
 import com.yc.movie.bean.Users;
 import com.yc.utils.TxQueryRunner;
@@ -24,7 +27,7 @@ public class UserDao {
 		Object[] params = {user.getUserId(),user.getUserName(),user.getUserAccount(),
 				user.getUserEmail(),user.getUserPwd(),
 				user.getUserCreateTime(),user.getUserTel(),
-				user.getUserPayNum(),user.getUserPayPwd()};
+				user.getUserAddr(),user.getUserStatus()};
 		qr.update(sql,params);
 	}
 
@@ -78,5 +81,35 @@ public class UserDao {
 		String sql = "insert into integral values(?,?,?)";
 		Object[] params = {in.getIntegralId(),in.getUser().getUserId(),in.getIntegralCount()};
 		qr.update(sql, params);
+	}
+
+	/**
+	 * 根据ID创建User对象
+	 * @param userId
+	 * @return
+	 * @throws SQLException 
+	 */
+	public Users createUser(Users user) throws SQLException {
+		String sql = "select * from ticket where ticketBuyBy=?";
+		List<Ticket> ticketList = qr.query(sql, new BeanListHandler<Ticket>(Ticket.class),user.getUserId());
+		user.setTicketList(ticketList);
+		
+		sql = "select * from images where imgUserId=?";
+		List<Images> imgList = qr.query(sql, new BeanListHandler<Images>(Images.class),user.getUserId());
+		user.setImgList(imgList);
+		
+		sql = "select * from indent where indentUserId=?";
+		List<Indent> indentList = qr.query(sql, new BeanListHandler<Indent>(Indent.class),user.getUserId());
+		user.setIndentList(indentList);
+		
+		sql = "select * from integral where integralUserId=?";
+		List<Integral> integralList = qr.query(sql, new BeanListHandler<Integral>(Integral.class),user.getUserId());
+		if(integralList.size() > 0) 
+			user.setIntegral(integralList.get(0));
+		
+		sql = "select * from userloginrecord where ulrUserId=?";
+		List<UserLoginRecord> ulrList = qr.query(sql, new BeanListHandler<UserLoginRecord>(UserLoginRecord.class),user.getUserId());
+		user.setUlrList(ulrList);
+		return user;
 	}
 }

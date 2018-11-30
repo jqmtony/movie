@@ -12,6 +12,7 @@ import java.util.List;
 public class Teleplay implements Serializable {
 	private Long teleplayId;  //电视剧ID
 	private Merchant merchant; //对应商户
+	private Long teleplayMerId;  //对应商户ID
 	private Long teleplayIntegralNum; //积分数
 	private String teleplayName; //电视剧名
 	private Long teleplayGradeNum; //评分数
@@ -19,26 +20,8 @@ public class Teleplay implements Serializable {
 	private String teleplayPath; //电视剧观看链接
 	private Timestamp teleplayCreateTime; //电视剧上架时间
 	private List<Classifys> classifysList;  //对应的类型集合
-	private List<Images> classifyList;  //对应的图片集合
+	private List<Images> imgList;  //对应的图片集合
 	private List<Protagonists> proList;  //对应主演集合
-	public List<Classifys> getClassifysList() {
-		return classifysList;
-	}
-	public void setClassifysList(List<Classifys> classifysList) {
-		this.classifysList = classifysList;
-	}
-	public List<Images> getClassifyList() {
-		return classifyList;
-	}
-	public void setClassifyList(List<Images> classifyList) {
-		this.classifyList = classifyList;
-	}
-	public List<Protagonists> getProList() {
-		return proList;
-	}
-	public void setProList(List<Protagonists> proList) {
-		this.proList = proList;
-	}
 	public Long getTeleplayId() {
 		return teleplayId;
 	}
@@ -50,6 +33,12 @@ public class Teleplay implements Serializable {
 	}
 	public void setMerchant(Merchant merchant) {
 		this.merchant = merchant;
+	}
+	public Long getTeleplayMerId() {
+		return teleplayMerId;
+	}
+	public void setTeleplayMerId(Long teleplayMerId) {
+		this.teleplayMerId = teleplayMerId;
 	}
 	public Long getTeleplayIntegralNum() {
 		return teleplayIntegralNum;
@@ -87,12 +76,31 @@ public class Teleplay implements Serializable {
 	public void setTeleplayCreateTime(Timestamp teleplayCreateTime) {
 		this.teleplayCreateTime = teleplayCreateTime;
 	}
+	public List<Classifys> getClassifysList() {
+		return classifysList;
+	}
+	public void setClassifysList(List<Classifys> classifysList) {
+		this.classifysList = classifysList;
+	}
+	public List<Images> getImgList() {
+		return imgList;
+	}
+	public void setImgList(List<Images> imgList) {
+		this.imgList = imgList;
+	}
+	public List<Protagonists> getProList() {
+		return proList;
+	}
+	public void setProList(List<Protagonists> proList) {
+		this.proList = proList;
+	}
 	@Override
 	public String toString() {
-		return "Teleplay [teleplayId=" + teleplayId + ", merchant=" + merchant + ", teleplayIntegralNum="
-				+ teleplayIntegralNum + ", teleplayName=" + teleplayName + ", teleplayGradeNum=" + teleplayGradeNum
-				+ ", teleplayDescribe=" + teleplayDescribe + ", teleplayPath=" + teleplayPath + ", teleplayCreateTime="
-				+ teleplayCreateTime + "]";
+		return "Teleplay [teleplayId=" + teleplayId + ", merchant=" + merchant + ", teleplayMerId=" + teleplayMerId
+				+ ", teleplayIntegralNum=" + teleplayIntegralNum + ", teleplayName=" + teleplayName
+				+ ", teleplayGradeNum=" + teleplayGradeNum + ", teleplayDescribe=" + teleplayDescribe
+				+ ", teleplayPath=" + teleplayPath + ", teleplayCreateTime=" + teleplayCreateTime + ", classifysList="
+				+ classifysList + ", imgList=" + imgList + ", proList=" + proList + "]";
 	}
 	
 }

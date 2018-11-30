@@ -18,6 +18,13 @@ public class Merchant implements Serializable {
 	private String merIDCard;	//商户身份证号码
 	private String merStatus;  //商户状态  0禁用  1正常使用
 	private List<Images> imgList;  //对应图片集合
+	private List<Movies> movieList; //对应多个电影
+	public List<Movies> getMovieList() {
+		return movieList;
+	}
+	public void setMovieList(List<Movies> movieList) {
+		this.movieList = movieList;
+	}
 	public List<Images> getImgList() {
 		return imgList;
 	}
