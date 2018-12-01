@@ -11,8 +11,8 @@ import java.util.Properties;
 import java.util.Set;
 
 import com.yc.movie.bean.*;
+import com.yc.movie.exception.AdminException;
 import com.yc.movie.admin.dao.AdminDao;
-import com.yc.movie.admin.exception.AdminException;
 import com.yc.movie.utils.JdbcUtils;
 import com.yc.movie.utils.CommonsUtils;
 

@@ -22,8 +22,6 @@ public class Movies implements Serializable{
 	private List<Classifys> classifysList;  //对应的类型集合
 	private List<Images> imgList;  //对应的图片集合
 	private List<Protagonists> proList;  //对应主演集合
-	
-
 	public Long getMovieMerId() {
 		return movieMerId;
 	}
@@ -128,5 +126,4 @@ public class Movies implements Serializable{
 				+ movieVisitCount + ", movieDescribe=" + movieDescribe + ", moviePath=" + moviePath + ", moviePrice="
 				+ moviePrice + ", movieStatus=" + movieStatus + ", movieCreateTime=" + movieCreateTime + "]";
 	}
-	
 }

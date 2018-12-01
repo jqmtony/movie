@@ -245,15 +245,5 @@
 							</div>
 						</div>
 				<!-- //Modal1 -->
-				<!-- breadcrumb -->
-				<div class="w3_breadcrumb">
-					<div class="breadcrumb-inner">	
-						<ul>
-							<li><a href="index.jsp">Home</a><i>//</i></li>
-							<li>Genre</li>
-						</ul>
-					</div>
-				</div>
-			<!-- //breadcrumb -->
 			
 			

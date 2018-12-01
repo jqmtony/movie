@@ -160,8 +160,8 @@
 	<!--//pop-up-box -->
 
 			<div id="small-dialog1" class="mfp-hide">
-			<iframe src=""></iframe>
-	</div>
+				<iframe src=""></iframe>
+			</div>
 	<div id="small-dialog2" class="mfp-hide">
 		<iframe src=""></iframe>
 	</div>

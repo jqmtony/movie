@@ -1,7 +1,7 @@
 package com.yc.movie.admin.web.servlet;
 
 import com.yc.movie.bean.*;
-import com.yc.movie.admin.exception.AdminException;
+import com.yc.movie.exception.AdminException;
 import com.yc.movie.admin.service.AdminService;
 import com.yc.movie.utils.BaseServlet;
 import com.yc.movie.utils.CommonsUtils;
@@ -218,13 +218,4 @@ public class AdminServlet extends BaseServlet {
 		return alr;
 	}
 
- 	/**
-	 * 生成验证码
-	 */
-	public void createVerification(HttpServletRequest request, HttpServletResponse response)throws ServletException, IOException {
-		Verification verification = new Verification(); // 创建验证码对象
-		BufferedImage image = verification.getImage(); // 生成验证码图片
-		session.setAttribute("verificationObject", verification);// 将验证码对象保存到session域中
-		Verification.output(image, response.getOutputStream());// 把图片响应给客户端
-	}
 }

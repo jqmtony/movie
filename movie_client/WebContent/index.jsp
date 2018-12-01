@@ -288,7 +288,7 @@
 										     <div class="col-md-7 wthree_agile-movies_list">
 										     <c:forEach items="${movieListByTime }" var="movie" begin="1">
 														<div class="w3l-movie-gride-agile">
-															<a href="single.jsp" class="hvr-sweep-to-bottom" href="<c:url value='/movie.s?method=singleShow&type=movie&id=${movie.movieId }' />"><img src="${movie.imgList[0].imgPath }" title="Movies Pro" class="img-responsive" alt=" ">
+															<a href="<c:url value='/movie.s?method=singleShow&type=movie&id=${movie.movieId }' />" class="hvr-sweep-to-bottom" ><img src="${movie.imgList[0].imgPath }" title="Movies Pro" class="img-responsive" alt=" ">
 																<div class="w3l-action-icon"><i class="fa fa-play-circle-o" aria-hidden="true"></i></div>
 															</a>
 																<div class="mid-1 agileits_w3layouts_mid_1_home">
@@ -672,7 +672,11 @@
 			</div>
 		</div>
 			<!--//content-inner-section-->
-		
+		<c:if test="${! empty msg }">
+			<script type="text/javascript">
+				alert('${msg}');
+			</script>
+		</c:if>
 	<!--/footer-bottom-->
 	<%@ include file="footer.jsp"%>
 

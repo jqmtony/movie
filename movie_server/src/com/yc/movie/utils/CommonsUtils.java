@@ -59,6 +59,19 @@ public class CommonsUtils {
 	public static Random ra = new Random(); // 随机数对象
 	
 	/**
+	 * 通过cookie名获取request中的cookie对象   如果没有就返回null
+	 * @param request
+	 * @param cookieName
+	 * @return
+	 */
+	public static Cookie getCookie(HttpServletRequest request,String cookieName){
+		Cookie[] cookies = request.getCookies();
+    	for(Cookie c:cookies)
+    		if(c.getName().equals(cookieName))
+    			return c;
+    	return null;
+	}
+	/**
 	 * 生成一个长度为len的验证码文本
 	 * @param len 验证码长度
 	 * @param type 验证码类型  邮箱验证码  手机验证码
@@ -134,6 +147,8 @@ public class CommonsUtils {
 		for(Cookie cookie:cookies){  //遍历
 			if(cookie.getName().equals(cookieName)){
 				cookie.setMaxAge(0);
+				cookie.setValue("");
+				response.addCookie(cookie);
 			}
 		}
 	}

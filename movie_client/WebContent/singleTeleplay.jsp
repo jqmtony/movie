@@ -34,13 +34,23 @@
 <!--/main-header-->
   <!--/banner-section-->
 	<%@ include file="head.jsp"%>
+	<!-- breadcrumb -->
+				<div class="w3_breadcrumb">
+					<div class="breadcrumb-inner">	
+						<ul>
+							<li><a href="index.jsp">Home</a><i>//</i></li>
+							<li>Single</li>
+						</ul>
+					</div>
+				</div>
+			<!-- //breadcrumb -->
 	<div class="w3_breadcrumb"></div>
 <!-- //breadcrumb -->
 			<!--/content-inner-section-->
 				<div class="w3_content_agilleinfo_inner">
 						<div class="agile_featured_movies">
 				            <div class="inner-agile-w3l-part-head">
-					            <h3 class="w3l-inner-h-title">Single Page</h3>
+					            <h3 class="w3l-inner-h-title">${singleShow.movieName }</h3>
 								<p class="w3ls_head_para">Add short Description</p>
 							</div>
 							   <div class="latest-news-agile-info">

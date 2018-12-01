@@ -10,7 +10,7 @@ Target Server Type    : MYSQL
 Target Server Version : 50561
 File Encoding         : 65001
 
-Date: 2018-11-30 15:42:44
+Date: 2018-12-01 13:56:53
 */
 
 SET FOREIGN_KEY_CHECKS=0;
@@ -26,7 +26,7 @@ CREATE TABLE `adminloginrecord` (
   `alrAdminId` int(11) DEFAULT NULL,
   `alrStatus` varchar(255) DEFAULT NULL,
   PRIMARY KEY (`alrId`)
-) ENGINE=InnoDB AUTO_INCREMENT=19 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=27 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Records of adminloginrecord
@@ -49,6 +49,14 @@ INSERT INTO `adminloginrecord` VALUES ('15', '2018-11-26 21:42:37', '0:0:0:0:0:0
 INSERT INTO `adminloginrecord` VALUES ('16', '2018-11-26 21:52:17', '0:0:0:0:0:0:0:1', '1', '成功');
 INSERT INTO `adminloginrecord` VALUES ('17', '2018-11-29 14:42:13', '0:0:0:0:0:0:0:1', null, '失败');
 INSERT INTO `adminloginrecord` VALUES ('18', '2018-11-29 14:42:16', '0:0:0:0:0:0:0:1', null, '失败');
+INSERT INTO `adminloginrecord` VALUES ('19', '2018-11-30 18:13:22', '0:0:0:0:0:0:0:1', null, '失败');
+INSERT INTO `adminloginrecord` VALUES ('20', '2018-11-30 18:13:47', '0:0:0:0:0:0:0:1', null, '失败');
+INSERT INTO `adminloginrecord` VALUES ('21', '2018-11-30 18:13:51', '0:0:0:0:0:0:0:1', null, '失败');
+INSERT INTO `adminloginrecord` VALUES ('22', '2018-11-30 18:13:58', '0:0:0:0:0:0:0:1', null, '失败');
+INSERT INTO `adminloginrecord` VALUES ('23', '2018-11-30 18:14:15', '0:0:0:0:0:0:0:1', '1', '成功');
+INSERT INTO `adminloginrecord` VALUES ('24', '2018-11-30 18:16:34', '0:0:0:0:0:0:0:1', '1', '成功');
+INSERT INTO `adminloginrecord` VALUES ('25', '2018-11-30 18:16:48', '0:0:0:0:0:0:0:1', null, '失败');
+INSERT INTO `adminloginrecord` VALUES ('26', '2018-11-30 18:27:38', '0:0:0:0:0:0:0:1', '1', '成功');
 
 -- ----------------------------
 -- Table structure for `admins`
@@ -173,7 +181,7 @@ CREATE TABLE `merchant` (
 -- ----------------------------
 -- Records of merchant
 -- ----------------------------
-INSERT INTO `merchant` VALUES ('1', '杨鑫虎', '15570906290', 'naivestruggle@126.com', '湖南省', '123456', '15570906290', '1');
+INSERT INTO `merchant` VALUES ('1', null, null, 'naivestruggle@126.com', null, 'e10adc3949ba59abbe56e057f20f883e', null, '0');
 
 -- ----------------------------
 -- Table structure for `movies`
@@ -212,11 +220,14 @@ CREATE TABLE `protagonists` (
   `proName` varchar(255) DEFAULT NULL,
   `proLink` varchar(255) DEFAULT NULL,
   PRIMARY KEY (`proId`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Records of protagonists
 -- ----------------------------
+INSERT INTO `protagonists` VALUES ('1', '2', null, '主演1', null);
+INSERT INTO `protagonists` VALUES ('2', '2', null, '主演2', null);
+INSERT INTO `protagonists` VALUES ('3', '2', null, '主演3', null);
 
 -- ----------------------------
 -- Table structure for `teleplay`

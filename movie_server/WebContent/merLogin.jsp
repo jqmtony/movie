@@ -1,514 +1,306 @@
-<%@ page language="java" contentType="text/html; charset=utf-8"
-    pageEncoding="utf-8"%>
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<!doctype html>
 <html>
-<head>
-<meta charset="utf-8">
-<meta name="viewport"
-	content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
-<title>登录</title>
-<link rel="stylesheet" href="css/normalize.css">
-<link rel="stylesheet" href="css/login.css">
-<link rel="stylesheet" href="css/sign-up-login.css">
-<link rel="stylesheet" type="text/css" href="http://cdn.bootcss.com/font-awesome/4.6.0/css/font-awesome.min.css">
-<link rel="stylesheet" href="css/inputEffect.css" />
-<link rel="stylesheet" href="css/tooltips.css" />
-<link rel="stylesheet" href="css/spop.min.css" />
 
-<script src="js/jquery.min.js"></script>
-<script src="js/snow.js"></script>
-<script src="js/jquery.pure.tooltips.js"></script>
-<script src="js/spop.min.js"></script>
-<script>	
-	(function() {
-		// trim polyfill : https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String/Trim
-		if (!String.prototype.trim) {
-			(function() {
-				// Make sure we trim BOM and NBSP
-				var rtrim = /^[\s\uFEFF\xA0]+|[\s\uFEFF\xA0]+$/g;
-				String.prototype.trim = function() {
-					return this.replace(rtrim, '');
-				};
-			})();
-		}
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="maximum-scale=1.0,minimum-scale=1.0,user-scalable=0,width=device-width,initial-scale=1.0" />
+		<meta name="format-detection" content="telephone=no, email=no, date=no, address=no">
+		<meta name="apple-mobile-web-app-capable" content="yes">
+		<meta name="apple-mobile-web-app-status-bar-style" content="black">
+		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+		<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+		<meta name="format-detection" content="telephone=no" />
+		<meta name="apple-mobile-web-app-capable" content="yes" />
+		<meta content="black" name="apple-mobile-web-app-status-bar-style">
+		<link href="merCss/bksystem.css" rel="stylesheet" type="text/css" />
+		<link href="merSkin/black/skin.css" rel="stylesheet" type="text/css" id="skin" />
+		<link href="merCss/module.css" rel="stylesheet" type="text/css" />
+		<link href="merFont/iconfont.css" rel="stylesheet" type="text/css" />
+		<title>登录</title>
+		<script src="merJs/jquery-1.9.1.min.js" type="text/javascript"></script>
+		<script src="merJs/jquery.cookie.js" type="text/javascript"></script>
+		<script src="merJs/jquery.nicescroll.js" type="text/javascript"></script>
+		<script src="merJs/BKframe.js" type="text/javascript"></script>
+		<!--[if lt IE 9]>
+          <script src="js/html5shiv.js" type="text/javascript"></script>
+          <script src="js/css3-mediaqueries.js"  type="text/javascript"></script>
+        <![endif]-->
+	</head>
+	<body class="login-layout Reg_log_style" id="loginstyle">
+		<!-- <div class="logintop">
+			<span>后台管理界面平台</span>
+			<ul>
+				<li>
+					<a href="">返回首页</a>
+				</li>
+				<li>
+					<a href="#">帮助</a>
+				</li>
+				<li>
+					<a href="#">关于</a>
+				</li>
+			</ul>
+		</div> -->
+		<div class="loginbody">
+			<div class="login-container">
+				<div class="center"> <img src="merImages/logo.png" /></div>
+				<div class="space-6"></div>
+				<div class="position-relative">
+					<div id="login-box" class="login-box widget-box no-border visible">
+						<div class="login-main">
+							<!--皮肤选择-->
+						<div class="skin-section">
+							<a href="javascript:void(0)" class="skin-btn clickBombbox iconfont icon-pifushezhi" id="skin-btn"></a>
+							<div class="Bombbox">
+								<ul class="skin-list">
+									<li>
+										<a class="colorpick-btn" href="javascript:void(0)" data-val="black" id="default" style="background-color:#222A2D"></a>
+									</li>
+									<li>
+										<a class="colorpick-btn" href="javascript:void(0)" data-val="blue" style="background-color:#438EB9;"></a>
+									</li>
+									<li>
+										<a class="colorpick-btn" href="javascript:void(0)" data-val="green" style="background-color:#72B63F;"></a>
+									</li>
+									<li>
+										<a class="colorpick-btn" href="javascript:void(0)" data-val="gray" style="background-color:#067350;"></a>
+									</li>
+									<li>
+										<a class="colorpick-btn" href="javascript:void(0)" data-val="red" style="background-color:#FF6868;"></a>
+									</li>
+									<li>
+										<a class="colorpick-btn" href="javascript:void(0)" data-val="purple" style="background-color:#6F036B;"></a>
+									</li>
+								</ul>
+							</div>
+						</div>
+							<div class="clearfix">
+								<div class="login_icon"><img src="merImages/login_img.png" /></div>
+								<form class="" style=" width:300px; float:right; margin-right:50px;">
+									<h4 class="title_name"><img src="merImages/login_title.png" /></h4>
+									<font style="color:red;" id="errorMsg"></font>
+									<fieldset>
+										<ul>
+											<li class="frame_style form_error"><label class="user_icon iconfont">&#xe620;</label><input name="" type="text" value="" data-name="邮箱地址" id="username" /><i>邮箱地址</i></li>
+											<li class="frame_style form_error"><label class="password_icon iconfont">&#xe625;</label><input name="" type="password" value="" data-name="密码" id="userpwd" /><i>密码</i></li>
+											<li class="frame_style form_error">
+												<label class="Codes_icon iconfont">&#xe624;</label>
+												<input name="" type="text" data-name="验证码" id="Codes_text" /><i>验证码</i>
+												<div class="Codes_region">
+												<img id="verify" src="<c:url value='/mer.s?method=createVerification' />" width="100%" height="38px" onclick="againCreateVerify()" style="cursor: pointer;">
+											</div></li>
+										</ul>
+										<div class="space"></div>
+										<div class="clearfix">
+											<label class="inline">
+                                      <input id="remUser" type="checkbox" class="ace">
+                                      <span class="lbl">保存用户</span><a href="javascript:forget()" style="margin-left:150px;">忘记密码</a><br /><br />
+                                  </label>
+                                 			<button type="button" class="login_btn" id="login_btn"> 登&nbsp;陆 </button>
+                                  			<button type="button" class="login_btn" id="register_btn"> 注&nbsp;册</button>
+										</div>
 
-		[].slice.call( document.querySelectorAll( 'input.input__field' ) ).forEach( function( inputEl ) {
-			// in case the input is already filled..
-			if( inputEl.value.trim() !== '' ) {
-				classie.add( inputEl.parentNode, 'input--filled' );
-			}
-
-			// events:
-			inputEl.addEventListener( 'focus', onInputFocus );
-			inputEl.addEventListener( 'blur', onInputBlur );
-		} );
-
-		function onInputFocus( ev ) {
-			classie.add( ev.target.parentNode, 'input--filled' );
-		}
-
-		function onInputBlur( ev ) {
-			if( ev.target.value.trim() === '' ) {
-				classie.remove( ev.target.parentNode, 'input--filled' );
-			}
-		}
-	})();
-	
-	$(function() {	
-		$('#login #login-password').focus(function() {
-			$('.login-owl').addClass('password');
-		}).blur(function() {
-			$('.login-owl').removeClass('password');
-		});
-		$('#login #register-password').focus(function() {
-			$('.register-owl').addClass('password');
-		}).blur(function() {
-			$('.register-owl').removeClass('password');
-		});
-		$('#login #register-repassword').focus(function() {
-			$('.register-owl').addClass('password');
-		}).blur(function() {
-			$('.register-owl').removeClass('password');
-		});
-		$('#login #forget-password').focus(function() {
-			$('.forget-owl').addClass('password');
-		}).blur(function() {
-			$('.forget-owl').removeClass('password');
-		});
-	});
-	
-	function goto_register(){
-		$("#register-username").val("");
-		$("#register-password").val("");
-		$("#register-repassword").val("");
-		$("#register-code").val("");
-		$("#tab-2").prop("checked",true);
-	}
-	
-	function goto_login(){
-		$("#login-username").val("");
-		$("#login-password").val("");
-		$("#tab-1").prop("checked",true);
-	}
-	
-	function goto_forget(){
-		$("#forget-username").val("");
-		$("#forget-password").val("");
-		$("#forget-code").val("");
-		$("#tab-3").prop("checked",true);
-	}
-	
-	function login(){//登录
-		var username = $("#login-username").val(),
-			password = $("#login-password").val(),
-			validatecode = null,
-			flag = false;
-		//判断用户名密码是否为空
-		if(username == ""){
-			$.pt({
-        		target: $("#login-username"),
-        		position: 'r',
-        		align: 't',
-        		width: 'auto',
-        		height: 'auto',
-        		content:"用户名不能为空"
-        	});
-			flag = true;
-		}
-		if(password == ""){
-			$.pt({
-        		target: $("#login-password"),
-        		position: 'r',
-        		align: 't',
-        		width: 'auto',
-        		height: 'auto',
-        		content:"密码不能为空"
-        	});
-			flag = true;
-		}
-		//用户名只能是15位以下的字母或数字
-		var regExp = new RegExp("^[a-zA-Z0-9_]{1,15}$");
-		if(!regExp.test(username)){
-			$.pt({
-        		target: $("#login-username"),
-        		position: 'r',
-        		align: 't',
-        		width: 'auto',
-        		height: 'auto',
-        		content:"用户名必须为15位以下的字母或数字"
-        	});
-			flag = true;
-		}
-		
-		if(flag){
-			return false;
-		}else{//登录
-			//调用后台登录验证的方法
-			alert('登录成功');
-			return false;
-		}
-	}
-	
-	//注册
-	function register(){
-		var username = $("#register-username").val(),
-			password = $("#register-password").val(),
-			repassword = $("#register-repassword").val(),
-			code = $("#register-code").val(),
-			flag = false,
-			validatecode = null;
-		//判断用户名密码是否为空
-		if(username == ""){
-			$.pt({
-        		target: $("#register-username"),
-        		position: 'r',
-        		align: 't',
-        		width: 'auto',
-        		height: 'auto',
-        		content:"用户名不能为空"
-        	});
-			flag = true;
-		}
-		if(password == ""){
-			$.pt({
-        		target: $("#register-password"),
-        		position: 'r',
-        		align: 't',
-        		width: 'auto',
-        		height: 'auto',
-        		content:"密码不能为空"
-        	});
-			flag = true;
-		}else{
-			if(password != repassword){
-				$.pt({
-	        		target: $("#register-repassword"),
-	        		position: 'r',
-	        		align: 't',
-	        		width: 'auto',
-	        		height: 'auto',
-	        		content:"两次输入的密码不一致"
-	        	});
-				flag = true;
-			}
-		}
-		//用户名只能是15位以下的字母或数字
-		var regExp = new RegExp("^[a-zA-Z0-9_]{1,15}$");
-		if(!regExp.test(username)){
-			$.pt({
-        		target: $("#register-username"),
-        		position: 'r',
-        		align: 't',
-        		width: 'auto',
-        		height: 'auto',
-        		content:"用户名必须为15位以下的字母或数字"
-        	});
-			flag = true;
-		}
-		//检查用户名是否已经存在
-		//调后台代码检查用户名是否已经被注册
-		
-		//检查注册码是否正确
-		//调后台方法检查注册码，这里写死为11111111
-		if(code != '11111111'){
-			$.pt({
-		        target: $("#register-code"),
-		        position: 'r',
-		        align: 't',
-		        width: 'auto',
-		        height: 'auto',
-		        content:"注册码不正确"
-		       });
-			flag = true;
-		}
-		
-		
-		if(flag){
-			return false;
-		}else{//注册
-			spop({			
-				template: '<h4 class="spop-title">注册成功</h4>即将于3秒后返回登录',
-				position: 'top-center',
-				style: 'success',
-				autoclose: 3000,
-				onOpen : function(){
-					var second = 2;
-					var showPop = setInterval(function(){
-						if(second == 0){
-							clearInterval(showPop);
-						}
-						$('.spop-body').html('<h4 class="spop-title">注册成功</h4>即将于'+second+'秒后返回登录');
-						second--;
-					},1000);
-				},
-				onClose : function(){
-					goto_login();
-				}
-			});
-			return false;
-		}
-	}
-	
-	//重置密码
-	function forget(){
-		var username = $("#forget-username").val(),
-			password = $("#forget-password").val(),
-			code = $("#forget-code").val(),
-			flag = false,
-			validatecode = null;
-		//判断用户名密码是否为空
-		if(username == ""){
-			$.pt({
-        		target: $("#forget-username"),
-        		position: 'r',
-        		align: 't',
-        		width: 'auto',
-        		height: 'auto',
-        		content:"用户名不能为空"
-        	});
-			flag = true;
-		}
-		if(password == ""){
-			$.pt({
-        		target: $("#forget-password"),
-        		position: 'r',
-        		align: 't',
-        		width: 'auto',
-        		height: 'auto',
-        		content:"密码不能为空"
-        	});
-			flag = true;
-		}
-		//用户名只能是15位以下的字母或数字
-		var regExp = new RegExp("^[a-zA-Z0-9_]{1,15}$");
-		if(!regExp.test(username)){
-			$.pt({
-        		target: $("#forget-username"),
-        		position: 'r',
-        		align: 't',
-        		width: 'auto',
-        		height: 'auto',
-        		content:"用户名必须为15位以下的字母或数字"
-        	});
-			flag = true;
-		}
-		//检查用户名是否存在
-		//调后台方法
-		
-		//检查注册码是否正确
-		if(code != '11111111'){
-			$.pt({
-		        target: $("#forget-code"),
-		        position: 'r',
-		        align: 't',
-		        width: 'auto',
-		        height: 'auto',
-		        content:"注册码不正确"
-		       });
-			flag = true;
-		}
-		
-		
-		
-		if(flag){
-			return false;
-		}else{//重置密码
-			spop({			
-				template: '<h4 class="spop-title">重置密码成功</h4>即将于3秒后返回登录',
-				position: 'top-center',
-				style: 'success',
-				autoclose: 3000,
-				onOpen : function(){
-					var second = 2;
-					var showPop = setInterval(function(){
-						if(second == 0){
-							clearInterval(showPop);
-						}
-						$('.spop-body').html('<h4 class="spop-title">重置密码成功</h4>即将于'+second+'秒后返回登录');
-						second--;
-						},1000);
-				},
-				onClose : function(){
-					goto_login();
-				}
-			});
-			return false;
-		}
-	}
-	
-	
-	
-	
-	
-	
-	
-</script>
-<style type="text/css">
-html{width: 100%; height: 100%;}
-
-body{
-
-	background-repeat: no-repeat;
-
-	background-position: center center #2D0F0F;
-
-	background-color: #00BDDC;
-
-	background-image: url(images/snow1.jpg);
-
-	background-size: 100% 100%;
-
-}
-
-.snow-container { position: fixed; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 100001; }
-
-</style>
-</head>
-<body>
-	<!-- 雪花背景 -->
-	<div class="snow-container"></div>
-	<!-- 登录控件 -->
-	<div id="login">
-		<input id="tab-1" type="radio" name="tab" class="sign-in hidden" checked />
-		<input id="tab-2" type="radio" name="tab" class="sign-up hidden" />
-		<input id="tab-3" type="radio" name="tab" class="sign-out hidden" />
-		<div class="wrapper">
-			<!-- 登录页面 -->
-			<div class="login sign-in-htm">
-				<form class="container offset1 loginform">
-					<!-- 猫头鹰控件 -->
-					<div id="owl-login" class="login-owl">
-						<div class="hand"></div>
-						<div class="hand hand-r"></div>
-						<div class="arms">
-							<div class="arm"></div>
-							<div class="arm arm-r"></div>
+										<div class="space-4"></div>
+									</fieldset>
+								</form>
+							</div>
+							<!-- <div class="social-or-login center">
+								<span class="bigger-110">通知</span>
+							</div> -->
+							<!-- <div class="social-login ">
+								为了更好的体验性（兼容移动端），本网站系统不再对IE8（含IE8）以下浏览器支持，请见谅。
+							</div> -->
 						</div>
 					</div>
-					<div class="pad input-container">
-						<section class="content">
-							<span class="input input--hideo">
-								<input class="input__field input__field--hideo" type="text" id="login-username" 
-									autocomplete="off" placeholder="请输入用户名" tabindex="1" maxlength="15" />
-								<label class="input__label input__label--hideo" for="login-username">
-									<i class="fa fa-fw fa-user icon icon--hideo"></i>
-									<span class="input__label-content input__label-content--hideo"></span>
-								</label>
-							</span>
-							<span class="input input--hideo">
-								<input class="input__field input__field--hideo" type="password" id="login-password" placeholder="请输入密码" tabindex="2" maxlength="15"/>
-								<label class="input__label input__label--hideo" for="login-password">
-									<i class="fa fa-fw fa-lock icon icon--hideo"></i>
-									<span class="input__label-content input__label-content--hideo"></span>
-								</label>
-							</span>
-						</section>
-					</div>
-					<div class="form-actions">
-						<a tabindex="4" class="btn pull-left btn-link text-muted" onClick="goto_forget()">忘记密码?</a>
-						<a tabindex="5" class="btn btn-link text-muted" onClick="goto_register()">注册</a>
-						<input class="btn btn-primary" type="button" tabindex="3" onClick="login()" value="登录" 
-							style="color:white;"/>
-					</div>
-				</form>
-			</div>
-			<!-- 忘记密码页面 -->
-			<div class="login sign-out-htm">
-				<form action="#" method="post" class="container offset1 loginform">
-					<!-- 猫头鹰控件 -->
-					<div id="owl-login" class="forget-owl">
-						<div class="hand"></div>
-						<div class="hand hand-r"></div>
-						<div class="arms">
-							<div class="arm"></div>
-							<div class="arm arm-r"></div>
-						</div>
-					</div>
-					<div class="pad input-container">
-						<section class="content">
-							<span class="input input--hideo">
-								<input class="input__field input__field--hideo" type="text" id="forget-username" autocomplete="off" placeholder="请输入用户名"/>
-								<label class="input__label input__label--hideo" for="forget-username">
-									<i class="fa fa-fw fa-user icon icon--hideo"></i>
-									<span class="input__label-content input__label-content--hideo"></span>
-								</label>
-							</span>
-							<span class="input input--hideo">
-								<input class="input__field input__field--hideo" type="text" id="forget-code" autocomplete="off" placeholder="请输入注册码"/>
-								<label class="input__label input__label--hideo" for="forget-code">
-									<i class="fa fa-fw fa-wifi icon icon--hideo"></i>
-									<span class="input__label-content input__label-content--hideo"></span>
-								</label>
-							</span>
-							<span class="input input--hideo">
-								<input class="input__field input__field--hideo" type="password" id="forget-password" placeholder="请重置密码" />
-								<label class="input__label input__label--hideo" for="forget-password">
-									<i class="fa fa-fw fa-lock icon icon--hideo"></i>
-									<span class="input__label-content input__label-content--hideo"></span>
-								</label>
-							</span>
-						</section>
-					</div>
-					<div class="form-actions">
-						<a class="btn pull-left btn-link text-muted" onClick="goto_login()">返回登录</a>
-						<input class="btn btn-primary" type="button" onClick="forget()" value="重置密码" 
-							style="color:white;"/>
-					</div>
-				</form>
-			</div>
-			<!-- 注册页面 -->
-			<div class="login sign-up-htm">
-				<form action="#" method="post" class="container offset1 loginform">
-					<!-- 猫头鹰控件 -->
-					<div id="owl-login" class="register-owl">
-						<div class="hand"></div>
-						<div class="hand hand-r"></div>
-						<div class="arms">
-							<div class="arm"></div>
-							<div class="arm arm-r"></div>
-						</div>
-					</div>
-					<div class="pad input-container">
-						<section class="content">
-							<span class="input input--hideo">
-								<input class="input__field input__field--hideo" type="text" id="register-username" 
-									autocomplete="off" placeholder="请输入用户名" maxlength="15"/>
-								<label class="input__label input__label--hideo" for="register-username">
-									<i class="fa fa-fw fa-user icon icon--hideo"></i>
-									<span class="input__label-content input__label-content--hideo"></span>
-								</label>
-							</span>
-							<span class="input input--hideo">
-								<input class="input__field input__field--hideo" type="password" id="register-password" placeholder="请输入密码" maxlength="15"/>
-								<label class="input__label input__label--hideo" for="register-password">
-									<i class="fa fa-fw fa-lock icon icon--hideo"></i>
-									<span class="input__label-content input__label-content--hideo"></span>
-								</label>
-							</span>
-							<span class="input input--hideo">
-								<input class="input__field input__field--hideo" type="password" id="register-repassword" placeholder="请确认密码" maxlength="15"/>
-								<label class="input__label input__label--hideo" for="register-repassword">
-									<i class="fa fa-fw fa-lock icon icon--hideo"></i>
-									<span class="input__label-content input__label-content--hideo"></span>
-								</label>
-							</span>
-							<span class="input input--hideo">
-								<input class="input__field input__field--hideo" type="text" id="register-code" autocomplete="off" placeholder="请输入注册码"/>
-								<label class="input__label input__label--hideo" for="register-code">
-									<i class="fa fa-fw fa-wifi icon icon--hideo"></i>
-									<span class="input__label-content input__label-content--hideo"></span>
-								</label>
-							</span>
-						</section>
-					</div>
-					<div class="form-actions">
-						<a class="btn pull-left btn-link text-muted" onClick="goto_login()">返回登录</a>
-						<input class="btn btn-primary" type="button" onClick="register()" value="注册" 
-							style="color:white;"/>
-					</div>
-				</form>
+				</div>
 			</div>
 		</div>
-	</div>
-</body>
+		<!-- <div class="loginbm">版权所有 2016</div> -->
+	</body>
+	<c:if test="${! empty cookie.remMer}">
+		<script type="text/javascript">
+			var ad = $('#username').val();
+			if(ad === null || ad === ""){
+				$('#username').val('${cookie.remMer.value}');
+			}
+		</script>
+	</c:if>
+	<c:if test="${! empty msg }">
+		<script type="text/javascript">
+			alert("${msg}");
+		</script>
+	</c:if>
 </html>
+<script type="text/javascript">
+	//验证登录
+	var i = 0;
+	$(document).ready(function() {	
+		$("input[type='text'],input[type='password']").blur(function() {
+			var $el = $(this);
+			var inputname=0;
+			var $parent = $el.parent();
+			$parent.attr('class', 'frame_style').removeClass(' form_error');
+			if($el.val() == '') {
+				var name=$el.attr("data-name");
+				$parent.attr('class', 'frame_style').addClass(' form_error form_prompt');
+				$parent.find('i').eq(inputname).html(name+"不能为空").addClass("prompt");
+			}
+		});
+		$("input[type='text'],input[type='password']").focus(function() {
+			var $el = $(this);
+			var $parent = $el.parent();
+			if($el.val() == '') {
+				$parent.attr('class', 'frame_style').addClass(' form_errors');
+			} else {
+				$parent.attr('class', 'frame_style').removeClass(' form_errors');
+			}
+		});
+	  $('#login_btn').on('click', function() {
+		var num = 0;
+		var str = "";
+		$("input[type$='text'],input[type$='password']").each(function(n) {
+			var $el = $(this);		
+			var inputname=0;
+			var $parent = $el.parent();
+			if($el.val() == "") {
+				var name=$el.attr("data-name");
+				$parent.attr('class', 'frame_style').addClass(' form_error form_prompt');
+                 $parent.find('i').eq(inputname).html(name+"不能为空").addClass("prompt");
+				num++;
+				return false;
+			}
+		});
+		if(num > 0) {
+			return false;
+		} else {
+			//ajax 判断用户名是否存在
+			//location.href = "index.html";
+			var objUsername = $('#username');
+			var objPwd = $('#userpwd');
+			var objRemUser = $('#remUser');
+			var isRemUser = objRemUser.prop('checked');
+			var objVerify = $('#Codes_text');
+			var data = {
+					merEmail : objUsername.val(),
+					merPwd : objPwd.val(),
+					isRemUser : isRemUser,
+					verify : objVerify.val()
+			};
+			
+			$.post("<c:url value='mer.s?method=login' />",data,function(data){
+				if(data === "yes"){
+					location.href = "merIndex.jsp";
+				}else{
+					$('#errorMsg').html(data);
+				}
+			});
+		}
+	});
+	  
+	  //注册
+	  $('#register_btn').on('click', function() {
+			var num = 0;
+			var str = "";
+			$("input[type$='text'],input[type$='password']").each(function(n) {
+				var $el = $(this);		
+				var inputname=0;
+				var $parent = $el.parent();
+				if($el.val() == "") {
+					var name=$el.attr("data-name");
+					$parent.attr('class', 'frame_style').addClass(' form_error form_prompt');
+	                 $parent.find('i').eq(inputname).html(name+"不能为空").addClass("prompt");
+					num++;
+					return false;
+				}
+			});
+			if(num > 0) {
+				return false;
+			} else {
+				//ajax 判断用户名是否存在
+				//location.href = "index.html";
+				var objUsername = $('#username');
+				var objPwd = $('#userpwd');
+				var objRemUser = $('#remUser');
+				var isRemUser = objRemUser.prop('checked');
+				var objVerify = $('#Codes_text');
+				var data = {
+						merEmail : objUsername.val(),
+						merPwd : objPwd.val(),
+						isRemUser : isRemUser,
+						verify : objVerify.val()
+				};
+				
+				$.post("<c:url value='mer.s?method=register' />",data,function(data){
+					if(data === "yes"){
+						alert("注册链接已发送至您的邮箱，请根据邮件提示激活账号！")
+						history.go(0);
+					}else{
+						$('#errorMsg').html(data);
+					}
+				}); 
+			}
+		});
+	})
+	//框架设置
+	$(function() {
+		$("#loginstyle").BKframe({
+               //必须保留否则无法进行皮肤更换，以及兼容移动端
+               
+		})
+	});
+	
+	//刷新验证码
+	function againCreateVerify(){
+		var data;
+		var objVerify = $('#verify'); 
+		$.post("<c:url value='/mer.s?method=createVerification' />",data,function(data){
+			objVerify.attr("src","<c:url value='/mer.s?method=createVerification' />");
+		}); 
+	}
+	
+	//忘记密码
+	function forget(){
+		var num = 0;
+		var str = "";
+		$("input[type$='text']").each(function(n) {
+			var $el = $(this);		
+			var inputname=0;
+			var $parent = $el.parent();
+			if($el.val() == "") {
+				var name=$el.attr("data-name");
+				$parent.attr('class', 'frame_style').addClass(' form_error form_prompt');
+                 $parent.find('i').eq(inputname).html(name+"不能为空").addClass("prompt");
+				num++;
+				return false;
+			}
+		});
+		if(num > 0) {
+			return false;
+		} else {
+			//ajax 判断用户名是否存在
+			//location.href = "index.html";
+			var objUsername = $('#username');
+			var objPwd = $('#userpwd');
+			var objRemUser = $('#remUser');
+			var isRemUser = objRemUser.prop('checked');
+			var objVerify = $('#Codes_text');
+			var data = {
+					merEmail : objUsername.val(),
+					verify : objVerify.val()
+			};
+			
+			$.post("<c:url value='mer.s?method=fogetBefore' />",data,function(data){
+				if(data === "yes"){
+					alert("修改密码链接已发送至您的邮箱，请根据链接修改密码！")
+					history.go(0);
+				}else{
+					$('#errorMsg').html(data);
+				}
+			}); 
+		}
+	}
+</script>
+

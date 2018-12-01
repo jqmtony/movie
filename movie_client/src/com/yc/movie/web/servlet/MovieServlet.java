@@ -42,14 +42,16 @@ public class MovieServlet extends BaseServlet {
 			if("movie".equals(type)){  //电影
 				Movies singleShow = ms.findMovieById(id);
 				request.setAttribute("singleShow", singleShow);
+				return "f:/singleMovie.jsp";
 			}else if("teleplay".equals(type)){  //电视剧
 				Teleplay singleShow = ms.findTeleplayById(id);
 				request.setAttribute("singleShow", singleShow);
+				return "f:/singleTeleplay.jsp";
 			}
-			return "f:/single.jsp";
+			return "f:/index.jsp";
 		}catch(MovieException e){
 			request.setAttribute("msg", e.getMessage());
-			return "f/:index.jsp";
+			return "f:/index.jsp";
 		}
 	}
 	/**
@@ -87,7 +89,6 @@ public class MovieServlet extends BaseServlet {
 				}
 			});
 			request.setAttribute("movieListByCount",  movieListByCount);
-//			System.out.println("servlet2"+movieListByCount);
 			
 			List<Movies> movieListByGrade = ms.findAllMovie();
 			Collections.sort(movieListByGrade,new Comparator<Movies>() {
@@ -100,7 +101,6 @@ public class MovieServlet extends BaseServlet {
 				}
 			});
 			request.setAttribute("movieListByGrade",  movieListByGrade);
-//			System.out.println("servlet3"+movieListByGrade);
 		} catch (MovieException e) {
 			request.setAttribute("msg", e.getMessage());
 		}
