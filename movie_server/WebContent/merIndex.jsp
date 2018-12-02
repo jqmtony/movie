@@ -193,7 +193,7 @@
 	var data = [{
 			id: 2,//默认设置显示页时该值必须保持为2,不为2时将出错
 			pid: 0,
-			url: "index_home.html", //地址自定义 但需要和homepage保持一致
+			url: "merIndex_home.jsp", //地址自定义 但需要和homepage保持一致
 			icon: 'iconfont icon-home',
 			name: '系统首页',
 		},
@@ -306,8 +306,8 @@
 			id: 111,
 			pid:8,
 			icon: '',
-			url: 'merAdministrators.jsp',
-			name: '个人信息',
+			url: 'merAlterInfo/merAlterInfo.jsp',
+			name: '实名认证',
 
 		}
 		,
@@ -330,7 +330,7 @@
 			cookieDate:7,//设置皮肤显示时间（天单位）
 			rightclick: false, //是否启用右键功能(为true是右键失效，为false时右键显示)
 			minStatue:false,//设置默认是否显示菜单栏（true为隐藏/false为显示）
-			homepage:"index_home.html", // 设置默认显示页（id值必须为2，否则将出错）
+			homepage:"merIndex_home.jsp", // 设置默认显示页（id值必须为2，否则将出错）
 			scrollbar:function(e){
 				e.niceScroll({
 					    cursorcolor: "#dddddd",

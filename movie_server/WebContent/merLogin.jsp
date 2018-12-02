@@ -16,7 +16,7 @@
 		<meta name="apple-mobile-web-app-capable" content="yes" />
 		<meta content="black" name="apple-mobile-web-app-status-bar-style">
 		<link href="merCss/bksystem.css" rel="stylesheet" type="text/css" />
-		<link href="merSkin/black/skin.css" rel="stylesheet" type="text/css" id="skin" />
+		<!-- <link href="merSkin/black/skin.css" rel="stylesheet" type="text/css" id="skin" /> -->
 		<link href="merCss/module.css" rel="stylesheet" type="text/css" />
 		<link href="merFont/iconfont.css" rel="stylesheet" type="text/css" />
 		<title>登录</title>
@@ -133,8 +133,7 @@
 			alert("${msg}");
 		</script>
 	</c:if>
-</html>
-<script type="text/javascript">
+	<script type="text/javascript">
 	//验证登录
 	var i = 0;
 	$(document).ready(function() {	
@@ -303,4 +302,6 @@
 		}
 	}
 </script>
+</html>
+
 

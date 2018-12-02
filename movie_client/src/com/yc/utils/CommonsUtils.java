@@ -2,6 +2,7 @@ package com.yc.utils;
 
 import java.io.File;
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.security.MessageDigest;
@@ -11,7 +12,10 @@ import java.text.DateFormat;
 import java.text.MessageFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.Iterator;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Properties;
@@ -33,6 +37,14 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.fileupload.FileItem;
+import org.apache.commons.httpclient.Header;
+import org.apache.commons.httpclient.HttpClient;
+import org.apache.commons.httpclient.HttpException;
+import org.apache.commons.httpclient.NameValuePair;
+import org.apache.commons.httpclient.methods.PostMethod;
+import org.dom4j.Attribute;
+import org.dom4j.DocumentException;
+import org.dom4j.io.SAXReader;
 
 import com.yc.movie.bean.Verification;
 
@@ -57,6 +69,160 @@ public class CommonsUtils {
 	public static final int VERIFY_CODE_TYPE_TEL = 2;
 	private static String codes = "23456789ABCDEFGHJKMNPQRSTUVWXYZ";
 	public static Random ra = new Random(); // 随机数对象
+	private static String smsKey = "d41d8cd98f00b204e980";
+	private static String smsUsername = "naivestruggle";
+	private static String smsUrl = "http://utf8.api.smschinese.cn";
+	
+	/**
+	 * 获得所有的省
+	 * @return
+	 */
+	public static Map<String, String> xmlProvince(Class c) {
+		Map<String, String> map = new LinkedHashMap<String, String>();
+		// 创建SaxReader对象
+		SAXReader saxReader = new SAXReader();
+		// 通过saxReader中的read()获取到dom4j 文档对象 Document
+		org.dom4j.Document document = null;
+		try {
+			document = saxReader.read(c.getClassLoader().getResourceAsStream("Provinces.xml"));
+		} catch (DocumentException e) {
+			e.printStackTrace();
+		}
+		// 获取根元素
+		org.dom4j.Element root = document.getRootElement();
+		Iterator it = root.elementIterator();
+		int i = 1;
+		while (it.hasNext()) {
+			org.dom4j.Element book = (org.dom4j.Element) it.next();
+			map.put(i + "", book.getStringValue());
+			i++;
+		}
+		return map;
+	}
+
+	/**
+	 * 根据城市的id获取县
+	 * @param key
+	 * @param c
+	 * @return
+	 */
+	public static Map<String,String> xmlDistricts(String key,Class c) {
+		Map<String,String> map = new LinkedHashMap<String,String>();
+		SAXReader saxReader = new SAXReader();
+		org.dom4j.Document document = null;
+		try {
+			document = saxReader.read(c.getClassLoader().getResourceAsStream("Districts.xml"));
+		} catch (DocumentException e) {
+			e.printStackTrace();
+		}
+		org.dom4j.Element root = document.getRootElement();
+		Iterator it = root.elementIterator();
+		int i = 1;
+		while (it.hasNext()) {
+			org.dom4j.Element book = (org.dom4j.Element) it.next();
+			List<Attribute> arrlist = book.attributes();
+			for (Attribute attr : arrlist){
+				if (attr.getName().equals("CID"))
+					if (attr.getValue().equals(key)){
+						map.put(i + "", book.getStringValue());
+					}
+			}
+			i++;
+		}
+		return map;
+	}
+
+	/**
+	 * 根据省id获取城市的Map
+	 * 
+	 * @param key
+	 * @return
+	 */
+	public static Map<String,String> xmlCities(String key,Class c) {
+		Map<String,String> map = new LinkedHashMap<String,String>();
+		SAXReader saxReader = new SAXReader();
+		org.dom4j.Document document = null;
+		try {
+			document = saxReader.read(c.getClassLoader().getResourceAsStream("Cities.xml"));
+		} catch (DocumentException e) {
+			e.printStackTrace();
+		}
+		org.dom4j.Element root = document.getRootElement();
+		Iterator it = root.elementIterator();
+		int i = 1;
+		while (it.hasNext()) {
+			org.dom4j.Element book = (org.dom4j.Element) it.next();
+			List<Attribute> arrlist = book.attributes();
+			for (Attribute attr : arrlist)
+				if (attr.getName().equals("PID"))
+					if (attr.getValue().equals(key))
+						map.put(i+"",book.getStringValue());
+			i++;
+		}
+		return map;
+	}
+
+	/**
+	 * 获取city表中的一个城市对应的CID
+	 * @param dvolue
+	 * @return
+	 */
+	public static String xmlgetCitiesID(String dvolue,Class c) {
+		SAXReader saxReader = new SAXReader();
+		org.dom4j.Document document = null;
+		try {
+			document = saxReader.read(c.getClassLoader().getResourceAsStream("Cities.xml"));
+		} catch (DocumentException e) {
+			e.printStackTrace();
+		}
+		org.dom4j.Element root = document.getRootElement();
+		Iterator it = root.elementIterator();
+		while (it.hasNext()) {
+			org.dom4j.Element book = (org.dom4j.Element) it.next();
+			List<Attribute> arrlist = book.attributes();
+			for (Attribute attr : arrlist)
+				if (attr.getName().equals("ID"))
+					if (book.getStringValue().equals(dvolue))
+						return attr.getStringValue();
+		}
+		return "";
+	}
+	
+	
+	/**
+	 * 发送短信
+	 * @param smsUrl
+	 * @param userName
+	 * @param key
+	 * @param toTel
+	 * @param content
+	 * @throws IOException
+	 * @throws HttpException
+	 * @throws UnsupportedEncodingException
+	 */
+	public static void sendTelCode(String toTel,String content) throws IOException, HttpException, UnsupportedEncodingException {
+		HttpClient client = new HttpClient();
+        PostMethod post = new PostMethod(smsUrl);  //"http://utf8.api.smschinese.cn"
+        post.addRequestHeader("Content-Type", "application/x-www-form-urlencoded;charset=utf-8");// 在头文件中设置转码
+        NameValuePair[] data = { new NameValuePair("Uid",smsUsername ),  //"naivestruggle"
+                                 new NameValuePair("Key", smsKey), //"d41d8cd98f00b204e980"
+                                 new NameValuePair("smsMob", toTel), //"15570906290"
+                                 new NameValuePair("smsText", content) };//"验证码：8888"
+        post.setRequestBody(data);
+
+        client.executeMethod(post);
+        Header[] headers = post.getResponseHeaders();
+        int statusCode = post.getStatusCode();
+//        System.out.println("statusCode:" + statusCode);
+//        for (Header h : headers) {
+//            System.out.println(h.toString());
+//        }
+        String result = new String(post.getResponseBodyAsString().getBytes("utf-8"));
+//        System.out.println(result); // 打印返回消息状态
+
+        post.releaseConnection();
+	}
+	
 	
 	/**
 	 * 通过cookie名获取request中的cookie对象   如果没有就返回null

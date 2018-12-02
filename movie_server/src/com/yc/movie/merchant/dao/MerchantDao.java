@@ -84,4 +84,34 @@ public class MerchantDao {
 		Object[] params = {me.getMerPwd(),me.getMerEmail()};
 		qr.update(sql,params);
 	}
+
+	/**
+	 * 通过id查询Merchant对象
+	 * @param merId
+	 * @return
+	 * @throws SQLException 
+	 */
+	public Merchant findMerchantById(Long merId) throws SQLException {
+		String sql = "select * from merchant where merId=?";
+		List<Merchant> list = qr.query(sql, new BeanListHandler<Merchant>(Merchant.class),merId);
+		if(list.size() > 0)
+			return list.get(0);
+		return null;
+	}
+
+	public Merchant findMerchantByIdCard(String merIDCard) throws SQLException {
+		String sql = "select * from merchant where merIDCard=?";
+		List<Merchant> list = qr.query(sql, new BeanListHandler<Merchant>(Merchant.class),merIDCard);
+		if(list.size() > 0)
+			return list.get(0);
+		return null;
+	}
+
+	public Merchant findMerchantByTel(String merTel) throws SQLException {
+		String sql = "select * from merchant where merTel=?";
+		List<Merchant> list = qr.query(sql, new BeanListHandler<Merchant>(Merchant.class),merTel);
+		if(list.size() > 0)
+			return list.get(0);
+		return null;
+	}
 }
