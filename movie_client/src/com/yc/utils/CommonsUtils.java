@@ -1,6 +1,8 @@
 package com.yc.utils;
 
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.lang.reflect.InvocationTargetException;
@@ -35,6 +37,7 @@ import javax.mail.internet.MimeMessage.RecipientType;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.Part;
 
 import org.apache.commons.fileupload.FileItem;
 import org.apache.commons.httpclient.Header;
@@ -72,6 +75,18 @@ public class CommonsUtils {
 	private static String smsKey = "d41d8cd98f00b204e980";
 	private static String smsUsername = "naivestruggle";
 	private static String smsUrl = "http://utf8.api.smschinese.cn";
+	
+	
+	/**
+	 * 将iso8859编码转化为utf-8
+	 * @param str
+	 * @return
+	 * @throws UnsupportedEncodingException
+	 */
+	public static String getString_ISO8859_To_UTF8(String str) throws UnsupportedEncodingException{
+		return new String(str.getBytes("iso-8859-1"),"utf-8");
+	}
+	
 	
 	/**
 	 * 获得所有的省
@@ -200,7 +215,7 @@ public class CommonsUtils {
 	 * @throws HttpException
 	 * @throws UnsupportedEncodingException
 	 */
-	public static void sendTelCode(String toTel,String content) throws IOException, HttpException, UnsupportedEncodingException {
+	public static void sendTelCode(String toTel,String content){
 		HttpClient client = new HttpClient();
         PostMethod post = new PostMethod(smsUrl);  //"http://utf8.api.smschinese.cn"
         post.addRequestHeader("Content-Type", "application/x-www-form-urlencoded;charset=utf-8");// 在头文件中设置转码
@@ -210,14 +225,30 @@ public class CommonsUtils {
                                  new NameValuePair("smsText", content) };//"验证码：8888"
         post.setRequestBody(data);
 
-        client.executeMethod(post);
+        try {
+			client.executeMethod(post);
+		} catch (HttpException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
         Header[] headers = post.getResponseHeaders();
         int statusCode = post.getStatusCode();
 //        System.out.println("statusCode:" + statusCode);
 //        for (Header h : headers) {
 //            System.out.println(h.toString());
 //        }
-        String result = new String(post.getResponseBodyAsString().getBytes("utf-8"));
+        try {
+			String result = new String(post.getResponseBodyAsString().getBytes("utf-8"));
+		} catch (UnsupportedEncodingException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 //        System.out.println(result); // 打印返回消息状态
 
         post.releaseConnection();
@@ -302,6 +333,138 @@ public class CommonsUtils {
 		return sqlPath;
 	}
 	
+	/**
+	 * Part上传文件
+	 * @param root
+	 * @param part
+	 * @return
+	 */
+	public static String uploadFile(HttpServletRequest request,String root,Part part){
+		String s1 = root;
+		root = request.getServletContext().getRealPath(root);
+		//得到文件名
+		String filename = part.getSubmittedFileName();
+		
+		//处理文件名的绝对路径问题
+		int index = filename.lastIndexOf("\\");
+		if(index != -1){
+			filename = filename.substring(index+1);
+		}
+		
+		//处理文件同名问题，给文件名称添加uuid前缀。
+		String savename = getUUID() + "_" + filename;
+		
+		//得到hashCode
+		int hCode = filename.hashCode();
+		//转化成16进制
+		String hex = Integer.toHexString(hCode);
+		
+		//获取hex的前两个字母，与root连接在一起，生成一个完整的路径
+		String s = "/"+hex.charAt(0)+"/"+hex.charAt(1);
+		File dirFile = new File(root,s);
+		
+		//创建目录链
+		dirFile.mkdirs();
+		
+		//创建目标文件
+		File destFile = new File(dirFile,savename);
+		if(!destFile.exists())
+			try {
+				destFile.createNewFile();
+			} catch (IOException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
+//					File sqlFile = new File("/WEB-INF/files","/"+hex.charAt(0)+"/"+hex.charAt(1));
+		String sqlPath = s1+s+"/"+savename;
+		
+		
+		//保存
+		try {
+			part.write(dirFile+"/"+savename);
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return sqlPath;
+	}
+	/**
+	 * 上传文件  返回要保存在数据库的路径
+	 * @param root	存储文件的根目录
+	 * @return	保存在数据库的路径
+	 * @throws Exception
+	 */
+	public static String uploadFile(String root, File file){
+		
+		//得到文件名
+		String filename = file.getName();
+		
+		//处理文件名的绝对路径问题
+		int index = filename.lastIndexOf("\\");
+		if(index != -1){
+			filename = filename.substring(index+1);
+		}
+		
+		//处理文件同名问题，给文件名称添加uuid前缀。
+		String savename = getUUID() + "_" + filename;
+		
+		//得到hashCode
+		int hCode = filename.hashCode();
+		//转化成16进制
+		String hex = Integer.toHexString(hCode);
+		
+		//获取hex的前两个字母，与root连接在一起，生成一个完整的路径
+		File dirFile = new File(root,"/"+hex.charAt(0)+"/"+hex.charAt(1));
+		
+		//创建目录链
+		dirFile.mkdirs();
+		
+		//创建目标文件
+		File destFile = new File(dirFile,savename);
+		
+//					File sqlFile = new File("/WEB-INF/files","/"+hex.charAt(0)+"/"+hex.charAt(1));
+		String sqlPath = dirFile+"\\"+savename;
+		
+		
+		//保存  //复制
+		cloneFile(file,destFile);
+		return sqlPath;
+	}
+	
+	/**
+	 * 复制文件
+	 * @param oldFile
+	 * @param newFile
+	 */
+	public static void cloneFile(File oldFile,File newFile){
+		if(!oldFile.exists())
+			throw new RuntimeException("没有找到源文件");
+		FileInputStream fis = null;
+		FileOutputStream fos = null;
+		try{
+			if(!newFile.exists())
+				newFile.createNewFile();
+				
+			fis = new FileInputStream(oldFile);
+			fos = new FileOutputStream(newFile);
+			byte[] buf = new byte[fis.available()];
+			int len = 0;
+			while((len = fis.read(buf)) != -1){
+				fos.write(buf, 0, len);
+			}
+		}catch(IOException e){
+			e.printStackTrace();
+		}finally{
+			try {
+				if(fis != null)
+					fis.close();
+				if(fos != null)
+					fos.close();
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+		}
+	}
 	/**
 	 * 移除cookie
 	 * @param request

@@ -1,14 +1,19 @@
 package com.yc.movie.merchant.dao;
 
 import java.sql.SQLException;
+import java.sql.Timestamp;
 import java.util.List;
 
 import org.apache.commons.dbutils.QueryRunner;
 import org.apache.commons.dbutils.handlers.BeanListHandler;
 
+import com.yc.movie.bean.ClassifyName;
+import com.yc.movie.bean.Classifys;
 import com.yc.movie.bean.Images;
 import com.yc.movie.bean.Merchant;
 import com.yc.movie.bean.Movies;
+import com.yc.movie.bean.Protagonists;
+import com.yc.movie.bean.Ticket;
 import com.yc.movie.utils.TxQueryRunner;
 
 public class MerchantDao {
@@ -113,5 +118,106 @@ public class MerchantDao {
 		if(list.size() > 0)
 			return list.get(0);
 		return null;
+	}
+
+	/**
+	 * 查询所有的类型
+	 * @return
+	 * @throws SQLException 
+	 */
+	public List<ClassifyName> findAllClassify() throws SQLException {
+		String sql = "select * from classifyname";
+		List<ClassifyName> list = qr.query(sql, new BeanListHandler<ClassifyName>(ClassifyName.class));
+		if(list.size() > 0)
+			return list;
+		return null;
+	}
+
+	/**
+	 * 插入电影到数据库
+	 * @param form
+	 * @throws SQLException 
+	 */
+	public void addMovie(Movies form) throws SQLException {
+		String sql = "insert into movies values(?,?,?,?,?,?,?,?,?,?,?)";
+		Object[] params = {form.getMovieId(),form.getMerchant().getMerId(),form.getMovieIntegralNum(),
+				form.getMovieName(),form.getMovieGradeNum(),form.getMovieVisitCount(),form.getMovieDescribe(),
+				form.getMoviePath(),form.getMoviePrice(),form.getMovieStatus(),form.getMovieCreateTime()};
+		qr.update(sql, params);
+	}
+
+	/**
+	 * 通过创建时间查询movie对象
+	 * @param movieCreateTime
+	 * @throws SQLException 
+	 */
+	public Movies findMovieByTime(Timestamp movieCreateTime) throws SQLException {
+		String sql = "select * from movies where movieCreateTime=?";
+		List<Movies> list = qr.query(sql, new BeanListHandler<Movies>(Movies.class),movieCreateTime);
+		if(list.size() > 0)
+			return list.get(0);
+		return null;
+	}
+
+	/**
+	 * 通过类型名获取类型对象
+	 * @param s
+	 * @return
+	 * @throws SQLException 
+	 */
+	public ClassifyName findClassifyNameByName(String s) throws SQLException {
+		String sql = "select * from classifyname where classifyNameString=?";
+		List<ClassifyName> list = qr.query(sql, new BeanListHandler<ClassifyName>(ClassifyName.class),s);
+		if(list.size() > 0)
+			return list.get(0);
+		return null;
+	}
+
+	/**
+	 * 添加类型
+	 * @param c
+	 * @throws SQLException 
+	 */
+	public void addClassify(Classifys c) throws SQLException {
+		String sql = "insert into classifys values(?,?,?,?,?,?)";
+		Object[] params = {c.getClassifyId(),c.getClassifyMovieId(),c.getClassifyTeleplayId(),c.getClassifyNameObj().getClassifyNameId(),
+				c.getClassifyDescribe(),c.getParentClassify()};
+		qr.update(sql,params);
+	}
+
+	/**
+	 * 添加主演
+	 * @param p
+	 * @throws SQLException 
+	 */
+	public void addPro(Protagonists p) throws SQLException {
+		String sql = "insert into protagonists values(?,?,?,?,?)";
+		Object[] params = {p.getProId(),p.getProMovieId(),p.getProTeleplayId(),p.getProName(),p.getProLink()};
+		qr.update(sql, params);
+	}
+
+	/**
+	 * 添加电影票
+	 * @param t
+	 * @throws SQLException 
+	 */
+	public void addTicket(Ticket t) throws SQLException {
+		String sql = "insert into ticket values(?,?,?,?,?,?)";
+		Object[] params = {t.getTicketId(),t.getMovie().getMovieId(),t.getTicketStatus(),
+				t.getTicjetBuyBy(),t.getTicketStartTime(),t.getIndent()};
+		qr.update(sql, params);
+	}
+
+	/**
+	 * 添加图片
+	 * @param img
+	 * @throws SQLException 
+	 */
+	public void addImage(Images img) throws SQLException {
+		String sql = "insert into images values(?,?,?,?,?,?,?,?,?,?)";
+		Object[] params = {img.getImgId(),img.getImgMovieId(),img.getImgAdminId(),img.getImgUserId(),
+				img.getImgMerchantId(),img.getImgTeleplayId(),img.getImgTicketId(),
+				img.getImgNewId(),img.getImgStatus(),img.getImgPath()};
+		qr.update(sql, params);
 	}
 }

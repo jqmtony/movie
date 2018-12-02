@@ -41,6 +41,7 @@ public class MovieDao {
 			if(imgList.size() > 0)
 				movie.setImgList(imgList);  //…Ë÷√Õº∆¨ºØ∫œ
 		}
+		System.out.println(movieList);
 		return movieList;
 	}
 

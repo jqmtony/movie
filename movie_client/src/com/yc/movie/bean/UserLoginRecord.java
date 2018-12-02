@@ -13,7 +13,11 @@ public class UserLoginRecord implements Serializable {
 	private Timestamp ulrLoginTime;  //登录时间
 	private String ulrLoginIp;  //登录IP
 	private Users user;  //对应的User
-	private Long ulrUserId; //对应用户ID
+	@Override
+	public String toString() {
+		return "UserLoginRecord [ulrId=" + ulrId + ", ulrLoginTime=" + ulrLoginTime + ", ulrLoginIp=" + ulrLoginIp
+				+ "]";
+	}
 	public Long getUlrId() {
 		return ulrId;
 	}
@@ -38,16 +42,6 @@ public class UserLoginRecord implements Serializable {
 	public void setUser(Users user) {
 		this.user = user;
 	}
-	public Long getUlrUserId() {
-		return ulrUserId;
-	}
-	public void setUlrUserId(Long ulrUserId) {
-		this.ulrUserId = ulrUserId;
-	}
-	@Override
-	public String toString() {
-		return "UserLoginRecord [ulrId=" + ulrId + ", ulrLoginTime=" + ulrLoginTime + ", ulrLoginIp=" + ulrLoginIp
-				+ ", user=" + user + ", ulrUserId=" + ulrUserId + "]";
-	}
+	
 	
 }

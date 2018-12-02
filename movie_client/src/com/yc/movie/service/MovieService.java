@@ -27,7 +27,6 @@ public class MovieService{
 	 */
 	public List<Movies> findAllMovie() throws MovieException {
 		try {
-			
 			return md.findAllMovie();
 		} catch (SQLException e) {
 			throw new MovieException("系统异常，请稍后再试！");

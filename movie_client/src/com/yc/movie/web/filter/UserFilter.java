@@ -30,7 +30,7 @@ public class UserFilter implements Filter {
 		HttpServletResponse httpResponse = (HttpServletResponse) response;
 		HttpSession session = httpRequest.getSession();
 		// place your code here
-		String path = httpRequest.getServletPath();	//获取到访问路径   /login.jsp
+//		String path = httpRequest.getServletPath();	//获取到访问路径   /login.jsp
 //		if(!path.endsWith("login.jsp") && !path.endsWith("user.s")){
 //			if(session.getAttribute("loginedUser") == null){
 //				//未登录

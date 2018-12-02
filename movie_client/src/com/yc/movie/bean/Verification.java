@@ -85,7 +85,7 @@ public class Verification implements Serializable {
 	 * 随机生成一个字符
 	 * @return
 	 */
-	public char randomChar() {
+	private char randomChar() {
 		int index = r.nextInt(codes.length());
 		return codes.charAt(index);
 	}

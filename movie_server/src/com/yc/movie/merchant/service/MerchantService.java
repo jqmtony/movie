@@ -5,6 +5,7 @@ import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.math.BigDecimal;
 import java.net.DatagramPacket;
 import java.net.DatagramSocket;
 import java.net.InetAddress;
@@ -12,8 +13,18 @@ import java.net.Socket;
 import java.net.SocketException;
 import java.net.UnknownHostException;
 import java.sql.SQLException;
+import java.sql.Timestamp;
+import java.util.List;
 
+import javax.servlet.http.Part;
+
+import com.yc.movie.bean.ClassifyName;
+import com.yc.movie.bean.Classifys;
+import com.yc.movie.bean.Images;
 import com.yc.movie.bean.Merchant;
+import com.yc.movie.bean.Movies;
+import com.yc.movie.bean.Protagonists;
+import com.yc.movie.bean.Ticket;
 import com.yc.movie.bean.Verification;
 import com.yc.movie.exception.MerchantException;
 import com.yc.movie.merchant.dao.MerchantDao;
@@ -384,5 +395,138 @@ public class MerchantService {
 		
 		
 		return infoID;
+	}
+
+	/**
+	 * 查询所有的类型
+	 * @return
+	 */
+	public List<ClassifyName> findAllClassify() {
+		try {
+			return md.findAllClassify();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return null;
+	}
+
+	/**
+	 * 非图片信息校验
+	 * @param form
+	 * @param moviePro
+	 * @param movieClassify
+	 * @throws MerchantException 
+	 */
+	public void movieRegx(Movies form, String moviePro, String movieClassify) throws MerchantException {
+		String name = form.getMovieName();
+		BigDecimal price = form.getMoviePrice();
+		String descript = form.getMovieDescribe();
+		Long inte = form.getMovieIntegralNum();
+		
+		//判断电影名是否为null
+		if(name == null || name.trim().isEmpty())
+			throw new MerchantException("请输入电影名！");
+		
+		//判断价格是否为null
+		if(price == null)
+			throw new MerchantException("请输入电影单价！");
+		
+		//判断描述是否为null
+		if(descript == null || descript.trim().isEmpty())
+			throw new MerchantException("请输入电影描述！");
+		
+		//判断积分数是否为null
+		if(inte == null)
+			throw new MerchantException("请输入积分数！");
+		
+		//判断主演是否为null
+		if(moviePro == null || moviePro.trim().isEmpty())
+			throw new MerchantException("请输入主演！");
+		
+		
+	}
+
+	/**
+	 * 图片信息校验
+	 * @param partList
+	 * @throws MerchantException 
+	 */
+	public void movieRegx(List<Part> partList) throws MerchantException {
+		if(partList == null || partList.size() < 3)
+			throw new MerchantException("文件上传异常！");
+		
+		if(partList.get(0).getSubmittedFileName() == null || partList.get(0).getSubmittedFileName().trim().isEmpty())
+			throw new MerchantException("请选择封面图片！");
+		
+		if(partList.get(1).getSubmittedFileName() == null || partList.get(1).getSubmittedFileName().trim().isEmpty())
+			throw new MerchantException("请选择介绍图片！");
+		
+		if(partList.get(2).getSubmittedFileName() == null || partList.get(2).getSubmittedFileName().trim().isEmpty())
+			throw new MerchantException("请选择单品显示图片！");
+	}
+
+	/**
+	 * 电影上架
+	 * @param form	电影
+	 * @param sqlPaths	图片路径
+	 * @param moviePro	主演集
+	 * @param movieClassify	类型
+	 * @param movieCount  电影票总数
+	 * @throws MerchantException
+	 */
+	public void addMovie(Movies form , List<String> sqlPaths ,String moviePro , List<String> movieClassify ,Integer movieCount , String movieTime) throws MerchantException {
+		try {
+			JdbcUtils.beginTransaction();
+			md.addMovie(form);  //添加电影
+			
+			Movies insertedMovie = md.findMovieByTime(form.getMovieCreateTime());  //获取到刚刚添加的电影
+			
+			//添加类型
+			for(String s:movieClassify){
+				Classifys c = new Classifys();
+				c.setClassifyMovieId(insertedMovie.getMovieId());
+				ClassifyName cn = md.findClassifyNameByName(s);  //获取类型对象
+				c.setClassifyNameObj(cn); //保存类型对象
+				md.addClassify(c);  //添加类型表
+			}
+			
+			//添加主演
+			String[] arr = moviePro.split(";");
+			for(String s:arr){
+				Protagonists p = new Protagonists();
+				p.setProMovieId(insertedMovie.getMovieId());
+				p.setProName(s);
+				md.addPro(p);  //添加主演
+			}
+			
+			//生成电影票
+			for(int i=0;i<movieCount;i++){
+				Ticket t = new Ticket();
+				t.setTicketStartTime(Timestamp.valueOf(movieTime));  //上映时间
+				t.setMovie(insertedMovie);
+				t.setTicketStatus("1");
+				md.addTicket(t);
+			}
+			
+			//添加图片
+			for(String s:sqlPaths){
+				Images img = new Images();
+				img.setImgPath(s);
+				img.setImgMovieId(insertedMovie.getMovieId());
+				md.addImage(img);
+			}
+			JdbcUtils.commitTransaction();
+		} catch (SQLException e) {
+			e.printStackTrace();
+			try {
+				JdbcUtils.roolbackTransaction();
+			} catch (SQLException e1) {
+				throw new MerchantException("系统异常，请稍后再试！");
+			}
+		}
+		
+		
+		
 	}
 }

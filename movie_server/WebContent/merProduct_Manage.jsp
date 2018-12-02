@@ -46,7 +46,6 @@
            <div class="operation  mb15">
            	<button class="btn button_btn btn-danger" type="button" onclick=""><i class="iconfont"></i>&nbsp;批量删除</button>
            	<button class="btn button_btn bg-deep-blue" type="button" onclick="window.location.href='merUpload.jsp'"><i class="iconfont"></i>&nbsp;电影上架</button>
-           	<button class="btn button_btn bg-deep-gray" type="button" onclick=""><i class="iconfont"></i>&nbsp;添加分类</button>
            </div>
            <!--列表内容-->
            <div class="page_content clearfix mb15 table-module ">

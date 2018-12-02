@@ -226,13 +226,6 @@
 			name: '系统管理',
 		},
 		{
-			id: 6,
-			pid: 0,
-			url: "",
-			icon: 'iconfont icon-wenzhang',
-			name: '文章管理',
-		},
-		{
 			id: 7,
 			pid: 0,
 			url: "",
@@ -254,21 +247,7 @@
 			url: 'merProduct_Manage.jsp',
 			name: '商品管理',
 
-		}, {
-			id: 14,
-			pid: 1,
-			icon: '',
-			url: 'merBrand_Manage.jsp',
-			name: '品牌管理',
-
-		}, {
-			id: 26,
-			pid: 6,
-			icon: '',
-			url: 'merPages.jsp',
-			name: '文章设置',
-
-		}, {
+		},{
 			id: 46,
 			pid: 5,
 			icon: '',
@@ -316,7 +295,7 @@
 			pid:8,
 			icon: '',
 			url: 'merUserNotes.jsp',
-			name: '个人便签',
+			name: '个人信息',
 
 		}		
 	]

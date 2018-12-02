@@ -387,7 +387,7 @@ public class UserService {
 			}else if("userTel".equals(selectCode)){
 				//发送手机验证码
 				text = CommonsUtils.createVerifyCode(6, CommonsUtils.VERIFY_CODE_TYPE_TEL);
-				
+				CommonsUtils.sendTelCode(code, "您正在修改密码，验证码【"+text+"】，请勿将验证码泄露给其他人！");
 			}
 			return text;  //返回验证码
 		}catch(SQLException e){

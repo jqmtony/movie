@@ -37,6 +37,7 @@ import javax.mail.internet.MimeMessage.RecipientType;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.Part;
 
 import org.apache.commons.fileupload.FileItem;
 import org.apache.commons.httpclient.Header;
@@ -74,6 +75,18 @@ public class CommonsUtils {
 	private static String smsKey = "d41d8cd98f00b204e980";
 	private static String smsUsername = "naivestruggle";
 	private static String smsUrl = "http://utf8.api.smschinese.cn";
+	
+	
+	/**
+	 * 将iso8859编码转化为utf-8
+	 * @param str
+	 * @return
+	 * @throws UnsupportedEncodingException
+	 */
+	public static String getString_ISO8859_To_UTF8(String str) throws UnsupportedEncodingException{
+		return new String(str.getBytes("iso-8859-1"),"utf-8");
+	}
+	
 	
 	/**
 	 * 获得所有的省
@@ -320,6 +333,61 @@ public class CommonsUtils {
 		return sqlPath;
 	}
 	
+	/**
+	 * Part上传文件
+	 * @param root
+	 * @param part
+	 * @return
+	 */
+	public static String uploadFile(HttpServletRequest request,String root,Part part){
+		String s1 = root;
+		root = request.getServletContext().getRealPath(root);
+		//得到文件名
+		String filename = part.getSubmittedFileName();
+		
+		//处理文件名的绝对路径问题
+		int index = filename.lastIndexOf("\\");
+		if(index != -1){
+			filename = filename.substring(index+1);
+		}
+		
+		//处理文件同名问题，给文件名称添加uuid前缀。
+		String savename = getUUID() + "_" + filename;
+		
+		//得到hashCode
+		int hCode = filename.hashCode();
+		//转化成16进制
+		String hex = Integer.toHexString(hCode);
+		
+		//获取hex的前两个字母，与root连接在一起，生成一个完整的路径
+		String s = "/"+hex.charAt(0)+"/"+hex.charAt(1);
+		File dirFile = new File(root,s);
+		
+		//创建目录链
+		dirFile.mkdirs();
+		
+		//创建目标文件
+		File destFile = new File(dirFile,savename);
+		if(!destFile.exists())
+			try {
+				destFile.createNewFile();
+			} catch (IOException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
+//					File sqlFile = new File("/WEB-INF/files","/"+hex.charAt(0)+"/"+hex.charAt(1));
+		String sqlPath = s1+s+"/"+savename;
+		
+		
+		//保存
+		try {
+			part.write(dirFile+"/"+savename);
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return sqlPath;
+	}
 	/**
 	 * 上传文件  返回要保存在数据库的路径
 	 * @param root	存储文件的根目录
