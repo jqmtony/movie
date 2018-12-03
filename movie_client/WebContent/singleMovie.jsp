@@ -120,42 +120,48 @@
 												<div class="clearfix"> </div>
 										</div>
 										<div class="response">
-							<h4>Responses</h4>
+							<h4>${lg["Comment"] }</h4>
+							<c:forEach items="${singleShow.commentList }" var="comment">
+							<%--评论 --%>
 							<div class="media response-info">
 								<div class="media-left response-text-left">
 									<a href="#">
 										<img class="media-object" src="images/admin.jpg" alt="">
 									</a>
-									<h5><a href="#">Admin</a></h5>
+									<h5><a href="#">${comment.user.userAccount }</a></h5>
 								</div>
 								<div class="media-body response-text-right">
-									<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit,There are many variations of passages of Lorem Ipsum available, 
-										sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.There are many variations of passages of Lorem Ipsum available.</p>
+									<p>${comment.commentContent }</p>
 									<ul>
-										<li>October 15, 2016</li>
-										<li><a href="single.jsp"><i class="fa fa-reply" aria-hidden="true"></i> Reply</a></li>
+										<li>${comment.commentCreateTime }</li>
+										<li><a href="single.jsp"><i class="fa fa-reply" aria-hidden="true"></i> ${lg["Reply"] }</a></li>
 									</ul>
+									<%--该评论的回复 --%>
+									<c:forEach items="${comment.replyList }" var="reply">
 									<div class="media response-info">
 										<div class="media-left response-text-left">
 											<a href="#">
 												<img class="media-object" src="images/admin.jpg" alt="">
 											</a>
-											<h5><a href="#">Admin</a></h5>
+											<h5><a href="#">${reply.user.userAccount }</a></h5>
 										</div>
 										<div class="media-body response-text-right">
-											<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit,There are many variations of passages of Lorem Ipsum available, 
-												sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.There are many variations of passages of Lorem Ipsum available.</p>
+											<p>${reply.replyContent }</p>
 											<ul>
-												<li>November 02, 2016</li>
-												<li><a href="single.jsp"><i class="fa fa-reply" aria-hidden="true"></i> Reply</a></li>
+												<li>${reply.replyCreateTime }</li>
+												<li><a href="single.jsp"><i class="fa fa-reply" aria-hidden="true"></i> ${lg["Reply"] }</a></li>
 											</ul>		
 										</div>
 										<div class="clearfix"> </div>
 									</div>
+									</c:forEach>
 								</div>
 								<div class="clearfix"> </div>
 							</div>
-							<div class="media response-info">
+							</c:forEach>
+							
+							
+							<!-- <div class="media response-info">
 								<div class="media-left response-text-left">
 									<a href="#">
 										<img class="media-object" src="images/admin.jpg" alt="">
@@ -171,28 +177,46 @@
 									</ul>		
 								</div>
 								<div class="clearfix"> </div>
-							</div>
+							</div> -->
 						</div>
-											<div class="all-comments-info">
-												 <h5 >LEAVE A COMMENT</h5>
-												<div class="agile-info-wthree-box">
-													<form>
-													   <div class="col-md-6 form-info">
-														<input type="text" name="name" placeholder="Your Name" required="">			           					   
-														<input type="email" name="email" placeholder="Your Email" required="">
-														<input type="text" name="phone" placeholder="Your Phone" required="">	
-													  </div>
-													   <div class="col-md-6 form-info">
-														
-														<textarea placeholder="Message" required=""></textarea>
-														<input type="submit" value="SEND">
-													 </div>
-													 <div class="clearfix"> </div>
-														
-														
-													</form>
+						
+											<%--评论 --%>
+											<!-- <div class="form-group mb-n">
+												<label for="largeinput" class="col-sm-2 control-label label-input-lg">Large Input</label>
+												<div class="col-sm-8">
+													<textarea placeholder="Message" required="" style="width:500px;height:100px;"></textarea>
 												</div>
-											</div>
+											</div> -->
+											 <div class="all-comments-info">
+												 <h5 >${lg["addComment"] }  <font id="errorMsg" style="font-size:12px;color:red;"></font></h5>
+												<div class="agile-info-wthree-box">
+													   <input type="hidden" id="commentMovieId" value="${singleShow.movieId }">
+													   <div class="col-md-6 form-info">
+													   <textarea id="commentContent" placeholder="${lg['Message'] }" required="" style="width:700px;"></textarea>
+													   <input type="button" value="${lg['send'] }" onclick="sendComment()" style="margin-left:530px;width:150px;height:40px;background-color:#06f;color:#fff;">
+													  </div>
+													 <div class="clearfix"> </div>
+													 <script type="text/javascript">
+													 	function sendComment(){
+													 		var data = {
+													 				commentContent : $('#commentContent').val(),
+													 				commentMovieId : $('#commentMovieId').val()
+													 		};
+													 		$.post("<c:url value='/movie.s?method=sendComment' />",data,function(data){
+													 			if(data === "yes"){
+													 				alert("评论成功！感谢您为电影${singleShow.movieName}发表了评论！")
+													 				history.go(0);
+													 			}else if(data === "notLogin"){
+													 				alert("你还没有登录，请先登录！");
+													 				window.location.href = "userLogin.jsp";
+													 			}else{
+													 				$('#errorMsg').html("   * "+data+"!");
+													 			}
+													 		});
+													 	}
+													 </script>
+												</div>
+											</div> 
 								   </div>
 								   <div class="col-md-4 latest-news-agile-right-content">
 								   <h4 class="side-t-w3l-agile">For Latest <span>Movies</span></h4>
@@ -298,6 +322,11 @@ A girl in a small town forms an unlikely....</p>
 						</div>
 				</div>
 			<!--//content-inner-section-->
+			<c:if test="${! empty msg }">
+				<script type="text/javascript">
+					alert('${msg}');
+				</script>
+			</c:if>
 
 	<!--/footer-bottom-->
 	<%@ include file="footer.jsp"%>

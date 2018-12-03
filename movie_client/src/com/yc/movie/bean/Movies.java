@@ -22,6 +22,7 @@ public class Movies implements Serializable{
 	private List<Classifys> classifysList;  //对应的类型集合
 	private List<Images> imgList;  //对应的图片集合
 	private List<Protagonists> proList;  //对应主演集合
+	private List<Comment> commentList;  //评论
 	public Long getMovieId() {
 		return movieId;
 	}
@@ -118,6 +119,12 @@ public class Movies implements Serializable{
 	public void setProList(List<Protagonists> proList) {
 		this.proList = proList;
 	}
+	public List<Comment> getCommentList() {
+		return commentList;
+	}
+	public void setCommentList(List<Comment> commentList) {
+		this.commentList = commentList;
+	}
 	@Override
 	public String toString() {
 		return "Movies [movieId=" + movieId + ", merchant=" + merchant + ", movieMerId=" + movieMerId
@@ -125,7 +132,8 @@ public class Movies implements Serializable{
 				+ movieGradeNum + ", movieDescribe=" + movieDescribe + ", moviePath=" + moviePath + ", moviePrice="
 				+ moviePrice + ", movieVisitCount=" + movieVisitCount + ", movieStatus=" + movieStatus
 				+ ", movieCreateTime=" + movieCreateTime + ", ticketList=" + ticketList + ", classifysList="
-				+ classifysList + ", imgList=" + imgList + ", proList=" + proList + "]";
+				+ classifysList + ", imgList=" + imgList + ", proList=" + proList + ", commentList=" + commentList
+				+ "]";
 	}
 	
 }

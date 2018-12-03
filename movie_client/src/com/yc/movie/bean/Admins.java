@@ -21,6 +21,7 @@ public class Admins implements Serializable{    //如果要改属性   就要全部更改
 	private String adminPwd;	//管理员密码
 	private List<AdminLoginRecord> alrList;  //对应的登录记录对象集合
 	private List<Images> imgList;  //对应图片对象集合
+	
 	public List<AdminLoginRecord> getAlrList() {
 		return alrList;
 	}

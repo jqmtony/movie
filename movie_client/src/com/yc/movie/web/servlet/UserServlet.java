@@ -27,6 +27,18 @@ public class UserServlet extends BaseServlet {
 	private UserService us = new UserService();
 	
 	/**
+	 * 登录之前设置是哪个页面发送的登录请求  保存在session中
+	 * @param request
+	 * @param response
+	 * @throws ServletException
+	 * @throws IOException
+	 */
+	public String loginSetReferer(HttpServletRequest request, HttpServletResponse response)throws ServletException, IOException {
+		String refererPath = request.getHeader("referer");
+		session.setAttribute("refererPath", refererPath);
+		return "r:/userLogin.jsp";
+	}
+	/**
 	 * 退出登录
 	 * @param request
 	 * @param response
@@ -34,6 +46,7 @@ public class UserServlet extends BaseServlet {
 	 * @throws IOException
 	 */
     public void exit(HttpServletRequest request, HttpServletResponse response)throws ServletException, IOException {
+    	session.removeAttribute("refererPath");
     	session.removeAttribute("loginedUser");
     }
     /**
@@ -119,6 +132,7 @@ public class UserServlet extends BaseServlet {
     		UserLoginRecord ulr = getULR(request); //得到登录日志对象
 			Users loginedUser = us.login(form,ulr);  //登录
 			session.setAttribute("loginedUser", loginedUser);  //把登录成功的对象存在session域中
+			
 		} catch (UserException e) {
 			response.getWriter().append(e.getMessage());  //登录失败把信息响应给页面
 		}

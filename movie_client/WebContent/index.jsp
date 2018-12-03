@@ -198,7 +198,7 @@
 									<li><a href="#" class="login reg"  data-toggle="modal" data-target="#myModal5">${lg["indexRegister"]}</a></li> --%>
 									<c:choose>
 										<c:when test="${empty loginedUser }">
-											<li><a href="userLogin.jsp" class="login">${lg["indexLogin"]}</a></li>
+											<li><a href="<c:url value='/user.s?method=loginSetReferer' />" class="login">${lg["indexLogin"]}</a></li>
 										</c:when>
 										<c:otherwise>
 											<li style="margin-left:30px;">

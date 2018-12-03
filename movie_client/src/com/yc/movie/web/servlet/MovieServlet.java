@@ -1,10 +1,13 @@
 package com.yc.movie.web.servlet;
 
 import com.yc.exception.MovieException;
+import com.yc.movie.bean.Comment;
 import com.yc.movie.bean.Movies;
 import com.yc.movie.bean.Teleplay;
+import com.yc.movie.bean.Users;
 import com.yc.movie.service.MovieService;
 import com.yc.utils.BaseServlet;
+import com.yc.utils.CommonsUtils;
 
 import java.io.IOException;
 import java.util.Collections;
@@ -27,6 +30,35 @@ public class MovieServlet extends BaseServlet {
 	private static final long serialVersionUID = 1L;
 	private MovieService ms = new MovieService();
 	
+	/**
+	 * 发送评论
+	 * @param request
+	 * @param response
+	 * @return
+	 * @throws ServletException
+	 * @throws IOException
+	 */
+	public void sendComment(HttpServletRequest request, HttpServletResponse response)throws ServletException, IOException {
+		String refererPath = request.getHeader("referer"); //获取referer请求头
+		session.setAttribute("refererPath", refererPath);
+		
+		Users loginedUser = (Users)session.getAttribute("loginedUser");  //获取当前登录的用户对象  
+		if(loginedUser == null){  //如果没有登录   就不能发送评论  转发到登录页面
+			response.getWriter().append("notLogin");
+			return;
+		}
+		
+		//如果不为null  说明登录了可以发送新的评论
+		Comment form = CommonsUtils.toBean(request, Comment.class);  //将表单数据封装成javabean对象
+//		//form中有  commentMovieId  commentContent
+		
+		try {
+			ms.sendComment(form,loginedUser); //发送评论
+			response.getWriter().append("yes");
+		} catch (MovieException e) {
+			response.getWriter().append(e.getMessage());
+		}  
+	}
 	/**
 	 * 单个电影/电视剧展示  （用户点击某个电影/电视剧）
 	 * @param request
