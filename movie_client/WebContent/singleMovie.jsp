@@ -554,7 +554,7 @@ A girl in a small town forms an unlikely....</p>
 				}
 				
 				//将电影评分加到数据库中
-				//var da = {movie};
+				var da = {movieId : "${singleShow.movieId}"};
 				$.post("<c:url value='/movie.s?method=addMovieGradeNum' />",da,function(data){
 					
 				});

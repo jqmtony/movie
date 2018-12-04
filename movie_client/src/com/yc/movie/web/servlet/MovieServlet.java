@@ -39,6 +39,7 @@ public class MovieServlet extends BaseServlet {
 	 * @throws IOException
 	 */
 	public void addMovieGradeNum(HttpServletRequest request, HttpServletResponse response)throws ServletException, IOException {
+		Long movieId = Long.parseLong(request.getParameter("movieId"));  //获取到要添加评分的movieId
 		
 	}
 	
