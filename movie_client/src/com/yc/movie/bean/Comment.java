@@ -20,6 +20,7 @@ public class Comment implements Serializable {
 	private Teleplay teleplay;  //电视剧对象
 	private String commentContent;  //评论内容
 	private Timestamp commentCreateTime;  //评论时间
+	private Long replyNum;  //回复数
 	public Long getCommentId() {
 		return commentId;
 	}
@@ -86,13 +87,19 @@ public class Comment implements Serializable {
 	public void setCommentCreateTime(Timestamp commentCreateTime) {
 		this.commentCreateTime = commentCreateTime;
 	}
+	public Long getReplyNum() {
+		return replyNum;
+	}
+	public void setReplyNum(Long replyNum) {
+		this.replyNum = replyNum;
+	}
 	@Override
 	public String toString() {
 		return "Comment [commentId=" + commentId + ", commentUserId=" + commentUserId + ", user=" + user
 				+ ", commentReplyId=" + commentReplyId + ", replyList=" + replyList + ", commentMovieId="
 				+ commentMovieId + ", movie=" + movie + ", commentTeleplayId=" + commentTeleplayId + ", teleplay="
-				+ teleplay + ", commentContent=" + commentContent + ", commentCreateTime=" + commentCreateTime + "]";
+				+ teleplay + ", commentContent=" + commentContent + ", commentCreateTime=" + commentCreateTime
+				+ ", replyNum=" + replyNum + "]";
 	}
-	
-	
+
 }

@@ -119,8 +119,43 @@ public class MovieDao {
 			List<Users> userList = qr.query(sql,new BeanListHandler<Users>(Users.class),c.getCommentUserId());
 			if(userList.size() > 0)
 				c.setUser(userList.get(0));
+			
+			c.setReplyNum(Long.parseLong(getCommentReplyNum(c)+""));
 		}
 		return commentList;
+	}
+
+	/**
+	 * 获取评论的回复条数
+	 * @param c
+	 * @return
+	 */
+	private int getCommentReplyNum(Comment c) {
+		int i = 0;
+		if(c == null || c.getReplyList() == null || c.getReplyList().size() <= 0)
+			return i;
+		for(Reply r : c.getReplyList()){
+			if(r == null || r.getReplySonList() == null || r.getReplySonList().size() <= 0)
+				continue;
+			for(Reply rSon : r.getReplySonList()){
+				i = getReplyNum(rSon,i);
+			}
+		}
+		return i;
+	}
+
+	/**
+	 * 获取回复的回复条数
+	 * @param rSon
+	 */
+	private int getReplyNum(Reply r,int i) {
+		if(r == null || r.getReplySonList() == null || r.getReplySonList().size() <= 0)
+			return i;
+		for(Reply rSon : r.getReplySonList()){
+			i = getReplyNum(rSon,i);
+			i++;
+		}
+		return i;
 	}
 
 	/**
@@ -130,11 +165,25 @@ public class MovieDao {
 	 * @throws SQLException 
 	 */
 	private List<Reply> createReplyList(List<Reply> replyList) throws SQLException {
+		//每一条回复
 		for(Reply r : replyList){
 			String sql = "select * from users where userId=?";
 			List<Users> userList = qr.query(sql,new BeanListHandler<Users>(Users.class),r.getReplyUserId());
 			if(userList.size() > 0)
 				r.setUser(userList.get(0));
+			
+			//添加儿子集合
+			sql = "select * from reply where replyParId=?";
+			List<Reply> replySonList = qr.query(sql, new BeanListHandler<Reply>(Reply.class),r.getReplyId());
+			if(replySonList.size() > 0){
+				replySonList = createReplyList(replySonList);
+				r.setReplySonList(replySonList);
+			}else{
+				r.setReplySonList(null);
+			}
+			int i = 0;
+			getReplyNum(r,i);
+			r.setReplyNum(Long.parseLong(""+i));
 		}
 		return replyList;
 	}
@@ -189,6 +238,45 @@ public class MovieDao {
 		Object[] params = {c.getCommentId(),c.getCommentUserId(),c.getCommentReplyId(),
 				c.getCommentMovieId(),c.getCommentTeleplayId(),c.getCommentContent(),c.getCommentCreateTime()};
 		qr.update(sql, params);
+	}
+
+	/**
+	 * 通过ID查找评论对象
+	 * @param replyCommentId
+	 * @throws SQLException 
+	 */
+	public Comment findCommentById(Long replyCommentId) throws SQLException {
+		String sql = "select * from comment where commentId=?";
+		List<Comment> commentList = qr.query(sql, new BeanListHandler<Comment>(Comment.class),replyCommentId);
+		if(commentList.size() > 0)
+			return commentList.get(0);
+		return null;
+	}
+
+	/**
+	 * 插入回复对象到数据库
+	 * @param form
+	 * @throws SQLException 
+	 */
+	public void insertReply(Reply r) throws SQLException {
+		String sql = "insert into reply values(?,?,?,?,?,?)";
+		Object[] params = {r.getReplyId(),r.getReplyUserId(),r.getReplyCommentId(),
+				r.getReplyCreateTime(),r.getReplyContent(),r.getReplyParId()};
+		qr.update(sql, params);
+	}
+
+	/**
+	 * 通过ID查询回复对象
+	 * @param replyId
+	 * @return
+	 * @throws SQLException 
+	 */
+	public Reply findReplyById(Long replyId) throws SQLException {
+		String sql = "select * from reply where replyId=?";
+		List<Reply> replyList = qr.query(sql, new BeanListHandler<Reply>(Reply.class),replyId);
+		if(replyList.size() > 0)
+			return replyList.get(0);
+		return null;
 	}
 
 }

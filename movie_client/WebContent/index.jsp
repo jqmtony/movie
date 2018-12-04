@@ -256,7 +256,7 @@
 										<div class="w3_agile_featured_movies">
 											<div class="col-md-5 video_agile_player">
 										            <div class="video-grid-single-page-agileits">
-														<div data-video="f2Z65fobH2I" id="video"> <img src="${movieListByTime[0].imgList[0].imgPath}" alt="" class="img-responsive" /> </div>
+														<div data-video="f2Z65fobH2I" id="video"> <img src="${pageContext.request.contextPath }${movieListByTime[0].imgList[0].imgPath}" alt="" class="img-responsive" /> </div>
 													</div>
 			       									 <div class="player-text">
 														<p class="fexi_header">${movieListByTime[0].movieName }</p>
@@ -288,7 +288,7 @@
 										     <div class="col-md-7 wthree_agile-movies_list">
 										     <c:forEach items="${movieListByTime }" var="movie" begin="1">
 														<div class="w3l-movie-gride-agile">
-															<a href="<c:url value='/movie.s?method=singleShow&type=movie&id=${movie.movieId }' />" class="hvr-sweep-to-bottom" ><img src="${movie.imgList[0].imgPath }" title="Movies Pro" class="img-responsive" alt=" ">
+															<a href="<c:url value='/movie.s?method=singleShow&type=movie&id=${movie.movieId }' />" class="hvr-sweep-to-bottom" ><img src="${pageContext.request.contextPath }${movie.imgList[0].imgPath }" title="Movies Pro" class="img-responsive" alt=" ">
 																<div class="w3l-action-icon"><i class="fa fa-play-circle-o" aria-hidden="true"></i></div>
 															</a>
 																<div class="mid-1 agileits_w3layouts_mid_1_home">
@@ -336,7 +336,7 @@
 										<div class="w3_agile_featured_movies">
 											<div class="col-md-5 video_agile_player">
 										            <div class="video-grid-single-page-agileits">
-														<div data-video="f2Z65fobH2I" id="video"> <img src="${movieListByCount[0].imgList[0].imgPath}" alt="" class="img-responsive" /> </div>
+														<div data-video="f2Z65fobH2I" id="video"> <img src="${pageContext.request.contextPath }${movieListByCount[0].imgList[0].imgPath}" alt="" class="img-responsive" /> </div>
 													</div>
 
 
@@ -371,7 +371,7 @@
 										     <div class="col-md-7 wthree_agile-movies_list">
 										     <c:forEach items="${movieListByCount }" var="movie" begin="1">
 														<div class="w3l-movie-gride-agile">
-															<a href="single.jsp" class="hvr-sweep-to-bottom"><img src="${movie.imgList[0].imgPath }" title="Movies Pro" class="img-responsive" alt=" ">
+															<a href="<c:url value='/movie.s?method=singleShow&type=movie&id=${movie.movieId }' />" class="hvr-sweep-to-bottom"><img src="${pageContext.request.contextPath }${movie.imgList[0].imgPath }" title="Movies Pro" class="img-responsive" alt=" ">
 																<div class="w3l-action-icon"><i class="fa fa-play-circle-o" aria-hidden="true"></i></div>
 															</a>
 																<div class="mid-1 agileits_w3layouts_mid_1_home">
@@ -418,7 +418,7 @@
 										<div class="w3_agile_featured_movies">
 											<div class="col-md-5 video_agile_player">
 										            <div class="video-grid-single-page-agileits">
-														<div data-video="f2Z65fobH2I" id="video"> <img src="${movieListByGrade[0].imgList[0].imgPath}" alt="" class="img-responsive" /> </div>
+														<div data-video="f2Z65fobH2I" id="video"> <img src="${pageContext.request.contextPath }${movieListByGrade[0].imgList[0].imgPath}" alt="" class="img-responsive" /> </div>
 													</div>
 
 
@@ -453,7 +453,7 @@
 										     <div class="col-md-7 wthree_agile-movies_list">
 										     <c:forEach items="${movieListByGrade }" var="movie" begin="1">
 														<div class="w3l-movie-gride-agile">
-															<a href="single.jsp" class="hvr-sweep-to-bottom"><img src="${movie.imgList[0].imgPath }" title="Movies Pro" class="img-responsive" alt=" ">
+															<a href="<c:url value='/movie.s?method=singleShow&type=movie&id=${movie.movieId }' />" class="hvr-sweep-to-bottom"><img src="${pageContext.request.contextPath }${movie.imgList[0].imgPath }" title="Movies Pro" class="img-responsive" alt=" ">
 																<div class="w3l-action-icon"><i class="fa fa-play-circle-o" aria-hidden="true"></i></div>
 															</a>
 																<div class="mid-1 agileits_w3layouts_mid_1_home">
@@ -507,7 +507,7 @@
 				<c:forEach  items="${movieListByTime }" var="movie">
 					<div class="item">
 						<div class="w3l-movie-gride-agile w3l-movie-gride-slider ">
-							<a href="single.jsp" class="hvr-sweep-to-bottom"><img src="${movie.imgList[0].imgPath }" title="Movies Pro" class="img-responsive" alt=" " />
+							<a href="<c:url value='/movie.s?method=singleShow&type=movie&id=${movie.movieId }' />" class="hvr-sweep-to-bottom"><img src="${pageContext.request.contextPath }${movie.imgList[0].imgPath }" title="Movies Pro" class="img-responsive" alt=" " />
 								<div class="w3l-action-icon"><i class="fa fa-play-circle-o" aria-hidden="true"></i></div>
 							</a>
 							<div class="mid-1 agileits_w3layouts_mid_1_home">
@@ -549,7 +549,7 @@
 					<c:forEach items="${movieListByCount }" var="movie">
 				     <div class="wthree_agile-requested-movies">
 						<div class="col-md-2 w3l-movie-gride-agile requested-movies">
-							<a href="single.jsp" class="hvr-sweep-to-bottom"><img src="${movie.imgList[0].imgPath }" title="Movies Pro" class="img-responsive" alt=" ">
+							<a href="<c:url value='/movie.s?method=singleShow&type=movie&id=${movie.movieId }' />" class="hvr-sweep-to-bottom"><img src="${pageContext.request.contextPath }${movie.imgList[0].imgPath }" title="Movies Pro" class="img-responsive" alt=" ">
 								<div class="w3l-action-icon"><i class="fa fa-play-circle-o" aria-hidden="true"></i></div>
 							</a>
 								<div class="mid-1 agileits_w3layouts_mid_1_home">
@@ -594,7 +594,7 @@
 		     	
 											<c:forEach items="${movieListByGrade }" var="movie" begin="1">	
 													<div class="w3l-movie-gride-agile">
-														<a href="single.jsp" class="hvr-sweep-to-bottom"><img src="${movie.imgList[0].imgPath }" title="Movies Pro" class="img-responsive" alt=" ">
+														<a href="<c:url value='/movie.s?method=singleShow&type=movie&id=${movie.movieId }' />" class="hvr-sweep-to-bottom"><img src="${pageContext.request.contextPath }${movie.imgList[0].imgPath }" title="Movies Pro" class="img-responsive" alt=" ">
 															<div class="w3l-action-icon"><i class="fa fa-play-circle-o" aria-hidden="true"></i></div>
 														</a>
 															<div class="mid-1 agileits_w3layouts_mid_1_home">
@@ -630,7 +630,7 @@
 											
 											 	<div class="col-md-5 video_agile_player second-top">
 										            <div class="video-grid-single-page-agileits">
-														<div data-video="BXEZFd0RT5Y" id="video3"> <img src="${movieListByGrade[0].imgList[0].imgPath}" alt="" class="img-responsive" /> </div>
+														<div data-video="BXEZFd0RT5Y" id="video3"> <img src="${pageContext.request.contextPath }${movieListByGrade[0].imgList[0].imgPath}" alt="" class="img-responsive" /> </div>
 													</div>
 
         <div class="player-text two">

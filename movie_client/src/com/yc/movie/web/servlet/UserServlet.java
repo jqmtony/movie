@@ -27,6 +27,24 @@ public class UserServlet extends BaseServlet {
 	private UserService us = new UserService();
 	
 	/**
+	 * 当前是否登录
+	 * @param request
+	 * @param response
+	 * @throws ServletException
+	 * @throws IOException
+	 */
+	public void isLogin(HttpServletRequest request, HttpServletResponse response)throws ServletException, IOException {
+		String refererPath = request.getHeader("referer");
+		session.setAttribute("refererPath", refererPath);
+		Users user = (Users)session.getAttribute("loginedUser");
+		if(user == null){
+			response.getWriter().append("notLogin");
+			return;
+		}else{
+			response.getWriter().append("yes");
+		}
+	}
+	/**
 	 * 登录之前设置是哪个页面发送的登录请求  保存在session中
 	 * @param request
 	 * @param response

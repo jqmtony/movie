@@ -59,14 +59,22 @@
 											<div class="single video_agile_player">
 											       
 										            <div class="video-grid-single-page-agileits">
-														<div data-video="f2Z65fobH2I" id="video"> <img src="${singleShow.imgList[0].imgPath }" alt="" class="img-responsive" /> </div>
+														<div data-video="f2Z65fobH2I" id="video"> <img src="${pageContext.request.contextPath }${singleShow.imgList[0].imgPath }" alt="这里的图片不存在" class="img-responsive" /> </div>
 													</div>
 													 <h4>
-													 	主演 ： 
-													 	<c:forEach items="${singleShow.proList }" var="pro" begin="0" end="${fn:length(singleShow.proList)-2}">
-													 		<a href="${pro.proLink }">${pro.proName }</a> |
-													 	</c:forEach>
-													 	<a href="${singleShow.proList[fn:length(singleShow.proList)-1].proLink }">${singleShow.proList[fn:length(singleShow.proList)-1].proName }</a>
+													 	主演 ： <%--这里需要判断主演是否只有一个 --%>
+													 	<c:choose>
+													 		<c:when test="${fn:length(singleShow.proList) eq 1}">
+													 			<a href="${singleShow.proList[fn:length(singleShow.proList)-1].proLink }">${singleShow.proList[fn:length(singleShow.proList)-1].proName }</a>
+													 		</c:when>
+													 		<c:otherwise>
+													 			<c:forEach items="${singleShow.proList }" var="pro" begin="0" end="${fn:length(singleShow.proList)-2}">
+															 		<a href="${pro.proLink }">${pro.proName }</a> |
+															 	</c:forEach>
+															 	<a href="${singleShow.proList[fn:length(singleShow.proList)-1].proLink }">${singleShow.proList[fn:length(singleShow.proList)-1].proName }</a>
+													 		</c:otherwise>
+													 	</c:choose>
+													 	<i id="giveALike" class="fa fa-heart-o" aria-hidden="true" style="cursor:pointer" onclick="giveALike()"></i><font id="giveALikeAdd"></font>
 													 </h4>
 													 	
 										    </div>
@@ -107,7 +115,7 @@
 														</li>
 													</ul>
 											</div>
-										<div class="admin-text">
+										<!-- <div class="admin-text">
 												<h5>WRITTEN BY ADMIN</h5>
 												<div class="admin-text-left">
 													<a href="#"><img src="images/admin.jpg" alt=""></a>
@@ -118,12 +126,16 @@
 													<span>View all posts by :<a href="#"> Admin </a></span>
 												</div>
 												<div class="clearfix"> </div>
-										</div>
+										</div> -->
 										<div class="response">
 							<h4>${lg["Comment"] }</h4>
+							<%--所有评论 --%>
+							<c:if test="${fn:length(singleShow.commentList) eq 0}">
+								<h2 style="color:#a3a">当前还没有回复，赶快来抢占沙发</h2>
+							</c:if>
+							<c:set var="commenti" value="1"/>
 							<c:forEach items="${singleShow.commentList }" var="comment">
-							<%--评论 --%>
-							<div class="media response-info">
+							<div class="media response-info" style="border-left:7px solid#aabb55;border-top:7px solid#aabb55">
 								<div class="media-left response-text-left">
 									<a href="#">
 										<img class="media-object" src="images/admin.jpg" alt="">
@@ -133,90 +145,174 @@
 								<div class="media-body response-text-right">
 									<p>${comment.commentContent }</p>
 									<ul>
+										<li>(${commenti} ${lg["tower"] }) </li>
+										<c:set var="commenti" value="${commenti+1 }"/>
 										<li>${comment.commentCreateTime }</li>
-										<li><a href="single.jsp"><i class="fa fa-reply" aria-hidden="true"></i> ${lg["Reply"] }</a></li>
+										<li><a href="javascript:sendReplyToCommentToggle(${comment.commentId})"><i class="fa fa-reply" aria-hidden="true"></i> ${lg["Reply"] }(${comment.replyNum })</a></li>
 									</ul>
-									<%--该评论的回复 --%>
+									
+									
+									<%--该评论的所有回复 --%>
+									<div id="showReply${comment.commentId }" style="display:none;">
 									<c:forEach items="${comment.replyList }" var="reply">
-									<div class="media response-info">
+									<div class="media response-info" style="border-left:6px solid#aabb55;border-top:6px solid#aabb55">
 										<div class="media-left response-text-left">
 											<a href="#">
 												<img class="media-object" src="images/admin.jpg" alt="">
 											</a>
-											<h5><a href="#">${reply.user.userAccount }</a></h5>
+											<h5><a href="#">${reply.user.userAccount } ${lg['Reply'] } ${comment.user.userAccount }</a></h5>
 										</div>
 										<div class="media-body response-text-right">
 											<p>${reply.replyContent }</p>
 											<ul>
-												<li>${reply.replyCreateTime }</li>
-												<li><a href="single.jsp"><i class="fa fa-reply" aria-hidden="true"></i> ${lg["Reply"] }</a></li>
-											</ul>		
+												<li>${reply.replyCreateTime }</li> <%--这是评论下的第一级 --%>
+												<li><a href="javascript:sendReplyToggle(${reply.replyId })"><i class="fa fa-reply" aria-hidden="true"></i> ${lg["Reply"] }</a></li>
+											</ul>	
 										</div>
+										<%--该评论所有的回复 --%>
+										<div class="all-comments-info" style="width:600px; display:none;" id="reply${reply.replyId }"> 
+											 <h5 >${lg["addReply"] } ${reply.user.userAccount }  <font id="errorMsgBySonReply${reply.replyId }" style="font-size:12px;color:red;"></font></h5>
+											<div class="agile-info-wthree-box">
+												   <div class="col-md-6 form-info">
+												   <textarea id="sonreplyContent${reply.replyId }" placeholder="${lg['Message'] }" required="" style="width:500px;height:70px;"></textarea>
+												   <input type="button" value="${lg['send'] }" onclick="sendReplyToReplay(${reply.replyId})" style="margin-left:330px;width:150px;height:40px;background-color:#06f;color:#fff;">
+												  </div>
+												 <div class="clearfix"> </div>
+											</div>
+										</div>
+												<%---------------------------下面这一段是回复的所有回复----------------------------- --%>
+												<c:forEach items="${reply.replySonList }" var="sonReply">
+													<div class="media response-info" style="margin-left:50px;border-left:5px solid#aabb55;border-top:5px solid#aabb55">
+														<div class="media-left response-text-left">
+															<a href="#">
+																<img class="media-object" src="images/admin.jpg" alt="">
+															</a>
+															<h5><a href="#">${sonReply.user.userAccount } ${lg['Reply'] } ${reply.user.userAccount }</a></h5>
+														</div>
+														<div class="media-body response-text-right">
+															<p>${sonReply.replyContent }</p>
+															<ul>
+																<li>${sonReply.replyCreateTime }</li>
+																<li><a href="javascript:sendReplyToReplyToggle(${sonReply.replyId })"><i class="fa fa-reply" aria-hidden="true"></i> ${lg["Reply"] }</a></li>
+															</ul>	
+														</div>
+														<%--该回复所有的回复 --%>
+														<div class="all-comments-info" style="width:600px; display:none;" id="sonReply${sonReply.replyId }"> 
+															 <h5 >${lg["addReply"] } ${sonReply.user.userAccount }  <font id="errorMsgBySonReply${sonReply.replyId }" style="font-size:12px;color:red;"></font></h5>
+															<div class="agile-info-wthree-box">
+																   <div class="col-md-6 form-info">
+																   <textarea id="sonreplyContent${sonReply.replyId }" placeholder="${lg['Message'] }" required="" style="width:500px;height:70px;"></textarea>
+																   <input type="button" value="${lg['send'] }" onclick="sendReplyToReplay(${sonReply.replyId})" style="margin-left:330px;width:150px;height:40px;background-color:#06f;color:#fff;">
+																  </div>
+																 <div class="clearfix"> </div>
+															</div>
+														</div>
+														<%--====================回复下的回复1=================================== --%>
+														<c:forEach items="${sonReply.replySonList }" var="sonReply1">
+													<div class="media response-info" style="margin-left:50px;border-left:4px solid#aabb55;border-top:4px solid#aabb55">
+														<div class="media-left response-text-left">
+															<a href="#">
+																<img class="media-object" src="images/admin.jpg" alt="">
+															</a>
+															<h5><a href="#">${sonReply1.user.userAccount } ${lg['Reply'] } ${sonReply.user.userAccount }</a></h5>
+														</div>
+														<div class="media-body response-text-right">
+															<p>${sonReply1.replyContent }</p>
+															<ul>
+																<li>${sonReply1.replyCreateTime }</li>
+																<li><a href="javascript:sendReplyToReplyToggle(${sonReply1.replyId })"><i class="fa fa-reply" aria-hidden="true"></i> ${lg["Reply"] }</a></li>
+															</ul>	
+														</div>
+														<%--该回复所有的回复 --%>
+														<div class="all-comments-info" style="width:600px; display:none;" id="sonReply${sonReply1.replyId }"> 
+															 <h5 >${lg["addReply"] } ${sonReply.user.userAccount }  <font id="errorMsgBySonReply${sonReply1.replyId }" style="font-size:12px;color:red;"></font></h5>
+															<div class="agile-info-wthree-box">
+																   <div class="col-md-6 form-info">
+																   <textarea id="sonreplyContent${sonReply1.replyId }" placeholder="${lg['Message'] }" required="" style="width:500px;height:70px;"></textarea>
+																   <input type="button" value="${lg['send'] }" onclick="sendReplyToReplay(${sonReply1.replyId})" style="margin-left:330px;width:150px;height:40px;background-color:#06f;color:#fff;">
+																  </div>
+																 <div class="clearfix"> </div>
+															</div>
+														</div>
+														<%--====================回复下的回复2=================================== --%>
+														<c:forEach items="${sonReply1.replySonList }" var="sonReply2">
+													<div class="media response-info" style="margin-left:50px;border-left:3px solid#aabb55;border-top:3px solid#aabb55">
+														<div class="media-left response-text-left">
+															<a href="#">
+																<img class="media-object" src="images/admin.jpg" alt="">
+															</a>
+															<h5><a href="#">${sonReply2.user.userAccount } ${lg['Reply'] } ${sonReply1.user.userAccount }</a></h5>
+														</div>
+														<div class="media-body response-text-right">
+															<p>${sonReply2.replyContent }</p>
+															<ul>
+																<li>${sonReply2.replyCreateTime }</li>
+																<li><a href="javascript:sendReplyToReplyToggle(${sonReply2.replyId })"><i class="fa fa-reply" aria-hidden="true"></i> ${lg["Reply"] }</a></li>
+															</ul>	
+														</div>
+														<%--该回复所有的回复 --%>
+														<div class="all-comments-info" style="width:600px; display:none;" id="sonReply${sonReply1.replyId }"> 
+															 <h5 >${lg["addReply"] } ${sonReply1.user.userAccount }  <font id="errorMsgBySonReply${sonReply1.replyId }" style="font-size:12px;color:red;"></font></h5>
+															<div class="agile-info-wthree-box">
+																   <div class="col-md-6 form-info">
+																   <textarea id="sonreplyContent${sonReply2.replyId }" placeholder="${lg['Message'] }" required="" style="width:500px;height:70px;"></textarea>
+																   <input type="button" value="${lg['send'] }" onclick="sendReplyToReplay(${sonReply2.replyId})" style="margin-left:330px;width:150px;height:40px;background-color:#06f;color:#fff;">
+																  </div>
+																 <div class="clearfix"> </div>
+															</div>
+														</div>
+														<div class="clearfix"> </div>
+													</div>
+												</c:forEach>
+													<%--============================================================================================ --%>
+														<div class="clearfix"> </div>
+													</div>
+												</c:forEach>
+													<%--============================================================================================ --%>
+														<div class="clearfix"> </div>
+													</div>
+												</c:forEach>
+											<%---------------------------上面这一段是回复的所有回复----------------------------- --%>
 										<div class="clearfix"> </div>
 									</div>
 									</c:forEach>
+									
+									</div>
+									
+									
 								</div>
+								<input id="onclickShowReply${comment.commentId }" type="button" value="点击查看所有回复" onclick="clickShowReply(${comment.commentId })" style="margin-left:500px;">
+								
+								<%--回复评论 --%>
+								<div class="all-comments-info" style="width:600px; display:none;" id="replyComment${comment.commentId }"> 
+									 <h5 >${lg["addReply"] } ${comment.user.userAccount }  <font id="errorMsgByReplyComment${comment.commentId }" style="font-size:12px;color:red;"></font></h5>
+									<div class="agile-info-wthree-box">
+										   <div class="col-md-6 form-info">
+										   <textarea id="replyCommentContent${comment.commentId }" placeholder="${lg['Message'] }" required="" style="width:500px;height:70px;"></textarea>
+										   <input type="button" value="${lg['send'] }" onclick="sendReplyToComment(${comment.commentId })" style="margin-left:330px;width:150px;height:40px;background-color:#06f;color:#fff;">
+										  </div>
+										 <div class="clearfix"> </div>
+									</div>
+								</div> 
+									
+									
 								<div class="clearfix"> </div>
 							</div>
 							</c:forEach>
-							
-							
-							<!-- <div class="media response-info">
-								<div class="media-left response-text-left">
-									<a href="#">
-										<img class="media-object" src="images/admin.jpg" alt="">
-									</a>
-									<h5><a href="#">Admin</a></h5>
-								</div>
-								<div class="media-body response-text-right">
-									<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit,There are many variations of passages of Lorem Ipsum available, 
-										sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.There are many variations of passages of Lorem Ipsum available.</p>
-									<ul>
-										<li>November 03, 2016</li>
-										<li><a href="single.jsp"><i class="fa fa-reply" aria-hidden="true"></i> Reply</a></li>
-									</ul>		
-								</div>
-								<div class="clearfix"> </div>
-							</div> -->
 						</div>
 						
-											<%--评论 --%>
-											<!-- <div class="form-group mb-n">
-												<label for="largeinput" class="col-sm-2 control-label label-input-lg">Large Input</label>
-												<div class="col-sm-8">
-													<textarea placeholder="Message" required="" style="width:500px;height:100px;"></textarea>
-												</div>
-											</div> -->
-											 <div class="all-comments-info">
-												 <h5 >${lg["addComment"] }  <font id="errorMsg" style="font-size:12px;color:red;"></font></h5>
-												<div class="agile-info-wthree-box">
-													   <input type="hidden" id="commentMovieId" value="${singleShow.movieId }">
-													   <div class="col-md-6 form-info">
-													   <textarea id="commentContent" placeholder="${lg['Message'] }" required="" style="width:700px;"></textarea>
-													   <input type="button" value="${lg['send'] }" onclick="sendComment()" style="margin-left:530px;width:150px;height:40px;background-color:#06f;color:#fff;">
-													  </div>
-													 <div class="clearfix"> </div>
-													 <script type="text/javascript">
-													 	function sendComment(){
-													 		var data = {
-													 				commentContent : $('#commentContent').val(),
-													 				commentMovieId : $('#commentMovieId').val()
-													 		};
-													 		$.post("<c:url value='/movie.s?method=sendComment' />",data,function(data){
-													 			if(data === "yes"){
-													 				alert("评论成功！感谢您为电影${singleShow.movieName}发表了评论！")
-													 				history.go(0);
-													 			}else if(data === "notLogin"){
-													 				alert("你还没有登录，请先登录！");
-													 				window.location.href = "userLogin.jsp";
-													 			}else{
-													 				$('#errorMsg').html("   * "+data+"!");
-													 			}
-													 		});
-													 	}
-													 </script>
-												</div>
-											</div> 
+								 <%--发表本电影的评论  （已实现）--%>		
+								 <div class="all-comments-info">
+									 <h5 >${lg["addComment"] }  <font id="errorMsg" style="font-size:12px;color:red;"></font></h5>
+									<div class="agile-info-wthree-box">
+										   <input type="hidden" id="commentMovieId" value="${singleShow.movieId }">
+										   <div class="col-md-6 form-info">
+										   <textarea id="commentContent" placeholder="${lg['Message'] }" required="" style="width:700px;"></textarea>
+										   <input type="button" value="${lg['send'] }" onclick="sendComment()" style="margin-left:530px;width:150px;height:40px;background-color:#06f;color:#fff;">
+										  </div>
+										 <div class="clearfix"> </div>
+									</div>
+								</div> 
 								   </div>
 								   <div class="col-md-4 latest-news-agile-right-content">
 								   <h4 class="side-t-w3l-agile">For Latest <span>Movies</span></h4>
@@ -327,7 +423,149 @@ A girl in a small town forms an unlikely....</p>
 					alert('${msg}');
 				</script>
 			</c:if>
-
+<script type="text/javascript">
+	//发表评论
+ 	function sendComment(){
+ 		var data = {
+ 				commentContent : $('#commentContent').val(),
+ 				commentMovieId : $('#commentMovieId').val()
+ 		};
+ 		$.post("<c:url value='/movie.s?method=sendComment' />",data,function(data){
+ 			if(data === "yes"){
+ 				alert("评论成功！感谢您为电影${singleShow.movieName}发表了评论！")
+ 				history.go(0);
+ 			}else if(data === "notLogin"){
+ 				alert("你还没有登录，不能发表评论，请先登录！");
+ 				window.location.href = "userLogin.jsp";
+ 			}else{
+ 				$('#errorMsg').html("   * "+data+"!");
+ 			}
+ 		});
+ 	}
+	
+	//发表回复的回复框的显示  
+	function sendReplyToggle(str){
+		//ajax校验是否已经登录
+		var data;
+		$.post("<c:url value='/user.s?method=isLogin' />",data,function(data){
+			if(data === "yes"){
+				var replyObj = $('#reply'+str);
+				replyObj.toggle();
+			}else if(data === "notLogin"){
+				alert("你还没有登录，不能发表回复，请先登录！");
+				window.location.href = "userLogin.jsp";
+			}
+		});
+	} 
+	
+	//发送回复给评论的框的显示控制  str是当前的评论ID  用来生成每一个
+	function sendReplyToCommentToggle(str){
+		var data;
+		$.post("<c:url value='/user.s?method=isLogin' />",data,function(data){
+			if(data === "yes"){
+				var replyCommentObj = $('#replyComment'+str);
+				replyCommentObj.toggle();
+			}else if(data === "notLogin"){
+				alert("你还没有登录，不能发表回复，请先登录！");
+				window.location.href = "userLogin.jsp";
+			}
+		});
+	}
+	
+	//给回复发送回复的框显示控制
+	function sendReplyToReplyToggle(str){
+		var data;
+		$.post("<c:url value='/user.s?method=isLogin' />",data,function(data){
+			if(data === "yes"){
+				var replyCommentObj = $('#sonReply'+str);
+				replyCommentObj.toggle();
+			}else if(data === "notLogin"){
+				alert("你还没有登录，不能发表回复，请先登录！");
+				window.location.href = "userLogin.jsp";
+			}
+		});
+	}
+	
+	///给评论发送回复   （已完成）
+	function sendReplyToComment(commentID){
+		var errorBox = $('#errorMsgByReplyComment'+commentID);
+		var content = $('#replyCommentContent'+commentID).val();
+		var data = {
+ 				replyContent : content,
+ 				replyCommentId : commentID
+ 		};
+		$.post("<c:url value='/movie.s?method=sendReplyToComment' />",data,function(data){
+ 			if(data === "yes"){
+ 				history.go(0);
+ 			}else{
+ 				errorBox.html("   * "+data+"!");
+ 			}
+ 		});
+	}
+	
+	//给回复发送回复
+	function sendReplyToReplay(replyID){
+		var errorBox = $('#errorMsgBySonReply'+replyID);
+		var content = $('#sonreplyContent'+replyID).val();
+		var data = {
+ 				replyContent : content,
+ 				replyId : replyID
+ 		};
+		$.post("<c:url value='/movie.s?method=sendReplyToReply' />",data,function(data){
+ 			if(data === "yes"){
+ 				history.go(0);
+ 			}else{
+ 				errorBox.html("   * "+data+"!");
+ 			}
+ 		});
+	}
+	
+	//点击显示所有评论
+	function clickShowReply(commentID){
+		var box = $('#showReply'+commentID);
+		var btn = $('#onclickShowReply'+commentID);
+		if(btn.val() === "点击查看所有回复"){
+			btn.val("点击收起所有回复");
+		}else{
+			btn.val("点击查看所有回复");
+		}
+		box.toggle();
+	}
+	var i = 1;
+	//点赞
+	function giveALike(){
+		var data;
+		$.post("<c:url value='/user.s?method=isLogin' />",data,function(data){
+			if(data === "yes"){
+				var btn = $('#giveALike');
+				var msg = $('#giveALikeAdd');
+				//alert(btn.attr("class"))
+				if(btn.attr("class") == "fa fa-heart-o"){
+					btn.attr("class","fa fa-heart");
+					msg.html(' + '+i);
+					i++;
+				}else{
+					if(i > 10){
+						alert('每个用户每次只能点赞10次')
+						return;
+					}
+					msg.html(' + '+i);
+					i++;
+				}
+				
+				//将电影评分加到数据库中
+				//var da = {movie};
+				$.post("<c:url value='/movie.s?method=addMovieGradeNum' />",da,function(data){
+					
+				});
+			}else if(data === "notLogin"){
+				alert("你还没有登录，必须登录后才能点赞！");
+				location.href = "userLogin.jsp";
+			}
+		});
+		
+	}
+ </script>
 	<!--/footer-bottom-->
 	<%@ include file="footer.jsp"%>
 

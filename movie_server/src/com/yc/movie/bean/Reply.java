@@ -7,6 +7,7 @@ import java.io.Serializable;
  *
  */
 import java.sql.Timestamp;
+import java.util.List;
 public class Reply implements Serializable {
 	private Long replyId; //回复id
 	private Long replyUserId; //用户id
@@ -15,6 +16,9 @@ public class Reply implements Serializable {
 	private Comment comment;  //评论对象
 	private Timestamp replyCreateTime;  //回复时间
 	private String replyContent;  //回复内容 
+	private Long replyParId;  //回复的父ID
+	private Long replyNum;  //回复数
+	private List<Reply> replySonList;  //回复的儿子集合  
 	public Long getReplyId() {
 		return replyId;
 	}
@@ -57,11 +61,31 @@ public class Reply implements Serializable {
 	public void setReplyContent(String replyContent) {
 		this.replyContent = replyContent;
 	}
+	public Long getReplyParId() {
+		return replyParId;
+	}
+	public void setReplyParId(Long replyParId) {
+		this.replyParId = replyParId;
+	}
+	public Long getReplyNum() {
+		return replyNum;
+	}
+	public void setReplyNum(Long replyNum) {
+		this.replyNum = replyNum;
+	}
+	public List<Reply> getReplySonList() {
+		return replySonList;
+	}
+	public void setReplySonList(List<Reply> replySonList) {
+		this.replySonList = replySonList;
+	}
 	@Override
 	public String toString() {
 		return "Reply [replyId=" + replyId + ", replyUserId=" + replyUserId + ", user=" + user + ", replyCommentId="
 				+ replyCommentId + ", comment=" + comment + ", replyCreateTime=" + replyCreateTime + ", replyContent="
-				+ replyContent + "]";
+				+ replyContent + ", replyParId=" + replyParId + ", replyNum=" + replyNum + ", replySonList="
+				+ replySonList + "]";
 	}
 	
 }
+	

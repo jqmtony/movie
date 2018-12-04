@@ -16,6 +16,5 @@ public class demo {
 	public void fun1() throws HttpException, UnsupportedEncodingException, IOException{
 		File file = new File("g:/db.sql");
 		File file2 = new File("f:/1.sql");
-		CommonsUtils.cloneFile(file, file2);
 	}
 }

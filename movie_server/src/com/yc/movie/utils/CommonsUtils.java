@@ -381,7 +381,18 @@ public class CommonsUtils {
 		
 		//保存
 		try {
-			part.write(dirFile+"/"+savename);
+			String path = dirFile+"/"+savename;
+//			System.out.println(path);
+//			part.write(path);
+//			path = path.replace("server", "client");
+			part.write(path);
+			
+			String mk = dirFile.getAbsolutePath().replace("server", "client");
+			System.out.println("源文件："+destFile.getAbsolutePath());
+			System.out.println("目录链："+mk);
+			System.out.println("完整目录："+path.replace("server", "client"));
+			cloneFile(destFile,new File(mk),new File(path.replace("server", "client")));
+			
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -427,7 +438,7 @@ public class CommonsUtils {
 		
 		
 		//保存  //复制
-		cloneFile(file,destFile);
+		cloneFile(file,dirFile,destFile);
 		return sqlPath;
 	}
 	
@@ -436,7 +447,9 @@ public class CommonsUtils {
 	 * @param oldFile
 	 * @param newFile
 	 */
-	public static void cloneFile(File oldFile,File newFile){
+	public static void cloneFile(File oldFile,File newFileDir,File newFile){
+		if(!newFileDir.exists())
+			newFileDir.mkdirs();
 		if(!oldFile.exists())
 			throw new RuntimeException("没有找到源文件");
 		FileInputStream fis = null;

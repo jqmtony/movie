@@ -3,6 +3,7 @@ package com.yc.movie.web.servlet;
 import com.yc.exception.MovieException;
 import com.yc.movie.bean.Comment;
 import com.yc.movie.bean.Movies;
+import com.yc.movie.bean.Reply;
 import com.yc.movie.bean.Teleplay;
 import com.yc.movie.bean.Users;
 import com.yc.movie.service.MovieService;
@@ -29,6 +30,54 @@ import javax.servlet.http.HttpServletResponse;
 public class MovieServlet extends BaseServlet {
 	private static final long serialVersionUID = 1L;
 	private MovieService ms = new MovieService();
+	
+	/**
+	 * 添加评分
+	 * @param request
+	 * @param response
+	 * @throws ServletException
+	 * @throws IOException
+	 */
+	public void addMovieGradeNum(HttpServletRequest request, HttpServletResponse response)throws ServletException, IOException {
+		
+	}
+	
+	/**
+	 * 给回复发送回复
+	 * @param request
+	 * @param response
+	 * @throws ServletException
+	 * @throws IOException
+	 */
+	public void sendReplyToReply(HttpServletRequest request, HttpServletResponse response)throws ServletException, IOException {
+		Reply form = CommonsUtils.toBean(request, Reply.class); // replyContent   replyId
+		Users user = (Users)session.getAttribute("loginedUser");
+		try {
+			ms.addReplyToReply(form,user);
+			response.getWriter().append("yes");
+		} catch (MovieException e) {
+			response.getWriter().append(e.getMessage());
+		}
+	}
+	
+	/**
+	 * 给评论发送回复
+	 * @param request
+	 * @param response
+	 * @throws ServletException
+	 * @throws IOException
+	 */
+	public void sendReplyToComment(HttpServletRequest request, HttpServletResponse response)throws ServletException, IOException {
+		Reply form = CommonsUtils.toBean(request, Reply.class);  // replyContent  replyCommentId
+		Users user = (Users)session.getAttribute("loginedUser");
+		try {
+			ms.addReplyToComment(form,user);
+			response.getWriter().append("yes");
+		} catch (MovieException e) {
+			response.getWriter().append(e.getMessage());
+		}
+	}
+	
 	
 	/**
 	 * 发送评论
