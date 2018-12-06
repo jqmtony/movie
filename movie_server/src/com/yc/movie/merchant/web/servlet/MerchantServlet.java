@@ -2,7 +2,6 @@ package com.yc.movie.merchant.web.servlet;
 
 import com.alibaba.fastjson.JSON;
 import com.yc.movie.bean.ClassifyName;
-import com.yc.movie.bean.Images;
 import com.yc.movie.bean.Merchant;
 import com.yc.movie.bean.Movies;
 import com.yc.movie.bean.Verification;
@@ -13,12 +12,9 @@ import com.yc.movie.utils.CommonsUtils;
 
 import java.awt.image.BufferedImage;
 import java.io.IOException;
-import java.math.BigDecimal;
-import java.sql.Timestamp;
 import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Date;
 import java.util.Iterator;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -30,12 +26,6 @@ import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.Part;
-
-import org.apache.commons.fileupload.FileItem;
-import org.apache.commons.fileupload.FileUploadBase;
-import org.apache.commons.fileupload.FileUploadException;
-import org.apache.commons.fileupload.disk.DiskFileItemFactory;
-import org.apache.commons.fileupload.servlet.ServletFileUpload;
 
 /**
  * Servlet implementation class MerchantServlet
@@ -55,39 +45,71 @@ public class MerchantServlet extends BaseServlet {
 	 * @throws IOException
 	 */
 	public String addMovie(HttpServletRequest request, HttpServletResponse response)throws ServletException, IOException {
+		//movieMerId  movieName movieIntegralNum  movieDescribe movieTimeLong moviePrevue moviePrice
 		Movies form = CommonsUtils.toBean(request, Movies.class);
-		Integer movieCount = Integer.parseInt(request.getParameter("movieCount")); //电影票总数
-		String movieTime = request.getParameter("movieTime");  //上映时间
-		System.out.println("movieTime:"+movieTime);
-		//		String movieName = request.getParameter("movieName");  //电影名
-		String moviePro = request.getParameter("moviePro");  //电影主演集
-		String movieClassify = request.getParameter("movieClassify1");  //电影类型
-		String movieClassify2 = request.getParameter("movieClassify2");
-		String movieClassify3 = request.getParameter("movieClassify3");
-		List<String> movieClassifyList = new ArrayList<String>();
-		movieClassifyList.add(movieClassify);
-		movieClassifyList.add(movieClassify2);
-		movieClassifyList.add(movieClassify3);
-		
-		String moviePrice = request.getParameter("moviePrice");  //电影单价
-		Double l = Double.valueOf(moviePrice);
-		form.setMoviePrice(BigDecimal.valueOf(l));
-//		String movieDescript = request.getParameter("movieDescript"); //电影描述
-//		String movieIntegralNum = request.getParameter("movieIntegralNum");  //电影积分数
-		
-		System.out.println(form);
+		String movieMerId = form.getMovieMerId();  //获取到本次的商户ID
+		String oldMovieMerId = null;
 		try {
-			ms.movieRegx(form,moviePro,movieClassify);//非图片的信息校验
-			
-			Part part1 = request.getPart("image1");
-			Part part2 = request.getPart("image2");
-			Part part3 = request.getPart("image3");
-			List<Part> partList = new ArrayList<Part>();
-			partList.add(part1);
-			partList.add(part2);
-			partList.add(part3);
-			
-			ms.movieRegx(partList);  //图片信息校验
+			oldMovieMerId = ms.getMovieMerIdByMovieName(form.getMovieName()); //通过电影名查找数据库中相同的电影名
+			if(oldMovieMerId == null)
+				oldMovieMerId = "";
+		} catch (MerchantException e1) {
+			request.setAttribute("msg", e1.getMessage());
+			return "f:/merUpload.jsp";
+		}  
+		String moviePro = request.getParameter("moviePro"); //主演
+		String classifyStr = request.getParameter("movieClassify");  //获取类型字符串
+		String movieStartTime1 = request.getParameter("movieStartTime1");  //1号厅上映时间
+		String movieStartTime2 = request.getParameter("movieStartTime2");  //2号厅上映时间
+		String movieStartTime3 = request.getParameter("movieStartTime3");  //3号厅上映时间
+		String movieStartTime4 = request.getParameter("movieStartTime4");  //4号厅上映时间
+		String movieStartTime5 = request.getParameter("movieStartTime5");  //5号厅上映时间
+		String movieStartTime6 = request.getParameter("movieStartTime6");  //6号厅上映时间
+		
+		Part moviePrevuePathPart = request.getPart("moviePrevue"); //得到预告片路径的Part  上传的时候要用
+		Part movieImage1Part = request.getPart("movieImage1");  //封面图片的Part
+		Part movieImage2Part = request.getPart("movieImage2");  //图片2的Part
+		Part movieImage3Part = request.getPart("movieImage3"); //图片3的Part
+		List<Part> partList = new ArrayList<Part>();
+		partList.add(movieImage1Part);
+		partList.add(movieImage2Part);
+		partList.add(movieImage3Part);
+		partList.add(moviePrevuePathPart);
+		
+		String moviePrevuePath = moviePrevuePathPart.getSubmittedFileName();  //预告片路径
+		String movieImage1 = movieImage1Part.getSubmittedFileName();  //封面图片
+		String movieImage2 = movieImage2Part.getSubmittedFileName();  //图片2
+		String movieImage3 = movieImage3Part.getSubmittedFileName();	//图片3
+		
+		Map<String,String> m = new LinkedHashMap<String,String>();
+		m.put("movieStartTime1", movieStartTime1);
+		m.put("movieStartTime2", movieStartTime2);
+		m.put("movieStartTime3", movieStartTime3);
+		m.put("movieStartTime4", movieStartTime4);
+		m.put("movieStartTime5", movieStartTime5);
+		m.put("movieStartTime6", movieStartTime6);
+		m.put("movieImage1", movieImage1);
+		m.put("movieImage2", movieImage2);
+		m.put("movieImage3", movieImage3);
+		m.put("classifyStr", classifyStr);
+		m.put("moviePrevuePath", moviePrevuePath);
+		m.put("moviePro", moviePro);
+		
+//		System.out.println(form);
+//		System.out.println("类型："+classifyStr);
+//		System.out.println("预告片路径："+moviePrevuePath);
+//		System.out.println("1号厅电影开始时间："+movieStartTime1);
+//		System.out.println("2号厅电影开始时间："+movieStartTime2);
+//		System.out.println("3号厅电影开始时间："+movieStartTime3);
+//		System.out.println("4号厅电影开始时间："+movieStartTime4);
+//		System.out.println("5号厅电影开始时间："+movieStartTime5);
+//		System.out.println("6号厅电影开始时间："+movieStartTime6);
+//		System.out.println("图片1路径"+movieImage1);
+//		System.out.println("图片2路径"+movieImage2);
+//		System.out.println("图片3路径"+movieImage3);
+		
+		try {
+			ms.regxMovieInfo(form,m);  //验证信息
 			
 			List<String> sqlPaths = new ArrayList<String>();
 			//上传
@@ -96,62 +118,16 @@ public class MerchantServlet extends BaseServlet {
 				sqlPaths.add(sqlPath);
 			}
 			
-			Merchant loginedMerchant = (Merchant)session.getAttribute("loginedMerchant");
-			form.setMerchant(loginedMerchant);  //对应商户
-			form.setMovieGradeNum(0d);  //评分数
-			form.setMovieStatus("1");  //上架
-			form.setMovieCreateTime(new Timestamp(new Date().getTime()));  //上架时间
+			form.setMoviePrevue(sqlPaths.get(3)); //添加电影预告片的路径
+			ms.addMovie(form, m,sqlPaths,oldMovieMerId);  //电影上架
 			
-			ms.addMovie(form,sqlPaths,moviePro,movieClassifyList,movieCount,movieTime);  //上架电影
-			
-			request.setAttribute("msg", "上架成功");
+			request.setAttribute("msg", "上架电影成功");
 			return "f:/merUpload.jsp";
 		} catch (MerchantException e) {
 			request.setAttribute("msg", e.getMessage());
 			return "f:/merUpload.jsp";
-		}  
+		}
 		
-//		System.out.println(name3);
-//		Collection<Part> partList = request.getParts();
-//		for(Part part : partList){
-//			String name = part.getSubmittedFileName();
-//			part.write("merHeadCreateImage");
-////			CommonsUtils.uploadFile("merHeadCreateImage", file)
-//			String name2 = part.getName();
-//			System.out.println(name2+":"+name);
-//		}
-//		return "f:/merUpload.jsp"; 
-//		Movies movie = new Movies();
-//		
-//		//1.得到解析工厂
-//		DiskFileItemFactory factory = new DiskFileItemFactory();
-//		
-//		//2.得到解析器
-//		ServletFileUpload suf = new ServletFileUpload(factory);
-//		
-//		//3.解析
-//		try {
-//			List<FileItem> fileItem = suf.parseRequest(request);
-//			for(FileItem fi : fileItem){
-//				if(fi.isFormField()){ //普通
-//					System.out.println(fi.getFieldName());
-//					String infoUTF8 = CommonsUtils.getString_ISO8859_To_UTF8(fi.getString());
-//					System.out.println(infoUTF8);
-////					switch(fi.getFieldName()){
-////					
-////					}
-//				}else{  //文件
-//					System.out.println("文件："+fi.getFieldName());
-////					String infoUTF8 = CommonsUtils.getString_ISO8859_To_UTF8(fi.getString());
-//					System.out.println("文件："+fi.getString());
-//				}
-//			}
-//		} catch (FileUploadException e) {
-//			// TODO Auto-generated catch block
-//			e.printStackTrace();
-//		}
-//		
-//		return "f:/merUpload.jsp";
 	}
 	/**
 	 * 查找所有的类型
@@ -376,6 +352,8 @@ public class MerchantServlet extends BaseServlet {
 				Cookie cookie = new Cookie("remMer", form.getMerEmail());
 				cookie.setMaxAge(60*60*24*7);  //七天
 				response.addCookie(cookie);
+			}else{
+				CommonsUtils.removeCookie(request, response, "remMer");
 			}
 			response.getWriter().append("yes");
 		} catch (MerchantException e) {

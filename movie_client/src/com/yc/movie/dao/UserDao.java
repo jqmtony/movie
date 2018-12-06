@@ -1,6 +1,7 @@
 package com.yc.movie.dao;
 
 import java.sql.SQLException;
+import java.sql.Timestamp;
 import java.util.List;
 
 import org.apache.commons.dbutils.QueryRunner;
@@ -111,5 +112,19 @@ public class UserDao {
 		List<UserLoginRecord> ulrList = qr.query(sql, new BeanListHandler<UserLoginRecord>(UserLoginRecord.class),user.getUserId());
 		user.setUlrList(ulrList);
 		return user;
+	}
+
+	/**
+	 * 通过用户创建时间查询用户
+	 * @param userCreateTime
+	 * @return
+	 * @throws SQLException 
+	 */
+	public Users findUserByCraeteTime(Timestamp userCreateTime) throws SQLException {
+		String sql = "select * from users where userCreateTime=?";
+		List<Users> list = qr.query(sql, new BeanListHandler<Users>(Users.class),userCreateTime);
+		if(list.size() > 0)
+			return list.get(0);
+		return null;
 	}
 }

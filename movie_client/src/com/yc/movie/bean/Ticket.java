@@ -18,6 +18,10 @@ public class Ticket implements Serializable {
 	private Long ticjetBuyBy; //购买用户ID
 	private Timestamp ticketStartTime; //电影开始时间
 	private Indent indent;  //对应订单
+	private String ticketLocation;  //座位
+	private String ticketMovieTheater;  //上映厅室
+	private Timestamp ticketMovieEndTime;  //结束时间
+	private Timestamp ticketMovieStartTime; //上映时间
 	private List<Images> imgList;  //对应图片集合
 	public Long getTicketId() {
 		return ticketId;
@@ -67,6 +71,30 @@ public class Ticket implements Serializable {
 	public void setIndent(Indent indent) {
 		this.indent = indent;
 	}
+	public String getTicketLocation() {
+		return ticketLocation;
+	}
+	public void setTicketLocation(String ticketLocation) {
+		this.ticketLocation = ticketLocation;
+	}
+	public String getTicketMovieTheater() {
+		return ticketMovieTheater;
+	}
+	public void setTicketMovieTheater(String ticketMovieTheater) {
+		this.ticketMovieTheater = ticketMovieTheater;
+	}
+	public Timestamp getTicketMovieEndTime() {
+		return ticketMovieEndTime;
+	}
+	public void setTicketMovieEndTime(Timestamp ticketMovieEndTime) {
+		this.ticketMovieEndTime = ticketMovieEndTime;
+	}
+	public Timestamp getTicketMovieStartTime() {
+		return ticketMovieStartTime;
+	}
+	public void setTicketMovieStartTime(Timestamp ticketMovieStartTime) {
+		this.ticketMovieStartTime = ticketMovieStartTime;
+	}
 	public List<Images> getImgList() {
 		return imgList;
 	}
@@ -77,7 +105,9 @@ public class Ticket implements Serializable {
 	public String toString() {
 		return "Ticket [ticketId=" + ticketId + ", movie=" + movie + ", ticketMovieId=" + ticketMovieId
 				+ ", ticketStatus=" + ticketStatus + ", user=" + user + ", ticjetBuyBy=" + ticjetBuyBy
-				+ ", ticketStartTime=" + ticketStartTime + ", indent=" + indent + ", imgList=" + imgList + "]";
+				+ ", ticketStartTime=" + ticketStartTime + ", indent=" + indent + ", ticketLocation=" + ticketLocation
+				+ ", ticketMovieTheater=" + ticketMovieTheater + ", ticketMovieEndTime=" + ticketMovieEndTime
+				+ ", ticketMovieStartTime=" + ticketMovieStartTime + ", imgList=" + imgList + "]";
 	}
 	
 }

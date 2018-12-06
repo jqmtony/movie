@@ -7,8 +7,8 @@ import java.util.List;
 
 public class Movies implements Serializable{
 	private Long movieId;	//电影id
-	private Merchant merchant;  //对应商户
-	private Long movieMerId;  //商户ID
+	private List<Merchant> merchantList;  //对应商户List
+	private String movieMerId;  //商户ID
 	private Long movieIntegralNum;  //积分数
 	private String movieName;	//电影名
 	private Double movieGradeNum;	//评分数
@@ -18,6 +18,9 @@ public class Movies implements Serializable{
 	private Long movieVisitCount;  //访问数
 	private String movieStatus;  /*电影状态  0表示下架（卖完了） 1表示上架*/
 	private Timestamp movieCreateTime; //上架时间
+	private Long movieTimeLong; //播放时长
+	private String moviePrevue;  //预告片路径
+	private String movieGenre; //片种  3d  2d
 	private List<Ticket> ticketList;  //对应电影票对象集合
 	private List<Classifys> classifysList;  //对应的类型集合
 	private List<Images> imgList;  //对应的图片集合
@@ -29,16 +32,16 @@ public class Movies implements Serializable{
 	public void setMovieId(Long movieId) {
 		this.movieId = movieId;
 	}
-	public Merchant getMerchant() {
-		return merchant;
+	public List<Merchant> getMerchantList() {
+		return merchantList;
 	}
-	public void setMerchant(Merchant merchant) {
-		this.merchant = merchant;
+	public void setMerchantList(List<Merchant> merchantList) {
+		this.merchantList = merchantList;
 	}
-	public Long getMovieMerId() {
+	public String getMovieMerId() {
 		return movieMerId;
 	}
-	public void setMovieMerId(Long movieMerId) {
+	public void setMovieMerId(String movieMerId) {
 		this.movieMerId = movieMerId;
 	}
 	public Long getMovieIntegralNum() {
@@ -95,6 +98,24 @@ public class Movies implements Serializable{
 	public void setMovieCreateTime(Timestamp movieCreateTime) {
 		this.movieCreateTime = movieCreateTime;
 	}
+	public Long getMovieTimeLong() {
+		return movieTimeLong;
+	}
+	public void setMovieTimeLong(Long movieTimeLong) {
+		this.movieTimeLong = movieTimeLong;
+	}
+	public String getMoviePrevue() {
+		return moviePrevue;
+	}
+	public void setMoviePrevue(String moviePrevue) {
+		this.moviePrevue = moviePrevue;
+	}
+	public String getMovieGenre() {
+		return movieGenre;
+	}
+	public void setMovieGenre(String movieGenre) {
+		this.movieGenre = movieGenre;
+	}
 	public List<Ticket> getTicketList() {
 		return ticketList;
 	}
@@ -127,11 +148,12 @@ public class Movies implements Serializable{
 	}
 	@Override
 	public String toString() {
-		return "Movies [movieId=" + movieId + ", merchant=" + merchant + ", movieMerId=" + movieMerId
+		return "Movies [movieId=" + movieId + ", merchantList=" + merchantList + ", movieMerId=" + movieMerId
 				+ ", movieIntegralNum=" + movieIntegralNum + ", movieName=" + movieName + ", movieGradeNum="
 				+ movieGradeNum + ", movieDescribe=" + movieDescribe + ", moviePath=" + moviePath + ", moviePrice="
 				+ moviePrice + ", movieVisitCount=" + movieVisitCount + ", movieStatus=" + movieStatus
-				+ ", movieCreateTime=" + movieCreateTime + ", ticketList=" + ticketList + ", classifysList="
+				+ ", movieCreateTime=" + movieCreateTime + ", movieTimeLong=" + movieTimeLong + ", moviePrevue="
+				+ moviePrevue + ", movieGenre=" + movieGenre + ", ticketList=" + ticketList + ", classifysList="
 				+ classifysList + ", imgList=" + imgList + ", proList=" + proList + ", commentList=" + commentList
 				+ "]";
 	}

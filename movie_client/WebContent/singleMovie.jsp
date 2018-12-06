@@ -36,15 +36,15 @@
   <!--/banner-section-->
 	<%@ include file="head.jsp"%>
 	<!-- breadcrumb -->
-				<div class="w3_breadcrumb">
-					<div class="breadcrumb-inner">	
-						<ul>
-							<li><a href="index.jsp">Home</a><i>//</i></li>
-							<li>Single</li>
-						</ul>
-					</div>
-				</div>
-			<!-- //breadcrumb -->
+		<div class="w3_breadcrumb">
+			<div class="breadcrumb-inner">	
+				<ul>
+					<li><a href="index.jsp">Home</a><i>//</i></li>
+					<li>Single</li>
+				</ul>
+			</div>
+		</div>
+	<!-- //breadcrumb -->
 	<div class="w3_breadcrumb"></div>
 <!-- //breadcrumb -->
 			<!--/content-inner-section-->
@@ -67,6 +67,10 @@
 													 		<c:when test="${fn:length(singleShow.proList) eq 1}">
 													 			<a href="${singleShow.proList[fn:length(singleShow.proList)-1].proLink }">${singleShow.proList[fn:length(singleShow.proList)-1].proName }</a>
 													 		</c:when>
+													 		<c:when test="${fn:length(singleShow.proList) eq 2}">
+													 			<a href="${singleShow.proList[fn:length(singleShow.proList)-2].proLink }">${singleShow.proList[fn:length(singleShow.proList)-2].proName }</a> |
+													 			<a href="${singleShow.proList[fn:length(singleShow.proList)-1].proLink }">${singleShow.proList[fn:length(singleShow.proList)-1].proName }</a>
+													 		</c:when>
 													 		<c:otherwise>
 													 			<c:forEach items="${singleShow.proList }" var="pro" begin="0" end="${fn:length(singleShow.proList)-2}">
 															 		<a href="${pro.proLink }">${pro.proName }</a> |
@@ -74,7 +78,8 @@
 															 	<a href="${singleShow.proList[fn:length(singleShow.proList)-1].proLink }">${singleShow.proList[fn:length(singleShow.proList)-1].proName }</a>
 													 		</c:otherwise>
 													 	</c:choose>
-													 	<i id="giveALike" class="fa fa-heart-o" aria-hidden="true" style="cursor:pointer" onclick="giveALike()"></i><font id="giveALikeAdd"></font>
+														<a href="<c:url value='movie.s?method=goBallotTicket&movieId=${singleShow.movieId }' />"><i id="goShopping" class="fa fa-shopping-cart" aria-hidden="true" style="cursor:pointer;color:#f83;margin-left:20px;"><font style="font-size:15px;"> ${lg['buyTicket'] }</font></i></a>
+														<i id="giveALike" class="fa fa-heart-o" aria-hidden="true" style="cursor:pointer;margin-left:20px;" onclick="giveALike()"><font style="font-size:17px;"> ${lg['like'] }</font></i><font id="giveALikeAdd"></font>
 													 </h4>
 													 	
 										    </div>
@@ -532,8 +537,17 @@ A girl in a small town forms an unlikely....</p>
 		box.toggle();
 	}
 	var i = 1;
+	var flag = true;
 	//点赞
 	function giveALike(){
+		if(!flag){
+			alert("您点击的太快了，请稍后再试！")
+			setTimeout(function(){
+				flag = true;
+			},3000);
+			return;
+		}
+		flag = false;
 		var data;
 		$.post("<c:url value='/user.s?method=isLogin' />",data,function(data){
 			if(data === "yes"){
@@ -556,14 +570,15 @@ A girl in a small town forms an unlikely....</p>
 				//将电影评分加到数据库中
 				var da = {movieId : "${singleShow.movieId}"};
 				$.post("<c:url value='/movie.s?method=addMovieGradeNum' />",da,function(data){
-					
+					if(data != "yes"){
+						alert(data);
+					}
 				});
 			}else if(data === "notLogin"){
 				alert("你还没有登录，必须登录后才能点赞！");
 				location.href = "userLogin.jsp";
 			}
 		});
-		
 	}
  </script>
 	<!--/footer-bottom-->

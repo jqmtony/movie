@@ -14,7 +14,9 @@ import java.net.SocketException;
 import java.net.UnknownHostException;
 import java.sql.SQLException;
 import java.sql.Timestamp;
+import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
 import javax.servlet.http.Part;
 
@@ -410,80 +412,163 @@ public class MerchantService {
 		}
 		return null;
 	}
-
 	/**
-	 * 非图片信息校验
-	 * @param form
-	 * @param moviePro
-	 * @param movieClassify
+	 * 信息校验
+	 * @param form //movieMerId  movieName movieIntegralNum  movieDescribe movieTimeLong moviePrevue moviePrice
+	 * @param m
 	 * @throws MerchantException 
 	 */
-	public void movieRegx(Movies form, String moviePro, String movieClassify) throws MerchantException {
-		String name = form.getMovieName();
-		BigDecimal price = form.getMoviePrice();
-		String descript = form.getMovieDescribe();
-		Long inte = form.getMovieIntegralNum();
+	public void regxMovieInfo(Movies form, Map<String, String> m) throws MerchantException {
+		String moviePro = m.get("moviePro");   //主演
+		String classifyStr = m.get("classifyStr");  //获取类型字符串
+		String moviePrevuePath = m.get("moviePrevuePath");  //预告片路径
+		String movieStartTime1 = m.get("movieStartTime1");  //1号厅上映时间
+		String movieStartTime2 = m.get("movieStartTime2");  //2号厅上映时间
+		String movieStartTime3 = m.get("movieStartTime3");  //3号厅上映时间
+		String movieStartTime4 = m.get("movieStartTime4");  //4号厅上映时间
+		String movieStartTime5 = m.get("movieStartTime5");  //5号厅上映时间
+		String movieStartTime6 = m.get("movieStartTime6");  //6号厅上映时间
+		String movieImage1 = m.get("movieImage1");  //封面图片
+		String movieImage2 = m.get("movieImage2");  //图片2
+		String movieImage3 = m.get("movieImage3");  //图片3
+		String movieName = form.getMovieName();  //电影名
+		Long movieIntegralNum = form.getMovieIntegralNum();  //积分数
+		String movieDescribe = form.getMovieDescribe();  //电影简介
+		Long movieTimeLong = form.getMovieTimeLong();  //电影时长
+		BigDecimal moviePrice = form.getMoviePrice();  //单价
+		String movieGenre = form.getMovieGenre(); //片种
 		
 		//判断电影名是否为null
-		if(name == null || name.trim().isEmpty())
+		if(isNull(movieName))
 			throw new MerchantException("请输入电影名！");
 		
-		//判断价格是否为null
-		if(price == null)
-			throw new MerchantException("请输入电影单价！");
-		
-		//判断描述是否为null
-		if(descript == null || descript.trim().isEmpty())
-			throw new MerchantException("请输入电影描述！");
-		
-		//判断积分数是否为null
-		if(inte == null)
-			throw new MerchantException("请输入积分数！");
-		
 		//判断主演是否为null
-		if(moviePro == null || moviePro.trim().isEmpty())
+		if(isNull(moviePro))
 			throw new MerchantException("请输入主演！");
 		
+		//判断分类是否为null
+		if(isNull(classifyStr))
+			throw new MerchantException("请输入类型！");
 		
+		//判断片种是否为null
+		if(isNull(movieGenre))
+			throw new MerchantException("请输入片种！");
+		
+		//判断单价是否为null
+		if(moviePrice == null)
+			throw new MerchantException("请输入单价！");
+		
+		//判断积分是否为Null
+		if(movieIntegralNum == null)
+			throw new MerchantException("请输入积分数！");
+		
+		//判断电影时长是否为Null
+		if(movieTimeLong == null)
+			throw new MerchantException("请输入电影播放时长！");
+		
+		//判断预告片是否为null
+		if(isNull(moviePrevuePath))
+			throw new MerchantException("请上传预告片！");
+		
+		//判断描述是否为null
+		if(isNull(movieDescribe))
+			throw new MerchantException("请输入电影简介！");
+		
+		//判断上映时间是否为null
+		if(isNull(movieStartTime1) && isNull(movieStartTime2) && isNull(movieStartTime3) && 
+				isNull(movieStartTime4) && isNull(movieStartTime5) && isNull(movieStartTime6))
+			throw new MerchantException("请至少选择一个电影播放厅并填写上映时间！");
+		
+		//判断movieImage是否为null
+		if(isNull(movieImage1) || isNull(movieImage2) || isNull(movieImage3))
+			throw new MerchantException("你还没有上传电影的图片，电影的三张图片必须上传！");
 	}
-
+	
 	/**
-	 * 图片信息校验
-	 * @param partList
-	 * @throws MerchantException 
+	 * 判断字符串是否为Null
+	 * @param str
+	 * @return
 	 */
-	public void movieRegx(List<Part> partList) throws MerchantException {
-		if(partList == null || partList.size() < 3)
-			throw new MerchantException("文件上传异常！");
-		
-		if(partList.get(0).getSubmittedFileName() == null || partList.get(0).getSubmittedFileName().trim().isEmpty())
-			throw new MerchantException("请选择封面图片！");
-		
-		if(partList.get(1).getSubmittedFileName() == null || partList.get(1).getSubmittedFileName().trim().isEmpty())
-			throw new MerchantException("请选择介绍图片！");
-		
-		if(partList.get(2).getSubmittedFileName() == null || partList.get(2).getSubmittedFileName().trim().isEmpty())
-			throw new MerchantException("请选择单品显示图片！");
+	private boolean isNull(String str){
+		if(str == null || str.trim().isEmpty())
+			return true;
+		return false;
 	}
 
 	/**
 	 * 电影上架
-	 * @param form	电影
-	 * @param sqlPaths	图片路径
-	 * @param moviePro	主演集
-	 * @param movieClassify	类型
-	 * @param movieCount  电影票总数
-	 * @throws MerchantException
+	 * @param form
+	 * @param m
+	 * @throws MerchantException 
 	 */
-	public void addMovie(Movies form , List<String> sqlPaths ,String moviePro , List<String> movieClassify ,Integer movieCount , String movieTime) throws MerchantException {
+	public void addMovie(Movies form, Map<String, String> m,List<String> sqlPaths,String oldMovieMerId) throws MerchantException {
+		String moviePro = m.get("moviePro");   //主演
+		String classifyStr = m.get("classifyStr");  //获取类型字符串
+		
+		String movieStartTime1 = m.get("movieStartTime1");  //1号厅上映时间
+		String movieStartTime2 = m.get("movieStartTime2");  //2号厅上映时间
+		String movieStartTime3 = m.get("movieStartTime3");  //3号厅上映时间
+		String movieStartTime4 = m.get("movieStartTime4");  //4号厅上映时间
+		String movieStartTime5 = m.get("movieStartTime5");  //5号厅上映时间
+		String movieStartTime6 = m.get("movieStartTime6");  //6号厅上映时间
+//		String moviePrevuePath = m.get("moviePrevuePath");  //预告片路径   这四个文件的路径都在sqlPaths集合中
+//		String movieImage1 = m.get("movieImage1");  //封面图片
+//		String movieImage2 = m.get("movieImage2");  //图片2
+//		String movieImage3 = m.get("movieImage3");  //图片3
+		String movieName = form.getMovieName();  //电影名
+		Long movieIntegralNum = form.getMovieIntegralNum();  //积分数
+		String movieDescribe = form.getMovieDescribe();  //电影简介
+		Long movieTimeLong = form.getMovieTimeLong();  //电影时长
+		String moviePrevue = form.getMoviePrevue();  //电影片种
+		BigDecimal moviePrice = form.getMoviePrice();  //单价
+		
+		form.setMovieVisitCount(0l);  //设置初始访问量为0
+		form.setMovieGradeNum(0.0);  //设置初始评分为0
+		form.setMovieStatus("1");  //设置电影的状态  1为正常
+		form.setMovieCreateTime(new Timestamp(new Date().getTime()));  //设置电影上架时间
+		
+		//进入数据修改  进入事务
 		try {
 			JdbcUtils.beginTransaction();
-			md.addMovie(form);  //添加电影
+			
+			//如果此商户已经上映了此部电影   就只是增加电影票数
+			Movies m1 = md.haveMovie(form.getMovieName());
+			if(m1 != null){  //数据库中已经有movie了
+				if(m1.getMovieMerId().contains(form.getMovieMerId())){  //如果此商户已经有了这部电影
+					//生成电影票
+					if(movieStartTime1!=null){ 
+						createTicket(movieStartTime1, m1.getMovieId(),1,movieTimeLong);
+					}
+					if(movieStartTime2!=null){
+						createTicket(movieStartTime2, m1.getMovieId(),2,movieTimeLong);
+					}
+					if(movieStartTime3!=null){
+						createTicket(movieStartTime3, m1.getMovieId(),3,movieTimeLong);
+					}
+					if(movieStartTime4!=null){
+						createTicket(movieStartTime4, m1.getMovieId(),4,movieTimeLong);
+					}
+					if(movieStartTime5!=null){
+						createTicket(movieStartTime5, m1.getMovieId(),5,movieTimeLong);
+					}
+					if(movieStartTime6!=null){
+						createTicket(movieStartTime6, m1.getMovieId(),6,movieTimeLong);
+					}
+					return;
+				}
+			}
+				
+			String str = oldMovieMerId+form.getMovieMerId()+";";
+			md.updateMerchantId(oldMovieMerId,str);
+			
+			form.setMovieMerId(str);  //修改电影的商户ID
+			md.addMovie(form); //添加电影
 			
 			Movies insertedMovie = md.findMovieByTime(form.getMovieCreateTime());  //获取到刚刚添加的电影
 			
 			//添加类型
-			for(String s:movieClassify){
+			String[] classifys = classifyStr.split(";");  //获取到类型数组
+			for(String s:classifys){
 				Classifys c = new Classifys();
 				c.setClassifyMovieId(insertedMovie.getMovieId());
 				ClassifyName cn = md.findClassifyNameByName(s);  //获取类型对象
@@ -501,32 +586,89 @@ public class MerchantService {
 			}
 			
 			//生成电影票
-			for(int i=0;i<movieCount;i++){
-				Ticket t = new Ticket();
-				t.setTicketStartTime(Timestamp.valueOf(movieTime));  //上映时间
-				t.setMovie(insertedMovie);
-				t.setTicketStatus("1");
-				md.addTicket(t);
+			if(movieStartTime1!=null){ 
+				createTicket(movieStartTime1, insertedMovie.getMovieId(),1,movieTimeLong);
+			}
+			if(movieStartTime2!=null){
+				createTicket(movieStartTime2, insertedMovie.getMovieId(),2,movieTimeLong);
+			}
+			if(movieStartTime3!=null){
+				createTicket(movieStartTime3, insertedMovie.getMovieId(),3,movieTimeLong);
+			}
+			if(movieStartTime4!=null){
+				createTicket(movieStartTime4, insertedMovie.getMovieId(),4,movieTimeLong);
+			}
+			if(movieStartTime5!=null){
+				createTicket(movieStartTime5, insertedMovie.getMovieId(),5,movieTimeLong);
+			}
+			if(movieStartTime6!=null){
+				createTicket(movieStartTime6, insertedMovie.getMovieId(),6,movieTimeLong);
 			}
 			
-			//添加图片
-			for(String s:sqlPaths){
+			//添加文件路径到数据库
+			int i = 1;
+			for(String path:sqlPaths){  //预告片在最后一个
+				if(i>3)
+					break;
 				Images img = new Images();
-				img.setImgPath(s);
+				img.setImgPath(path);
+				if(i == 1)
+					img.setImgStatus("封面");
+				else if(i == 2)
+					img.setImgStatus("介绍");
+				else if(i == 3)
+					img.setImgStatus("单品展示");
 				img.setImgMovieId(insertedMovie.getMovieId());
 				md.addImage(img);
+				i++;
 			}
+			
 			JdbcUtils.commitTransaction();
-		} catch (SQLException e) {
-			e.printStackTrace();
+		} catch (Exception e) {
 			try {
 				JdbcUtils.roolbackTransaction();
 			} catch (SQLException e1) {
-				throw new MerchantException("系统异常，请稍后再试！");
+				e1.printStackTrace();
+				throw new MerchantException("系统异常，请稍后再试");
 			}
 		}
-		
-		
-		
+	}
+
+	/**
+	 * 根据电影厅生成电影票   一个电影厅12 * 17 = 204个座位
+	 * @param movieStartTime
+	 * @param insertedMovie
+	 * @param theaterNum
+	 * @throws SQLException
+	 */
+	private void createTicket(String movieStartTime, Long insertedMovie,int theaterNum ,Long minute) throws SQLException {
+		for(int i=1;i<=12;i++){
+			for(int j=1;j<=17;j++){
+				Ticket t = new Ticket();
+				t.setTicketStartTime(Timestamp.valueOf(movieStartTime));  //上映时间
+				t.setTicketMovieStartTime(Timestamp.valueOf(movieStartTime)); //上映时间  两个其实是一样的
+				t.setTicketLocation(i+"排"+j+"列");	//座位
+				t.setTicketMovieTheater(theaterNum+"号厅");  //上映厅
+				t.setTicketMovieId(insertedMovie);;
+				Long time = t.getTicketStartTime().getTime()+(minute*60*1000);  //得到结束时间戳
+				t.setTicketMovieEndTime(new Timestamp(time));  //设置结束时间
+				t.setTicketStatus("1");
+				md.addTicket(t);
+			}
+		}
+	}
+
+	/**
+	 * //通过电影名查找数据库中相同的商户id
+	 * @param movieName
+	 * @return
+	 * @throws MerchantException 
+	 */
+	public String getMovieMerIdByMovieName(String movieName) throws MerchantException {
+		try {
+			return md.getMovieMerIdByMovieName(movieName);
+		} catch (SQLException e) {
+			throw new MerchantException("系统异常，请稍后再试");
+		}
 	}
 }

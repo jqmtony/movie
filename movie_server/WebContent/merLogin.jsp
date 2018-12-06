@@ -84,7 +84,14 @@
 									<font style="color:red;" id="errorMsg"></font>
 									<fieldset>
 										<ul>
-											<li class="frame_style form_error"><label class="user_icon iconfont">&#xe620;</label><input name="" type="text" value="" data-name="邮箱地址" id="username" /><i>邮箱地址</i></li>
+										<c:choose>
+											<c:when test="${! empty cookie.remMer}">
+												<li class="frame_style form_error"><label class="user_icon iconfont">&#xe620;</label><input name="" type="text" value="${cookie.remMer.value}" data-name="" id="username" /><i></i></li>
+											</c:when>
+											<c:otherwise>
+												<li class="frame_style form_error"><label class="user_icon iconfont">&#xe620;</label><input name="" type="text" value="" data-name="邮箱地址" id="username" /><i>邮箱地址</i></li>
+											</c:otherwise>
+										</c:choose>
 											<li class="frame_style form_error"><label class="password_icon iconfont">&#xe625;</label><input name="" type="password" value="" data-name="密码" id="userpwd" /><i>密码</i></li>
 											<li class="frame_style form_error">
 												<label class="Codes_icon iconfont">&#xe624;</label>
@@ -96,7 +103,15 @@
 										<div class="space"></div>
 										<div class="clearfix">
 											<label class="inline">
-                                      <input id="remUser" type="checkbox" class="ace">
+										<c:choose>
+											<c:when test="${! empty cookie.remMer}">
+												<input id="remUser" type="checkbox" checked="checked" class="ace">
+											</c:when>
+											<c:otherwise>
+												<input id="remUser" type="checkbox" class="ace">
+											</c:otherwise>
+										</c:choose>
+                                      
                                       <span class="lbl">保存用户</span><a href="javascript:forget()" style="margin-left:150px;">忘记密码</a><br /><br />
                                   </label>
                                  			<button type="button" class="login_btn" id="login_btn"> 登&nbsp;陆 </button>
@@ -120,14 +135,7 @@
 		</div>
 		<!-- <div class="loginbm">版权所有 2016</div> -->
 	</body>
-	<c:if test="${! empty cookie.remMer}">
-		<script type="text/javascript">
-			var ad = $('#username').val();
-			if(ad === null || ad === ""){
-				$('#username').val('${cookie.remMer.value}');
-			}
-		</script>
-	</c:if>
+	
 	<c:if test="${! empty msg }">
 		<script type="text/javascript">
 			alert("${msg}");
@@ -167,8 +175,9 @@
 			if($el.val() == "") {
 				var name=$el.attr("data-name");
 				$parent.attr('class', 'frame_style').addClass(' form_error form_prompt');
-                 $parent.find('i').eq(inputname).html(name+"不能为空").addClass("prompt");
+                $parent.find('i').eq(inputname).html(name+"不能为空").addClass("prompt");
 				num++;
+				againCreateVerify(); //刷新验证码
 				return false;
 			}
 		});
@@ -193,6 +202,7 @@
 				if(data === "yes"){
 					location.href = "merIndex.jsp";
 				}else{
+					againCreateVerify(); //刷新验证码
 					$('#errorMsg').html(data);
 				}
 			});
@@ -210,8 +220,9 @@
 				if($el.val() == "") {
 					var name=$el.attr("data-name");
 					$parent.attr('class', 'frame_style').addClass(' form_error form_prompt');
-	                 $parent.find('i').eq(inputname).html(name+"不能为空").addClass("prompt");
+	                $parent.find('i').eq(inputname).html(name+"不能为空").addClass("prompt");
 					num++;
+					againCreateVerify(); //刷新验证码
 					return false;
 				}
 			});
@@ -237,6 +248,7 @@
 						alert("注册链接已发送至您的邮箱，请根据邮件提示激活账号！")
 						history.go(0);
 					}else{
+						againCreateVerify(); //刷新验证码
 						$('#errorMsg').html(data);
 					}
 				}); 
@@ -271,7 +283,8 @@
 			if($el.val() == "") {
 				var name=$el.attr("data-name");
 				$parent.attr('class', 'frame_style').addClass(' form_error form_prompt');
-                 $parent.find('i').eq(inputname).html(name+"不能为空").addClass("prompt");
+                $parent.find('i').eq(inputname).html(name+"不能为空").addClass("prompt");
+                againCreateVerify(); //刷新验证码
 				num++;
 				return false;
 			}
@@ -296,6 +309,7 @@
 					alert("修改密码链接已发送至您的邮箱，请根据链接修改密码！")
 					history.go(0);
 				}else{
+					againCreateVerify(); //刷新验证码
 					$('#errorMsg').html(data);
 				}
 			}); 

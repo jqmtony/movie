@@ -7,6 +7,7 @@ import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.math.BigDecimal;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.sql.Timestamp;
@@ -593,6 +594,9 @@ public class CommonsUtils {
 				continue g1;
 			try {
 				g2:switch(attrType){
+				case "java.math.BigDecimal":
+					me.invoke(t, BigDecimal.valueOf(Double.parseDouble(params)));
+					break g2;
 				case "java.lang.Integer":
 					me.invoke(t, Integer.parseInt(params));
 					break g2;

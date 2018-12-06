@@ -14,7 +14,10 @@ public class demo {
 	
 	@Test
 	public void fun1() throws HttpException, UnsupportedEncodingException, IOException{
-		File file = new File("g:/db.sql");
-		File file2 = new File("f:/1.sql");
+		String sql ="123;345;";
+		String[] s = sql.split(";");
+		System.out.println(s.length);
+		for(String s1:s)
+			System.out.println(s1);
 	}
 }

@@ -292,9 +292,10 @@ public class UserService {
 			}else if(type == 2){  //添加用户
 				form.setUserCreateTime(new Timestamp(new Date().getTime())); //设置创建时间
 				ud.insertUser(form);  //添加用户
+				Users u = ud.findUserByCraeteTime(form.getUserCreateTime());
 				Integral in = new Integral();  //创建积分卡对象
 				in.setIntegralCount(0l);  //设置初始积分数
-				in.setUser(form);  //设置对应用户
+				in.setUser(u);  //设置对应用户
 				ud.insertIntegral(in);  //插入积分卡到数据库
 			}
 			JdbcUtils.commitTransaction();

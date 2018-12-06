@@ -18,9 +18,11 @@ import java.util.Vector;
 
 import com.yc.exception.MovieException;
 import com.yc.movie.bean.Comment;
+import com.yc.movie.bean.Merchant;
 import com.yc.movie.bean.Movies;
 import com.yc.movie.bean.Reply;
 import com.yc.movie.bean.Teleplay;
+import com.yc.movie.bean.Ticket;
 import com.yc.movie.bean.Users;
 import com.yc.movie.dao.MovieDao;
 import com.yc.utils.JdbcUtils;
@@ -220,4 +222,56 @@ public class MovieService{
 			}
 		}
 	}
+
+	/**
+	 * 添加评分
+	 * @param movieId
+	 * @throws MovieException 
+	 */
+	public void addMovieGradeNum(Long movieId) throws MovieException {
+		try {
+			JdbcUtils.beginTransaction();
+			Movies movie = md.findMovieById(movieId); //得到movie
+			movie.setMovieGradeNum(movie.getMovieGradeNum()+0.001);  //评论
+			md.updateMovieGradeNum(movie);  //更新评分数
+			JdbcUtils.commitTransaction();
+		} catch (SQLException e) {
+			try {
+				JdbcUtils.roolbackTransaction();
+			} catch (SQLException e1) {
+				throw new MovieException("系统异常，请稍后再试！");
+			}
+		}
+		
+		
+	}
+
+	/**
+	 * 根据ID获取商户对象
+	 * @param merId
+	 * @return
+	 * @throws MovieException 
+	 */
+	public Merchant findMerchantById(Long merId) throws MovieException {
+		try {
+			return md.findMerchantById(merId);
+		} catch (SQLException e) {
+			throw new MovieException("系统异常，请稍后再试！");
+		}
+	}
+
+	/**
+	 * 通过时间来过滤电影票
+	 * @param ticketList
+	 * @return
+	 */
+	public List<Ticket> createTicketByStartTime(List<Ticket> ticketList) {
+		for(Ticket t:ticketList){
+			if(t.getTicketStartTime().getTime() < new Date().getTime()){  //如果电影票上的时间小于当前时间就移除
+				ticketList.remove(t);  //移除
+			}
+		}
+		return ticketList;
+	}
+
 }

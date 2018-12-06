@@ -12,7 +12,7 @@
         <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
         <meta name="format-detection" content="telephone=no">
 
-        <title>信息照片上传</title>
+        <title>电影上架</title>
 
         <link rel="stylesheet" type="text/css" href="css/base.css">
         <link rel="stylesheet" type="text/css" href="css/home.css">
@@ -68,7 +68,7 @@ body{font:12px/180% Arial, Helvetica, sans-serif, "新宋体";}
 }
     </style>
     <body>
-    	 <form action="<c:url value='/mer.s?method=addMovie' />" name="form1" method="post" enctype="multipart/form-data">
+    	 <form action="<c:url value='/mer.s?method=addMovie&movieMerId=${loginedMerchant.merId }' />" name="form1" method="post" enctype="multipart/form-data">
         <section class="aui-content">
             <div style="height:20px;"></div>
             <div class="aui-content-up">
@@ -76,115 +76,149 @@ body{font:12px/180% Arial, Helvetica, sans-serif, "新宋体";}
                     <div class="aui-content-up-form">
                         <h2><a href="merProduct_Manage.jsp">商品管理</a> >> 电影上架 </h2>
                     </div>
+                    
+                    <%--片名输入框 --%>
                     <div class="aui-form-group clear">
                         <label class="aui-label-control">
                             片名 <em>*</em>
                         </label>
                         <div class="aui-form-input">
-                            <input type="text" class="aui-form-control-two" name="movieName" onBlur="checkna()" value="${param.movieName }" required id="1" placeholder="请输入片名">
-                            <span class="tips" id="mname"></span>
+                            <input type="text" class="aui-form-control-two" name="movieName" onBlur="blurMovieName()" value="${param.movieName }" required id="1" placeholder="请输入片名">
+                            <span class="tips" id="movieNameErrorMsg"></span>
                         </div>
                     </div>
+                    
+                    <%--主演输入框 --%>
                     <div class="aui-form-group clear">
                         <label class="aui-label-control">
                             主演 <em>*</em>
                         </label>
                         <div class="aui-form-input">
-                            <input type="text" class="aui-form-control-two" name="moviePro" value="${param.moviePro }" id="2" placeholder="请输入主演" onBlur="checkpsd1()" required/>
-                            <span class="tips" id="pro"></span>
+                            <input type="text" class="aui-form-control-two" name="moviePro" value="${param.moviePro }" id="2" placeholder="请输入主演,多位主演用英文分号隔开" onBlur="blurMoviePro()" required/>
+                            <span class="tips" id="movieProErrorMsg"></span>
                         </div>
                     </div>
-                  <div class="aui-form-group clear">
+                    
+                    <%--选择分类 --%>
+                  	<div class="aui-form-group clear">
                         <label class="aui-label-control">
                             分类 <em>*</em>
                         </label>
                         <div class="aui-form-input">
-                            <select style="width:100px;height:30px;" name="movieClassify1" value="${param.movieClassify }">
+                            <select style="width:100px;height:30px;" id="selectMovieClassify" onchange="setMovieClassify()">
                             	<c:forEach items="${classifyList }" var="bean">
                             		<option style="width:200px;height:30px;">${bean.classifyNameString }</option>
                             	</c:forEach>
                             </select>
-                            <select style="width:100px;height:30px;" name="movieClassify2" value="${param.movieClassify }">
-                            	<c:forEach items="${classifyList }" var="bean" begin="1">
-                            		<option style="width:200px;height:30px;">${bean.classifyNameString }</option>
-                            	</c:forEach>
-                            </select>
-                            <select style="width:100px;height:30px;" name="movieClassify3" value="${param.movieClassify }">
-                            	<c:forEach items="${classifyList }" var="bean" begin="2">
-                            		<option style="width:200px;height:30px;">${bean.classifyNameString }</option>
-                            	</c:forEach>
+                            <input type="text" readonly="readonly" name="movieClassify" id="movieClassify" value="${param.movieClassify}" style="width:300px;height:30px;" >
+                       		<input type="button" value="重置" style="width:50px;height:30px;cursor:pointer;" onclick="emptyMovieClassify()">
+                        </div>
+                    </div>
+                    
+                    <%--选择片种 --%>
+                    <div class="aui-form-group clear">
+                        <label class="aui-label-control">
+                            片种 <em>*</em>
+                        </label>
+                        <div class="aui-form-input">
+                            <select style="width:200px;height:30px;" name="movieGenre"> 
+                            	<option style="width:200px;height:30px;">国产2D</option>
+                            	<option style="width:200px;height:30px;">国产3D</option>
                             </select>
                         </div>
                     </div>
+                    
+                    <%--单价输入框 --%>
                     <div class="aui-form-group clear">
                         <label class="aui-label-control">
                             单价 <em>*</em>
                         </label>
                         <div class="aui-form-input">
-                            <input type="text" class="aui-form-control-two" name="moviePrice" value="${param.moviePrice }" id="3" placeholder="请输入单价" onBlur="checkpsd2()" required/>
-                            <span class="tips" id="price"></span>
+                            <input type="text" class="aui-form-control-two" name="moviePrice" value="${param.moviePrice }" id="3" placeholder="请输入单价" onBlur="blurMoviePrice()" required/>
+                            <span class="tips" id="moviePriceErrorMsg"></span>
                         </div>
                     </div>
                     
-                    <div class="aui-form-group clear">
-                        <label class="aui-label-control">
-                            电影票总数 <em>*</em>
-                        </label>
-                        <div class="aui-form-input">
-                            <select style="width:200px;height:30px;" name="movieCount" >
-                            	<option>50</option>
-                            	<option>100</option>
-                            	<option>300</option>
-                            	<option>500</option>
-                            	<option>1000</option>
-                            	<option>2000</option>
-                            </select>
-                        </div>
-                    </div>
-                    
-                    <div class="aui-form-group clear">
-                        <label class="aui-label-control">
-                            上映时间 <em>*</em>
-                        </label>
-                        <div class="aui-form-input">
-								<input type="text" name="movieTime" style="width:200px;height:30px;" value="${param.movieTime }" id="" onclick="SelectDate(this,'yyyy-MM-dd hh:mm:ss')"/>
-								
-								<!-- <span>获取日期：<input type="text" value="" id="" onclick="SelectDate(this,'yyyy-MM-dd')"/></span> -->
-						   
-                        </div>
-                    </div>
-                    
+                    <%--积分数 --%>
                     <div class="aui-form-group clear">
                         <label class="aui-label-control">
                             积分 <em>*</em>
                         </label>
                         <div class="aui-form-input">
-                            <input type="text" class="aui-form-control-two" name="movieIntegralNum" value="${param.movieIntegralNum }" id="4" placeholder="请输入积分" onBlur="checkpsd3()" required/>
-                            <span class="tips" id="inte"></span>
+                            <input type="text" class="aui-form-control-two" name="movieIntegralNum" value="${param.movieIntegralNum }" id="4" placeholder="请输入积分" onBlur="blurMovieIntegralNum()" required/>
+                            <span class="tips" id="movieIntegralNumErrorMsg"></span>
                         </div>
                     </div>
                     
+                    <%--电影时长 --%>
+          			<div class="aui-form-group clear">
+                        <label class="aui-label-control">
+                            时长 <em>*</em>
+                        </label>
+                        <div class="aui-form-input">
+                            <input type="text" class="aui-form-control-two" name="movieTimeLong" value="${param.movieTimeLong }" id="5" placeholder="请输入电影时长,单位:分钟" onBlur="blurMovieTimeLong()" required/>
+                            <span class="tips" id="movieTimeLongErrorMsg"></span>
+                        </div>
+                    </div>
                     
+                    <%--预告片 --%>
                     <div class="aui-form-group clear">
+                        <label class="aui-label-control">
+                            预告片 <em>*</em>
+                        </label>
+                        <div class="aui-form-input">
+                            <input type="file" class="aui-form-control-two" name="moviePrevue" id="6" onchange="changeMoviePrevue()" required/>
+                            <span class="tips" id="moviePrevueErrorMsg"></span>
+                        </div>
+                    </div>
+                    
+                    <%--电影描述 --%>
+                     <div class="aui-form-group clear">
                         <label class="aui-label-control">
                             描述 <em>*</em>
                         </label>
                         <div class="aui-form-input">
-                            <textarea class="aui-form-control" name="movieDescribe" id="4" minlength="5" onBlur="checkpsd4()">${param.movieDescript }</textarea>
-                        	<span class="tips" id="des"></span>
+                            <textarea class="aui-form-control" name="movieDescribe" placeholder="请输入电影剧情简介" id="7" minlength="5" onBlur="blurMovieDescribe()">${param.movieDescript }</textarea>
+                        	<span class="tips" id="movieDescribeErrorMsg"></span>
                         </div>
                         
                     </div>
-          
-          
+                    
+          			<%--这里是选择生成电影票 --%>
+          			 <div class="aui-form-group clear">
+                        <label class="aui-label-control">
+                            上映厅室 <em>*</em>
+                        </label>
+                        <div class="aui-form-input" style="margin-top:20px;width:auto;">
+                            <input type="checkbox" name="movieTheater1" name="movieTheater1" value="1号厅" style="margin-top:20px;" onclick="clickMovieTheater(1)">1号厅 <br />
+                            <input type="checkbox" name="movieTheater2" name="movieTheater2" value="2号厅" style="margin-top:20px;" onclick="clickMovieTheater(2)">2号厅 <br />
+                            <input type="checkbox" name="movieTheater3" name="movieTheater3" value="3号厅" style="margin-top:20px;" onclick="clickMovieTheater(3)">3号厅 <br />
+                            <input type="checkbox" name="movieTheater4" name="movieTheater4" value="4号厅" style="margin-top:20px;" onclick="clickMovieTheater(4)">4号厅 <br />
+                            <input type="checkbox" name="movieTheater5" name="movieTheater5" value="5号厅" style="margin-top:20px;" onclick="clickMovieTheater(5)">5号厅 <br />
+                            <input type="checkbox" name="movieTheater6" name="movieTheater6" value="6号厅" style="margin-top:20px;" onclick="clickMovieTheater(6)">6号厅 <br />
+                        </div>
+                         <label class="aui-label-control" style="margin:0 0 0 40px">
+                            上映时间 <em>*</em>
+                        </label> 
+                        <div class="aui-form-input" style="margin:20px 0 0 0;width:310px;">
+                            <input type="text" name="movieStartTime1" style="margin-top:15px;" disabled="disabled" value="" id="movieStartTime1" placeholder="1号厅对应的上映时间" readonly="readonly" onclick="SelectDate(this,'yyyy-MM-dd hh:mm:ss')" onblur="blurMovieStartTime()"/><br />
+                            <input type="text" name="movieStartTime2" style="margin-top:15px;" disabled="disabled" value="" id="movieStartTime2" placeholder="2号厅对应的上映时间" readonly="readonly" onclick="SelectDate(this,'yyyy-MM-dd hh:mm:ss')" onblur="blurMovieStartTime()"/><br />
+                            <input type="text" name="movieStartTime3" style="margin-top:15px;" disabled="disabled" value="" id="movieStartTime3" placeholder="3号厅对应的上映时间" readonly="readonly" onclick="SelectDate(this,'yyyy-MM-dd hh:mm:ss')" onblur="blurMovieStartTime()"/><br />
+                            <input type="text" name="movieStartTime4" style="margin-top:15px;" disabled="disabled" value="" id="movieStartTime4" placeholder="4号厅对应的上映时间" readonly="readonly" onclick="SelectDate(this,'yyyy-MM-dd hh:mm:ss')" onblur="blurMovieStartTime()"/><br />
+                            <input type="text" name="movieStartTime5" style="margin-top:15px;" disabled="disabled" value="" id="movieStartTime5" placeholder="5号厅对应的上映时间" readonly="readonly" onclick="SelectDate(this,'yyyy-MM-dd hh:mm:ss')" onblur="blurMovieStartTime()"/><br />
+                            <input type="text" name="movieStartTime6" style="margin-top:15px;" disabled="disabled" value="" id="movieStartTime6" placeholder="6号厅对应的上映时间" readonly="readonly" onclick="SelectDate(this,'yyyy-MM-dd hh:mm:ss')" onblur="blurMovieStartTime()"/><br />
+                        </div>
+                    </div>
+                    
+                    
                      <div class="aui-form-group clear">
                         <label class="aui-label-control">
                             封面<em>*</em>
                         </label>
                         <div class="aui-form-input">
                             <div class="con4">
-								<canvas id="cvs1" width="200" height="200" onclick="upload1.click()" style="cursor:pointer;"></canvas>
-								<!-- <span class="btn upload">选择封面图 --><input type="file" class="upload_pic" id="upload1" name="image1" style="display:none;"/><!-- </span> -->
+								<canvas id="cvs1" width="200" height="200" onclick="upload1.click()" style="cursor:pointer;background-image:url('images/uploadLogo.jpg');"></canvas>
+								<!-- <span class="btn upload">选择封面图 --><input type="file" class="upload_pic" id="upload1" name="movieImage1" style="display:none;"/><!-- </span> -->
 							</div>
                         </div>
                     </div>
@@ -195,8 +229,8 @@ body{font:12px/180% Arial, Helvetica, sans-serif, "新宋体";}
                         </label>
                         <div class="aui-form-input">
                            <div class="con4">
-								<canvas id="cvs2" width="200" height="200" onclick="upload2.click()" style="cursor:pointer;"></canvas>
-								<input type="file" class="upload_pic" id="upload2" name="image2" style="display:none;"/>
+								<canvas id="cvs2" width="200" height="200" onclick="upload2.click()" style="cursor:pointer;background-image:url('images/uploadLogo.jpg');"></canvas>
+								<input type="file" class="upload_pic" id="upload2" name="movieImage2" style="display:none;"/>
 							</div>
                         </div>
                     </div>
@@ -207,8 +241,8 @@ body{font:12px/180% Arial, Helvetica, sans-serif, "新宋体";}
                         </label>
                         <div class="aui-form-input">
                             <div class="con4">
-								<canvas id="cvs3" width="200" height="200" onclick="upload3.click()" style="cursor:pointer;"></canvas>
-								<input type="file" class="upload_pic" id="upload3" name="image3" style="display:none;"/>
+								<canvas id="cvs3" width="200" height="200" onclick="upload3.click()" style="cursor:pointer;background-image:url('images/uploadLogo.jpg');"></canvas>
+								<input type="file" class="upload_pic" id="upload3" name="movieImage3" style="display:none;"/>
 							</div>
                         </div>
                     </div>
@@ -221,7 +255,7 @@ body{font:12px/180% Arial, Helvetica, sans-serif, "新宋体";}
             </div>
             <div class="aui-btn-default">
             <button style="margin-right:100px;" class="aui-btn aui-btn-account" onclick="window.location.href='merProduct_Manage.jsp'">返回商品管理</button>
-                <input type="submit" class="aui-btn aui-btn-account" value="确认上架">
+                <input id="submitMovie" type="submit" style="background-color:#f9b6aa;" disabled="disabled" class="aui-btn aui-btn-account" value="确认上架">
             </div>
             
         </section> 
@@ -231,71 +265,155 @@ body{font:12px/180% Arial, Helvetica, sans-serif, "新宋体";}
         <script type="text/javascript" src="js/jquery.min.js"></script>
         <script type="text/javascript" src="js/up.js"></script>
         <script type="text/javascript">
-            
-
-            //验证片
-            function checkna(){
-                na=form1.movieName.value;
-                if( na.length <1 || na.length >20)
-                {
-                    mname.innerHTML='<font class="tips_false">长度是1~20个字符</font>';
-                }else{
-                    mname.innerHTML='<font class="tips_true">输入正确</font>';
-                }
+        	var flag = false;
+            //验证片名
+            function blurMovieName(){
+            	na = form1.movieName.value;
+            	console.log("片名:"+na);
+            	if((na.length > 1) && (na.length < 20)){
+            		movieNameErrorMsg.innerHTML='<font class="tips_true">输入正确</font>';
+            	}else{
+            		movieNameErrorMsg.innerHTML='<font class="tips_false">长度是1~20个字符</font>';
+            	}
+            	isCanUpload(); //判断是否可以提交
             }
 
             //验证主演
-            function checkpsd1(){
+            function blurMoviePro(){
                 na=form1.moviePro.value;
-                if( na.length <1 || na.length >20)
-                {
-                    pro.innerHTML='<font class="tips_false">长度是1~20个字符</font>';
+                console.log("主演:"+na);
+                if( na.length >1 && na.length <500){
+                	movieProErrorMsg.innerHTML='<font class="tips_true">输入正确</font>';
                 }else{
-                    pro.innerHTML='<font class="tips_true">输入正确</font>';
+                	 movieProErrorMsg.innerHTML='<font class="tips_false">长度是1~500个字符</font>';
                 }
+                isCanUpload(); //判断是否可以提交
             }
 
             //验证单价
-            function checkpsd2(){
+            function blurMoviePrice(){
                 na=form1.moviePrice.value;
-                var reg=/^(([1-9][0-9]*)|(([0]\.\d{1,2}|[1-9][0-9]*\.\d{1,2})))$/;
-                if(!reg.test(na))
-                {
-                    price.innerHTML='<font class="tips_false">单价格式错误</font>';
+                console.log("单价:"+na);
+                var reg = /^(([1-9][0-9]*)|(([0]\.\d{1,2}|[1-9][0-9]*\.\d{1,2})))$/;
+                if(reg.test(na)){
+                	moviePriceErrorMsg.innerHTML='<font class="tips_true">输入正确</font>';
                 }else{
-                    price.innerHTML='<font class="tips_true">输入正确</font>';
+                	moviePriceErrorMsg.innerHTML='<font class="tips_false">单价格式错误</font>';
                 }
+                isCanUpload(); //判断是否可以提交
             }
             
           //验证积分
-            function checkpsd3(){
-                na=form1.movieIntegralNum.value;
-                var reg=/\d{1,3}/;
-                if(!reg.test(na))
-                {
-                    inte.innerHTML='<font class="tips_false">积分格式错误 0-999</font>';
+            function blurMovieIntegralNum(){
+                na = form1.movieIntegralNum.value;
+                console.log("积分:"+na);
+                var reg = /^[1-9]\d{0,2}$/;
+                if(reg.test(na)){
+                	movieIntegralNumErrorMsg.innerHTML='<font class="tips_true">输入正确</font>';
                 }else{
-                    inte.innerHTML='<font class="tips_true">输入正确</font>';
+                	movieIntegralNumErrorMsg.innerHTML='<font class="tips_false">积分格式错误 1-999</font>';
                 }
+                isCanUpload(); //判断是否可以提交
             }
 
+          //验证时长
+          function blurMovieTimeLong(){
+        	  na = form1.movieTimeLong.value;
+              console.log("时长:"+na);
+              var reg = /^[1-9]\d{0,2}$/;
+              if(reg.test(na)){
+              	movieTimeLongErrorMsg.innerHTML='<font class="tips_true">输入正确</font>';
+              }else{
+              	movieTimeLongErrorMsg.innerHTML='<font class="tips_false">时长格式错误 1-999</font>';
+              }
+              isCanUpload(); //判断是否可以提交
+          }
             
-            
+          //验证是否选择文件
+          function changeMoviePrevue(){
+        	  na = form1.moviePrevue.value;
+              console.log("电影预告文件名:"+na);
+              if(na.endsWith(".mp4")){
+              	moviePrevueErrorMsg.innerHTML='<font class="tips_true">选择正确</font>';
+              }else{
+            	moviePrevueErrorMsg.innerHTML='<font class="tips_false">格式错误,只能上传.mp4文件</font>';
+              }
+              isCanUpload(); //判断是否可以提交
+          }
+          
+          
+          
           //验证描述
-            function checkpsd4(){
+            function blurMovieDescribe(){
                 na=form1.movieDescribe.value;
-                if(na.length < 5 || na.length > 500)
-                {
-                	des.innerHTML='<font class="tips_false">描述必须大于5个字符</font>';
+                console.log("描述:"+na);
+                if(na.length > 5 && na.length < 500){
+                	movieDescribeErrorMsg.innerHTML='<font class="tips_true">输入正确</font>';
                 }else{
-                    des.innerHTML='<font class="tips_true">输入正确</font>';
+                	movieDescribeErrorMsg.innerHTML='<font class="tips_false">描述必须大于5个字符</font>';
                 }
+                isCanUpload(); //判断是否可以提交
             }
-
-        
+          
+         
+          
+			
+          //选择电影厅  如果为选中 对 应的时间框变成可改变
+          function clickMovieTheater(num){
+        	  var movieTheaterObj = $('#movieTheater'+num);
+        	  var movieStartTimeObj = $('#movieStartTime'+num);
+        	  if(movieStartTimeObj.attr("disabled")){
+        		  movieStartTimeObj.attr("disabled",false);
+        	  }else{
+        		  movieStartTimeObj.attr("disabled",true);
+        		  movieStartTimeObj.val("");
+        	  }
+        	  
+          }
+          
+         
+          /* 	$('input[type="checkbox"]').each(function(){
+          		
+          		//if($(this).attr("checked") != undefined )
+    	    		//alert($(this).attr("name"));
+          	}); */
+          	
+          	//选择分类
+          	function setMovieClassify(){
+          		var selectMovieClassify = $('#selectMovieClassify').val();
+          		var movieClassifyObj = $('#movieClassify');
+          		if(movieClassifyObj.val().indexOf(selectMovieClassify) == -1){
+          			movieClassifyObj.val(movieClassifyObj.val()+selectMovieClassify+";");
+          		}
+          	}
+          	
+          	//清空分类
+          	function emptyMovieClassify(){
+          		var movieClassifyObj = $('#movieClassify');
+          		movieClassifyObj.val("");
+          	}
+        	
+          	
+          	//判断是否格式正确  正确就把上传按钮显示出来
+          	function isCanUpload(){
+          		$('span[class="tips"]').each(function(){
+              		var status = $(this).html().indexOf("正确")!=-1;
+              		console.log(status)
+              		if(status === false){
+              			$('#submitMovie').css("background-color","#f9b6aa");
+              			$('#submitMovie').attr("disabled",true);
+              			flag = false;
+              		}
+              	});
+          		if(flag){
+          			$('#submitMovie').css("background-color","#f45858");
+          			$('#submitMovie').attr("disabled",false);
+          		}
+          		flag = true;
+          	}
         </script>
         <script>
-//获取上传按钮
+//获取上传文件按钮
 var input1 = document.getElementById("upload1"); 
 var input12 = document.getElementById("upload2");
 var input13 = document.getElementById("upload3"); 
@@ -323,22 +441,6 @@ function readFile1(obj,input1){
 	reader.readAsDataURL(file);//把上传的文件转换成url
 	//当文件读取成功便可以调取上传的接口
 	reader.onload = function(e){ 
-		// console.log(this.result);//文件路径
-		// console.log(e.target.result);//文件路径
-		/*var data = e.target.result.split(',');
-		var tp = (file.type == 'image/png')? 'png': 'jpg';
-		var imgUrl = data[1];//图片的url，去掉(data:image/png;base64,)
-		//需要上传到服务器的在这里可以进行ajax请求
-		// console.log(imgUrl);
-		// 创建一个 Image 对象 
-		var image = new Image();
-		// 创建一个 Image 对象 
-		// image.src = imgUrl;
-		image.src = e.target.result;
-		image.onload = function(){
-			document.body.appendChild(image);
-		}*/
-
 		var image = new Image();
 		// 设置src属性 
 		image.src = e.target.result;

@@ -72,10 +72,10 @@ public class MerchantDao {
 	 * @throws SQLException 
 	 */
 	public void insertMerchant(Merchant me) throws SQLException {
-		String sql = "insert into merchant values(?,?,?,?,?,?,?,?)";
+		String sql = "insert into merchant values(?,?,?,?,?,?,?,?,?)";
 		Object[] params = {me.getMerId(),me.getMerName(),me.getMerTel(),
 				me.getMerEmail(),me.getMerAddr(),me.getMerPwd(),
-				me.getMerIDCard(),me.getMerStatus()};
+				me.getMerIDCard(),me.getMerStatus(),me.getMerStoreName()};
 		qr.update(sql, params);
 	}
 
@@ -139,10 +139,11 @@ public class MerchantDao {
 	 * @throws SQLException 
 	 */
 	public void addMovie(Movies form) throws SQLException {
-		String sql = "insert into movies values(?,?,?,?,?,?,?,?,?,?,?)";
-		Object[] params = {form.getMovieId(),form.getMerchant().getMerId(),form.getMovieIntegralNum(),
+		String sql = "insert into movies values(?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
+		Object[] params = {form.getMovieId(),form.getMovieMerId(),form.getMovieIntegralNum(),
 				form.getMovieName(),form.getMovieGradeNum(),form.getMovieVisitCount(),form.getMovieDescribe(),
-				form.getMoviePath(),form.getMoviePrice(),form.getMovieStatus(),form.getMovieCreateTime()};
+				form.getMoviePath(),form.getMoviePrice(),form.getMovieStatus(),form.getMovieCreateTime(),
+				form.getMovieTimeLong(),form.getMoviePrevue(),form.getMovieGenre()};
 		qr.update(sql, params);
 	}
 
@@ -202,9 +203,11 @@ public class MerchantDao {
 	 * @throws SQLException 
 	 */
 	public void addTicket(Ticket t) throws SQLException {
-		String sql = "insert into ticket values(?,?,?,?,?,?)";
-		Object[] params = {t.getTicketId(),t.getMovie().getMovieId(),t.getTicketStatus(),
-				t.getTicjetBuyBy(),t.getTicketStartTime(),t.getIndent()};
+		String sql = "insert into ticket values(?,?,?,?,?,?,?,?,?,?)";
+		Object[] params = {t.getTicketId(),t.getTicketMovieId(),t.getTicketStatus(),
+				t.getTicjetBuyBy(),t.getTicketStartTime(),t.getIndent(),
+				t.getTicketLocation(),t.getTicketMovieTheater(),t.getTicketMovieStartTime(),
+				t.getTicketMovieEndTime()};
 		qr.update(sql, params);
 	}
 
@@ -219,5 +222,45 @@ public class MerchantDao {
 				img.getImgMerchantId(),img.getImgTeleplayId(),img.getImgTicketId(),
 				img.getImgNewId(),img.getImgStatus(),img.getImgPath()};
 		qr.update(sql, params);
+	}
+
+	/**
+	 * //通过电影名查找数据库中相同的商户id
+	 * @param movieName
+	 * @return
+	 * @throws SQLException 
+	 */
+	public String getMovieMerIdByMovieName(String movieName) throws SQLException {
+		String sql = "select * from movies where movieName=?";
+		List<Movies> list = qr.query(sql, new BeanListHandler<Movies>(Movies.class),movieName);
+		if(list.size() > 0)
+			return list.get(0).getMovieMerId();
+		return null;
+	}
+
+	/**
+	 * 修改数据库中所有的电影名的商户id
+	 * @param oldMovieMerId
+	 * @param str
+	 * @throws SQLException 
+	 */
+	public void updateMerchantId(String oldMovieMerId, String newMovieMerId) throws SQLException {
+		String sql = "update movies set movieMerId=? where movieMerId=?";
+		Object[] params = {newMovieMerId,oldMovieMerId};
+		qr.update(sql, params);
+	}
+
+	/**
+	 * 判断数据库中是否已经有这个电影
+	 * @param movieName
+	 * @return
+	 * @throws SQLException 
+	 */
+	public Movies haveMovie(String movieName) throws SQLException {
+		String sql = "select * from movies where movieName=?";
+		List<Movies> list = qr.query(sql, new BeanListHandler<Movies>(Movies.class),movieName);
+		if(list.size() > 0)
+			return list.get(0);
+		return null;
 	}
 }

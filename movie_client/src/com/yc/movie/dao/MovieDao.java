@@ -1,12 +1,14 @@
 package com.yc.movie.dao;
 
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Vector;
 
 import org.apache.commons.dbutils.QueryRunner;
 import org.apache.commons.dbutils.handlers.BeanListHandler;
 
+import com.yc.movie.bean.ClassifyName;
 import com.yc.movie.bean.Classifys;
 import com.yc.movie.bean.Comment;
 import com.yc.movie.bean.Images;
@@ -36,8 +38,17 @@ public class MovieDao {
 			//查询当前movie对应的类型集合
 			sql = "select * from classifys where classifyMovieId=?";
 			List<Classifys> classifysList = qr.query(sql, new BeanListHandler<Classifys>(Classifys.class),movie.getMovieId());
-			if(classifysList.size() > 0)
+			if(classifysList.size() > 0){
+				for(Classifys c : classifysList){
+					sql = "select * from classifyname where classifyNameId=?";
+					List<ClassifyName> list1 = qr.query(sql, new BeanListHandler<ClassifyName>(ClassifyName.class),c.getClassifyName());
+					if(list1.size() > 0){
+						c.setClassifyNameObj(list1.get(0));
+					}
+				}
 				movie.setClassifysList(classifysList);  //设置类型集合
+			}
+			
 			//查询当前movie对应的图片集合
 			sql = "select * from images where imgMovieId=?";
 			List<Images> imgList = qr.query(sql, new BeanListHandler<Images>(Images.class),movie.getMovieId());
@@ -69,27 +80,40 @@ public class MovieDao {
 	 * @throws SQLException 
 	 */
 	public Movies createMovie(Movies movie) throws SQLException {
+		//添加电影票集合
 		String sql = "select * from ticket where ticketMovieId=?";
 		List<Ticket> ticketList = qr.query(sql, new BeanListHandler<Ticket>(Ticket.class),movie.getMovieId());
 		movie.setTicketList(ticketList);
 		
+		//添加电影类型集合
 		sql = "select * from classifys where classifyMovieId=?";
 		List<Classifys> classifysList = qr.query(sql, new BeanListHandler<Classifys>(Classifys.class),movie.getMovieId());
+		classifysList = createClassifysList(classifysList);
 		movie.setClassifysList(classifysList);
 		
+		//添加电影图片集合
 		sql = "select * from images where imgMovieId=?";
 		List<Images> imgList = qr.query(sql, new BeanListHandler<Images>(Images.class),movie.getMovieId());
 		movie.setImgList(imgList);
 		
+		//添加电影主演集合
 		sql = "select * from protagonists where proMovieId=?";
 		List<Protagonists> proList = qr.query(sql, new BeanListHandler<Protagonists>(Protagonists.class),movie.getMovieId());
 		movie.setProList(proList);
 		
+		//添加电影对应的商户
 		sql = "select * from merchant where merId=?";
-		List<Merchant> merList = qr.query(sql, new BeanListHandler<Merchant>(Merchant.class),movie.getMovieMerId());
-		if(merList.size() > 0)
-			movie.setMerchant(merList.get(0));
+		String[] merIds = movie.getMovieMerId().split(";");
+		List<Merchant> list = new ArrayList<Merchant>();
+		for(String str : merIds){
+			List<Merchant> merList = qr.query(sql, new BeanListHandler<Merchant>(Merchant.class),Long.parseLong(str));
+			if(merList.size() > 0)
+				list.add(merList.get(0));
+		}
+		movie.setMerchantList(list);
 		
+		
+		//添加电影评论集合
 		sql = "select * from comment where commentMovieId=?";
 		List<Comment> commentList = qr.query(sql, new BeanListHandler<Comment>(Comment.class),movie.getMovieId());
 		if(commentList.size() > 0){
@@ -97,6 +121,22 @@ public class MovieDao {
 			movie.setCommentList(commentList);
 		}
 		return movie;
+	}
+
+	/**
+	 * 创建classifysList集合   就是将类型名集合添加进来
+	 * @param classifysList
+	 * @return
+	 * @throws SQLException 
+	 */
+	private List<Classifys> createClassifysList(List<Classifys> classifysList) throws SQLException {
+		for(Classifys c : classifysList){
+			String sql = "select * from classifyname where classifyNameId=?";
+			List<ClassifyName> classifyNameList = qr.query(sql, new BeanListHandler<ClassifyName>(ClassifyName.class),c.getClassifyName());
+			if(classifyNameList.size() > 0)
+				c.setClassifyNameObj(classifyNameList.get(0));
+		}
+		return classifysList;
 	}
 
 	/**
@@ -276,6 +316,32 @@ public class MovieDao {
 		List<Reply> replyList = qr.query(sql, new BeanListHandler<Reply>(Reply.class),replyId);
 		if(replyList.size() > 0)
 			return replyList.get(0);
+		return null;
+	}
+
+	/**
+	 * 修改评分
+	 * @param movie
+	 * @throws SQLException 
+	 */
+	public void updateMovieGradeNum(Movies movie) throws SQLException {
+//		System.out.println(movie.getMovieGradeNum());
+		String sql = "update movies set movieGradeNum=? where movieId=?";
+		Object[] params = {movie.getMovieGradeNum(),movie.getMovieId()};
+		qr.update(sql, params);
+	}
+
+	/**
+	 * 根据商户id获取商户对象
+	 * @param merId
+	 * @return
+	 * @throws SQLException 
+	 */
+	public Merchant findMerchantById(Long merId) throws SQLException {
+		String sql = "select * from merchant where merId=?";
+		List<Merchant> list = qr.query(sql, new BeanListHandler<Merchant>(Merchant.class),merId);
+		if(list.size() > 0)
+			return list.get(0);
 		return null;
 	}
 

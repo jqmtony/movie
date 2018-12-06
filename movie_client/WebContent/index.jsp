@@ -179,9 +179,9 @@
 			   <div class="baner-info">
 			      <h3>${lg["title_1"] } <span>${lg["title_2"] }</span>${lg["title_3"] } <span>${lg["title_4"] }</span>${lg["title_5"] }</h3>
 				  <h4>${lg["indexLastMovieName"]}</h4>
-				  <a class="w3_play_icon1" href="#small-dialog1">
+				 <%--  <a class="w3_play_icon1" href="#small-dialog1">
 											${lg["indexWatchTrailer"]}
-										</a>
+										</a> --%>
 			   </div>
 			<!--/banner-ingo-->		
 		</div>
@@ -264,10 +264,10 @@
 														${movieListByTime[0].movieDescribe }</p>
 														<p class="fexi_header_para"><span>${lg["indexNewOneReleaseOn"] }<label>:</label></span>${movieListByTime[0].movieCreateTime }</p>
 														<p class="fexi_header_para"><span>${lg["indexNewOneGenres"] }<label>:</label> </span>
-															<c:forEach items="${movieListByTime[0].classifysList }" var="bean" begin="0" end="${fn:length(movieListByTime[0].classifysList)-2}">
-																<a href="genre.jsp">${bean.classifyName }</a> | 
+															<c:forEach items="${movieListByTime[0].classifysList}" var="bean" begin="0" end="${fn:length(movieListByTime[0].classifysList)-2}">
+																<a href="genre.jsp">${bean.classifyNameObj.classifyNameString }</a> | 
 															</c:forEach>
-															<a href="genre.jsp">${movieListByTime[0].classifysList[fn:length(movieListByTime[0].classifysList)-1].classifyName }</a>								
+															<a href="genre.jsp">${movieListByTime[0].classifysList[fn:length(movieListByTime[0].classifysList)-1].classifyNameObj.classifyNameString }</a>								
 														</p>
 														<p class="fexi_header_para fexi_header_para1"><span>${lg["indexNewOneStarRating"] }<label>:</label></span>
 															<c:set var="starNum" value="${movieListByTime[0].movieGradeNum/2}"/>

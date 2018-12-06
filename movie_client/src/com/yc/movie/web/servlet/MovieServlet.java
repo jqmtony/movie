@@ -2,6 +2,7 @@ package com.yc.movie.web.servlet;
 
 import com.yc.exception.MovieException;
 import com.yc.movie.bean.Comment;
+import com.yc.movie.bean.Merchant;
 import com.yc.movie.bean.Movies;
 import com.yc.movie.bean.Reply;
 import com.yc.movie.bean.Teleplay;
@@ -32,6 +33,55 @@ public class MovieServlet extends BaseServlet {
 	private MovieService ms = new MovieService();
 	
 	/**
+	 * 显示该电影 该商户下的可选日期和时间厅室
+	 * @param request
+	 * @param response
+	 * @return
+	 * @throws ServletException
+	 * @throws IOException
+	 */
+	public String showChoosableByMovieMerchant(HttpServletRequest request, HttpServletResponse response)throws ServletException, IOException {
+		Movies movie = (Movies)session.getAttribute("movieBallotTicket");  //得到当前正在浏览的电影
+		movie.setTicketList(ms.createTicketByStartTime(movie.getTicketList()));  //过滤掉已经上映了的电影
+		session.setAttribute("movieByNextTime", movie);
+		Long merId = Long.parseLong(request.getParameter("merId"));  
+		try {
+			Merchant merchant = ms.findMerchantById(merId);  //得到当前选择的商户
+			session.setAttribute("nowMerchant", merchant);
+			return "r:/index/tickets.jsp";
+		} catch (MovieException e) {
+			request.setAttribute("msg", e.getMessage());
+			return "r:/index/tickets.jsp";
+		} 
+	}
+	/**
+	 * 跳转到购票网页
+	 * @param request
+	 * @param response
+	 * @throws ServletException
+	 * @throws IOException
+	 */
+	public String goBallotTicket(HttpServletRequest request, HttpServletResponse response)throws ServletException, IOException {
+		String refererPath = request.getHeader("referer"); //获取referer请求头
+		session.setAttribute("refererPath", refererPath);
+		Users loginedUser = (Users)session.getAttribute("loginedUser");
+		if(loginedUser == null){
+			request.setAttribute("msg", "你该没有登录，请先登录再进行下一步操作！");
+			return "f:/userLogin.jsp";
+		}
+		Long movieId = Long.parseLong(request.getParameter("movieId"));  //得到要购票的电影ID
+		try {
+			Movies movie = ms.findMovieById(movieId);
+			session.setAttribute("movieBallotTicket", movie);
+			return "r:/ballotTicket.jsp";
+		} catch (MovieException e) {
+			request.setAttribute("msg", e.getMessage());
+			return "r:/ballotTicket.jsp";
+		}
+		
+	}
+	
+	/**
 	 * 添加评分
 	 * @param request
 	 * @param response
@@ -40,6 +90,12 @@ public class MovieServlet extends BaseServlet {
 	 */
 	public void addMovieGradeNum(HttpServletRequest request, HttpServletResponse response)throws ServletException, IOException {
 		Long movieId = Long.parseLong(request.getParameter("movieId"));  //获取到要添加评分的movieId
+		try {
+			ms.addMovieGradeNum(movieId);  //添加评分
+			response.getWriter().append("yes");
+		} catch (MovieException e) {
+			response.getWriter().append(e.getMessage());
+		}  
 		
 	}
 	
