@@ -534,7 +534,8 @@ public class MerchantService {
 			//如果此商户已经上映了此部电影   就只是增加电影票数
 			Movies m1 = md.haveMovie(form.getMovieName());
 			if(m1 != null){  //数据库中已经有movie了
-				if(m1.getMovieMerId().contains(form.getMovieMerId())){  //如果此商户已经有了这部电影
+				if(m1.getMovieMerId().contains(form.getMovieMerId()+"")){  //如果此商户已经有了这部电影
+					System.out.println("只生成电影票。");
 					//生成电影票
 					if(movieStartTime1!=null){ 
 						createTicket(movieStartTime1, m1.getMovieId(),1,movieTimeLong,merId);
@@ -554,9 +555,11 @@ public class MerchantService {
 					if(movieStartTime6!=null){
 						createTicket(movieStartTime6, m1.getMovieId(),6,movieTimeLong,merId);
 					}
+					JdbcUtils.commitTransaction();
 					return;
 				}
 			}
+			
 				
 			String str = oldMovieMerId+form.getMovieMerId()+";";
 			md.updateMerchantId(oldMovieMerId,str);
@@ -643,6 +646,7 @@ public class MerchantService {
 	 */
 	private void createTicket(String movieStartTime, Long insertedMovie,int theaterNum ,Long minute,Long merId) throws SQLException {
 		Long num = 1l;
+		System.out.println("正在创造电影票");
 		for(int i=1;i<=12;i++){
 			for(int j=1;j<=17;j++){
 				Ticket t = new Ticket();
@@ -650,7 +654,7 @@ public class MerchantService {
 				t.setTicketMovieStartTime(Timestamp.valueOf(movieStartTime)); //上映时间  两个其实是一样的
 				t.setTicketLocation(i+"排"+j+"列");	//座位
 				t.setTicketMovieTheater(theaterNum+"号厅");  //上映厅
-				t.setTicketMovieId(insertedMovie);;
+				t.setTicketMovieId(insertedMovie);
 				Long time = t.getTicketStartTime().getTime()+(minute*60*1000);  //得到结束时间戳
 				t.setTicketMovieEndTime(new Timestamp(time));  //设置结束时间
 				t.setTicketStatus("1");
@@ -660,6 +664,7 @@ public class MerchantService {
 				md.addTicket(t);
 			}
 		}
+		System.out.println("创造电影票结束");
 	}
 
 	/**

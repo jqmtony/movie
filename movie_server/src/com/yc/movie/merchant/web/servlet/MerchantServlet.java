@@ -113,11 +113,15 @@ public class MerchantServlet extends BaseServlet {
 			ms.regxMovieInfo(form,m);  //验证信息
 			
 			List<String> sqlPaths = new ArrayList<String>();
+			
 			//上传
-			for(Part p : partList){
-				String sqlPath = CommonsUtils.uploadFile(request,"/merHeadCreateImage", p);
-				sqlPaths.add(sqlPath);
-			}
+			String sqlPath = CommonsUtils.uploadImage(request,"/merHeadCreateImage", partList.get(0),250,300);
+			sqlPaths.add(sqlPath);
+			sqlPath = CommonsUtils.uploadImage(request,"/merHeadCreateImage", partList.get(1),650,410);
+			sqlPaths.add(sqlPath);
+			sqlPath = CommonsUtils.uploadImage(request,"/merHeadCreateImage", partList.get(2),1680,850);
+			sqlPaths.add(sqlPath);
+			sqlPaths.add(CommonsUtils.uploadFile(request, "/merHeadCreateImage", partList.get(3)));
 			
 			form.setMoviePrevue(sqlPaths.get(3)); //添加电影预告片的路径
 			ms.addMovie(form, m,sqlPaths,oldMovieMerId,loginedMerchant.getMerId());  //电影上架

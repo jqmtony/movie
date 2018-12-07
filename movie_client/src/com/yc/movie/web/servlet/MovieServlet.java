@@ -2,6 +2,7 @@ package com.yc.movie.web.servlet;
 
 import com.yc.exception.MovieException;
 import com.yc.movie.bean.Comment;
+import com.yc.movie.bean.Indent;
 import com.yc.movie.bean.Merchant;
 import com.yc.movie.bean.Movies;
 import com.yc.movie.bean.Reply;
@@ -51,6 +52,28 @@ public class MovieServlet extends BaseServlet {
 			choseArr = choseStr.split(";");  //得到选定座位的序号数组
 		}
 		
+		try {
+			List<Ticket> showChoseList = (List<Ticket>)session.getAttribute("showChoseList");
+			List<Ticket> ticketList = new ArrayList<Ticket>();  //得到选择的电影票集合
+			for(String s : choseArr){
+				for(Ticket t : showChoseList){
+					if(s.equals(t.getTicketLocationNum()+"")){
+						ms.setTicketStatus(t,"0");  //设置电影票的状态
+						ticketList.add(t);
+					}
+				}
+			}
+			Users loginedUser = (Users)session.getAttribute("loginedUser"); //得到当前登录用户
+			Movies nowMovie = (Movies)session.getAttribute("movieBallotTicket");  //得到当前正在浏览的电影
+			
+			Indent indent = ms.createIndent(ticketList,loginedUser,nowMovie);//创建订单对象
+			
+			session.setAttribute("indentObj", indent);
+			response.getWriter().append("yes");
+		} catch (MovieException e) {
+			response.getWriter().append(e.getMessage());
+			e.printStackTrace();
+		}  
 		
 	}
 	

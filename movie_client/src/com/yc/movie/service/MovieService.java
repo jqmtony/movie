@@ -1,6 +1,7 @@
 package com.yc.movie.service;
 
 import java.io.IOException;
+import java.math.BigDecimal;
 import java.sql.SQLException;
 import java.sql.Timestamp;
 import java.util.ArrayList;
@@ -18,6 +19,7 @@ import java.util.Vector;
 
 import com.yc.exception.MovieException;
 import com.yc.movie.bean.Comment;
+import com.yc.movie.bean.Indent;
 import com.yc.movie.bean.Merchant;
 import com.yc.movie.bean.Movies;
 import com.yc.movie.bean.Reply;
@@ -25,6 +27,7 @@ import com.yc.movie.bean.Teleplay;
 import com.yc.movie.bean.Ticket;
 import com.yc.movie.bean.Users;
 import com.yc.movie.dao.MovieDao;
+import com.yc.utils.CommonsUtils;
 import com.yc.utils.JdbcUtils;
 
 public class MovieService{
@@ -326,6 +329,58 @@ public class MovieService{
 			return ticketList;
 		} catch (SQLException e) {
 			throw new MovieException("系统异常，请稍后再试");
+		}
+	}
+
+	/**
+	 * 创建订单对象
+	 * @param ticketList
+	 * @param loginedUser
+	 * @param nowMovie
+	 * @return
+	 * @throws MovieException 
+	 */
+	public Indent createIndent(List<Ticket> ticketList, Users loginedUser, Movies nowMovie) throws MovieException {
+		Indent in = new Indent();
+		in.setUser(loginedUser);  //设置用户
+		in.setIndentUserID(loginedUser.getUserId());  //设置用户ID
+		in.setIndentStatus("0");  //设置订单状态  0是未结算
+		in.setIndentNum(CommonsUtils.createIndentNum());  //设置订单号
+		in.setIndentPrice(new BigDecimal((Double.parseDouble(nowMovie.getMoviePrice().toString()) * Double.parseDouble(ticketList.size()+"")) + ""));
+		in.setIndentCreateTime(new Timestamp(new Date().getTime()));  //设置订单创建时间
+		in.setTicketList(ticketList);  //设置电影票集合
+		
+		try {
+			JdbcUtils.beginTransaction();
+			md.insertIndent(in);
+			JdbcUtils.commitTransaction();
+		} catch (SQLException e) {
+			try {
+				JdbcUtils.roolbackTransaction();
+			} catch (SQLException e1) {
+				throw new MovieException("系统异常，请稍后再试");
+			}
+		}
+		return in;
+	}
+
+	/**
+	 * 设置电影票的状态
+	 * @param t
+	 * @param string
+	 * @throws MovieException 
+	 */
+	public void setTicketStatus(Ticket t, String status) throws MovieException {
+		try {
+			JdbcUtils.beginTransaction();
+			md.setTicketStatus(t.getTicketId(),status);
+			JdbcUtils.commitTransaction();
+		} catch (SQLException e) {
+			try {
+				JdbcUtils.roolbackTransaction();
+			} catch (SQLException e1) {
+				throw new MovieException("系统异常，请稍后再试");
+			}
 		}
 	}
 

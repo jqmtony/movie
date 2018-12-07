@@ -1,7 +1,12 @@
 package com.yc.movie.utils;
 
+import java.awt.Color;
+import java.awt.Graphics2D;
+import java.awt.Image;
+import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
@@ -25,6 +30,7 @@ import java.util.Properties;
 import java.util.Random;
 import java.util.Vector;
 
+import javax.imageio.ImageIO;
 import javax.mail.Authenticator;
 import javax.mail.PasswordAuthentication;
 import javax.mail.Session;
@@ -77,7 +83,61 @@ public class CommonsUtils {
 	private static String smsUsername = "naivestruggle";
 	private static String smsUrl = "http://utf8.api.smschinese.cn";
 	
+	/**
+	 * 按设置的宽度高度压缩图片文件<br> 先保存原文件，再压缩、上传 
+     * @param oldFile  要进行压缩的文件全路径 
+     * @param newFile  新文件 
+     * @param width  宽度 
+     * @param height 高度 
+     * @param quality 质量 
+     * @return 返回压缩后的文件的全路径 
+	 */
+	public static String zipWidthHeightImageFile(File oldFile,File newFile, int width, int height) {  
+		
+		if (oldFile == null) {  
+            return null;  
+        }  
+        String newImage = null;  
+        try {  
+            /** 对服务器上的临时文件进行处理 */  
+        	System.out.println("oldFile:"+oldFile.getAbsolutePath());
+            Image srcFile = ImageIO.read(oldFile);  
+            
+            String srcImgPath = newFile.getAbsoluteFile().toString();
+            System.out.println(srcImgPath);
+            String subfix = "jpg";
+    		subfix = srcImgPath.substring(srcImgPath.lastIndexOf(".")+1,srcImgPath.length());
+ 
+    		BufferedImage buffImg = null; 
+    		if(subfix.equals("png")){
+    			buffImg = new BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB);
+    		}else{
+    			buffImg = new BufferedImage(width, height, BufferedImage.TYPE_INT_RGB);
+    		}
+ 
+    		Graphics2D graphics = buffImg.createGraphics();
+    		graphics.setBackground(new Color(255,255,255));
+    		graphics.setColor(new Color(255,255,255));
+    		graphics.fillRect(0, 0, width, height);
+    		graphics.drawImage(srcFile.getScaledInstance(width, height, Image.SCALE_SMOOTH), 0, 0, null);  
+ 
+    		ImageIO.write(buffImg, subfix, new File(srcImgPath));  
+        } catch (FileNotFoundException e) {  
+            e.printStackTrace();  
+        } catch (IOException e) {  
+            e.printStackTrace();  
+        }  
+        return newImage;  
+    }
 	
+	/**
+	 * 生成订单号
+	 * @return
+	 */
+	public static String createIndentNum(){
+		Date d = new Date();
+		return dateFormat(d, "yyyyMMddHHmmss")+d.getTime();
+	}
 	/**
 	 * 将iso8859编码转化为utf-8
 	 * @param str
@@ -335,6 +395,73 @@ public class CommonsUtils {
 	}
 	
 	/**
+	 * Part上传图片
+	 * @param root
+	 * @param part
+	 * @return
+	 */
+	public static String uploadImage(HttpServletRequest request,String root,Part part,int width,int height){
+		String s1 = root;
+		root = request.getServletContext().getRealPath(root);
+		//得到文件名
+		String filename = part.getSubmittedFileName();
+		
+		//处理文件名的绝对路径问题
+		int index = filename.lastIndexOf("\\");
+		if(index != -1){
+			filename = filename.substring(index+1);
+		}
+		
+		//处理文件同名问题，给文件名称添加uuid前缀。
+		String savename = getUUID() + "_" + filename;
+		
+		//得到hashCode
+		int hCode = filename.hashCode();
+		//转化成16进制
+		String hex = Integer.toHexString(hCode);
+		
+		//获取hex的前两个字母，与root连接在一起，生成一个完整的路径
+		String s = "/"+hex.charAt(0)+"/"+hex.charAt(1);
+		File dirFile = new File(root,s);
+		
+		//创建目录链
+		dirFile.mkdirs();
+		
+		//创建目标文件
+		File destFile = new File(dirFile,savename);
+		if(!destFile.exists())
+			try {
+				destFile.createNewFile();
+			} catch (IOException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
+//					File sqlFile = new File("/WEB-INF/files","/"+hex.charAt(0)+"/"+hex.charAt(1));
+		String sqlPath = s1+s+"/"+savename;
+		sqlPath = sqlPath.replace("movie_server", "movie_client");
+		
+		//保存
+		try {
+			part.write(dirFile+"/"+savename);
+//			System.out.println("第一次上传的目录："+dirFile.getAbsolutePath()+"/"+savename);
+			
+			//压缩图片
+			CommonsUtils.zipWidthHeightImageFile(destFile, destFile, width, height);
+			
+			//复制图片
+			String newFileDir = dirFile.getAbsolutePath().replace("movie_server", "movie_client");
+			File f = new File(newFileDir);
+			f.mkdirs(); //生成目录链
+			cloneFile(new File(dirFile.getAbsolutePath()+"\\"+savename), new File(f,savename));
+			
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return sqlPath;
+	}
+	
+	/**
 	 * Part上传文件
 	 * @param root
 	 * @param part
@@ -378,21 +505,18 @@ public class CommonsUtils {
 			}
 //					File sqlFile = new File("/WEB-INF/files","/"+hex.charAt(0)+"/"+hex.charAt(1));
 		String sqlPath = s1+s+"/"+savename;
-		
+		sqlPath = sqlPath.replace("movie_server", "movie_client");
 		
 		//保存
 		try {
-			String path = dirFile+"/"+savename;
-//			System.out.println(path);
-//			part.write(path);
-//			path = path.replace("server", "client");
-			part.write(path);
+			part.write(dirFile+"/"+savename);
+//			System.out.println("第一次上传的目录："+dirFile.getAbsolutePath()+"/"+savename);
 			
-			String mk = dirFile.getAbsolutePath().replace("server", "client");
-			System.out.println("源文件："+destFile.getAbsolutePath());
-			System.out.println("目录链："+mk);
-			System.out.println("完整目录："+path.replace("server", "client"));
-			cloneFile(destFile,new File(mk),new File(path.replace("server", "client")));
+			//复制图片
+			String newFileDir = dirFile.getAbsolutePath().replace("movie_server", "movie_client");
+			File f = new File(newFileDir);
+			f.mkdirs(); //生成目录链
+			cloneFile(new File(dirFile.getAbsolutePath()+"\\"+savename), new File(f,savename));
 			
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
@@ -400,6 +524,7 @@ public class CommonsUtils {
 		}
 		return sqlPath;
 	}
+	
 	/**
 	 * 上传文件  返回要保存在数据库的路径
 	 * @param root	存储文件的根目录
@@ -439,7 +564,7 @@ public class CommonsUtils {
 		
 		
 		//保存  //复制
-		cloneFile(file,dirFile,destFile);
+		cloneFile(file,destFile);
 		return sqlPath;
 	}
 	
@@ -448,9 +573,7 @@ public class CommonsUtils {
 	 * @param oldFile
 	 * @param newFile
 	 */
-	public static void cloneFile(File oldFile,File newFileDir,File newFile){
-		if(!newFileDir.exists())
-			newFileDir.mkdirs();
+	public static void cloneFile(File oldFile,File newFile){
 		if(!oldFile.exists())
 			throw new RuntimeException("没有找到源文件");
 		FileInputStream fis = null;
@@ -595,8 +718,8 @@ public class CommonsUtils {
 			try {
 				g2:switch(attrType){
 				case "java.math.BigDecimal":
-					me.invoke(t, BigDecimal.valueOf(Double.parseDouble(params)));
-					break g2;
+					me.invoke(t, BigDecimal.valueOf(Double.valueOf(params)));
+					break;
 				case "java.lang.Integer":
 					me.invoke(t, Integer.parseInt(params));
 					break g2;

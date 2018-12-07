@@ -31,14 +31,17 @@
 <link rel="stylesheet" href="indentCss/style.css"/>
 
 <script type="text/javascript" src="indentJs/demo.js"></script>
-
+<style type="text/css">
+</style>
 
 </head>
 <body>
 <!--/main-header-->
   <!--/banner-section-->
-	<%@ include file="head.jsp"%>
-	<!-- breadcrumb -->
+	<%-- <%@ include file="head.jsp"%> --%>
+	
+	
+	<!--
 		<div class="w3_breadcrumb">
 			<div class="breadcrumb-inner">	
 				<ul>
@@ -46,83 +49,48 @@
 					<li>Single</li>
 				</ul>
 			</div>
-		</div>
-	<!-- //breadcrumb -->
+		</div> -->
 	
 	
-	<div class="catbox">
-
-		<table id="cartTable">
+	<div class="catbox" style="margin-top:30px;">
+		<h3>订单号：${indentObj.indentNum }</h3>
+		<table id="cartTable" style="margin-top:20px;">
 			<thead>
-				<tr>
-					<th><label><input class="check-all check" type="checkbox"/>&nbsp;全选</label></th>
+				<tr  style="text-align:center;">
 					<th>电影名</th>
+					<th>封面</th>
 					<th>单价</th>
 					<th>数量</th>
-					<th>小计</th>
-					<th>上架时间</th>
+					<th>上映时间</th>
+					<th>座位</th>
 					<th>操作</th>
 				</tr>
 			</thead>
 			<tbody>
+			<c:forEach items="${indentObj.ticketList}" var="ticket">
 				<tr>
-					<td class="checkbox"><input class="check-one check" type="checkbox"/></td>
-					<td class="goods"><img src="indentImages/封面小6.jpg" alt=""/><span>复仇者联盟3:无限战争</span></td>
-					<td class="price">100</td>
-					<td class="count"><span class="reduce"></span><input class="count-input" type="text" value="1"/><span class="add">+</span></td>
-					<td class="subtotal">100</td>
-					<td class="update">2018-12-4</td>
+					<td class="goods"><span>${movieBallotTicket.movieName }</span></td>
+					<td><img style="width:100px;height:150px;" src="<c:url value='${movieBallotTicket.imgList[0].imgPath }' />" alt="不能显示这张图片"/></td>
+					<td class="price">${movieBallotTicket.moviePrice } 元</td>
+					<td class="count">1</td>
+					<td class="update">${fn:substring(ticket.ticketMovieStartTime,0,10) }</td>
+					<td>${ticket.ticketLocation }</td>
 					<td class="operation"><span class="delete">删除</span></td>
 				</tr>
-				<tr>
-					<td class="checkbox"><input class="check-one check" type="checkbox"/></td>
-					<td class="goods"><img src="indentImages/封面小4.jpg" alt=""/><span>蜘蛛侠:英雄归来</span></td>
-					<td class="price">100</td>
-					<td class="count"><span class="reduce"></span><input class="count-input" type="text" value="1"/><span class="add">+</span></td>
-					<td class="subtotal">100</td>
-					<td class="update">2018-12-4</td>
-					<td class="operation"><span class="delete">删除</span></td>
-				</tr>
-				<tr>
-					<td class="checkbox"><input class="check-one check" type="checkbox"/></td>
-					<td class="goods"><img src="indentImages/封面小5.jpg" alt=""/><span>正义联盟</span></td>
-					<td class="price">100</td>
-					<td class="count"><span class="reduce"></span><input class="count-input" type="text" value="1"/><span class="add">+</span></td>
-					<td class="subtotal">100</td>
-					<td class="update">2018-12-4</td>
-					<td class="operation"><span class="delete">删除</span></td>
-				</tr>
-				<tr>
-					<td class="checkbox"><input class="check-one check" type="checkbox"/></td>
-					<td class="goods"><img src="indentImages/封面小10.jpg" alt=""/><span>侏罗纪世界2</span></td>
-					<td class="price">100</td>
-					<td class="count"><span class="reduce"></span><input class="count-input" type="text" value="1"/><span class="add">+</span></td>
-					<td class="subtotal">100</td>
-					<td class="update">2018-12-4</td>
-					<td class="operation"><span class="delete">删除</span></td>
-				</tr>
+			</c:forEach>
 			</tbody>
 		</table>
 		
 		<div class="foot" id="foot">
-			<label class="fl select-all"><input type="checkbox" class="check-all check"/>&nbsp;全选</label>
-			<a class="fl delete" id="deleteAll" href="javascript:;">删除</a>
 			<div class="fr closing">结 算</div>
-			<div class="fr total">合计：￥<span id="priceTotal">0.00</span></div>
-			<div class="fr selected" id="selected">已选商品<span id="selectedTotal">0</span>件<span class="arrow up">︽</span><span class="arrow down">︾</span></div>
-			<div class="selected-view">
-				<div id="selectedViewList" class="clearfix">
-					<div><img src="indentImages/1.jpg"><span>取消选择</span></div>
-				</div>
-				<span class="arrow">◆<span>◆</span></span>
-			</div>
+			<div class="fr total">合计：￥${indentObj.indentPrice}</span></div>
 		</div>
 	
 	</div>
 	
 	
 	<!--/footer-bottom-->
-	<%@ include file="footer.jsp"%>
+	<%-- <%@ include file="footer.jsp"%> --%>
 
  
 

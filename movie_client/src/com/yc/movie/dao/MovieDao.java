@@ -12,6 +12,7 @@ import com.yc.movie.bean.ClassifyName;
 import com.yc.movie.bean.Classifys;
 import com.yc.movie.bean.Comment;
 import com.yc.movie.bean.Images;
+import com.yc.movie.bean.Indent;
 import com.yc.movie.bean.Merchant;
 import com.yc.movie.bean.Movies;
 import com.yc.movie.bean.Protagonists;
@@ -357,6 +358,30 @@ public class MovieDao {
 		Object[] params = {merId,theater};
 		List<Ticket> list = qr.query(sql, new BeanListHandler<Ticket>(Ticket.class),params);
 		return list;
+	}
+
+	/**
+	 * 添加订单
+	 * @param in
+	 * @throws SQLException 
+	 */
+	public void insertIndent(Indent in) throws SQLException {
+		String sql = "insert into indent values(?,?,?,?,?,?,?)";
+		Object[] params = {in.getIndentId(),in.getIndentUserID(),in.getIndentStatus(),
+				in.getIndentRemark(),in.getIndentCreateTime(),in.getIndentNum(),in.getIndentPrice()};
+		qr.update(sql, params);
+	}
+
+	/**
+	 * 设置电影票状态
+	 * @param ticketId
+	 * @param status
+	 * @throws SQLException 
+	 */
+	public void setTicketStatus(Long ticketId, String status) throws SQLException {
+		String sql = "update ticket set ticketStatus=? where ticketId=?";
+		Object[] params = {status,ticketId};
+		qr.update(sql, params);
 	}
 
 }

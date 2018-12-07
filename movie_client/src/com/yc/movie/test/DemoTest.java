@@ -1,5 +1,6 @@
 package com.yc.movie.test;
 
+import java.io.File;
 import java.sql.SQLException;
 import java.sql.Timestamp;
 import java.util.ArrayList;
@@ -16,9 +17,21 @@ import org.junit.Test;
 import com.yc.movie.bean.Movies;
 import com.yc.movie.dao.MovieDao;
 import com.yc.movie.dao.UserDao;
+import com.yc.utils.CommonsUtils;
 import com.yc.utils.TxQueryRunner;
 
 public class DemoTest {
+	@Test
+	public void fun9(){
+		CommonsUtils.zipWidthHeightImageFile(new File("E:/2.jpg"), new File("E:/3.jpg"), 100, 100);
+	}
+	@Test
+	public void fun8(){
+		Date d = new Date();
+		String s = CommonsUtils.dateFormat(d, "yyyyMMddHHmmss")+d.getTime();
+		System.out.println(s);
+	}
+	
 	@Test
 	public void fun6(){
 		String s = "123;";

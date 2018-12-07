@@ -256,11 +256,11 @@
 										<div class="w3_agile_featured_movies">
 											<div class="col-md-5 video_agile_player">
 										            <div class="video-grid-single-page-agileits">
-														<div data-video="f2Z65fobH2I" id="video"> <img src="${pageContext.request.contextPath }${movieListByTime[0].imgList[0].imgPath}" alt="" class="img-responsive" /> </div>
+														<div data-video="f2Z65fobH2I" id="video"> <img src="${pageContext.request.contextPath }${movieListByTime[0].imgList[1].imgPath}" alt="" class="img-responsive" /> </div>
 													</div>
 			       									 <div class="player-text">
 														<p class="fexi_header">${movieListByTime[0].movieName }</p>
-														<p class="fexi_header_para"><span class="conjuring_w3">${lg["indexNewOneStoryLine"] }<label>:</label></span>这是我们的电影非常好看的电影好吧这里只是字数太少了可能需要三行字才能保证页面不乱只能说明做这个原型的前端人员太不负责任了
+														<p class="fexi_header_para"><span class="conjuring_w3">${lg["indexNewOneStoryLine"] }<label>:</label></span>
 														${movieListByTime[0].movieDescribe }</p>
 														<p class="fexi_header_para"><span>${lg["indexNewOneReleaseOn"] }<label>:</label></span>${movieListByTime[0].movieCreateTime }</p>
 														<p class="fexi_header_para"><span>${lg["indexNewOneGenres"] }<label>:</label> </span>
@@ -630,13 +630,13 @@
 											
 											 	<div class="col-md-5 video_agile_player second-top">
 										            <div class="video-grid-single-page-agileits">
-														<div data-video="BXEZFd0RT5Y" id="video3"> <img src="${pageContext.request.contextPath }${movieListByGrade[0].imgList[0].imgPath}" alt="" class="img-responsive" /> </div>
+														<div data-video="BXEZFd0RT5Y" id="video3"> <img src="${pageContext.request.contextPath }${movieListByGrade[0].imgList[1].imgPath}" alt="" class="img-responsive" /> </div>
 													</div>
 
         <div class="player-text two">
 												<p class="fexi_header">${movieListByTime[0].movieName } </p>
-												<p class="fexi_header_para"><span class="conjuring_w3">${lg["indexNewOneStoryLine"] }<label>:</label></span>这是我们的电影非常好看的电影好吧这里只是字数太少了可能需要三行字才能保证页面不乱只能说明做这个原型的前端人员太不负责任了
-														${movieListByTime[0].movieDescribe } </p>
+												<p class="fexi_header_para"><span class="conjuring_w3">${lg["indexNewOneStoryLine"] }<label>:</label></span>
+												${movieListByTime[0].movieDescribe } </p>
 									<p class="fexi_header_para"><span>${lg["indexNewOneReleaseOn"] }<label>:</label></span>${movieListByTime[0].movieCreateTime } </p>
 												
 												<p class="fexi_header_para">
