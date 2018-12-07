@@ -265,13 +265,68 @@ public class MovieService{
 	 * @param ticketList
 	 * @return
 	 */
-	public List<Ticket> createTicketByStartTime(List<Ticket> ticketList) {
+	public List<String> createTicketByStartTime(List<Ticket> ticketList) {
+		List<String> list = new ArrayList<String>();
 		for(Ticket t:ticketList){
-			if(t.getTicketStartTime().getTime() < new Date().getTime()){  //如果电影票上的时间小于当前时间就移除
-				ticketList.remove(t);  //移除
+			if(t.getTicketStartTime().getTime() > new Date().getTime()){  //如果电影票上的时间小于当前时间就移除
+				String date = t.getTicketStartTime().toString().substring(5, 10);
+				if(list.indexOf(date) == -1)
+					list.add(date);
 			}
 		}
-		return ticketList;
+		return list;
+	}
+
+	/**
+	 * 过滤电影票  只要传入日期的电影  12-12
+	 * @param ticketList
+	 * @return
+	 */
+	public List<Ticket> createTicketByDate(List<Ticket> ticketList,String regx) {
+		List<Ticket> list = new ArrayList<Ticket>();
+		for(Ticket t:ticketList){
+			if(regx.equals(t.getTicketStartTime().toString().substring(5, 10))){
+				list.add(t);  
+			}
+		}
+		return list;
+	}
+
+	/**
+	 * 通过商户ID过滤电影票
+	 * @param ticketList2
+	 * @param merId
+	 * @return
+	 */
+	public List<Ticket> createTicketByMerId(List<Ticket> ticketList2, Long merId) {
+		List<Ticket> list = new ArrayList<Ticket>();
+		for(Ticket t : ticketList2){
+			if(merId.equals(t.getTicketMerId()))
+				list.add(t);
+		}
+		return list;
+	}
+
+	/**
+	 * 得到要选的204张票
+	 * @param merId
+	 * @param date
+	 * @param theater
+	 * @return
+	 * @throws MovieException 
+	 */
+	public List<Ticket> getShowChoseList(Long merId, String date, String theater) throws MovieException {
+		try {
+			List<Ticket> ticketList1 = md.getTicketListByMerIdAndTheater(merId,theater); //通过商户和厅室查找
+			List<Ticket> ticketList = new ArrayList<Ticket>();
+			for(Ticket t : ticketList1){
+				if(t.getTicketStartTime().toString().contains(date))
+					ticketList.add(t);
+			}
+			return ticketList;
+		} catch (SQLException e) {
+			throw new MovieException("系统异常，请稍后再试");
+		}
 	}
 
 }

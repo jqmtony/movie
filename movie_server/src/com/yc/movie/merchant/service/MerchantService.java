@@ -501,7 +501,7 @@ public class MerchantService {
 	 * @param m
 	 * @throws MerchantException 
 	 */
-	public void addMovie(Movies form, Map<String, String> m,List<String> sqlPaths,String oldMovieMerId) throws MerchantException {
+	public void addMovie(Movies form, Map<String, String> m,List<String> sqlPaths,String oldMovieMerId,Long merId) throws MerchantException {
 		String moviePro = m.get("moviePro");   //主演
 		String classifyStr = m.get("classifyStr");  //获取类型字符串
 		
@@ -537,22 +537,22 @@ public class MerchantService {
 				if(m1.getMovieMerId().contains(form.getMovieMerId())){  //如果此商户已经有了这部电影
 					//生成电影票
 					if(movieStartTime1!=null){ 
-						createTicket(movieStartTime1, m1.getMovieId(),1,movieTimeLong);
+						createTicket(movieStartTime1, m1.getMovieId(),1,movieTimeLong,merId);
 					}
 					if(movieStartTime2!=null){
-						createTicket(movieStartTime2, m1.getMovieId(),2,movieTimeLong);
+						createTicket(movieStartTime2, m1.getMovieId(),2,movieTimeLong,merId);
 					}
 					if(movieStartTime3!=null){
-						createTicket(movieStartTime3, m1.getMovieId(),3,movieTimeLong);
+						createTicket(movieStartTime3, m1.getMovieId(),3,movieTimeLong,merId);
 					}
 					if(movieStartTime4!=null){
-						createTicket(movieStartTime4, m1.getMovieId(),4,movieTimeLong);
+						createTicket(movieStartTime4, m1.getMovieId(),4,movieTimeLong,merId);
 					}
 					if(movieStartTime5!=null){
-						createTicket(movieStartTime5, m1.getMovieId(),5,movieTimeLong);
+						createTicket(movieStartTime5, m1.getMovieId(),5,movieTimeLong,merId);
 					}
 					if(movieStartTime6!=null){
-						createTicket(movieStartTime6, m1.getMovieId(),6,movieTimeLong);
+						createTicket(movieStartTime6, m1.getMovieId(),6,movieTimeLong,merId);
 					}
 					return;
 				}
@@ -587,22 +587,22 @@ public class MerchantService {
 			
 			//生成电影票
 			if(movieStartTime1!=null){ 
-				createTicket(movieStartTime1, insertedMovie.getMovieId(),1,movieTimeLong);
+				createTicket(movieStartTime1, insertedMovie.getMovieId(),1,movieTimeLong,merId);
 			}
 			if(movieStartTime2!=null){
-				createTicket(movieStartTime2, insertedMovie.getMovieId(),2,movieTimeLong);
+				createTicket(movieStartTime2, insertedMovie.getMovieId(),2,movieTimeLong,merId);
 			}
 			if(movieStartTime3!=null){
-				createTicket(movieStartTime3, insertedMovie.getMovieId(),3,movieTimeLong);
+				createTicket(movieStartTime3, insertedMovie.getMovieId(),3,movieTimeLong,merId);
 			}
 			if(movieStartTime4!=null){
-				createTicket(movieStartTime4, insertedMovie.getMovieId(),4,movieTimeLong);
+				createTicket(movieStartTime4, insertedMovie.getMovieId(),4,movieTimeLong,merId);
 			}
 			if(movieStartTime5!=null){
-				createTicket(movieStartTime5, insertedMovie.getMovieId(),5,movieTimeLong);
+				createTicket(movieStartTime5, insertedMovie.getMovieId(),5,movieTimeLong,merId);
 			}
 			if(movieStartTime6!=null){
-				createTicket(movieStartTime6, insertedMovie.getMovieId(),6,movieTimeLong);
+				createTicket(movieStartTime6, insertedMovie.getMovieId(),6,movieTimeLong,merId);
 			}
 			
 			//添加文件路径到数据库
@@ -641,7 +641,8 @@ public class MerchantService {
 	 * @param theaterNum
 	 * @throws SQLException
 	 */
-	private void createTicket(String movieStartTime, Long insertedMovie,int theaterNum ,Long minute) throws SQLException {
+	private void createTicket(String movieStartTime, Long insertedMovie,int theaterNum ,Long minute,Long merId) throws SQLException {
+		Long num = 1l;
 		for(int i=1;i<=12;i++){
 			for(int j=1;j<=17;j++){
 				Ticket t = new Ticket();
@@ -653,6 +654,9 @@ public class MerchantService {
 				Long time = t.getTicketStartTime().getTime()+(minute*60*1000);  //得到结束时间戳
 				t.setTicketMovieEndTime(new Timestamp(time));  //设置结束时间
 				t.setTicketStatus("1");
+				t.setTicketMerId(merId);
+				t.setTicketLocationNum(num);
+				num++;
 				md.addTicket(t);
 			}
 		}

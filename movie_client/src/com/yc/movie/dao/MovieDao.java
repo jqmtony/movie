@@ -345,4 +345,18 @@ public class MovieDao {
 		return null;
 	}
 
+	/**
+	 * 通过商户ID和选择的厅室查找204张电影票
+	 * @param merId
+	 * @param theater
+	 * @return
+	 * @throws SQLException 
+	 */
+	public List<Ticket> getTicketListByMerIdAndTheater(Long merId, String theater) throws SQLException {
+		String sql = "select * from ticket where ticketMerId=? and ticketMovieTheater=?";
+		Object[] params = {merId,theater};
+		List<Ticket> list = qr.query(sql, new BeanListHandler<Ticket>(Ticket.class),params);
+		return list;
+	}
+
 }

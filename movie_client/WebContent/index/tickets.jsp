@@ -37,13 +37,15 @@
         <!---tab日期标签滑动--->
         <div id="J_MenuX">
             <div class="xs-container">
+            	<c:set var="num" value="1" />
                 <ul class="xs-content nav nav-pills nav-justified" id="menus_xx" _xx="0">
-                	<c:if test="${fn:length(movieByNextTime.ticketList) > 0 }">
-                		<li>${fn:substring(movieByNextTime.ticketList[0].ticketStartTime,5,10) }(今天)</li>
+                	<c:if test="${fn:length(dateArr) > 0 }">
+                		<li name="0" class="0">${dateArr[0] }</li>
                 	</c:if>
-                	<c:forEach var="i" begin="1" end="${fn:length(movieByNextTime.ticketList)-1 }">
-                		<c:if test="${fn:substring(movieByNextTime.ticketList[i].ticketStartTime,5,10) != fn:substring(movieByNextTime.ticketList[i-1].ticketStartTime,5,10) }">
-                			<li>${fn:substring(movieByNextTime.ticketList[i].ticketStartTime,5,10) }</li>
+                	<c:forEach var="i" begin="1" end="${fn:length(dateArr)-1 }">
+                		<c:if test="${dateArr[i] != dateArr[i-1] }">
+                			<li name="${num }" class="${i}">${dateArr[i]}</li>
+                			<c:set var="num" value="${num+1}" />
                 		</c:if>
                 	</c:forEach>
                 </ul>
@@ -52,133 +54,88 @@
         <!---tab标签滑动END--->
     </div>
     
-    <div class="tickets-list">
-    	<ul>
-    		<c:if test="${fn:length(movieByNextTime.ticketList) > 0 }">
-    			<li>
-	            	<div class="ticket-info">
-	                	<span class="start">${fn:substring(movieByNextTime.ticketList[0].ticketStartTime,11,16)}</span>
-	                    <span class="styles">${movieByNextTime.movieGenre}</span>
-	                    <span> (结束)</span>
-	                    <span>4号厅</span>
-	                </div>
-	                <div class="buy-btn">
-	                	<span>40<b>元</b></span>
-	                    <a href="choose_seat.jsp">选座购票</a>
-	                </div>
-	            </li>
-    		</c:if>
-    		
-    		<c:forEach var="i" begin="1" end="${fn:length(movieByNextTime.ticketList)-1 }">
-    			
-    		</c:forEach>
-        	<li>
-            	<div class="ticket-info">
-                	<span class="start">14:20</span>
-                    <span class="styles">原版3D</span>
-                    <span>16:50(结束)</span>
-                    <span>4号厅</span>
-                </div>
-                <div class="buy-btn">
-                	<span>40<b>元</b></span>
-                    <a href="choose_seat.jsp">选座购票</a>
-                </div>
-            </li>
-            
-           <!--  <li>
-            	<div class="ticket-info">
-                	<span class="start">15:20</span>
-                    <span class="styles">原版3D</span>
-                    <span>17:50(结束)</span>
-                    <span>5号厅</span>
-                </div>
-                <div class="buy-btn">
-                	<span>40<b>元</b></span>
-                    <a href="choose_seat.jsp">选座购票</a>
-                </div>
-            </li>
-            
-            <li>
-            	<div class="ticket-info">
-                	<span class="start">16:20</span>
-                    <span class="styles">原版3D</span>
-                    <span>18:50(结束)</span>
-                    <span>6号厅</span>
-                </div>
-                <div class="buy-btn">
-                	<span>40<b>元</b></span>
-                    <a href="choose_seat.jsp">选座购票</a>
-                </div>
-            </li>
-            
-            <li>
-            	<div class="ticket-info">
-                	<span class="start">17:20</span>
-                    <span class="styles">原版3D</span>
-                    <span>19:50(结束)</span>
-                    <span>7号厅</span>
-                </div>
-                <div class="buy-btn">
-                	<span>40<b>元</b></span>
-                    <a href="choose_seat.jsp">选座购票</a>
-                </div>
-            </li>
-            
-            <li>
-            	<div class="ticket-info">
-                	<span class="start">18:20</span>
-                    <span class="styles">原版3D</span>
-                    <span>20:50(结束)</span>
-                    <span>8号厅</span>
-                </div>
-                <div class="buy-btn">
-                	<span>40<b>元</b></span>
-                    <a href="choose_seat.jsp">选座购票</a>
-                </div>
-            </li>
-            
-            <li>
-            	<div class="ticket-info">
-                	<span class="start">19:20</span>
-                    <span class="styles">原版3D</span>
-                    <span>21:50(结束)</span>
-                    <span>9号厅</span>
-                </div>
-                <div class="buy-btn">
-                	<span>40<b>元</b></span>
-                    <a href="choose_seat.jsp">选座购票</a>
-                </div>
-            </li>
-            
-            <li>
-            	<div class="ticket-info">
-                	<span class="start">20:20</span>
-                    <span class="styles">原版3D</span>
-                    <span>22:50(结束)</span>
-                    <span>1号厅</span>
-                </div>
-                <div class="buy-btn">
-                	<span>40<b>元</b></span>
-                    <a href="choose_seat.jsp">选座购票</a>
-                </div>
-            </li>
-            
-            <li>
-            	<div class="ticket-info">
-                	<span class="start">21:20</span>
-                    <span class="styles">原版3D</span>
-                    <span>23:50(结束)</span>
-                    <span>2号厅</span>
-                </div>
-                <div class="buy-btn">
-                	<span>40<b>元</b></span>
-                    <a href="choose_seat.jsp">选座购票</a>
-                </div>
-            </li> -->
-            
-        </ul>
-    </div>
+    <%--遍历所有的日期   通过日期取出对应的电影集合 --%>
     
+    <%--把第一个日期对应的所有电影厅显示出来 --%>
+    <div class="tickets-list" id="showTheater0" style="display:block;">
+	    	<ul>
+	    		<%--生成第一个电影厅 --%>
+	    		<c:if test="${fn:length(allMovietMap[dateArr[0]].ticketList) > 0 }">
+	    			<li>
+		            	<div class="ticket-info">
+		                	<span class="start">${fn:substring(allMovietMap[dateArr[0]].ticketList[0].ticketStartTime,11,16)}</span>
+		                    <span class="styles">${allMovietMap[dateArr[0]].movieGenre}</span>
+		                    <span>${fn:substring(allMovietMap[dateArr[0]].ticketList[0].ticketMovieEndTime,11,16)}(结束)</span>
+		                    <span>${allMovietMap[dateArr[0]].ticketList[0].ticketMovieTheater }</span>
+		                </div>
+		                <div class="buy-btn">
+		                	<span>${allMovietMap[dateArr[0]].moviePrice }<b>元</b></span>
+		                    <a href="<c:url value='/movie.s?method=showTicketChose&date=${dateArr[0]}&theater=${allMovietMap[dateArr[0]].ticketList[0].ticketMovieTheater}' />">选座购票</a>
+		                </div>
+		            </li>
+		            
+		            <%--生成后面的电影厅 --%>
+		            <c:forEach var="i" begin="1" end="${fn:length(allMovietMap[dateArr[0]].ticketList)-1 }">
+		            	<c:if test="${allMovietMap[dateArr[0]].ticketList[i].ticketMovieTheater != allMovietMap[dateArr[0]].ticketList[i-1].ticketMovieTheater }">
+		    				<li>
+				            	<div class="ticket-info">
+				                	<span class="start">${fn:substring(allMovietMap[dateArr[0]].ticketList[i].ticketStartTime,11,16)}</span>
+				                    <span class="styles">${allMovietMap[dateArr[0]].movieGenre}</span>
+				                    <span>${fn:substring(allMovietMap[dateArr[0]].ticketList[i].ticketMovieEndTime,11,16)}(结束)</span>
+				                    <span>${allMovietMap[dateArr[0]].ticketList[i].ticketMovieTheater }</span>
+				                </div>
+				                <div class="buy-btn">
+				                	<span>${allMovietMap[dateArr[0]].moviePrice }<b>元</b></span>
+				                    <a href="<c:url value='/movie.s?method=showTicketChose&date=${dateArr[0]}&theater=${allMovietMap[dateArr[0]].ticketList[i].ticketMovieTheater}' />">选座购票</a>
+				                </div>
+				            </li>
+			            </c:if>
+	    			</c:forEach>
+	    			
+	    		</c:if>
+	        </ul>
+	    </div>
+	    
+	    <%--生成后面的日期 --%>
+	<c:forEach var="i" begin="1" end="${fn:length(dateArr)-1 }">
+	    <div class="tickets-list" id="showTheater${i}" style="display:none;">  <%--这里的ID刚刚改过 --%>
+	    	<ul>
+	    		<%--生成第一个电影厅 --%>
+	    		<c:if test="${fn:length(allMovietMap[dateArr[i]].ticketList) > 0 }">
+	    			<li>
+		            	<div class="ticket-info">
+		                	<span class="start">${fn:substring(allMovietMap[dateArr[i]].ticketList[0].ticketStartTime,11,16)}</span>
+		                    <span class="styles">${allMovietMap[dateArr[i]].movieGenre}</span>
+		                    <span>${fn:substring(allMovietMap[dateArr[i]].ticketList[0].ticketMovieEndTime,11,16)}(结束)</span>
+		                    <span>${allMovietMap[dateArr[i]].ticketList[0].ticketMovieTheater }</span>
+		                </div>
+		                <div class="buy-btn">
+		                	<span>${allMovietMap[dateArr[i]].moviePrice }<b>元</b></span>
+		                    <a href="<c:url value='/movie.s?method=showTicketChose&date=${dateArr[i]}&theater=${allMovietMap[dateArr[i]].ticketList[0].ticketMovieTheater}' />">选座购票</a>
+		                </div>
+		            </li>
+		            <%--生成后面的电影厅 --%>
+		            <c:forEach var="j" begin="1" end="${fn:length(allMovietMap[dateArr[i]].ticketList)-1 }">
+		            	<c:if test="${allMovietMap[dateArr[i]].ticketList[j].ticketMovieTheater != allMovietMap[dateArr[i]].ticketList[j-1].ticketMovieTheater }">
+		    				<li>
+				            	<div class="ticket-info">
+				                	<span class="start">${fn:substring(allMovietMap[dateArr[i]].ticketList[j].ticketStartTime,11,16)}</span>
+				                    <span class="styles">${allMovietMap[dateArr[i]].movieGenre}</span>
+				                    <span>${fn:substring(allMovietMap[dateArr[i]].ticketList[j].ticketMovieEndTime,11,16)}(结束)</span>
+				                    <span>${allMovietMap[dateArr[i]].ticketList[j].ticketMovieTheater }</span>
+				                </div>
+				                <div class="buy-btn">
+				                	<span>${allMovietMap[dateArr[i]].moviePrice }<b>元</b></span>
+				                    <a href="<c:url value='/movie.s?method=showTicketChose&date=${dateArr[i]}&theater=${allMovietMap[dateArr[i]].ticketList[j].ticketMovieTheater}' />">选座购票</a>
+				                </div>
+				            </li>
+			            </c:if>
+	    			</c:forEach>
+	    			
+	    		</c:if>
+	        </ul>
+	    </div>
+    </c:forEach>
 </div>
 
 <script type="text/javascript">
@@ -195,7 +152,20 @@ $(function(){
 			$(this).removeClass('fa-star').addClass('fa-star-o');
 		}
 	});
+	
+	$('#menus_xx li').click(function(){
+		//把所有的先重置为不能显示
+		$('.tickets-list').each(function(){
+			$(this).css("display","none");
+		});
 		
+		//把当前的对应的电影厅设置为显示
+		var s = $(this).attr("name");  //得到当前的name 1 2 3
+		//console.log("当前是第："+s);
+		$('#showTheater'+s).css("display","block");
+	});
+	
+	
 })
 </script>
 

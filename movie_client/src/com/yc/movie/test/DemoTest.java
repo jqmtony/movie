@@ -1,20 +1,46 @@
 package com.yc.movie.test;
 
 import java.sql.SQLException;
+import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.Date;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.commons.dbutils.QueryRunner;
 import org.junit.Test;
 
 import com.yc.movie.bean.Movies;
 import com.yc.movie.dao.MovieDao;
 import com.yc.movie.dao.UserDao;
+import com.yc.utils.TxQueryRunner;
 
 public class DemoTest {
+	@Test
+	public void fun6(){
+		String s = "123;";
+		String[] ss = s.split(";");
+		System.out.println(ss.length);
+	}
+	@Test
+	public void fun5() throws SQLException{
+		QueryRunner qr = new TxQueryRunner();
+		for(int i=1;i<205;i++){
+			String sql = "update ticket set ticketLocationNum=? where ticketId=?";
+			Object[] params = {i,i+(204*3)};
+			qr.update(sql, params);
+		}
+	}
+	@Test
+	public void fun4(){
+		Timestamp t = new Timestamp(new Date().getTime());
+		String s = t.toString();
+		System.out.println(s);
+	}
+	
 	@Test
 	public void fun1(){
 		Map<String,Object> map = new LinkedHashMap<String,Object>();

@@ -13,6 +13,7 @@ public class Ticket implements Serializable {
 	private Long ticketId; //电影票ID
 	private Movies movie; //对应电影
 	private Long ticketMovieId;  //对应电影ID
+	private Long ticketMerId;  //商户ID
 	private String ticketStatus; //电影票状态  1为可用  0为禁用
 	private Users user; //对应买该票的用户
 	private Long ticjetBuyBy; //购买用户ID
@@ -22,6 +23,7 @@ public class Ticket implements Serializable {
 	private String ticketMovieTheater;  //上映厅室
 	private Timestamp ticketMovieEndTime;  //结束时间
 	private Timestamp ticketMovieStartTime; //上映时间
+	private Long ticketLocationNum;  //电影票的位置对应的数字  1-204
 	private List<Images> imgList;  //对应图片集合
 	public Long getTicketId() {
 		return ticketId;
@@ -40,6 +42,12 @@ public class Ticket implements Serializable {
 	}
 	public void setTicketMovieId(Long ticketMovieId) {
 		this.ticketMovieId = ticketMovieId;
+	}
+	public Long getTicketMerId() {
+		return ticketMerId;
+	}
+	public void setTicketMerId(Long ticketMerId) {
+		this.ticketMerId = ticketMerId;
 	}
 	public String getTicketStatus() {
 		return ticketStatus;
@@ -95,6 +103,12 @@ public class Ticket implements Serializable {
 	public void setTicketMovieStartTime(Timestamp ticketMovieStartTime) {
 		this.ticketMovieStartTime = ticketMovieStartTime;
 	}
+	public Long getTicketLocationNum() {
+		return ticketLocationNum;
+	}
+	public void setTicketLocationNum(Long ticketLocationNum) {
+		this.ticketLocationNum = ticketLocationNum;
+	}
 	public List<Images> getImgList() {
 		return imgList;
 	}
@@ -104,10 +118,11 @@ public class Ticket implements Serializable {
 	@Override
 	public String toString() {
 		return "Ticket [ticketId=" + ticketId + ", movie=" + movie + ", ticketMovieId=" + ticketMovieId
-				+ ", ticketStatus=" + ticketStatus + ", user=" + user + ", ticjetBuyBy=" + ticjetBuyBy
-				+ ", ticketStartTime=" + ticketStartTime + ", indent=" + indent + ", ticketLocation=" + ticketLocation
-				+ ", ticketMovieTheater=" + ticketMovieTheater + ", ticketMovieEndTime=" + ticketMovieEndTime
-				+ ", ticketMovieStartTime=" + ticketMovieStartTime + ", imgList=" + imgList + "]";
+				+ ", ticketMerId=" + ticketMerId + ", ticketStatus=" + ticketStatus + ", user=" + user
+				+ ", ticjetBuyBy=" + ticjetBuyBy + ", ticketStartTime=" + ticketStartTime + ", indent=" + indent
+				+ ", ticketLocation=" + ticketLocation + ", ticketMovieTheater=" + ticketMovieTheater
+				+ ", ticketMovieEndTime=" + ticketMovieEndTime + ", ticketMovieStartTime=" + ticketMovieStartTime
+				+ ", ticketLocationNum=" + ticketLocationNum + ", imgList=" + imgList + "]";
 	}
 	
 }

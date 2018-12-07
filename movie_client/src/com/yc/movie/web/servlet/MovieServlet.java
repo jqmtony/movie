@@ -6,12 +6,14 @@ import com.yc.movie.bean.Merchant;
 import com.yc.movie.bean.Movies;
 import com.yc.movie.bean.Reply;
 import com.yc.movie.bean.Teleplay;
+import com.yc.movie.bean.Ticket;
 import com.yc.movie.bean.Users;
 import com.yc.movie.service.MovieService;
 import com.yc.utils.BaseServlet;
 import com.yc.utils.CommonsUtils;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.LinkedHashMap;
@@ -33,6 +35,61 @@ public class MovieServlet extends BaseServlet {
 	private MovieService ms = new MovieService();
 	
 	/**
+	 * 生成订单
+	 * @param request
+	 * @param response
+	 * @throws ServletException
+	 * @throws IOException
+	 */
+	public void createIndent(HttpServletRequest request, HttpServletResponse response)throws ServletException, IOException {
+		String choseStr = request.getParameter("choseStr");  //得到选择的座位
+		String[] choseArr = null;
+		if(choseStr == null || choseStr.trim().isEmpty()){
+			response.getWriter().append("你还没有选择座位！");
+			return;
+		}else{
+			choseArr = choseStr.split(";");  //得到选定座位的序号数组
+		}
+		
+		
+	}
+	
+	/**
+	 * 生成选择座位页面
+	 * @param request
+	 * @param response
+	 * @return
+	 * @throws ServletException
+	 * @throws IOException
+	 */
+	public String showTicketChose(HttpServletRequest request, HttpServletResponse response)throws ServletException, IOException {
+		String date = request.getParameter("date");  //得到日期  11-11
+		String theater = request.getParameter("theater"); //得到厅室
+		Merchant nowMerchant = (Merchant)session.getAttribute("nowMerchant");  //得到当前选择的商户
+		try {
+			List<Ticket> showChoseList = ms.getShowChoseList(nowMerchant.getMerId(),date,theater);//得到204张电影票
+			System.out.println("电影票张数："+showChoseList.size());
+			
+			StringBuilder sb = new StringBuilder();  //得到已卖出的位置
+			for(Ticket t : showChoseList){
+				if("0".equals(t.getTicketStatus()))
+					sb.append(t.getTicketLocationNum()+";");
+			}
+			System.out.println("已卖出的位置："+sb.toString());
+			
+			session.setAttribute("statusArr", sb.toString());
+			session.setAttribute("showChoseList", showChoseList);
+			return "r:/index/choose_seat.jsp";
+		} catch (MovieException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} 
+
+		
+		
+		return null;
+	}
+	/**
 	 * 显示该电影 该商户下的可选日期和时间厅室
 	 * @param request
 	 * @param response
@@ -41,11 +98,39 @@ public class MovieServlet extends BaseServlet {
 	 * @throws IOException
 	 */
 	public String showChoosableByMovieMerchant(HttpServletRequest request, HttpServletResponse response)throws ServletException, IOException {
-		Movies movie = (Movies)session.getAttribute("movieBallotTicket");  //得到当前正在浏览的电影
-		movie.setTicketList(ms.createTicketByStartTime(movie.getTicketList()));  //过滤掉已经上映了的电影
-		session.setAttribute("movieByNextTime", movie);
-		Long merId = Long.parseLong(request.getParameter("merId"));  
 		try {
+			Movies movie = (Movies)session.getAttribute("movieBallotTicket");  //得到当前正在浏览的电影
+			Long merId = Long.parseLong(request.getParameter("merId"));  //当前选择的商户的ID
+			
+			List<String> dateArr = ms.createTicketByStartTime(movie.getTicketList()); //过滤掉已经上映了的电影票
+//			System.out.println("dateArr:"+dateArr);
+			
+			
+			
+			 //这个集合中存储的是所有的日期对应的Movie
+			Map<String,Movies> allMovietMap = new LinkedHashMap<String,Movies>(); 
+//			System.out.println("日期有："+dateArr);
+			for(String date : dateArr){
+				Movies movieByDate = ms.findMovieById(movie.getMovieId());  //得到一个新的movie
+				List<Ticket> ticketList2 = ms.createTicketByDate(movieByDate.getTicketList(),date); //得到当前日期对应的所有电影票的集合
+				ticketList2 = ms.createTicketByMerId(ticketList2,merId);  //通过商户ID过滤
+				movieByDate.setTicketList(ticketList2);
+				allMovietMap.put(date, movieByDate);  //将当前得到的电影集合存入Map中  键是当前的日期
+			}
+//			System.out.println("allMovietMap的长度:"+allMovietMap.size());
+//			System.out.println("12-18号有："+allMovietMap.get("12-18").getTicketList().size());
+			
+//			String regx = movieByDate.getTicketList().get(0).getTicketStartTime().toString().substring(5, 10);  //12-18
+//			List<Ticket> ticketList2 = ms.createTicketByDate(movieByDate.getTicketList(),regx);  //再次过滤电影票  只显示第一天的电影票
+//			movieByDate.setTicketList(ticketList2);
+			
+			/*for(Ticket t : movie.getTicketList()){
+				System.out.println(t);
+			}*/
+			session.setAttribute("dateArr", dateArr);
+			session.setAttribute("allMovietMap", allMovietMap);
+			  
+		
 			Merchant merchant = ms.findMerchantById(merId);  //得到当前选择的商户
 			session.setAttribute("nowMerchant", merchant);
 			return "r:/index/tickets.jsp";
@@ -54,6 +139,7 @@ public class MovieServlet extends BaseServlet {
 			return "r:/index/tickets.jsp";
 		} 
 	}
+	
 	/**
 	 * 跳转到购票网页
 	 * @param request

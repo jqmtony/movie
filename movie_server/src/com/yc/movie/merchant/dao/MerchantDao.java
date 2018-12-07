@@ -203,11 +203,11 @@ public class MerchantDao {
 	 * @throws SQLException 
 	 */
 	public void addTicket(Ticket t) throws SQLException {
-		String sql = "insert into ticket values(?,?,?,?,?,?,?,?,?,?)";
-		Object[] params = {t.getTicketId(),t.getTicketMovieId(),t.getTicketStatus(),
+		String sql = "insert into ticket values(?,?,?,?,?,?,?,?,?,?,?,?)";
+		Object[] params = {t.getTicketId(),t.getTicketMovieId(),t.getTicketMerId(),t.getTicketStatus(),
 				t.getTicjetBuyBy(),t.getTicketStartTime(),t.getIndent(),
 				t.getTicketLocation(),t.getTicketMovieTheater(),t.getTicketMovieStartTime(),
-				t.getTicketMovieEndTime()};
+				t.getTicketMovieEndTime(),t.getTicketLocationNum()};
 		qr.update(sql, params);
 	}
 

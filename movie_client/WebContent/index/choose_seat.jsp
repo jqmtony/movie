@@ -1,6 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 <!doctype html>
 <html>
 <head>
@@ -17,18 +18,19 @@
 
 <body>
 <div class="whole">
-
+<%-- <c:set var="statusArr" value="1;5;8"/> --%>
+	<input type="hidden" id="statusArr" value="${statusArr }">
 	<header class="header">
         <a href="javascript:history.back(-1)" class="fa fa-angle-left"></a>
-        <span class="names">变形金刚5：最后的骑士</span>
+        <span class="names">${movieBallotTicket.movieName }</span>
     </header>
     
     <div class="seat_head">
-    	<h3>北京沃美影城常营店</h3>
+    	<h3>${nowMerchant.merStoreName }</h3>
         <span>
-        	<a>今天07-06</a>
-            <a>19:00</a>
-            <a>(国语 3D)</a>
+        	<a>${fn:substring(showChoseList[0].ticketStartTime,5,10)} </a>
+            <a style="margin-left:10px;">${fn:substring(showChoseList[0].ticketStartTime,11,16)} </a>
+            <a style="margin-left:10px;">${movieBallotTicket.movieGenre}</a>
         </span>
     </div>
     
@@ -58,25 +60,69 @@
     	<div class="seats" id="seats"></div>
         
     </div>
-    <div class="buttons" onclick="show()">确认选择</div>
+    <div class="buttons" onclick="show()" style="cursor:pointer;">确认选择</div>
 	<li class=""><input type="checkbox" name="seat-1" id="seat-1"><label for="seat-1"></label></li>
 </div>
 
 <script>
+//公用弹出层
+function popu(content){
+	layer.open({
+		content: content
+		,skin: 'msg'
+		,time: 3
+	});	
+}
+
+
 function show(){
-	var number = $('#num');
-	var seats = $('#seats');
-	var touchs = $('#touchs');
+	var statusArr = $("#statusArr").val().split(";");
+	var choseArr = "";
+	var index = 0;
 	$("input[type='checkbox']").each(function(){
-//		if($(this).attr("checked") != undefined )  这里筛选出来的就是已经被选择的座位   seat1  -  seat204
-//	    	alert($(this).attr("name"));
+		if($(this).attr("checked") != undefined ){  //这里筛选出来的就是已经被选择的座位   seat1  -  seat204
+	    	//console.log();
+			var chose = $(this).attr("name").substring(5,8);  //已选座位的序号
+			var flag = true;
+			 for(var j=0;j<statusArr.length;j++){
+				 if(chose == statusArr[j]){  //如果当前的是已经卖出去的，就跳过
+					 flag = false;
+					 break;
+				 }
+			 }
+			 if(flag){
+				 choseArr = choseArr + chose + ";";
+				 index++;
+			 }
+		}
+	});
+	console.log(choseArr);  //这里是当前选的座位
+	var data = {choseStr : choseArr};
+	//popu("123");  弹窗
+	$.post("<c:url value='/movie.s?method=createIndent' />",data,function(data){
+		if(data === "yes"){
+			
+		}else{
+			popu(data);
+		}
 	});
 }
+
+
 $(function(){
 	var html='';
 		html+='<ul class="touchs" id="touchs"><div class="screen">大厅屏幕</div>';
+		var statusArr = $("#statusArr").val().split(";");
 		 for(var i=1; i<=204; i++){
-			var selected = (i == 204) ? 'selected' : '';//(i>91&&i<98 ? 'selected' : '');  //这里是设置什么位置被选中的
+			 var selected;
+			 for(var j=0;j<statusArr.length;j++){
+				 if(i == statusArr[j]){
+					 selected = 'selected';  //有人买了
+					 break;
+				 }
+				 selected = '';  //没人买  可选
+				//selected = (i == statusArr[j]) ? 'selected' : '';//(i>91&&i<98 ? 'selected' : '');  //这里是设置什么位置被选中的
+			 }
 			html+='<li class="'+selected+'">';
 			html+='<input type="checkbox" name="seat-'+i+'" id="seat-'+i+'" />';
 			html+='<label for="seat-'+i+'"></label>';

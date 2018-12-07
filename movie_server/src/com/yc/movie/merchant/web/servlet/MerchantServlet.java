@@ -48,6 +48,7 @@ public class MerchantServlet extends BaseServlet {
 		//movieMerId  movieName movieIntegralNum  movieDescribe movieTimeLong moviePrevue moviePrice
 		Movies form = CommonsUtils.toBean(request, Movies.class);
 		String movieMerId = form.getMovieMerId();  //获取到本次的商户ID
+		Merchant loginedMerchant = (Merchant)session.getAttribute("loginedMerchant");  //得到当前登录商户
 		String oldMovieMerId = null;
 		try {
 			oldMovieMerId = ms.getMovieMerIdByMovieName(form.getMovieName()); //通过电影名查找数据库中相同的电影名
@@ -119,7 +120,7 @@ public class MerchantServlet extends BaseServlet {
 			}
 			
 			form.setMoviePrevue(sqlPaths.get(3)); //添加电影预告片的路径
-			ms.addMovie(form, m,sqlPaths,oldMovieMerId);  //电影上架
+			ms.addMovie(form, m,sqlPaths,oldMovieMerId,loginedMerchant.getMerId());  //电影上架
 			
 			request.setAttribute("msg", "上架电影成功");
 			return "f:/merUpload.jsp";

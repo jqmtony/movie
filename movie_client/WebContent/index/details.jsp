@@ -81,7 +81,7 @@ $(document).ready(function() {
 		  shade: 0.8,
 		  closeBtn: 0,
 		  shadeClose: true,
-		  content: '${movieBallotTicket.moviePrevue}'
+		  content: '<c:url value="${movieBallotTicket.moviePrevue}" />'
 		});	
 	}
 	
