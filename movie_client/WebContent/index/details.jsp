@@ -17,7 +17,7 @@
 <div class="whole">
 	<div class="movie">
     	<!-- <div class="back"><img src="image/back.png" /></div> -->
-    	<img src="<c:url value='${movieBallotTicket.imgList[0].imgPath }' />" />
+    	<img src="<c:url value='${movieBallotTicket.imgList[3].imgPath }' />" />
         <span>
         	<img src="image/start.png" />
         </span>
@@ -27,7 +27,7 @@
         <div class="det-con">
         	<div class="common det-c">
             	<div class="jz-pic">
-                	<img src="<c:url value='${movieBallotTicket.imgList[1].imgPath }' />" />
+                	<img src="<c:url value='${movieBallotTicket.imgList[0].imgPath }' />" />
                 </div>
                 <div class="det-inf">
                 	<p class="det-titles">

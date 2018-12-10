@@ -5,6 +5,7 @@ import java.sql.SQLException;
 import java.sql.Timestamp;
 import java.util.Date;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Properties;
@@ -362,6 +363,20 @@ public class AdminService {
 			CommonsUtils.sendMail(this.getClass(), to, codes, fileName);
 		}catch(IOException e){
 			throw new AdminException("系统异常，本地配置文件已损坏！");
+		}
+	}
+
+	/**
+	 * 查找所有的订单
+	 * @return
+	 * @throws AdminException 
+	 */
+	public List<Indent> findAllIndent() throws AdminException {
+		
+		try {
+			return ad.findAllIndent();
+		} catch (SQLException e) {
+			throw new AdminException("系统异常，请稍后再试！");
 		}
 	}
 }

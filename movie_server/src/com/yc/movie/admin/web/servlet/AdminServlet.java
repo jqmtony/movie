@@ -10,6 +10,7 @@ import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.sql.Timestamp;
 import java.util.Date;
+import java.util.List;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -25,6 +26,23 @@ public class AdminServlet extends BaseServlet {
 	private static final long serialVersionUID = 1L;
 	private AdminService as = new AdminService();
 	
+	/**
+	 * 获取订单集合
+	 * @param request
+	 * @param response
+	 * @return
+	 * @throws ServletException
+	 * @throws IOException
+	 */
+	public String getIndentList(HttpServletRequest request, HttpServletResponse response)throws ServletException, IOException {
+		try {
+			List<Indent> indentList = as.findAllIndent();//查找所有的订单
+			request.setAttribute("indentList", indentList);
+		} catch (AdminException e) {
+			request.setAttribute("msg", e.getMessage());
+		}  
+		return "f:/index.jsp";
+	}
 	/**
 	 * 退出登录
 	 * @param request

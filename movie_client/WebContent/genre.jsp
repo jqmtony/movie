@@ -1,6 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 <!DOCTYPE html>
 <html>
 <head>
@@ -27,7 +28,11 @@
 <link href='http://fonts.googleapis.com/css?family=Montserrat:400,700' rel='stylesheet' type='text/css'>
 <!--//web-fonts-->
 </head>
-<body>
+
+<body> 
+<%-- <c:if test="${empty pageBean }">
+	<jsp:forward page="movie.s?method=goGenre" />
+</c:if> --%>
 <!--/main-header-->
   <!--/banner-section-->
   <%@ include file="head.jsp"%>
@@ -39,819 +44,102 @@
 				<div class="w3_content_agilleinfo_inner">
 					<div class="agile_featured_movies">
 						<!--/comedy-movies-->
-					<h3 class="agile_w3_title hor-t">Comedy<span>Movies</span> </h3>
-					 <div class="wthree_agile-requested-movies tv-movies">
-										<div class="col-md-2 w3l-movie-gride-agile requested-movies">
-															<a href="single.jsp" class="hvr-sweep-to-bottom"><img src="images/c1.jpg" title="Movies Pro" class="img-responsive" alt=" ">
-																<div class="w3l-action-icon"><i class="fa fa-play-circle-o" aria-hidden="true"></i></div>
-															</a>
-																<div class="mid-1 agileits_w3layouts_mid_1_home">
-																	<div class="w3l-movie-text">
-																		<h6><a href="single.jsp">Kevin Hart</a></h6>							
-																	</div>
-																	<div class="mid-2 agile_mid_2_home">
-																		<p>2016</p>
-																		<div class="block-stars">
-																			<ul class="w3l-ratings">
-																				<li><a href="#"><i class="fa fa-star" aria-hidden="true"></i></a></li>
-																				<li><a href="#"><i class="fa fa-star" aria-hidden="true"></i></a></li>
-																				<li><a href="#"><i class="fa fa-star-half-o" aria-hidden="true"></i></a></li>
-																				<li><a href="#"><i class="fa fa-star-o" aria-hidden="true"></i></a></li>
-																				<li><a href="#"><i class="fa fa-star-o" aria-hidden="true"></i></a></li>
-																			</ul>
-																		</div>
-																		<div class="clearfix"></div>
-																	</div>
-																</div>
-															<div class="ribben one">
-																<p>NEW</p>
-															</div>
-													</div>
-											<div class="col-md-2 w3l-movie-gride-agile requested-movies">
-												<a href="single.jsp" class="hvr-sweep-to-bottom"><img src="images/c2.jpg" title="Movies Pro" class="img-responsive" alt=" ">
-													<div class="w3l-action-icon"><i class="fa fa-play-circle-o" aria-hidden="true"></i></div>
-												</a>
-												<div class="mid-1 agileits_w3layouts_mid_1_home">
-													<div class="w3l-movie-text">
-														<h6><a href="single.jsp">Zootopia</a></h6>							
-													</div>
-													<div class="mid-2 agile_mid_2_home">
-														<p>2016</p>
-														<div class="block-stars">
-															<ul class="w3l-ratings">
-																<li><a href="#"><i class="fa fa-star" aria-hidden="true"></i></a></li>
-																				<li><a href="#"><i class="fa fa-star" aria-hidden="true"></i></a></li>
-																				<li><a href="#"><i class="fa fa-star-half-o" aria-hidden="true"></i></a></li>
-																				<li><a href="#"><i class="fa fa-star-o" aria-hidden="true"></i></a></li>
-																				<li><a href="#"><i class="fa fa-star-o" aria-hidden="true"></i></a></li>
-															</ul>
-														</div>
-														<div class="clearfix"></div>
-													</div>
-												</div>
-											<div class="ribben one">
-													<p>NEW</p>
-												</div>
+					<h3 class="agile_w3_title hor-t">${genreName} <span>${lg['Movies'] }</span> </h3>
+					
+			<%--循环遍历电影 --%>
+			<c:choose>
+				<c:when test="${fn:length(pageBean.beanList) eq 0}">
+					<h1>这个分类下还没有电影</h1>
+				</c:when>
+				<c:otherwise>
+					
+						 <div class="wthree_agile-requested-movies tv-movies">
+						 <c:forEach items="${pageBean.beanList }" var="movie">
+								<div class="col-md-2 w3l-movie-gride-agile requested-movies">
+									<a href="<c:url value='/movie.s?method=singleShow&type=movie&id=${movie.movieId }' />" class="hvr-sweep-to-bottom"><img src="<c:url value='${movie.imgList[0].imgPath }' />" title="Movies Pro" class="img-responsive" alt=" ">
+										<div class="w3l-action-icon"><i class="fa fa-play-circle-o" aria-hidden="true"></i></div>
+									</a>
+										<div class="mid-1 agileits_w3layouts_mid_1_home">
+											<div class="w3l-movie-text">
+												<h6><a href="<c:url value='/movie.s?method=singleShow&type=movie&id=${movie.movieId }' />" style="font-size:15px;">${movie.movieName }</a></h6>							
 											</div>
-											<div class="col-md-2 w3l-movie-gride-agile requested-movies">
-												<a href="single.jsp" class="hvr-sweep-to-bottom"><img src="images/c3.jpg" title="Movies Pro" class="img-responsive" alt=" ">
-													<div class="w3l-action-icon"><i class="fa fa-play-circle-o" aria-hidden="true"></i></div>
-												</a>
-												<div class="mid-1 agileits_w3layouts_mid_1_home">
-													<div class="w3l-movie-text">
-														<h6><a href="single.jsp">Dirty Grandpa</a></h6>							
-													</div>
-													<div class="mid-2 agile_mid_2_home">
-														<p>2016</p>
-														<div class="block-stars">
-															<ul class="w3l-ratings">
-																<li><a href="#"><i class="fa fa-star" aria-hidden="true"></i></a></li>
-																				<li><a href="#"><i class="fa fa-star" aria-hidden="true"></i></a></li>
-																				<li><a href="#"><i class="fa fa-star-half-o" aria-hidden="true"></i></a></li>
-																				<li><a href="#"><i class="fa fa-star-o" aria-hidden="true"></i></a></li>
-																				<li><a href="#"><i class="fa fa-star-o" aria-hidden="true"></i></a></li>
-															</ul>
-														</div>
-														<div class="clearfix"></div>
-													</div>
+											<div class="mid-2 agile_mid_2_home">
+												<p>${fn:substring(movie.movieCreateTime,0,4)}</p>
+												<div class="block-stars">
+													<ul class="w3l-ratings">
+														<c:set var="starNum" value="${movie.movieGradeNum/2}"/>
+															<c:forEach var="i" begin="1" end="${starNum }">
+																<a href="#"><i class="fa fa-star" aria-hidden="true"></i></a>
+															</c:forEach>
+															<c:if test="${starNum%1 != 0}">
+																<a href="#"><i class="fa fa-star-half-o" aria-hidden="true"></i></a>
+																<c:set var="starNum" value="${starNum+1}"/>
+															</c:if>
+															<c:forEach var="i" begin="${starNum+1}" end="5">
+																<a href="#"><i class="fa fa-star-o" aria-hidden="true"></i></a>
+															</c:forEach>
+													</ul>
 												</div>
-												<div class="ribben one">
-													<p>NEW</p>
-												</div>
-											</div>
-											<div class="col-md-2 w3l-movie-gride-agile requested-movies">
-												<a href="single.jsp" class="hvr-sweep-to-bottom"><img src="images/c4.jpg" title="Movies Pro" class="img-responsive" alt=" ">
-													<div class="w3l-action-icon"><i class="fa fa-play-circle-o" aria-hidden="true"></i></div>
-												</a>
-												<div class="mid-1 agileits_w3layouts_mid_1_home">
-													<div class="w3l-movie-text">
-														<h6><a href="single.jsp">Neighbors 2 </a></h6>							
-													</div>
-													<div class="mid-2 agile_mid_2_home">
-														<p>2016</p>
-														<div class="block-stars">
-															<ul class="w3l-ratings">
-																<li><a href="#"><i class="fa fa-star" aria-hidden="true"></i></a></li>
-																				<li><a href="#"><i class="fa fa-star" aria-hidden="true"></i></a></li>
-																				<li><a href="#"><i class="fa fa-star-half-o" aria-hidden="true"></i></a></li>
-																				<li><a href="#"><i class="fa fa-star-o" aria-hidden="true"></i></a></li>
-																				<li><a href="#"><i class="fa fa-star-o" aria-hidden="true"></i></a></li>
-															</ul>
-														</div>
-														<div class="clearfix"></div>
-													</div>
-												</div>
-											<div class="ribben one">
-													<p>NEW</p>
-												</div>
-											</div>
-											<div class="col-md-2 w3l-movie-gride-agile requested-movies">
-												<a href="single.jsp" class="hvr-sweep-to-bottom"><img src="images/c5.jpg" title="Movies Pro" class="img-responsive" alt=" ">
-													<div class="w3l-action-icon"><i class="fa fa-play-circle-o" aria-hidden="true"></i></div>
-												</a>
-												<div class="mid-1 agileits_w3layouts_mid_1_home">
-													<div class="w3l-movie-text">
-														<h6><a href="single.jsp">Finding Dory</a></h6>							
-													</div>
-													<div class="mid-2 agile_mid_2_home">
-														<p>2016</p>
-														<div class="block-stars">
-															<ul class="w3l-ratings">
-																<li><a href="#"><i class="fa fa-star" aria-hidden="true"></i></a></li>
-																				<li><a href="#"><i class="fa fa-star" aria-hidden="true"></i></a></li>
-																				<li><a href="#"><i class="fa fa-star-half-o" aria-hidden="true"></i></a></li>
-																				<li><a href="#"><i class="fa fa-star-o" aria-hidden="true"></i></a></li>
-																				<li><a href="#"><i class="fa fa-star-o" aria-hidden="true"></i></a></li>
-															</ul>
-														</div>
-														<div class="clearfix"></div>
-													</div>
-												</div>
-												<div class="ribben one">
-													<p>NEW</p>
-												</div>
-											</div>
 												<div class="clearfix"></div>
+											</div>
+										</div>
+									<div class="ribben">
+										<p>${lg["New"]}</p>
+									</div>
+							</div>
+							</c:forEach>
+							<div class="clearfix"></div>
 						</div>
+				</c:otherwise>
+			</c:choose>
+					
+				
+				<%--分页按钮 --%>
+				<div class="blog-pagenat-wthree" style="margin:0 0 20px 0;">
+					<ul>
+						<li><a class="frist" href="<c:url value='/movie.s?method=goGenre&op=${op}&pc=${pageBean.pc-1}' />">Prev</a></li>
+						
+						<c:choose>
+			              	<c:when test="${pageBean.tp < 3}">
+			              		<c:set var="begin" value="1" />
+			              		<c:set var="end" value="${pageBean.tp}"/>
+			              	</c:when>
+			              	<c:otherwise>
+			              		<c:set var="begin" value="${pageBean.pc-1}"/>
+			              		<c:set var="end" value="${pageBean.pc+1}"/>
+			              		
+			              		<c:if test="${begin < 1 }">
+				              		<c:set var="begin" value="1"/>
+				              		<c:set var="end" value="3"/>
+				              	</c:if>
+				              	
+				              	<c:if test="${end > pageBean.tp }">
+				              		<c:set var="begin" value="${pageBean.tp-2}"/>
+				              		<c:set var="end" value="${pageBean.tp}"/>
+				              	</c:if>
+			              	</c:otherwise>
+			              </c:choose>
+			              <c:forEach var="i" begin="${begin}" end="${end}">
+			              	<c:choose>
+			              		<c:when test="${i eq pageBean.pc}">
+			              			<li><a  style="background:#bbb;" href="<c:url value='/movie.s?method=goGenre&op=${op}&pc=${i}' />">${i }</a></li>
+			              		</c:when>
+			              		<c:otherwise>
+			              			<li><a href="<c:url value='/movie.s?method=goGenre&op=${op}&pc=${i}' />">${i }</a></li>
+			              		</c:otherwise>
+			              	</c:choose>
+			              </c:forEach>
+						
+						<li><a class="last" href="<c:url value='/movie.s?method=goGenre&op=${op}&pc=${pageBean.pc+1}' />">Next</a></li>
+					</ul>
+				</div>
+				
 			<!--//comedy-movies-->
-					<!--/tv-movies-->
-					<h3 class="agile_w3_title">Horror<span>Movies</span> </h3>
-					 <div class="wthree_agile-requested-movies tv-movies">
-										<div class="col-md-2 w3l-movie-gride-agile requested-movies">
-															<a href="single.jsp" class="hvr-sweep-to-bottom"><img src="images/hr1.jpg" title="Movies Pro" class="img-responsive" alt=" ">
-																<div class="w3l-action-icon"><i class="fa fa-play-circle-o" aria-hidden="true"></i></div>
-															</a>
-																<div class="mid-1 agileits_w3layouts_mid_1_home">
-																	<div class="w3l-movie-text">
-																		<h6><a href="single.jsp">The Conjuring 2</a></h6>							
-																	</div>
-																	<div class="mid-2 agile_mid_2_home">
-																		<p>2016</p>
-																		<div class="block-stars">
-																			<ul class="w3l-ratings">
-																				<li><a href="#"><i class="fa fa-star" aria-hidden="true"></i></a></li>
-																				<li><a href="#"><i class="fa fa-star" aria-hidden="true"></i></a></li>
-																				<li><a href="#"><i class="fa fa-star-half-o" aria-hidden="true"></i></a></li>
-																				<li><a href="#"><i class="fa fa-star-o" aria-hidden="true"></i></a></li>
-																				<li><a href="#"><i class="fa fa-star-o" aria-hidden="true"></i></a></li>
-																			</ul>
-																		</div>
-																		<div class="clearfix"></div>
-																	</div>
-																</div>
-															<div class="ribben one">
-																<p>NEW</p>
-															</div>
-													</div>
-											<div class="col-md-2 w3l-movie-gride-agile requested-movies">
-												<a href="single.jsp" class="hvr-sweep-to-bottom"><img src="images/hr2.jpg" title="Movies Pro" class="img-responsive" alt=" ">
-													<div class="w3l-action-icon"><i class="fa fa-play-circle-o" aria-hidden="true"></i></div>
-												</a>
-												<div class="mid-1 agileits_w3layouts_mid_1_home">
-													<div class="w3l-movie-text">
-														<h6><a href="single.jsp">The Forest</a></h6>							
-													</div>
-													<div class="mid-2 agile_mid_2_home">
-														<p>2016</p>
-														<div class="block-stars">
-															<ul class="w3l-ratings">
-																<li><a href="#"><i class="fa fa-star" aria-hidden="true"></i></a></li>
-																				<li><a href="#"><i class="fa fa-star" aria-hidden="true"></i></a></li>
-																				<li><a href="#"><i class="fa fa-star-half-o" aria-hidden="true"></i></a></li>
-																				<li><a href="#"><i class="fa fa-star-o" aria-hidden="true"></i></a></li>
-																				<li><a href="#"><i class="fa fa-star-o" aria-hidden="true"></i></a></li>
-															</ul>
-														</div>
-														<div class="clearfix"></div>
-													</div>
-												</div>
-											<div class="ribben one">
-													<p>NEW</p>
-												</div>
-											</div>
-											<div class="col-md-2 w3l-movie-gride-agile requested-movies">
-												<a href="single.jsp" class="hvr-sweep-to-bottom"><img src="images/hr3.jpg" title="Movies Pro" class="img-responsive" alt=" ">
-													<div class="w3l-action-icon"><i class="fa fa-play-circle-o" aria-hidden="true"></i></div>
-												</a>
-												<div class="mid-1 agileits_w3layouts_mid_1_home">
-													<div class="w3l-movie-text">
-														<h6><a href="single.jsp">The Purge</a></h6>							
-													</div>
-													<div class="mid-2 agile_mid_2_home">
-														<p>2016</p>
-														<div class="block-stars">
-															<ul class="w3l-ratings">
-																<li><a href="#"><i class="fa fa-star" aria-hidden="true"></i></a></li>
-																				<li><a href="#"><i class="fa fa-star" aria-hidden="true"></i></a></li>
-																				<li><a href="#"><i class="fa fa-star-half-o" aria-hidden="true"></i></a></li>
-																				<li><a href="#"><i class="fa fa-star-o" aria-hidden="true"></i></a></li>
-																				<li><a href="#"><i class="fa fa-star-o" aria-hidden="true"></i></a></li>
-															</ul>
-														</div>
-														<div class="clearfix"></div>
-													</div>
-												</div>
-												<div class="ribben one">
-													<p>NEW</p>
-												</div>
-											</div>
-											<div class="col-md-2 w3l-movie-gride-agile requested-movies">
-												<a href="single.jsp" class="hvr-sweep-to-bottom"><img src="images/hr4.jpg" title="Movies Pro" class="img-responsive" alt=" ">
-													<div class="w3l-action-icon"><i class="fa fa-play-circle-o" aria-hidden="true"></i></div>
-												</a>
-												<div class="mid-1 agileits_w3layouts_mid_1_home">
-													<div class="w3l-movie-text">
-														<h6><a href="single.jsp">Lights Out </a></h6>							
-													</div>
-													<div class="mid-2 agile_mid_2_home">
-														<p>2016</p>
-														<div class="block-stars">
-															<ul class="w3l-ratings">
-																<li><a href="#"><i class="fa fa-star" aria-hidden="true"></i></a></li>
-																				<li><a href="#"><i class="fa fa-star" aria-hidden="true"></i></a></li>
-																				<li><a href="#"><i class="fa fa-star-half-o" aria-hidden="true"></i></a></li>
-																				<li><a href="#"><i class="fa fa-star-o" aria-hidden="true"></i></a></li>
-																				<li><a href="#"><i class="fa fa-star-o" aria-hidden="true"></i></a></li>
-															</ul>
-														</div>
-														<div class="clearfix"></div>
-													</div>
-												</div>
-											<div class="ribben one">
-													<p>NEW</p>
-												</div>
-											</div>
-											<div class="col-md-2 w3l-movie-gride-agile requested-movies">
-												<a href="single.jsp" class="hvr-sweep-to-bottom"><img src="images/hr5.jpg" title="Movies Pro" class="img-responsive" alt=" ">
-													<div class="w3l-action-icon"><i class="fa fa-play-circle-o" aria-hidden="true"></i></div>
-												</a>
-												<div class="mid-1 agileits_w3layouts_mid_1_home">
-													<div class="w3l-movie-text">
-														<h6><a href="single.jsp">Rings	</a></h6>							
-													</div>
-													<div class="mid-2 agile_mid_2_home">
-														<p>2016</p>
-														<div class="block-stars">
-															<ul class="w3l-ratings">
-																<li><a href="#"><i class="fa fa-star" aria-hidden="true"></i></a></li>
-																				<li><a href="#"><i class="fa fa-star" aria-hidden="true"></i></a></li>
-																				<li><a href="#"><i class="fa fa-star-half-o" aria-hidden="true"></i></a></li>
-																				<li><a href="#"><i class="fa fa-star-o" aria-hidden="true"></i></a></li>
-																				<li><a href="#"><i class="fa fa-star-o" aria-hidden="true"></i></a></li>
-															</ul>
-														</div>
-														<div class="clearfix"></div>
-													</div>
-												</div>
-												<div class="ribben one">
-													<p>NEW</p>
-												</div>
-											</div>
-												<div class="clearfix"></div>
-						</div>
-			<!--//tv-movies-->
-				 <h3 class="agile_w3_title">Requested <span>Movies</span> </h3>
-				<!--/requested-movies-->
-				     <div class="wthree_agile-requested-movies">
-										<div class="col-md-2 w3l-movie-gride-agile requested-movies">
-															<a href="single.jsp" class="hvr-sweep-to-bottom"><img src="images/m1.jpg" title="Movies Pro" class="img-responsive" alt=" ">
-																<div class="w3l-action-icon"><i class="fa fa-play-circle-o" aria-hidden="true"></i></div>
-															</a>
-																<div class="mid-1 agileits_w3layouts_mid_1_home">
-																	<div class="w3l-movie-text">
-																		<h6><a href="single.jsp">Swiss Army Man</a></h6>							
-																	</div>
-																	<div class="mid-2 agile_mid_2_home">
-																		<p>2016</p>
-																		<div class="block-stars">
-																			<ul class="w3l-ratings">
-																				<li><a href="#"><i class="fa fa-star" aria-hidden="true"></i></a></li>
-																				<li><a href="#"><i class="fa fa-star" aria-hidden="true"></i></a></li>
-																				<li><a href="#"><i class="fa fa-star-half-o" aria-hidden="true"></i></a></li>
-																				<li><a href="#"><i class="fa fa-star-o" aria-hidden="true"></i></a></li>
-																				<li><a href="#"><i class="fa fa-star-o" aria-hidden="true"></i></a></li>
-																			</ul>
-																		</div>
-																		<div class="clearfix"></div>
-																	</div>
-																</div>
-															<div class="ribben one">
-																<p>NEW</p>
-															</div>
-													</div>
-											<div class="col-md-2 w3l-movie-gride-agile requested-movies">
-												<a href="single.jsp" class="hvr-sweep-to-bottom"><img src="images/m2.jpg" title="Movies Pro" class="img-responsive" alt=" ">
-													<div class="w3l-action-icon"><i class="fa fa-play-circle-o" aria-hidden="true"></i></div>
-												</a>
-												<div class="mid-1 agileits_w3layouts_mid_1_home">
-													<div class="w3l-movie-text">
-														<h6><a href="single.jsp">Me Before you</a></h6>							
-													</div>
-													<div class="mid-2 agile_mid_2_home">
-														<p>2016</p>
-														<div class="block-stars">
-															<ul class="w3l-ratings">
-															<li><a href="#"><i class="fa fa-star" aria-hidden="true"></i></a></li>
-																				<li><a href="#"><i class="fa fa-star" aria-hidden="true"></i></a></li>
-																				<li><a href="#"><i class="fa fa-star-half-o" aria-hidden="true"></i></a></li>
-																				<li><a href="#"><i class="fa fa-star-o" aria-hidden="true"></i></a></li>
-																				<li><a href="#"><i class="fa fa-star-o" aria-hidden="true"></i></a></li>
-															</ul>
-														</div>
-														<div class="clearfix"></div>
-													</div>
-												</div>
-											<div class="ribben one">
-													<p>NEW</p>
-												</div>
-											</div>
-											<div class="col-md-2 w3l-movie-gride-agile requested-movies">
-												<a href="single.jsp" class="hvr-sweep-to-bottom"><img src="images/m3.jpg" title="Movies Pro" class="img-responsive" alt=" ">
-													<div class="w3l-action-icon"><i class="fa fa-play-circle-o" aria-hidden="true"></i></div>
-												</a>
-												<div class="mid-1 agileits_w3layouts_mid_1_home">
-													<div class="w3l-movie-text">
-														<h6><a href="single.jsp">Deadpool</a></h6>							
-													</div>
-													<div class="mid-2 agile_mid_2_home">
-														<p>2016</p>
-														<div class="block-stars">
-															<ul class="w3l-ratings">
-																<li><a href="#"><i class="fa fa-star" aria-hidden="true"></i></a></li>
-																				<li><a href="#"><i class="fa fa-star" aria-hidden="true"></i></a></li>
-																				<li><a href="#"><i class="fa fa-star-half-o" aria-hidden="true"></i></a></li>
-																				<li><a href="#"><i class="fa fa-star-o" aria-hidden="true"></i></a></li>
-																				<li><a href="#"><i class="fa fa-star-o" aria-hidden="true"></i></a></li>
-															</ul>
-														</div>
-														<div class="clearfix"></div>
-													</div>
-												</div>
-												<div class="ribben one">
-													<p>NEW</p>
-												</div>
-											</div>
-											<div class="col-md-2 w3l-movie-gride-agile requested-movies">
-												<a href="single.jsp" class="hvr-sweep-to-bottom"><img src="images/m4.jpg" title="Movies Pro" class="img-responsive" alt=" ">
-													<div class="w3l-action-icon"><i class="fa fa-play-circle-o" aria-hidden="true"></i></div>
-												</a>
-												<div class="mid-1 agileits_w3layouts_mid_1_home">
-													<div class="w3l-movie-text">
-														<h6><a href="single.jsp">Rogue One </a></h6>							
-													</div>
-													<div class="mid-2 agile_mid_2_home">
-														<p>2016</p>
-														<div class="block-stars">
-															<ul class="w3l-ratings">
-																<li><a href="#"><i class="fa fa-star" aria-hidden="true"></i></a></li>
-																				<li><a href="#"><i class="fa fa-star" aria-hidden="true"></i></a></li>
-																				<li><a href="#"><i class="fa fa-star-half-o" aria-hidden="true"></i></a></li>
-																				<li><a href="#"><i class="fa fa-star-o" aria-hidden="true"></i></a></li>
-																				<li><a href="#"><i class="fa fa-star-o" aria-hidden="true"></i></a></li>
-															</ul>
-														</div>
-														<div class="clearfix"></div>
-													</div>
-												</div>
-											<div class="ribben one">
-													<p>NEW</p>
-												</div>
-											</div>
-											<div class="col-md-2 w3l-movie-gride-agile requested-movies">
-												<a href="single.jsp" class="hvr-sweep-to-bottom"><img src="images/m5.jpg" title="Movies Pro" class="img-responsive" alt=" ">
-													<div class="w3l-action-icon"><i class="fa fa-play-circle-o" aria-hidden="true"></i></div>
-												</a>
-												<div class="mid-1 agileits_w3layouts_mid_1_home">
-													<div class="w3l-movie-text">
-														<h6><a href="single.jsp">Storks	</a></h6>							
-													</div>
-													<div class="mid-2 agile_mid_2_home">
-														<p>2016</p>
-														<div class="block-stars">
-															<ul class="w3l-ratings">
-																<li><a href="#"><i class="fa fa-star" aria-hidden="true"></i></a></li>
-																				<li><a href="#"><i class="fa fa-star" aria-hidden="true"></i></a></li>
-																				<li><a href="#"><i class="fa fa-star-half-o" aria-hidden="true"></i></a></li>
-																				<li><a href="#"><i class="fa fa-star-o" aria-hidden="true"></i></a></li>
-																				<li><a href="#"><i class="fa fa-star-o" aria-hidden="true"></i></a></li>
-															</ul>
-														</div>
-														<div class="clearfix"></div>
-													</div>
-												</div>
-												<div class="ribben one">
-													<p>NEW</p>
-												</div>
-											</div>
-											<div class="col-md-2 w3l-movie-gride-agile requested-movies">
-												<a href="single.jsp" class="hvr-sweep-to-bottom"><img src="images/m6.jpg" title="Movies Pro" class="img-responsive" alt=" ">
-													<div class="w3l-action-icon"><i class="fa fa-play-circle-o" aria-hidden="true"></i></div>
-												</a>
-												<div class="mid-1 agileits_w3layouts_mid_1_home">
-													<div class="w3l-movie-text">
-														<h6><a href="single.jsp">Hopeless</a></h6>							
-													</div>
-													<div class="mid-2 agile_mid_2_home">
-														<p>2016</p>
-														<div class="block-stars">
-															<ul class="w3l-ratings">
-																<li><a href="#"><i class="fa fa-star" aria-hidden="true"></i></a></li>
-																				<li><a href="#"><i class="fa fa-star" aria-hidden="true"></i></a></li>
-																				<li><a href="#"><i class="fa fa-star-half-o" aria-hidden="true"></i></a></li>
-																				<li><a href="#"><i class="fa fa-star-o" aria-hidden="true"></i></a></li>
-																				<li><a href="#"><i class="fa fa-star-o" aria-hidden="true"></i></a></li>
-															</ul>
-														</div>
-														<div class="clearfix"></div>
-													</div>
-												</div>
-												<div class="ribben one">
-													<p>NEW</p>
-												</div>
-											</div>
-											<div class="col-md-2 w3l-movie-gride-agile requested-movies">
-												<a href="single.jsp" class="hvr-sweep-to-bottom"><img src="images/m7.jpg" title="Movies Pro" class="img-responsive" alt=" ">
-													<div class="w3l-action-icon"><i class="fa fa-play-circle-o" aria-hidden="true"></i></div>
-												</a>
-												<div class="mid-1 agileits_w3layouts_mid_1_home">
-													<div class="w3l-movie-text">
-														<h6><a href="single.jsp">Mechanic</a></h6>							
-													</div>
-													<div class="mid-2 agile_mid_2_home">
-														<p>2016</p>
-														<div class="block-stars">
-														<ul class="w3l-ratings">
-																<li><a href="#"><i class="fa fa-star" aria-hidden="true"></i></a></li>
-																				<li><a href="#"><i class="fa fa-star" aria-hidden="true"></i></a></li>
-																				<li><a href="#"><i class="fa fa-star-half-o" aria-hidden="true"></i></a></li>
-																				<li><a href="#"><i class="fa fa-star-o" aria-hidden="true"></i></a></li>
-																				<li><a href="#"><i class="fa fa-star-o" aria-hidden="true"></i></a></li>
-															</ul>
-														</div>
-														<div class="clearfix"></div>
-													</div>
-												</div>
-											<div class="ribben one">
-													<p>NEW</p>
-												</div>
-											</div>
-											<div class="col-md-2 w3l-movie-gride-agile requested-movies">
-												<a href="single.jsp" class="hvr-sweep-to-bottom"><img src="images/m8.jpg" title="Movies Pro" class="img-responsive" alt=" ">
-													<div class="w3l-action-icon"><i class="fa fa-play-circle-o" aria-hidden="true"></i></div>
-												</a>
-												<div class="mid-1 agileits_w3layouts_mid_1_home">
-													<div class="w3l-movie-text">
-														<h6><a href="single.jsp">Timeless</a></h6>							
-													</div>
-													<div class="mid-2 agile_mid_2_home">
-														<p>2016</p>
-														<div class="block-stars">
-															<ul class="w3l-ratings">
-																<li><a href="#"><i class="fa fa-star" aria-hidden="true"></i></a></li>
-																				<li><a href="#"><i class="fa fa-star" aria-hidden="true"></i></a></li>
-																				<li><a href="#"><i class="fa fa-star-half-o" aria-hidden="true"></i></a></li>
-																				<li><a href="#"><i class="fa fa-star-o" aria-hidden="true"></i></a></li>
-																				<li><a href="#"><i class="fa fa-star-o" aria-hidden="true"></i></a></li>
-															</ul>
-														</div>
-														<div class="clearfix"></div>
-													</div>
-												</div>
-											<div class="ribben one">
-													<p>NEW</p>
-												</div>
-											</div>
-											<div class="col-md-2 w3l-movie-gride-agile requested-movies">
-												<a href="single.jsp" class="hvr-sweep-to-bottom"><img src="images/m9.jpg" title="Movies Pro" class="img-responsive" alt=" ">
-													<div class="w3l-action-icon"><i class="fa fa-play-circle-o" aria-hidden="true"></i></div>
-												</a>
-												<div class="mid-1 agileits_w3layouts_mid_1_home">
-													<div class="w3l-movie-text">
-														<h6><a href="single.jsp">Inferno</a></h6>							
-													</div>
-													<div class="mid-2 agile_mid_2_home">
-														<p>2016</p>
-														<div class="block-stars">
-															<ul class="w3l-ratings">
-																<li><a href="#"><i class="fa fa-star" aria-hidden="true"></i></a></li>
-																				<li><a href="#"><i class="fa fa-star" aria-hidden="true"></i></a></li>
-																				<li><a href="#"><i class="fa fa-star-half-o" aria-hidden="true"></i></a></li>
-																				<li><a href="#"><i class="fa fa-star-o" aria-hidden="true"></i></a></li>
-																				<li><a href="#"><i class="fa fa-star-o" aria-hidden="true"></i></a></li>
-															</ul>
-														</div>
-														<div class="clearfix"></div>
-													</div>
-												</div>
-												<div class="ribben one">
-													<p>NEW</p>
-												</div>
-											</div>
-											<div class="col-md-2 w3l-movie-gride-agile requested-movies">
-												<a href="single.jsp" class="hvr-sweep-to-bottom"><img src="images/m11.jpg" title="Movies Pro" class="img-responsive" alt=" ">
-													<div class="w3l-action-icon"><i class="fa fa-play-circle-o" aria-hidden="true"></i></div>
-												</a>
-												<div class="mid-1 agileits_w3layouts_mid_1_home">
-													<div class="w3l-movie-text">
-														<h6><a href="single.jsp">Warcraft</a></h6>							
-													</div>
-													<div class="mid-2 agile_mid_2_home">
-														<p>2016</p>
-														<div class="block-stars">
-															<ul class="w3l-ratings">
-																<li><a href="#"><i class="fa fa-star" aria-hidden="true"></i></a></li>
-																				<li><a href="#"><i class="fa fa-star" aria-hidden="true"></i></a></li>
-																				<li><a href="#"><i class="fa fa-star-half-o" aria-hidden="true"></i></a></li>
-																				<li><a href="#"><i class="fa fa-star-o" aria-hidden="true"></i></a></li>
-																				<li><a href="#"><i class="fa fa-star-o" aria-hidden="true"></i></a></li>
-															</ul>
-														</div>
-														<div class="clearfix"></div>
-													</div>
-												</div>
-												<div class="ribben one">
-													<p>NEW</p>
-												</div>
-											</div>
-												<div class="clearfix"></div>
-						</div>
-				<!--//requested-movies-->
-					  <div class="blog-pagenat-wthree">
-								<ul>
-									<li><a class="frist" href="#">Prev</a></li>
-									<li><a href="#">1</a></li>
-									<li><a href="#">2</a></li>
-									<li><a href="#">3</a></li>
-									
-									<li><a class="last" href="#">Next</a></li>
-								</ul>
-								
-								<!--//requested-movies-->
-				  <h3 class="agile_w3_title"> Top Movies <span>Review</span></h3>
-			<!--/movies-->				
-			<div class="w3_agile_latest_movies">
-			
-				<div id="owl-demo" class="owl-carousel owl-theme">
-					<div class="item">
-						<div class="w3l-movie-gride-agile w3l-movie-gride-slider ">
-							<a href="single.jsp" class="hvr-sweep-to-bottom"><img src="images/m5.jpg" title="Movies Pro" class="img-responsive" alt=" " />
-								<div class="w3l-action-icon"><i class="fa fa-play-circle-o" aria-hidden="true"></i></div>
-							</a>
-							<div class="mid-1 agileits_w3layouts_mid_1_home">
-								<div class="w3l-movie-text">
-									<h6><a href="single.jsp">Storks	</a></h6>							
-								</div>
-								<div class="mid-2 agile_mid_2_home">
-									<p>2016</p>
-									<div class="block-stars">
-										<ul class="w3l-ratings">
-											<li><a href="#"><i class="fa fa-star" aria-hidden="true"></i></a></li>
-											<li><a href="#"><i class="fa fa-star" aria-hidden="true"></i></a></li>
-											<li><a href="#"><i class="fa fa-star" aria-hidden="true"></i></a></li>
-											<li><a href="#"><i class="fa fa-star" aria-hidden="true"></i></a></li>
-											<li><a href="#"><i class="fa fa-star-half-o" aria-hidden="true"></i></a></li>
-										</ul>
-									</div>
-									<div class="clearfix"></div>
-								</div>
-							</div>
-							<div class="ribben one">
-								<p>NEW</p>
-							</div>
-						</div>
-					</div>
-					<div class="item">
-						<div class="w3l-movie-gride-agile w3l-movie-gride-slider ">
-							<a href="single.jsp" class="hvr-sweep-to-bottom"><img src="images/m6.jpg" title="Movies Pro" class="img-responsive" alt=" " />
-								<div class="w3l-action-icon"><i class="fa fa-play-circle-o" aria-hidden="true"></i></div>
-							</a>
-							<div class="mid-1 agileits_w3layouts_mid_1_home">
-								<div class="w3l-movie-text">
-									<h6><a href="single.jsp">Hopeless</a></h6>							
-								</div>
-								<div class="mid-2 agile_mid_2_home">
-									<p>2016</p>
-									<div class="block-stars">
-										<ul class="w3l-ratings">
-											<li><a href="#"><i class="fa fa-star" aria-hidden="true"></i></a></li>
-											<li><a href="#"><i class="fa fa-star" aria-hidden="true"></i></a></li>
-											<li><a href="#"><i class="fa fa-star-half-o" aria-hidden="true"></i></a></li>
-											<li><a href="#"><i class="fa fa-star-o" aria-hidden="true"></i></a></li>
-											<li><a href="#"><i class="fa fa-star-o" aria-hidden="true"></i></a></li>
-										</ul>
-									</div>
-									<div class="clearfix"></div>
-								</div>
-							</div>
-							<div class="ribben one">
-								<p>NEW</p>
-							</div>
-						</div>
-					</div>
-					<div class="item">
-						<div class="w3l-movie-gride-agile w3l-movie-gride-slider ">
-							<a href="single.jsp" class="hvr-sweep-to-bottom"><img src="images/m7.jpg" title="Movies Pro" class="img-responsive" alt=" " />
-								<div class="w3l-action-icon"><i class="fa fa-play-circle-o" aria-hidden="true"></i></div>
-							</a>
-							<div class="mid-1 agileits_w3layouts_mid_1_home">
-								<div class="w3l-movie-text">
-									<h6><a href="single.jsp">Mechanic</a></h6>							
-								</div>
-								<div class="mid-2 agile_mid_2_home">
-									<p>2016</p>
-									<div class="block-stars">
-										<ul class="w3l-ratings">
-											<li><a href="#"><i class="fa fa-star" aria-hidden="true"></i></a></li>
-											<li><a href="#"><i class="fa fa-star" aria-hidden="true"></i></a></li>
-											<li><a href="#"><i class="fa fa-star" aria-hidden="true"></i></a></li>
-											<li><a href="#"><i class="fa fa-star-half-o" aria-hidden="true"></i></a></li>
-											<li><a href="#"><i class="fa fa-star-o" aria-hidden="true"></i></a></li>
-										</ul>
-									</div>
-									<div class="clearfix"></div>
-								</div>
-							</div>
-							<div class="ribben one">
-								<p>NEW</p>
-							</div>
-						</div>
-					</div>
-					<div class="item">
-						<div class="w3l-movie-gride-agile w3l-movie-gride-slider ">
-							<a href="single.jsp" class="hvr-sweep-to-bottom"><img src="images/m8.jpg" title="Movies Pro" class="img-responsive" alt=" " />
-								<div class="w3l-action-icon"><i class="fa fa-play-circle-o" aria-hidden="true"></i></div>
-							</a>
-							<div class="mid-1 agileits_w3layouts_mid_1_home">
-								<div class="w3l-movie-text">
-									<h6><a href="single.jsp">Timeless</a></h6>							
-								</div>
-								<div class="mid-2 agile_mid_2_home">
-									<p>2016</p>
-									<div class="block-stars">
-										<ul class="w3l-ratings">
-											<li><a href="#"><i class="fa fa-star" aria-hidden="true"></i></a></li>
-											<li><a href="#"><i class="fa fa-star" aria-hidden="true"></i></a></li>
-											<li><a href="#"><i class="fa fa-star-o" aria-hidden="true"></i></a></li>
-											<li><a href="#"><i class="fa fa-star-o" aria-hidden="true"></i></a></li>
-											<li><a href="#"><i class="fa fa-star-o" aria-hidden="true"></i></a></li>
-										</ul>
-									</div>
-									<div class="clearfix"></div>
-								</div>
-							</div>
-							<div class="ribben one">
-								<p>NEW</p>
-							</div>
-						</div>
-					</div>
-					<div class="item">
-						<div class="w3l-movie-gride-agile w3l-movie-gride-slider ">
-							<a href="single.jsp" class="hvr-sweep-to-bottom"><img src="images/m3.jpg" title="Movies Pro" class="img-responsive" alt=" " />
-								<div class="w3l-action-icon"><i class="fa fa-play-circle-o" aria-hidden="true"></i></div>
-							</a>
-							<div class="mid-1 agileits_w3layouts_mid_1_home">
-								<div class="w3l-movie-text">
-									<h6><a href="single.jsp">Deadpool</a></h6>							
-								</div>
-								<div class="mid-2 agile_mid_2_home">
-									<p>2016</p>
-									<div class="block-stars">
-										<ul class="w3l-ratings">
-											<li><a href="#"><i class="fa fa-star" aria-hidden="true"></i></a></li>
-											<li><a href="#"><i class="fa fa-star" aria-hidden="true"></i></a></li>
-											<li><a href="#"><i class="fa fa-star" aria-hidden="true"></i></a></li>
-											<li><a href="#"><i class="fa fa-star-half-o" aria-hidden="true"></i></a></li>
-											<li><a href="#"><i class="fa fa-star-o" aria-hidden="true"></i></a></li>
-										</ul>
-									</div>
-									<div class="clearfix"></div>
-								</div>
-							</div>
-							<div class="ribben one">
-								<p>NEW</p>
-							</div>
-						</div>
-					</div>
-					<div class="item">
-						<div class="w3l-movie-gride-agile w3l-movie-gride-slider ">
-							<a href="single.jsp" class="hvr-sweep-to-bottom"><img src="images/m11.jpg" title="Movies Pro" class="img-responsive" alt=" " />
-								<div class="w3l-action-icon"><i class="fa fa-play-circle-o" aria-hidden="true"></i></div>
-							</a>
-							<div class="mid-1 agileits_w3layouts_mid_1_home">
-								<div class="w3l-movie-text">
-									<h6><a href="single.jsp">Warcraft</a></h6>							
-								</div>
-								<div class="mid-2 agile_mid_2_home">
-									<p>2016</p>
-									<div class="block-stars">
-										<ul class="w3l-ratings">
-											<li><a href="#"><i class="fa fa-star" aria-hidden="true"></i></a></li>
-											<li><a href="#"><i class="fa fa-star" aria-hidden="true"></i></a></li>
-											<li><a href="#"><i class="fa fa-star" aria-hidden="true"></i></a></li>
-											<li><a href="#"><i class="fa fa-star" aria-hidden="true"></i></a></li>
-											<li><a href="#"><i class="fa fa-star-half-o" aria-hidden="true"></i></a></li>
-										</ul>
-									</div>
-									<div class="clearfix"></div>
-								</div>
-							</div>
-							<div class="ribben one">
-								<p>NEW</p>
-							</div>
-						</div>
-					</div>
-					<div class="item">
-						<div class="w3l-movie-gride-agile w3l-movie-gride-slider ">
-							<a href="single.jsp" class="hvr-sweep-to-bottom"><img src="images/m14.jpg" title="Movies Pro" class="img-responsive" alt=" " />
-								<div class="w3l-action-icon"><i class="fa fa-play-circle-o" aria-hidden="true"></i></div>
-							</a>
-							<div class="mid-1 agileits_w3layouts_mid_1_home">
-								<div class="w3l-movie-text">
-									<h6><a href="single.jsp">Rambo 4</a></h6>							
-								</div>
-								<div class="mid-2 agile_mid_2_home">
-									<p>2016</p>
-									<div class="block-stars">
-										<ul class="w3l-ratings">
-											<li><a href="#"><i class="fa fa-star" aria-hidden="true"></i></a></li>
-											<li><a href="#"><i class="fa fa-star-half-o" aria-hidden="true"></i></a></li>
-											<li><a href="#"><i class="fa fa-star-o" aria-hidden="true"></i></a></li>
-											<li><a href="#"><i class="fa fa-star-o" aria-hidden="true"></i></a></li>
-											<li><a href="#"><i class="fa fa-star-o" aria-hidden="true"></i></a></li>
-										</ul>
-									</div>
-									<div class="clearfix"></div>
-								</div>
-							</div>
-							<div class="ribben one">
-								<p>NEW</p>
-							</div>
-						</div>
-					</div>
-					<div class="item">
-						<div class="w3l-movie-gride-agile w3l-movie-gride-slider ">
-							<a href="single.jsp" class="hvr-sweep-to-bottom"><img src="images/m13.jpg" title="Movies Pro" class="img-responsive" alt=" " />
-								<div class="w3l-action-icon"><i class="fa fa-play-circle-o" aria-hidden="true"></i></div>
-							</a>
-							<div class="mid-1 agileits_w3layouts_mid_1_home">
-								<div class="w3l-movie-text">
-									<h6><a href="single.jsp">Ghostbuster</a></h6>							
-								</div>
-								<div class="mid-2 agile_mid_2_home">
-									<p>2016</p>
-									<div class="block-stars">
-										<ul class="w3l-ratings">
-											<li><a href="#"><i class="fa fa-star" aria-hidden="true"></i></a></li>
-											<li><a href="#"><i class="fa fa-star" aria-hidden="true"></i></a></li>
-											<li><a href="#"><i class="fa fa-star" aria-hidden="true"></i></a></li>
-											<li><a href="#"><i class="fa fa-star-half-o" aria-hidden="true"></i></a></li>
-											<li><a href="#"><i class="fa fa-star-o" aria-hidden="true"></i></a></li>
-										</ul>
-									</div>
-									<div class="clearfix"></div>
-								</div>
-							</div>
-							<div class="ribben one">
-								<p>NEW</p>
-							</div>
-						</div>
-					</div>
-					<div class="item">
-						<div class="w3l-movie-gride-agile w3l-movie-gride-slider ">
-							<a href="single.jsp" class="hvr-sweep-to-bottom"><img src="images/m15.jpg" title="Movies Pro" class="img-responsive" alt=" " />
-								<div class="w3l-action-icon"><i class="fa fa-play-circle-o" aria-hidden="true"></i></div>
-							</a>
-							<div class="mid-1 agileits_w3layouts_mid_1_home">
-								<div class="w3l-movie-text">
-									<h6><a href="single.jsp">RoboCop</a></h6>							
-								</div>
-								<div class="mid-2 agile_mid_2_home">
-									<p>2016</p>
-									<div class="block-stars">
-										<ul class="w3l-ratings">
-											<li><a href="#"><i class="fa fa-star" aria-hidden="true"></i></a></li>
-											<li><a href="#"><i class="fa fa-star" aria-hidden="true"></i></a></li>
-											<li><a href="#"><i class="fa fa-star" aria-hidden="true"></i></a></li>
-											<li><a href="#"><i class="fa fa-star" aria-hidden="true"></i></a></li>
-											<li><a href="#"><i class="fa fa-star-o" aria-hidden="true"></i></a></li>
-										</ul>
-									</div>
-									<div class="clearfix"></div>
-								</div>
-							</div>
-							<div class="ribben one">
-								<p>NEW</p>
-							</div>
-							</div>
-						</div>
-					   </div>
-				    </div>
-				<!--//movies-->
-					</div>
-				</div>
-				</div>
-			<!--//content-inner-section-->
-		
+		<c:if test="${! empty msg}">		
+			<script type="text/javascript">
+				alert("${msg}");
+			</script>
+		</c:if>	
 <!--/footer-bottom-->
 	<%@ include file="footer.jsp"%>
 

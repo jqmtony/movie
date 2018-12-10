@@ -4,10 +4,13 @@ import java.io.IOException;
 import java.sql.SQLException;
 import java.sql.Timestamp;
 import java.util.Date;
+import java.util.List;
 
 import javax.mail.Session;
 
 import com.yc.exception.UserException;
+import com.yc.movie.bean.Images;
+import com.yc.movie.bean.Indent;
 import com.yc.movie.bean.Integral;
 import com.yc.movie.bean.UserLoginRecord;
 import com.yc.movie.bean.Users;
@@ -156,6 +159,7 @@ public class UserService {
 			if(user == null)
 				throw new UserException("密码错误");
 		} catch (SQLException e) {
+			e.printStackTrace();
 			throw new UserException("系统异常，请稍后再试");
 		}
 		
@@ -392,6 +396,131 @@ public class UserService {
 			}
 			return text;  //返回验证码
 		}catch(SQLException e){
+			throw new UserException("系统异常，请稍后再试！");
+		}
+	}
+
+	/**
+	 * 验证邮箱
+	 * @param email
+	 * @throws UserException 
+	 */
+	public void regxEmail(String email,Users loginedUser) throws UserException {
+		//判断邮箱是否为null
+		if(email == null || email.trim().isEmpty())
+			throw new UserException("邮箱不能为Null");
+		
+		//判断邮箱格式是否正确
+		if(!email.matches(CommonsUtils.EMAIL_REGX))
+			throw new UserException("邮箱格式不正确");
+		
+		//判断邮箱是否已被绑定
+		try {
+			Users user = ud.findUserByEmail(email);
+			if(user != null){
+				if(!user.getUserId().equals(loginedUser.getUserId()))
+					throw new UserException("该邮箱已被其他用户绑定");
+			}
+		} catch (SQLException e) {
+			throw new UserException("系统异常，请稍后再试！");
+		}
+	}
+
+	/**
+	 * 验证手机号码
+	 * @param tel
+	 * @throws UserException 
+	 */
+	public void regxTel(String tel,Users loginedUser) throws UserException {
+		//判断输入的手机号码是否为null
+		if(tel == null || tel.trim().isEmpty())
+			throw new UserException("手机号码不能为null");
+		
+		//判断手机号码格式是否正确
+		if(!tel.matches(CommonsUtils.TEL_NUM_REGX))
+			throw new UserException("手机号码格式不正确");
+		
+		//判断手机号码是否已被其他用户绑定
+		try {
+			Users user = ud.findUserByTel(tel);
+			if(user != null){
+				if(!user.getUserId().equals(loginedUser.getUserId()))
+					throw new UserException("该手机号已被其他用户绑定");
+			}
+		} catch (SQLException e) {
+			throw new UserException("系统异常，请稍后再试！");
+		}
+	}
+
+	/**
+	 * 修改用户信息
+	 * @param form
+	 * @param sqlPath
+	 * @throws UserException 
+	 */
+	public void alterInfo(Users form, String sqlPath) throws UserException {
+		try {
+			JdbcUtils.beginTransaction();
+			ud.alterInfo(form);  //修改用户信息
+			
+			
+			//先看看数据库中有没有头像
+			Images img = ud.findImageByUserId(form.getUserId());  //通过用户ID查找图片对象
+			if(img == null){   //添加头像
+				if(sqlPath !=null && !sqlPath.trim().isEmpty()){
+					Images im = new Images();
+					im.setImgUserId(form.getUserId()); 
+					im.setImgStatus("头像");
+					im.setImgPath(sqlPath);
+					ud.addImageByUser(im);
+				}
+			}else if(img != null){  //修改头像
+				if(sqlPath !=null && !sqlPath.trim().isEmpty()){
+					Images im = new Images();
+					im.setImgUserId(form.getUserId()); 
+					im.setImgStatus("头像");
+					im.setImgPath(sqlPath);
+					ud.alterImageByUser(im);
+				}
+			}
+			
+			JdbcUtils.commitTransaction();
+		} catch (SQLException e) {
+			try {
+				JdbcUtils.roolbackTransaction();
+			} catch (SQLException e1) {
+				throw new UserException("系统异常，请稍后再试！");
+			}
+		}
+	}
+
+	/**
+	 * 通过ID查找user
+	 * @param userId
+	 * @return
+	 * @throws UserException 
+	 */
+	public Users findUserByUserId(Long userId) throws UserException {
+		try {
+			Users user = ud.findUserById(userId);
+			user = ud.createUser(user);
+			return user;
+		} catch (SQLException e) {
+			throw new UserException("系统异常，请稍后再试！");
+		}
+	}
+
+	/**
+	 * 根据用户查找所有订单
+	 * @param loginedUser
+	 * @return
+	 * @throws UserException 
+	 */
+	public List<Indent> findIndentListByUser(Users loginedUser) throws UserException {
+		try {
+			List<Indent> indentList = ud.findIndentListByUser(loginedUser);
+			return indentList;
+		} catch (SQLException e) {
 			throw new UserException("系统异常，请稍后再试！");
 		}
 	}

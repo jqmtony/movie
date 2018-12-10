@@ -59,7 +59,7 @@
 											<div class="single video_agile_player">
 											       
 										            <div class="video-grid-single-page-agileits">
-														<div data-video="f2Z65fobH2I" id="video"> <img src="${pageContext.request.contextPath }${singleShow.imgList[0].imgPath }" alt="这里的图片不存在" class="img-responsive" /> </div>
+														<div data-video="f2Z65fobH2I" id="video"> <img src="${pageContext.request.contextPath }${singleShow.imgList[2].imgPath }" alt="这里的图片不存在" class="img-responsive" /> </div>
 													</div>
 													 <h4>
 													 	主演 ： <%--这里需要判断主演是否只有一个 --%>

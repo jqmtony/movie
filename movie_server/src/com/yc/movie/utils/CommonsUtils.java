@@ -438,7 +438,12 @@ public class CommonsUtils {
 			}
 //					File sqlFile = new File("/WEB-INF/files","/"+hex.charAt(0)+"/"+hex.charAt(1));
 		String sqlPath = s1+s+"/"+savename;
-		sqlPath = sqlPath.replace("movie_server", "movie_client");
+		if(sqlPath.contains("movie_server")){
+			sqlPath = sqlPath.replace("movie_server", "movie_client");
+		}else if(sqlPath.contains("movie_client")){
+			sqlPath = sqlPath.replace("movie_client", "movie_server");
+		}
+		
 		
 		//±£´æ
 		try {

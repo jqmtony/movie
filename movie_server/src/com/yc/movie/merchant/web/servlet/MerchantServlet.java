@@ -121,9 +121,11 @@ public class MerchantServlet extends BaseServlet {
 			sqlPaths.add(sqlPath);
 			sqlPath = CommonsUtils.uploadImage(request,"/merHeadCreateImage", partList.get(2),1680,850);
 			sqlPaths.add(sqlPath);
+			sqlPath = CommonsUtils.uploadImage(request,"/merHeadCreateImage", partList.get(2),720,338);
+			sqlPaths.add(sqlPath);
 			sqlPaths.add(CommonsUtils.uploadFile(request, "/merHeadCreateImage", partList.get(3)));
 			
-			form.setMoviePrevue(sqlPaths.get(3)); //添加电影预告片的路径
+			form.setMoviePrevue(sqlPaths.get(4)); //添加电影预告片的路径
 			ms.addMovie(form, m,sqlPaths,oldMovieMerId,loginedMerchant.getMerId());  //电影上架
 			
 			request.setAttribute("msg", "上架电影成功");

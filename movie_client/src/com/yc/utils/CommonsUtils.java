@@ -438,7 +438,8 @@ public class CommonsUtils {
 			}
 //					File sqlFile = new File("/WEB-INF/files","/"+hex.charAt(0)+"/"+hex.charAt(1));
 		String sqlPath = s1+s+"/"+savename;
-		sqlPath = sqlPath.replace("movie_server", "movie_client");
+		
+		
 		
 		//保存
 		try {
@@ -449,7 +450,12 @@ public class CommonsUtils {
 			CommonsUtils.zipWidthHeightImageFile(destFile, destFile, width, height);
 			
 			//复制图片
-			String newFileDir = dirFile.getAbsolutePath().replace("movie_server", "movie_client");
+			String newFileDir = dirFile.getAbsolutePath();
+			if(newFileDir.contains("movie_server")){
+				newFileDir = newFileDir.replace("movie_server", "movie_client");
+			}else if(newFileDir.contains("movie_client")){
+				newFileDir = newFileDir.replace("movie_client", "movie_server");
+			}
 			File f = new File(newFileDir);
 			f.mkdirs(); //生成目录链
 			cloneFile(new File(dirFile.getAbsolutePath()+"\\"+savename), new File(f,savename));

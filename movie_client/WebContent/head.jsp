@@ -26,33 +26,33 @@
 									<li>
 									<div class="col-sm-4">
 										<ul class="multi-column-dropdown">
-											<li><a href="genre.jsp">${lg["indexMenuGenreAction"] }</a></li>
-											<li><a href="genre.jsp">${lg["indexMenuGenreBiography"] }</a></li>
-											<li><a href="genre.jsp">${lg["indexMenuGenreCrime"] }</a></li>
-											<li><a href="genre.jsp">${lg["indexMenuGenreFamily"] }</a></li>
-											<li><a href="horror.jsp">${lg["indexMenuGenreHorror"] }</a></li>
-											<li><a href="genre.jsp">${lg["indexMenuGenreRomance"] }</a></li>
-											<li><a href="genre.jsp">${lg["indexMenuGenreSports"] }</a></li>
-											<li><a href="genre.jsp">${lg["indexMenuGenreWar"] }</a></li>
+											<li><a href="<c:url value='/movie.s?method=goGenre&op=indexMenuGenreAction' />">${lg["indexMenuGenreAction"] }</a></li>
+											<li><a href="<c:url value='/movie.s?method=goGenre&op=indexMenuGenreBiography' />">${lg["indexMenuGenreBiography"] }</a></li>
+											<li><a href="<c:url value='/movie.s?method=goGenre&op=indexMenuGenreCrime' />">${lg["indexMenuGenreCrime"] }</a></li>
+											<li><a href="<c:url value='/movie.s?method=goGenre&op=indexMenuGenreFamily' />">${lg["indexMenuGenreFamily"] }</a></li>
+											<li><a href="<c:url value='/movie.s?method=goGenre&op=indexMenuGenreHorror' />">${lg["indexMenuGenreHorror"] }</a></li>
+											<li><a href="<c:url value='/movie.s?method=goGenre&op=indexMenuGenreRomance' />">${lg["indexMenuGenreRomance"] }</a></li>
+											<li><a href="<c:url value='/movie.s?method=goGenre&op=indexMenuGenreSports' />">${lg["indexMenuGenreSports"] }</a></li>
+											<li><a href="<c:url value='/movie.s?method=goGenre&op=indexMenuGenreWar' />">${lg["indexMenuGenreWar"] }</a></li>
 										</ul>
 									</div>
 									<div class="col-sm-4">
 										<ul class="multi-column-dropdown">
-											<li><a href="genre.jsp">${lg["indexMenuGenreAdventure"] }</a></li>
-											<li><a href="comedy.jsp">${lg["indexMenuGenreComedy"] }</a></li>
-											<li><a href="genre.jsp">${lg["indexMenuGenreDocumentary"] }</a></li>
-											<li><a href="genre.jsp">${lg["indexMenuGenreFantasy"] }</a></li>
-											<li><a href="genre.jsp">${lg["indexMenuGenreThriller"] }</a></li>
+											<li><a href="<c:url value='/movie.s?method=goGenre&op=indexMenuGenreAdventure' />">${lg["indexMenuGenreAdventure"] }</a></li>
+											<li><a href="<c:url value='/movie.s?method=goGenre&op=indexMenuGenreComedy' />">${lg["indexMenuGenreComedy"] }</a></li>
+											<li><a href="<c:url value='/movie.s?method=goGenre&op=indexMenuGenreDocumentary' />">${lg["indexMenuGenreDocumentary"] }</a></li>
+											<li><a href="<c:url value='/movie.s?method=goGenre&op=indexMenuGenreFantasy' />">${lg["indexMenuGenreFantasy"] }</a></li>
+											<li><a href="<c:url value='/movie.s?method=goGenre&op=indexMenuGenreThriller' />">${lg["indexMenuGenreThriller"] }</a></li>
 										</ul>
 									</div>
 									<div class="col-sm-4">
 										<ul class="multi-column-dropdown">
-											<li><a href="genre.jsp">${lg["indexMenuGenreAnimation"] }</a></li>
-											<li><a href="genre.jsp">${lg["indexMenuGenreCostume"] }</a></li>
-											<li><a href="genre.jsp">${lg["indexMenuGenreDrama"] }</a></li>
-											<li><a href="genre.jsp">${lg["indexMenuGenreHistory"] }</a></li>
-											<li><a href="genre.jsp">${lg["indexMenuGenreMusical"] }</a></li>
-											<li><a href="genre.jsp">${lg["indexMenuGenrePsychological"] }</a></li>
+											<li><a href="<c:url value='/movie.s?method=goGenre&op=indexMenuGenreAnimation' />">${lg["indexMenuGenreAnimation"] }</a></li>
+											<li><a href="<c:url value='/movie.s?method=goGenre&op=indexMenuGenreCostume' />">${lg["indexMenuGenreCostume"] }</a></li>
+											<li><a href="<c:url value='/movie.s?method=goGenre&op=indexMenuGenreDrama' />">${lg["indexMenuGenreDrama"] }</a></li>
+											<li><a href="<c:url value='/movie.s?method=goGenre&op=indexMenuGenreHistory' />">${lg["indexMenuGenreHistory"] }</a></li>
+											<li><a href="<c:url value='/movie.s?method=goGenre&op=indexMenuGenreMusical' />">${lg["indexMenuGenreMusical"] }</a></li>
+											<li><a href="<c:url value='/movie.s?method=goGenre&op=indexMenuGenrePsychological' />">${lg["indexMenuGenrePsychological"] }</a></li>
 										</ul>
 									</div>
 									<div class="clearfix"></div>
@@ -61,39 +61,6 @@
 							</li>
 							<li><a href="series.jsp">${lg["indexMenuTvSeries"]}</a></li>
 							<li><a href="news.jsp">${lg["indexMenuNews"]}</a></li>
-							<li class="dropdown">
-								<a href="#" class="dropdown-toggle" data-toggle="dropdown">${lg["indexMenuCountry"]}<b class="caret"></b></a>
-								<ul class="dropdown-menu multi-column columns-3">
-									<li>
-										<div class="col-sm-4">
-											<ul class="multi-column-dropdown">
-												<li><a href="genre.jsp">${lg["indexMenuCountryAsia"]}</a></li>
-												<li><a href="genre.jsp">${lg["indexMenuCountryFrance"]}</a></li>
-												<li><a href="genre.jsp">${lg["indexMenuCountryTaiwan"]}</a></li>
-												<li><a href="genre.jsp">${lg["indexMenuCountryUnitedStates"]}</a></li>
-											</ul>
-										</div>
-										<div class="col-sm-4">
-											<ul class="multi-column-dropdown">
-												<li><a href="genre.jsp">${lg["indexMenuCountryChina"]}</a></li>
-												<li><a href="genre.jsp">${lg["indexMenuCountryHongCong"]}</a></li>
-												<li><a href="genre.jsp">${lg["indexMenuCountryJapan"]}</a></li>
-												<li><a href="genre.jsp">${lg["indexMenuCountryThailand"]}</a></li>
-											</ul>
-										</div>
-										<div class="col-sm-4">
-											<ul class="multi-column-dropdown">
-												<li><a href="genre.jsp">${lg["indexMenuCountryEuro"]}</a></li>
-												<li><a href="genre.jsp">${lg["indexMenuCountryIndia"]}</a></li>
-												<li><a href="genre.jsp">${lg["indexMenuCountryKorea"]}</a></li>
-												<li><a href="genre.jsp">${lg["indexMenuCountryUnitedKingdom"]}</a></li>
-											</ul>
-										</div>
-										<div class="clearfix"></div>
-									</li>
-								</ul>
-							</li>
-							<li><a href="list.jsp">${lg["indexMenuAZList"]}</a></li>
 							<li><a href="contact.jsp">${lg["indexMenuContact"]}</a></li>
 							<li>
 								<select style="margin:13px 10px 0 10px; width:80px;cursor:pointer;" id="languageChose">
@@ -147,14 +114,15 @@
 										</c:when>
 										<c:otherwise>
 											<li style="margin-left:30px;">
-												<img id="headImg" src="" alt="图片">
+												<img id="headImg" style="width:20px;height:20px;" src="<c:url value='${loginedUser.imgList[0].imgPath }' />" alt="图片">
 												<font>${loginedUser.userAccount}</font>
 											</li>
 											<li style="margin-left:20px;">
 												<select id="infoChange" style="color:#000000;" onchange="infoChange()">
-													<option selected="selected">个人中心</option>
-													<option>修改信息</option>
-													<option>退出登录</option>
+													<option selected="selected">${lg['personalCenter'] }</option>
+													<option>${lg['alterInfo'] }</option>
+													<option>${lg['myIndent'] }</option>
+													<option>${lg['loginOut'] }</option>
 												</select>
 											</li>
 										</c:otherwise>

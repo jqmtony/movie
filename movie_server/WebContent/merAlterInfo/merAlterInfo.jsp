@@ -60,7 +60,7 @@
                             <select style="width:110px;height:30px;" id="province" onchange="createCityAndDistrict()">
                             	<option selected="selected">省</option>
                             	<c:forEach items="${provincesMap }" var="map">
-                            		<option value="${map.key }">${map.value }</option>
+                            		<option rel="${map.key }">${map.value }</option>
                             	</c:forEach>
                             </select>
                             <select style="width:110px;height:30px;" id="city" onchange="createDistrictByCity()">
@@ -190,38 +190,38 @@
      <script type="text/javascript">
     	//创建市和县
    		function createCityAndDistrict(){
-   			var province = $('#province');
+   			var province = $('#province option:selected');
    			var city = $('#city');
    			var district = $('#district');
    			
    			var data={pId : province.val()};
-   			$.post("<c:url value='/mer.s?method=getCityAndDistrictByProvince&pId="+province.val()+"' />",data,function(data){
+   			$.post("<c:url value='/mer.s?method=getCityAndDistrictByProvince&pId="+province.attr("rel")+"' />",data,function(data){
    				city.html("");
    				district.html("");
    				var list = eval("("+data+")");
    				var citys = list[0];
    				var districts = list[1];
    				$.each(citys,function(n,value){
-   					city.append('<option value="'+n+'">'+value+'</option>');
+   					city.append('<option rel="'+n+'">'+value+'</option>');
    				});
    				
    				$.each(districts,function(n,value){
-   					district.append('<option value="'+n+'">'+value+'</option>');
+   					district.append('<option rel="'+n+'">'+value+'</option>');
    				});
    			});
    		}
     	//创建县
     	function createDistrictByCity(){
     		var province = $('#province');
-   			var city = $('#city');
+   			var city = $('#city option:selected');
    			var district = $('#district');
    			
    			var data={pId : province.val()};
-   			$.post("<c:url value='/mer.s?method=getDistrictByCity&cId="+city.val()+"' />",data,function(data){
+   			$.post("<c:url value='/mer.s?method=getDistrictByCity&cId="+city.attr("rel")+"' />",data,function(data){
    				district.html("");
    				var districts = eval("("+data+")");
    				$.each(districts,function(n,value){
-   					district.append('<option value="'+n+'">'+value+'</option>');
+   					district.append('<option rel="'+n+'">'+value+'</option>');
    				});
    			});
     	}

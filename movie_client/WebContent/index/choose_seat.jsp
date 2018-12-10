@@ -101,7 +101,7 @@ function show(){
 	//popu("123");  弹窗
 	$.post("<c:url value='/movie.s?method=createIndent' />",data,function(data){
 		if(data === "yes"){
-			location.href = "<c:url value='/movieIndent.jsp' />";
+			parent.location.href = "<c:url value='/movieIndent.jsp' />";
 		}else{
 			popu(data);
 		}

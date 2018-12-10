@@ -274,6 +274,8 @@ fit: true
 		var selector = $('#infoChange');
 		if(selector.val() == "修改信息"){
 			window.location.href = "userAlterInfo.jsp";
+		}else if(selector.val() == "我的订单"){
+			
 		}else if(selector.val() == "退出登录"){
 			var data;
 			$.post("<c:url value='/user.s?method=exit' />",data,function(data){})

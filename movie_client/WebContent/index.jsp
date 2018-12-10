@@ -28,13 +28,13 @@
 <link href='http://fonts.googleapis.com/css?family=Montserrat:400,700' rel='stylesheet' type='text/css'>
 <!--//web-fonts-->
 </head>
-<c:if test="${empty movieListByTime }">
+<c:if test="${empty movieList }">
 	<jsp:forward page="movie.s?method=findAllMovie"></jsp:forward>
 </c:if>
 <%-- <%
-	List<Movies> list1 = (List<Movies>)request.getAttribute("movieListByTime");
-	List<Movies> list2 = (List<Movies>)request.getAttribute("movieListByCount");
-	List<Movies> list3 = (List<Movies>)request.getAttribute("movieListByGrade");
+	List<Movies> list1 = (List<Movies>)request.getAttribute("movieList");
+	List<Movies> list2 = (List<Movies>)request.getAttribute("movieList");
+	List<Movies> list3 = (List<Movies>)request.getAttribute("movieList");
 	/*System.out.println("jsp1"+list1.hashCode());
 	System.out.println("jsp2"+list2.hashCode());
 	System.out.println("jsp3"+list3.hashCode()); */
@@ -45,7 +45,7 @@
 <body>
 <!--/main-header-->
   <!--/banner-section-->
-	<div id="demo-1" data-zs-src='["images/2.jpg", "images/1.jpg", "images/3.jpg","images/4.jpg"]' data-zs-overlay="dots">
+	<div id="demo-1" data-zs-src='["<c:url value='${movieList[indexTime[0]].imgList[2].imgPath }' />", "<c:url value='${movieList[indexTime[1]].imgList[2].imgPath }' />", "<c:url value='${movieList[indexTime[2]].imgList[2].imgPath }' />","<c:url value='${movieList[indexTime[3]].imgList[2].imgPath }' />"]' data-zs-overlay="dots">
 		<div class="demo-inner-content">
 		<!--/header-w3l-->
 			   <div class="header-w3-agileits" id="home">
@@ -70,33 +70,33 @@
 									<li>
 									<div class="col-sm-4">
 										<ul class="multi-column-dropdown">
-											<li><a href="genre.jsp">${lg["indexMenuGenreAction"] }</a></li>
-											<li><a href="genre.jsp">${lg["indexMenuGenreBiography"] }</a></li>
-											<li><a href="genre.jsp">${lg["indexMenuGenreCrime"] }</a></li>
-											<li><a href="genre.jsp">${lg["indexMenuGenreFamily"] }</a></li>
-											<li><a href="horror.jsp">${lg["indexMenuGenreHorror"] }</a></li>
-											<li><a href="genre.jsp">${lg["indexMenuGenreRomance"] }</a></li>
-											<li><a href="genre.jsp">${lg["indexMenuGenreSports"] }</a></li>
-											<li><a href="genre.jsp">${lg["indexMenuGenreWar"] }</a></li>
+											<li><a href="<c:url value='/movie.s?method=goGenre&op=indexMenuGenreAction' />">${lg["indexMenuGenreAction"] }</a></li>
+											<li><a href="<c:url value='/movie.s?method=goGenre&op=indexMenuGenreBiography' />">${lg["indexMenuGenreBiography"] }</a></li>
+											<li><a href="<c:url value='/movie.s?method=goGenre&op=indexMenuGenreCrime' />">${lg["indexMenuGenreCrime"] }</a></li>
+											<li><a href="<c:url value='/movie.s?method=goGenre&op=indexMenuGenreFamily' />">${lg["indexMenuGenreFamily"] }</a></li>
+											<li><a href="<c:url value='/movie.s?method=goGenre&op=indexMenuGenreHorror' />">${lg["indexMenuGenreHorror"] }</a></li>
+											<li><a href="<c:url value='/movie.s?method=goGenre&op=indexMenuGenreRomance' />">${lg["indexMenuGenreRomance"] }</a></li>
+											<li><a href="<c:url value='/movie.s?method=goGenre&op=indexMenuGenreSports' />">${lg["indexMenuGenreSports"] }</a></li>
+											<li><a href="<c:url value='/movie.s?method=goGenre&op=indexMenuGenreWar' />">${lg["indexMenuGenreWar"] }</a></li>
 										</ul>
 									</div>
 									<div class="col-sm-4">
 										<ul class="multi-column-dropdown">
-											<li><a href="genre.jsp">${lg["indexMenuGenreAdventure"] }</a></li>
-											<li><a href="comedy.jsp">${lg["indexMenuGenreComedy"] }</a></li>
-											<li><a href="genre.jsp">${lg["indexMenuGenreDocumentary"] }</a></li>
-											<li><a href="genre.jsp">${lg["indexMenuGenreFantasy"] }</a></li>
-											<li><a href="genre.jsp">${lg["indexMenuGenreThriller"] }</a></li>
+											<li><a href="<c:url value='/movie.s?method=goGenre&op=indexMenuGenreAdventure' />">${lg["indexMenuGenreAdventure"] }</a></li>
+											<li><a href="<c:url value='/movie.s?method=goGenre&op=indexMenuGenreComedy' />">${lg["indexMenuGenreComedy"] }</a></li>
+											<li><a href="<c:url value='/movie.s?method=goGenre&op=indexMenuGenreDocumentary' />">${lg["indexMenuGenreDocumentary"] }</a></li>
+											<li><a href="<c:url value='/movie.s?method=goGenre&op=indexMenuGenreFantasy' />">${lg["indexMenuGenreFantasy"] }</a></li>
+											<li><a href="<c:url value='/movie.s?method=goGenre&op=indexMenuGenreThriller' />">${lg["indexMenuGenreThriller"] }</a></li>
 										</ul>
 									</div>
 									<div class="col-sm-4">
 										<ul class="multi-column-dropdown">
-											<li><a href="genre.jsp">${lg["indexMenuGenreAnimation"] }</a></li>
-											<li><a href="genre.jsp">${lg["indexMenuGenreCostume"] }</a></li>
-											<li><a href="genre.jsp">${lg["indexMenuGenreDrama"] }</a></li>
-											<li><a href="genre.jsp">${lg["indexMenuGenreHistory"] }</a></li>
-											<li><a href="genre.jsp">${lg["indexMenuGenreMusical"] }</a></li>
-											<li><a href="genre.jsp">${lg["indexMenuGenrePsychological"] }</a></li>
+											<li><a href="<c:url value='/movie.s?method=goGenre&op=indexMenuGenreAnimation' />">${lg["indexMenuGenreAnimation"] }</a></li>
+											<li><a href="<c:url value='/movie.s?method=goGenre&op=indexMenuGenreCostume' />">${lg["indexMenuGenreCostume"] }</a></li>
+											<li><a href="<c:url value='/movie.s?method=goGenre&op=indexMenuGenreDrama' />">${lg["indexMenuGenreDrama"] }</a></li>
+											<li><a href="<c:url value='/movie.s?method=goGenre&op=indexMenuGenreHistory' />">${lg["indexMenuGenreHistory"] }</a></li>
+											<li><a href="<c:url value='/movie.s?method=goGenre&op=indexMenuGenreMusical' />">${lg["indexMenuGenreMusical"] }</a></li>
+											<li><a href="<c:url value='/movie.s?method=goGenre&op=indexMenuGenrePsychological' />">${lg["indexMenuGenrePsychological"] }</a></li>
 										</ul>
 									</div>
 									<div class="clearfix"></div>
@@ -105,39 +105,6 @@
 							</li>
 							<li><a href="series.jsp">${lg["indexMenuTvSeries"]}</a></li>
 							<li><a href="news.jsp">${lg["indexMenuNews"]}</a></li>
-							<li class="dropdown">
-								<a href="#" class="dropdown-toggle" data-toggle="dropdown">${lg["indexMenuCountry"]}<b class="caret"></b></a>
-								<ul class="dropdown-menu multi-column columns-3">
-									<li>
-										<div class="col-sm-4">
-											<ul class="multi-column-dropdown">
-												<li><a href="genre.jsp">${lg["indexMenuCountryAsia"]}</a></li>
-												<li><a href="genre.jsp">${lg["indexMenuCountryFrance"]}</a></li>
-												<li><a href="genre.jsp">${lg["indexMenuCountryTaiwan"]}</a></li>
-												<li><a href="genre.jsp">${lg["indexMenuCountryUnitedStates"]}</a></li>
-											</ul>
-										</div>
-										<div class="col-sm-4">
-											<ul class="multi-column-dropdown">
-												<li><a href="genre.jsp">${lg["indexMenuCountryChina"]}</a></li>
-												<li><a href="genre.jsp">${lg["indexMenuCountryHongCong"]}</a></li>
-												<li><a href="genre.jsp">${lg["indexMenuCountryJapan"]}</a></li>
-												<li><a href="genre.jsp">${lg["indexMenuCountryThailand"]}</a></li>
-											</ul>
-										</div>
-										<div class="col-sm-4">
-											<ul class="multi-column-dropdown">
-												<li><a href="genre.jsp">${lg["indexMenuCountryEuro"]}</a></li>
-												<li><a href="genre.jsp">${lg["indexMenuCountryIndia"]}</a></li>
-												<li><a href="genre.jsp">${lg["indexMenuCountryKorea"]}</a></li>
-												<li><a href="genre.jsp">${lg["indexMenuCountryUnitedKingdom"]}</a></li>
-											</ul>
-										</div>
-										<div class="clearfix"></div>
-									</li>
-								</ul>
-							</li>
-							<li><a href="list.jsp">${lg["indexMenuAZList"]}</a></li>
 							<li><a href="contact.jsp">${lg["indexMenuContact"]}</a></li>
 							<li>
 								<select style="margin:13px 10px 0 10px; width:80px;cursor:pointer;" id="languageChose">
@@ -202,21 +169,19 @@
 										</c:when>
 										<c:otherwise>
 											<li style="margin-left:30px;">
-												<img id="headImg" src="" alt="图片">
+												<img id="headImg" style="width:20px;height:20px;" src="<c:url value='${loginedUser.imgList[0].imgPath }' />" alt="图片">
 												<font>${loginedUser.userAccount}</font>
 											</li>
 											<li style="margin-left:20px;">
 												<select id="infoChange" style="color:#000000;" onchange="infoChange()">
-													<option selected="selected">个人中心</option>
-													<option>修改信息</option>
-													<option>退出登录</option>
+													<option selected="selected">${lg['personalCenter'] }</option>
+													<option>${lg['alterInfo'] }</option>
+													<option>${lg['myIndent'] }</option>
+													<option>${lg['loginOut'] }</option>
 												</select>
 											</li>
 										</c:otherwise>
 									</c:choose>
-									
-									<%-- <li><a href="userLogin.jsp" class="login reg">${lg["indexRegister"]}</a></li> --%>
-
 								</ul>
 						</div>
 						 <div class="col-md-6 wthree_share_agile">
@@ -256,21 +221,21 @@
 										<div class="w3_agile_featured_movies">
 											<div class="col-md-5 video_agile_player">
 										            <div class="video-grid-single-page-agileits">
-														<div data-video="f2Z65fobH2I" id="video"> <img src="${pageContext.request.contextPath }${movieListByTime[0].imgList[1].imgPath}" alt="" class="img-responsive" /> </div>
+														<div data-video="f2Z65fobH2I" id="video"> <img src="<c:url value='${movieList[indexTime[0]].imgList[2].imgPath}' />" alt="" class="img-responsive" /> </div>
 													</div>
 			       									 <div class="player-text">
-														<p class="fexi_header">${movieListByTime[0].movieName }</p>
+														<p class="fexi_header">${movieList[indexTime[0]].movieName }</p>
 														<p class="fexi_header_para"><span class="conjuring_w3">${lg["indexNewOneStoryLine"] }<label>:</label></span>
-														${movieListByTime[0].movieDescribe }</p>
-														<p class="fexi_header_para"><span>${lg["indexNewOneReleaseOn"] }<label>:</label></span>${movieListByTime[0].movieCreateTime }</p>
+														${movieList[indexTime[0]].movieDescribe }</p>
+														<p class="fexi_header_para"><span>${lg["indexNewOneReleaseOn"] }<label>:</label></span>${movieList[indexTime[0]].movieCreateTime }</p>
 														<p class="fexi_header_para"><span>${lg["indexNewOneGenres"] }<label>:</label> </span>
-															<c:forEach items="${movieListByTime[0].classifysList}" var="bean" begin="0" end="${fn:length(movieListByTime[0].classifysList)-2}">
-																<a href="genre.jsp">${bean.classifyNameObj.classifyNameString }</a> | 
+															<a href="genre.jsp">${movieList[indexTime[0]].classifysList[0].classifyNameObj.classifyNameString }</a>  <%--先把第一个打印出来 --%>
+															<c:forEach items="${movieList[indexTime[0]].classifysList}" var="bean" begin="1">
+																 | <a href="genre.jsp">${bean.classifyNameObj.classifyNameString }</a>
 															</c:forEach>
-															<a href="genre.jsp">${movieListByTime[0].classifysList[fn:length(movieListByTime[0].classifysList)-1].classifyNameObj.classifyNameString }</a>								
 														</p>
 														<p class="fexi_header_para fexi_header_para1"><span>${lg["indexNewOneStarRating"] }<label>:</label></span>
-															<c:set var="starNum" value="${movieListByTime[0].movieGradeNum/2}"/>
+															<c:set var="starNum" value="${movieList[indexTime[0]].movieGradeNum/2}"/>
 															<c:forEach var="i" begin="1" end="${starNum }">
 																<a href="#"><i class="fa fa-star" aria-hidden="true"></i></a>
 															</c:forEach>
@@ -286,20 +251,20 @@
 										    </div>	
 											<%--最新  最热    评分最高电影 --%>
 										     <div class="col-md-7 wthree_agile-movies_list">
-										     <c:forEach items="${movieListByTime }" var="movie" begin="1">
+										     <c:forEach items="${indexTime }" var="index" begin="1" end="8">
 														<div class="w3l-movie-gride-agile">
-															<a href="<c:url value='/movie.s?method=singleShow&type=movie&id=${movie.movieId }' />" class="hvr-sweep-to-bottom" ><img src="${pageContext.request.contextPath }${movie.imgList[0].imgPath }" title="Movies Pro" class="img-responsive" alt=" ">
+															<a href="<c:url value='/movie.s?method=singleShow&type=movie&id=${movieList[index].movieId }' />" class="hvr-sweep-to-bottom" ><img src="<c:url value='${movieList[index].imgList[0].imgPath }' />" title="Movies Pro" class="img-responsive" alt=" ">
 																<div class="w3l-action-icon"><i class="fa fa-play-circle-o" aria-hidden="true"></i></div>
 															</a>
 																<div class="mid-1 agileits_w3layouts_mid_1_home">
 																	<div class="w3l-movie-text">
-																		<h6><a href="single.jsp">${movie.movieName }	</a></h6>						
+																		<h6><a href="<c:url value='/movie.s?method=singleShow&type=movie&id=${movieList[index].movieId }' />" style="font-size:15px;">${movieList[index].movieName }	</a></h6>						
 																	</div>
 																	<div class="mid-2 agile_mid_2_home">
-																		<p>${fn:substring(movie.movieCreateTime,0,4)}</p>
+																		<p>${fn:substring(movieList[index].movieCreateTime,0,4)}</p>
 																		<div class="block-stars">
 																			<ul class="w3l-ratings">
-																				<c:set var="starNum" value="${movie.movieGradeNum/2}"/>
+																				<c:set var="starNum" value="${movieList[index].movieGradeNum/2}"/>
 																					<c:forEach var="i" begin="1" end="${starNum }">
 																						<a href="#"><i class="fa fa-star" aria-hidden="true"></i></a>
 																					</c:forEach>
@@ -336,24 +301,24 @@
 										<div class="w3_agile_featured_movies">
 											<div class="col-md-5 video_agile_player">
 										            <div class="video-grid-single-page-agileits">
-														<div data-video="f2Z65fobH2I" id="video"> <img src="${pageContext.request.contextPath }${movieListByCount[0].imgList[0].imgPath}" alt="" class="img-responsive" /> </div>
+														<div data-video="f2Z65fobH2I" id="video"> <img src="<c:url value='${movieList[indexVisit[0]].imgList[2].imgPath}' />" alt="" class="img-responsive" /> </div>
 													</div>
 
 
 										
 	        <div class="player-text">
-												<p class="fexi_header">${movieListByCount[0].movieName }</p>
-												<p class="fexi_header_para"><span class="conjuring_w3">${lg["indexNewOneStoryLine"] }<label>:</label></span>这是我们的电影非常好看的电影好吧这里只是字数太少了可能需要三行字才能保证页面不乱只能说明做这个原型的前端人员太不负责任了
-												${movieListByCount[0].movieDescribe }</p>
-												<p class="fexi_header_para"><span>${lg["indexNewOneReleaseOn"] }<label>:</label></span>${movieListByCount[0].movieCreateTime }</p>
+												<p class="fexi_header">${movieList[indexVisit[0]].movieName }</p>
+												<p class="fexi_header_para"><span class="conjuring_w3">${lg["indexNewOneStoryLine"] }<label>:</label></span>
+												${movieList[indexVisit[0]].movieDescribe }</p>
+												<p class="fexi_header_para"><span>${lg["indexNewOneReleaseOn"] }<label>:</label></span>${movieList[indexVisit[0]].movieCreateTime }</p>
 												<p class="fexi_header_para"><span>${lg["indexNewOneGenres"] }<label>:</label> </span>
-													<c:forEach items="${movieListByCount[0].classifysList }" var="bean" begin="0" end="${fn:length(movieListByCount[0].classifysList)-2}">
-														<a href="genre.jsp">${bean.classifyName }</a> | 
+													<a href="genre.jsp">${movieList[indexVisit[0]].classifysList[0].classifyNameObj.classifyNameString }</a>  <%--先把第一个打印出来 --%>
+													<c:forEach items="${movieList[indexVisit[0]].classifysList}" var="bean" begin="1">
+														 | <a href="genre.jsp">${bean.classifyNameObj.classifyNameString }</a>
 													</c:forEach>
-													<a href="genre.jsp">${movieListByCount[0].classifysList[fn:length(movieListByCount[0].classifysList)-1].classifyName }</a>								
 												</p>
 												<p class="fexi_header_para fexi_header_para1"><span>${lg["indexNewOneStarRating"] }<label>:</label></span>
-													<c:set var="starNum" value="${movieListByCount[0].movieGradeNum/2}"/>
+													<c:set var="starNum" value="${movieList[indexVisit[0]].movieGradeNum/2}"/>
 													<c:forEach var="i" begin="1" end="${starNum }">
 														<a href="#"><i class="fa fa-star" aria-hidden="true"></i></a>
 													</c:forEach>
@@ -369,20 +334,20 @@
 										    </div>	
 											<%--最新  最热    评分最高电影 --%>
 										     <div class="col-md-7 wthree_agile-movies_list">
-										     <c:forEach items="${movieListByCount }" var="movie" begin="1">
+										     <c:forEach items="${indexVisit }" var="index" begin="1" end="8">
 														<div class="w3l-movie-gride-agile">
-															<a href="<c:url value='/movie.s?method=singleShow&type=movie&id=${movie.movieId }' />" class="hvr-sweep-to-bottom"><img src="${pageContext.request.contextPath }${movie.imgList[0].imgPath }" title="Movies Pro" class="img-responsive" alt=" ">
+															<a href="<c:url value='/movie.s?method=singleShow&type=movie&id=${movieList[index].movieId }' />" class="hvr-sweep-to-bottom"><img src="<c:url value='${movieList[index].imgList[0].imgPath }' />" title="Movies Pro" class="img-responsive" alt=" ">
 																<div class="w3l-action-icon"><i class="fa fa-play-circle-o" aria-hidden="true"></i></div>
 															</a>
 																<div class="mid-1 agileits_w3layouts_mid_1_home">
 																	<div class="w3l-movie-text">
-																		<h6><a href="single.jsp">${movie.movieName }	</a></h6>						
+																		<h6><a href="<c:url value='/movie.s?method=singleShow&type=movie&id=${movieList[index].movieId }' />" style="font-size:15px;">${movieList[index].movieName }	</a></h6>						
 																	</div>
 																	<div class="mid-2 agile_mid_2_home">
-																		<p>${fn:substring(movie.movieCreateTime,0,4)}</p>
+																		<p>${fn:substring(movieList[index].movieCreateTime,0,4)}</p>
 																		<div class="block-stars">
 																			<ul class="w3l-ratings">
-																				<c:set var="starNum" value="${movie.movieGradeNum/2}"/>
+																				<c:set var="starNum" value="${movieList[index].movieGradeNum/2}"/>
 																					<c:forEach var="i" begin="1" end="${starNum }">
 																						<a href="#"><i class="fa fa-star" aria-hidden="true"></i></a>
 																					</c:forEach>
@@ -418,24 +383,23 @@
 										<div class="w3_agile_featured_movies">
 											<div class="col-md-5 video_agile_player">
 										            <div class="video-grid-single-page-agileits">
-														<div data-video="f2Z65fobH2I" id="video"> <img src="${pageContext.request.contextPath }${movieListByGrade[0].imgList[0].imgPath}" alt="" class="img-responsive" /> </div>
+														<div data-video="f2Z65fobH2I" id="video"> <img src="<c:url value='${movieList[indexGrade[0]].imgList[2].imgPath}' />" alt="" class="img-responsive" /> </div>
 													</div>
 
 
 										
 	        <div class="player-text">
-												<p class="fexi_header">${movieListByGrade[0].movieName }</p>
-												<p class="fexi_header_para"><span class="conjuring_w3">${lg["indexNewOneStoryLine"] }<label>:</label></span>这是我们的电影非常好看的电影好吧这里只是字数太少了可能需要三行字才能保证页面不乱只能说明做这个原型的前端人员太不负责任了
-												${movieListByGrade[0].movieDescribe }</p>
-												<p class="fexi_header_para"><span>${lg["indexNewOneReleaseOn"] }<label>:</label></span>${movieListByGrade[0].movieCreateTime }</p>
+												<p class="fexi_header">${movieList[indexGrade[0]].movieName }</p>
+												<p class="fexi_header_para"><span class="conjuring_w3">${lg["indexNewOneStoryLine"] }<label>:</label></span>
+												${movieList[indexGrade[0]].movieDescribe }</p>
+												<p class="fexi_header_para"><span>${lg["indexNewOneReleaseOn"] }<label>:</label></span>${movieList[indexGrade[0]].movieCreateTime }</p>
 												<p class="fexi_header_para"><span>${lg["indexNewOneGenres"] }<label>:</label> </span>
-													<c:forEach items="${movieListByGrade[0].classifysList }" var="bean" begin="0" end="${fn:length(movieListByGrade[0].classifysList)-2}">
-														<a href="genre.jsp">${bean.classifyName }</a> | 
-													</c:forEach>
-													<a href="genre.jsp">${movieListByGrade[0].classifysList[fn:length(movieListByGrade[0].classifysList)-1].classifyName }</a>								
-												</p>
+													<a href="genre.jsp">${movieList[indexGrade[0]].classifysList[0].classifyNameObj.classifyNameString }</a>  <%--先把第一个打印出来 --%>
+													<c:forEach items="${movieList[indexGrade[0]].classifysList}" var="bean" begin="1">
+														 | <a href="genre.jsp">${bean.classifyNameObj.classifyNameString }</a>
+													</c:forEach>												</p>
 												<p class="fexi_header_para fexi_header_para1"><span>${lg["indexNewOneStarRating"] }<label>:</label></span>
-													<c:set var="starNum" value="${movieListByGrade[0].movieGradeNum/2}"/>
+													<c:set var="starNum" value="${movieList[indexGrade[0]].movieGradeNum/2}"/>
 													<c:forEach var="i" begin="1" end="${starNum }">
 														<a href="#"><i class="fa fa-star" aria-hidden="true"></i></a>
 													</c:forEach>
@@ -451,20 +415,20 @@
 										    </div>	
 											<%--最新  最热    评分最高电影 --%>
 										     <div class="col-md-7 wthree_agile-movies_list">
-										     <c:forEach items="${movieListByGrade }" var="movie" begin="1">
+										     <c:forEach items="${indexGrade }" var="index" begin="1" end="8">
 														<div class="w3l-movie-gride-agile">
-															<a href="<c:url value='/movie.s?method=singleShow&type=movie&id=${movie.movieId }' />" class="hvr-sweep-to-bottom"><img src="${pageContext.request.contextPath }${movie.imgList[0].imgPath }" title="Movies Pro" class="img-responsive" alt=" ">
+															<a href="<c:url value='/movie.s?method=singleShow&type=movie&id=${movieList[index].movieId }' />" class="hvr-sweep-to-bottom"><img src="<c:url value='${movieList[index].imgList[0].imgPath}' />" title="Movies Pro" class="img-responsive" alt=" ">
 																<div class="w3l-action-icon"><i class="fa fa-play-circle-o" aria-hidden="true"></i></div>
 															</a>
 																<div class="mid-1 agileits_w3layouts_mid_1_home">
 																	<div class="w3l-movie-text">
-																		<h6><a href="single.jsp">${movie.movieName }	</a></h6>						
+																		<h6><a href="<c:url value='/movie.s?method=singleShow&type=movie&id=${movieList[index].movieId }' />" style="font-size:15px;">${movieList[index].movieName }	</a></h6>						
 																	</div>
 																	<div class="mid-2 agile_mid_2_home">
-																		<p>${fn:substring(movie.movieCreateTime,0,4)}</p>
+																		<p>${fn:substring(movieList[index].movieCreateTime,0,4)}</p>
 																		<div class="block-stars">
 																			<ul class="w3l-ratings">
-																				<c:set var="starNum" value="${movie.movieGradeNum/2}"/>
+																				<c:set var="starNum" value="${movieList[index].movieGradeNum/2}"/>
 																					<c:forEach var="i" begin="1" end="${starNum }">
 																						<a href="#"><i class="fa fa-star" aria-hidden="true"></i></a>
 																					</c:forEach>
@@ -504,21 +468,21 @@
 			<div class="w3_agile_latest_movies">
 			
 				<div id="owl-demo" class="owl-carousel owl-theme">
-				<c:forEach  items="${movieListByTime }" var="movie">
+				<c:forEach  items="${indexTime }" var="index">
 					<div class="item">
 						<div class="w3l-movie-gride-agile w3l-movie-gride-slider ">
-							<a href="<c:url value='/movie.s?method=singleShow&type=movie&id=${movie.movieId }' />" class="hvr-sweep-to-bottom"><img src="${pageContext.request.contextPath }${movie.imgList[0].imgPath }" title="Movies Pro" class="img-responsive" alt=" " />
+							<a href="<c:url value='/movie.s?method=singleShow&type=movie&id=${movieList[index].movieId }' />" class="hvr-sweep-to-bottom"><img src="${pageContext.request.contextPath }${movieList[index].imgList[0].imgPath }" title="Movies Pro" class="img-responsive" alt=" " />
 								<div class="w3l-action-icon"><i class="fa fa-play-circle-o" aria-hidden="true"></i></div>
 							</a>
 							<div class="mid-1 agileits_w3layouts_mid_1_home">
 								<div class="w3l-movie-text">
-									<h6><a href="single.jsp">${movie.movieName }	</a></h6>							
+									<h6><a href="<c:url value='/movie.s?method=singleShow&type=movie&id=${movieList[index].movieId }' />">${movieList[index].movieName }	</a></h6>							
 								</div>
 								<div class="mid-2 agile_mid_2_home">
-									<p>${fn:substring(movie.movieCreateTime,0,4)}</p>
+									<p>${fn:substring(movieList[index].movieCreateTime,0,4)}</p>
 									<div class="block-stars">
 										<ul class="w3l-ratings">
-											<c:set var="starNum" value="${movie.movieGradeNum/2}"/>
+											<c:set var="starNum" value="${movieList[index].movieGradeNum/2}"/>
 												<c:forEach var="i" begin="1" end="${starNum }">
 													<a href="#"><i class="fa fa-star" aria-hidden="true"></i></a>
 												</c:forEach>
@@ -546,21 +510,21 @@
 				 <h3 class="agile_w3_title">${lg["Requested"] } <span>${lg["Movies"] }</span> </h3>
 				<!--/requested-movies-->
 				
-					<c:forEach items="${movieListByCount }" var="movie">
+					<c:forEach items="${indexVisit }" var="index">
 				     <div class="wthree_agile-requested-movies">
 						<div class="col-md-2 w3l-movie-gride-agile requested-movies">
-							<a href="<c:url value='/movie.s?method=singleShow&type=movie&id=${movie.movieId }' />" class="hvr-sweep-to-bottom"><img src="${pageContext.request.contextPath }${movie.imgList[0].imgPath }" title="Movies Pro" class="img-responsive" alt=" ">
+							<a href="<c:url value='/movie.s?method=singleShow&type=movie&id=${movieList[index].movieId }' />" class="hvr-sweep-to-bottom"><img src="${pageContext.request.contextPath }${movieList[index].imgList[0].imgPath }" title="Movies Pro" class="img-responsive" alt=" ">
 								<div class="w3l-action-icon"><i class="fa fa-play-circle-o" aria-hidden="true"></i></div>
 							</a>
 								<div class="mid-1 agileits_w3layouts_mid_1_home">
 									<div class="w3l-movie-text">
-										<h6><a href="single.jsp">${movie.movieName }</a></h6>							
+										<h6><a href="<c:url value='/movie.s?method=singleShow&type=movie&id=${movieList[index].movieId }' />">${movieList[index].movieName }</a></h6>							
 									</div>
 									<div class="mid-2 agile_mid_2_home">
-										<p>${fn:substring(movie.movieCreateTime,0,4)}</p>
+										<p>${fn:substring(movieList[index].movieCreateTime,0,4)}</p>
 										<div class="block-stars">
 											<ul class="w3l-ratings">
-												<c:set var="starNum" value="${movie.movieGradeNum/2}"/>
+												<c:set var="starNum" value="${movieList[index].movieGradeNum/2}"/>
 												<c:forEach var="i" begin="1" end="${starNum }">
 													<a href="#"><i class="fa fa-star" aria-hidden="true"></i></a>
 												</c:forEach>
@@ -592,20 +556,20 @@
 										
 										     <div class="col-md-7 wthree_agile-movies_list second-top">
 		     	
-											<c:forEach items="${movieListByGrade }" var="movie" begin="1">	
+											<c:forEach items="${indexGrade }" var="index" begin="1" end="8">	
 													<div class="w3l-movie-gride-agile">
-														<a href="<c:url value='/movie.s?method=singleShow&type=movie&id=${movie.movieId }' />" class="hvr-sweep-to-bottom"><img src="${pageContext.request.contextPath }${movie.imgList[0].imgPath }" title="Movies Pro" class="img-responsive" alt=" ">
+														<a href="<c:url value='/movie.s?method=singleShow&type=movie&id=${movieList[index].movieId }' />" class="hvr-sweep-to-bottom"><img src="${pageContext.request.contextPath }${movieList[index].imgList[0].imgPath }" title="Movies Pro" class="img-responsive" alt=" ">
 															<div class="w3l-action-icon"><i class="fa fa-play-circle-o" aria-hidden="true"></i></div>
 														</a>
 															<div class="mid-1 agileits_w3layouts_mid_1_home">
 																<div class="w3l-movie-text">
-																	<h6><a href="single.jsp">${movie.movieName }</a></h6>							
+																	<h6><a href="<c:url value='/movie.s?method=singleShow&type=movie&id=${movieList[index].movieId }' />" style="font-size:15px;">${movieList[index].movieName }</a></h6>							
 																</div>
 																<div class="mid-2 agile_mid_2_home">
-																	<p>${fn:substring(movie.movieCreateTime,0,4)}</p>
+																	<p>${fn:substring(movieList[index].movieCreateTime,0,4)}</p>
 																	<div class="block-stars">
 																		<ul class="w3l-ratings">
-																			<c:set var="starNum" value="${movie.movieGradeNum/2}"/>
+																			<c:set var="starNum" value="${movieList[index].movieGradeNum/2}"/>
 																			<c:forEach var="i" begin="1" end="${starNum }">
 																				<a href="#"><i class="fa fa-star" aria-hidden="true"></i></a>
 																			</c:forEach>
@@ -630,24 +594,24 @@
 											
 											 	<div class="col-md-5 video_agile_player second-top">
 										            <div class="video-grid-single-page-agileits">
-														<div data-video="BXEZFd0RT5Y" id="video3"> <img src="${pageContext.request.contextPath }${movieListByGrade[0].imgList[1].imgPath}" alt="" class="img-responsive" /> </div>
+														<div data-video="BXEZFd0RT5Y" id="video3"> <img src="<c:url value='${movieList[indexGrade[0]].imgList[2].imgPath}' />" alt="" class="img-responsive" /> </div>
 													</div>
 
         <div class="player-text two">
-												<p class="fexi_header">${movieListByTime[0].movieName } </p>
+												<p class="fexi_header">${movieList[indexGrade[0]].movieName } </p>
 												<p class="fexi_header_para"><span class="conjuring_w3">${lg["indexNewOneStoryLine"] }<label>:</label></span>
-												${movieListByTime[0].movieDescribe } </p>
-									<p class="fexi_header_para"><span>${lg["indexNewOneReleaseOn"] }<label>:</label></span>${movieListByTime[0].movieCreateTime } </p>
+												${movieList[indexGrade[0]].movieDescribe } </p>
+									<p class="fexi_header_para"><span>${lg["indexNewOneReleaseOn"] }<label>:</label></span>${movieList[indexGrade[0]].movieCreateTime } </p>
 												
 												<p class="fexi_header_para">
 													<span>${lg["indexNewOneGenres"] }<label>:</label> </span>
-													<c:forEach items="${movieListByTime[0].classifysList }" var="bean" begin="0" end="${fn:length(movieListByTime[0].classifysList)-2}">
-														<a href="genre.jsp">${bean.classifyName }</a> | 
+													<a href="genre.jsp">${movieList[indexGrade[0]].classifysList[0].classifyNameObj.classifyNameString }</a>  <%--先把第一个打印出来 --%>
+													<c:forEach items="${movieList[indexGrade[0]].classifysList}" var="bean" begin="1">
+														 | <a href="genre.jsp">${bean.classifyNameObj.classifyNameString }</a>
 													</c:forEach>
-													<a href="genre.jsp">${movieListByTime[0].classifysList[fn:length(movieListByTime[0].classifysList)-1].classifyName }</a>								
 												</p>
 												<p class="fexi_header_para fexi_header_para1"><span>${lg["indexNewOneStarRating"] }<label>:</label></span>
-													<c:set var="starNum" value="${movieListByTime[0].movieGradeNum/2}"/>
+													<c:set var="starNum" value="${movieList[indexGrade[0]].movieGradeNum/2}"/>
 													<c:forEach var="i" begin="1" end="${starNum }">
 														<a href="#"><i class="fa fa-star" aria-hidden="true"></i></a>
 													</c:forEach>

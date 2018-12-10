@@ -14,17 +14,18 @@ public class Ticket implements Serializable {
 	private Movies movie; //对应电影
 	private Long ticketMovieId;  //对应电影ID
 	private Long ticketMerId;  //商户ID
+	private Merchant merchant;  //对应商户
 	private String ticketStatus; //电影票状态  1为可用  0为禁用
 	private Users user; //对应买该票的用户
-	private Long ticjetBuyBy; //购买用户ID
+	private Long ticketBuyBy; //购买用户ID
 	private Timestamp ticketStartTime; //电影开始时间
+	private Long ticketIndentId;  //对应订单ID
 	private Indent indent;  //对应订单
 	private String ticketLocation;  //座位
 	private String ticketMovieTheater;  //上映厅室
 	private Timestamp ticketMovieEndTime;  //结束时间
 	private Timestamp ticketMovieStartTime; //上映时间
 	private Long ticketLocationNum;  //电影票的位置对应的数字  1-204
-	private List<Images> imgList;  //对应图片集合
 	public Long getTicketId() {
 		return ticketId;
 	}
@@ -49,6 +50,12 @@ public class Ticket implements Serializable {
 	public void setTicketMerId(Long ticketMerId) {
 		this.ticketMerId = ticketMerId;
 	}
+	public Merchant getMerchant() {
+		return merchant;
+	}
+	public void setMerchant(Merchant merchant) {
+		this.merchant = merchant;
+	}
 	public String getTicketStatus() {
 		return ticketStatus;
 	}
@@ -61,17 +68,23 @@ public class Ticket implements Serializable {
 	public void setUser(Users user) {
 		this.user = user;
 	}
-	public Long getTicjetBuyBy() {
-		return ticjetBuyBy;
+	public Long getTicketBuyBy() {
+		return ticketBuyBy;
 	}
-	public void setTicjetBuyBy(Long ticjetBuyBy) {
-		this.ticjetBuyBy = ticjetBuyBy;
+	public void setTicketBuyBy(Long ticketBuyBy) {
+		this.ticketBuyBy = ticketBuyBy;
 	}
 	public Timestamp getTicketStartTime() {
 		return ticketStartTime;
 	}
 	public void setTicketStartTime(Timestamp ticketStartTime) {
 		this.ticketStartTime = ticketStartTime;
+	}
+	public Long getTicketIndentId() {
+		return ticketIndentId;
+	}
+	public void setTicketIndentId(Long ticketIndentId) {
+		this.ticketIndentId = ticketIndentId;
 	}
 	public Indent getIndent() {
 		return indent;
@@ -109,20 +122,14 @@ public class Ticket implements Serializable {
 	public void setTicketLocationNum(Long ticketLocationNum) {
 		this.ticketLocationNum = ticketLocationNum;
 	}
-	public List<Images> getImgList() {
-		return imgList;
-	}
-	public void setImgList(List<Images> imgList) {
-		this.imgList = imgList;
-	}
 	@Override
 	public String toString() {
 		return "Ticket [ticketId=" + ticketId + ", movie=" + movie + ", ticketMovieId=" + ticketMovieId
-				+ ", ticketMerId=" + ticketMerId + ", ticketStatus=" + ticketStatus + ", user=" + user
-				+ ", ticjetBuyBy=" + ticjetBuyBy + ", ticketStartTime=" + ticketStartTime + ", indent=" + indent
-				+ ", ticketLocation=" + ticketLocation + ", ticketMovieTheater=" + ticketMovieTheater
-				+ ", ticketMovieEndTime=" + ticketMovieEndTime + ", ticketMovieStartTime=" + ticketMovieStartTime
-				+ ", ticketLocationNum=" + ticketLocationNum + ", imgList=" + imgList + "]";
+				+ ", ticketMerId=" + ticketMerId + ", merchant=" + merchant + ", ticketStatus=" + ticketStatus
+				+ ", user=" + user + ", ticketBuyBy=" + ticketBuyBy + ", ticketStartTime=" + ticketStartTime
+				+ ", ticketIndentId=" + ticketIndentId + ", indent=" + indent + ", ticketLocation=" + ticketLocation
+				+ ", ticketMovieTheater=" + ticketMovieTheater + ", ticketMovieEndTime=" + ticketMovieEndTime
+				+ ", ticketMovieStartTime=" + ticketMovieStartTime + ", ticketLocationNum=" + ticketLocationNum + "]";
 	}
 	
 }

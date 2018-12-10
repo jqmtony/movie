@@ -611,7 +611,7 @@ public class MerchantService {
 			//添加文件路径到数据库
 			int i = 1;
 			for(String path:sqlPaths){  //预告片在最后一个
-				if(i>3)
+				if(i>4)
 					break;
 				Images img = new Images();
 				img.setImgPath(path);
@@ -621,6 +621,8 @@ public class MerchantService {
 					img.setImgStatus("介绍");
 				else if(i == 3)
 					img.setImgStatus("单品展示");
+				else
+					img.setImgStatus("售票展示");
 				img.setImgMovieId(insertedMovie.getMovieId());
 				md.addImage(img);
 				i++;

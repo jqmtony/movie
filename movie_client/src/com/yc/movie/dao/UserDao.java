@@ -7,9 +7,12 @@ import java.util.List;
 import org.apache.commons.dbutils.QueryRunner;
 import org.apache.commons.dbutils.handlers.BeanListHandler;
 
+import com.sun.prism.Image;
 import com.yc.movie.bean.Images;
 import com.yc.movie.bean.Indent;
 import com.yc.movie.bean.Integral;
+import com.yc.movie.bean.Merchant;
+import com.yc.movie.bean.Movies;
 import com.yc.movie.bean.Ticket;
 import com.yc.movie.bean.UserLoginRecord;
 import com.yc.movie.bean.Users;
@@ -17,6 +20,7 @@ import com.yc.utils.TxQueryRunner;
 
 public class UserDao {
 	private QueryRunner qr = new TxQueryRunner();
+	private MovieDao md = new MovieDao();
 
 	/**
 	 * 将用户插入到数据库中
@@ -24,11 +28,12 @@ public class UserDao {
 	 * @throws SQLException 
 	 */
 	public void insertUser(Users user) throws SQLException {
-		String sql = "insert into users values(?,?,?,?,?,?,?,?,?)";
+		String sql = "insert into users values(?,?,?,?,?,?,?,?,?,?,?)";
 		Object[] params = {user.getUserId(),user.getUserName(),user.getUserAccount(),
 				user.getUserEmail(),user.getUserPwd(),
 				user.getUserCreateTime(),user.getUserTel(),
-				user.getUserAddr(),user.getUserStatus()};
+				user.getUserAddr(),user.getUserStatus(),
+				user.getUserBirthday(),user.getUserAge()};
 		qr.update(sql,params);
 	}
 
@@ -126,5 +131,155 @@ public class UserDao {
 		if(list.size() > 0)
 			return list.get(0);
 		return null;
+	}
+
+	/**
+	 * 通过邮箱查找用户对象  没找到就返回Null
+	 * @param email
+	 * @return
+	 * @throws SQLException 
+	 */
+	public Users findUserByEmail(String email) throws SQLException {
+		String sql = "select * from users where userEmail=?";
+		List<Users> list = qr.query(sql, new BeanListHandler<Users>(Users.class),email);
+		if(list.size() > 0)
+			return list.get(0);
+		return null;
+	}
+
+	/**
+	 * 通过手机号查找用户对象   没找到就返回null
+	 * @param tel
+	 * @return
+	 * @throws SQLException 
+	 */
+	public Users findUserByTel(String tel) throws SQLException {
+		String sql = "select * from users where userTel=?";
+		List<Users> list = qr.query(sql, new BeanListHandler<Users>(Users.class),tel);
+		if(list.size() > 0)
+			return list.get(0);
+		return null;
+	}
+
+	/**
+	 * 修改信息
+	 * @param form
+	 * @throws SQLException 
+	 */
+	public void alterInfo(Users form) throws SQLException {
+		String sql = "update users set userName=?,userTel=?,userEmail=?,userAddr=?,userBirthday=?,userAge=? where userId=?";
+		Object[] params = {form.getUserName(),form.getUserTel(),form.getUserEmail(),
+				form.getUserAddr(),form.getUserBirthday(),form.getUserAge(),form.getUserId()};
+		qr.update(sql, params);
+	}
+
+	/**
+	 * 插入一张图片
+	 * @param sqlPath
+	 * @throws SQLException 
+	 */
+	public void addImageByUser(Images im) throws SQLException {
+		String sql = "insert into images values(?,?,?,?,?,?,?,?,?,?)";
+		Object[] params = {im.getImgId(),im.getImgMovieId(),im.getImgAdminId(),
+				im.getImgUserId(),im.getImgMerchantId(),im.getImgTeleplayId(),im.getImgTicketId(),
+				im.getImgNewId(),im.getImgStatus(),im.getImgPath()};
+		qr.update(sql, params);
+	}
+
+	/**
+	 * 通过ID查询用户对象
+	 * @param userId
+	 * @return
+	 * @throws SQLException 
+	 */
+	public Users findUserById(Long userId) throws SQLException {
+		String sql = "select * from users where userId=?";
+		List<Users> list = qr.query(sql, new BeanListHandler<Users>(Users.class),userId);
+		if(list.size() > 0)
+			return list.get(0);
+		return null;
+	}
+
+	/**
+	 * 通过用户的ID查找图片
+	 * @param userId
+	 * @return
+	 * @throws SQLException 
+	 */
+	public Images findImageByUserId(Long userId) throws SQLException {
+		String sql = "select * from images where imgUserId=?";
+		List<Images> list = qr.query(sql, new BeanListHandler<Images>(Images.class),userId);
+		if(list.size() > 0)
+			return list.get(0);
+		return null;
+	}
+
+	/**
+	 * 修改头像
+	 * @param im
+	 * @throws SQLException 
+	 */
+	public void alterImageByUser(Images im) throws SQLException {
+		String sql = "update images set imgPath=? where imgUserId=?";
+		Object[] params = {im.getImgPath(),im.getImgUserId()};
+		qr.update(sql,params);
+	}
+
+	/**
+	 * 根据用户查找所有订单
+	 * @param loginedUser
+	 * @return
+	 * @throws SQLException 
+	 */
+	public List<Indent> findIndentListByUser(Users user) throws SQLException {
+		String sql = "select * from indent where indentUserId=? and indentStatus!='-1'";
+		List<Indent> indentList = qr.query(sql, new BeanListHandler<Indent>(Indent.class),user.getUserId());
+		indentList = createIndentList(indentList,user);
+		return indentList;
+	}
+
+	/**
+	 * 填充订单List
+	 * @param indentList
+	 * @return
+	 * @throws SQLException 
+	 */
+	private List<Indent> createIndentList(List<Indent> indentList,Users user) throws SQLException {
+		for(Indent in : indentList){
+			//填充当前用户
+			in.setUser(user);
+			
+			//填充电影票集合
+			String sql = "select * from ticket where ticketIndentId=?";
+			List<Ticket> ticketList = qr.query(sql, new BeanListHandler<Ticket>(Ticket.class),in.getIndentId());
+			ticketList = createTicketList(ticketList);
+			in.setTicketList(ticketList);
+		}
+		return indentList;
+	}
+
+	/**
+	 * 填充电影票集合
+	 * @param ticketList
+	 * @return
+	 * @throws SQLException 
+	 */
+	private List<Ticket> createTicketList(List<Ticket> ticketList) throws SQLException {
+		for(Ticket t:ticketList){
+			//填充电影
+			String sql = "select * from movies where movieId=?";
+			List<Movies> movieList = qr.query(sql, new BeanListHandler<Movies>(Movies.class),t.getTicketMovieId());
+			if(movieList.size() > 0){
+				Movies movie = md.createMovie(movieList.get(0));
+				t.setMovie(movie);
+			}
+			
+			//填充商户
+			sql = "select * from merchant where merId=?";
+			List<Merchant> merList = qr.query(sql, new BeanListHandler<Merchant>(Merchant.class),t.getTicketMerId());
+			if(merList.size() > 0)
+				t.setMerchant(merList.get(0));
+		}
+		return ticketList;
 	}
 }

@@ -1,6 +1,8 @@
 package com.yc.movie.web.servlet;
 
+import com.alibaba.fastjson.JSON;
 import com.yc.exception.UserException;
+import com.yc.movie.bean.Indent;
 import com.yc.movie.bean.UserLoginRecord;
 import com.yc.movie.bean.Users;
 import com.yc.movie.bean.Verify;
@@ -10,24 +12,271 @@ import com.yc.utils.CommonsUtils;
 
 import java.io.IOException;
 import java.sql.Timestamp;
+import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
 
 import javax.servlet.ServletException;
+import javax.servlet.annotation.MultipartConfig;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.Part;
 
 /**
  * Servlet implementation class UserServlet
  */
 @WebServlet("/user.s")
+@MultipartConfig
 public class UserServlet extends BaseServlet {
 	private static final long serialVersionUID = 1L;
 	private UserService us = new UserService();
 	
 	/**
-	 * 当前是否登录
+	 * 根据当前登录用户查找所有订单
+	 * @param request
+	 * @param response
+	 * @return
+	 * @throws ServletException
+	 * @throws IOException
+	 */
+	public String findIndentListByLoginedUser(HttpServletRequest request, HttpServletResponse response)throws ServletException, IOException {
+		Users loginedUser = (Users)session.getAttribute("loginedUser");
+		try {
+			List<Indent> indentList = us.findIndentListByUser(loginedUser); //查找所有订单
+			request.setAttribute("indentList", indentList);
+			
+		} catch (UserException e) {
+			request.setAttribute("msg", e.getMessage());
+		}  
+		return "f:/userMovieIndent.jsp";
+		
+	}
+	/**
+     * 修改信息
+     * @param request
+     * @param response
+     * @throws ServletException
+     * @throws IOException
+     */
+    public String alterInfo(HttpServletRequest request, HttpServletResponse response)throws ServletException, IOException {
+    	//需求   1.姓名  2.手机号 3.邮箱  4.地址 5.出生日期  7.头像
+    	Users loginedUser = (Users)session.getAttribute("loginedUser");
+    	String userName = request.getParameter("userName");  //姓名
+    	String userTel = request.getParameter("userTel");  //手机号
+    	String userEmail = request.getParameter("userEmail"); //邮箱
+    	
+    	//地址
+    	String country = request.getParameter("country");  //国家
+    	String province = request.getParameter("province");  //省
+    	String city = request.getParameter("city");  //市
+    	String district = request.getParameter("district");  //县
+    	String fullAddress = request.getParameter("fullAddress");  //详细地址
+    	String userAddr = country + " " + province + " " + city + " " + district + " " + fullAddress;  //地址
+    	
+    	//出生日期
+    	String y = request.getParameter("y");  //年
+    	String m = request.getParameter("m");  //月
+    	String d = request.getParameter("d");  //日
+    	Date da = CommonsUtils.dateFormat(y+"-"+m+"-"+d, "yyyy-MM-dd");
+    	java.sql.Date userBirthday = new java.sql.Date(da.getTime());    //出生日期
+    	
+    	//头像
+    	Part part = request.getPart("file");
+    	String filename = part.getSubmittedFileName();
+//    	System.out.println("filename:"+filename);
+//    	System.out.println("姓名："+userName);
+//    	System.out.println("手机号："+userTel);
+//    	System.out.println("邮箱："+userEmail);
+//    	System.out.println("地址："+userAddr);
+//    	System.out.println("出生日期："+userBirthday);
+//    	return null;
+    	Users form = new Users();
+    	form.setUserName(userName);
+    	form.setUserTel(userTel);
+    	form.setUserEmail(userEmail);
+    	form.setUserAddr(userAddr);
+    	form.setUserBirthday(userBirthday);
+    	form.setUserId(loginedUser.getUserId());
+    	form.setUserAge((new Date().getTime() - userBirthday.getTime())/1000/60/60/24/365);  //设置年龄
+    	
+    	//判断地址是否为null
+    	if(userAddr.startsWith("中国 省"))
+    		form.setUserAddr(loginedUser.getUserAddr());
+    	
+    	if(userEmail == null)
+    		form.setUserEmail(loginedUser.getUserEmail());
+    	
+    	if(userTel == null)
+    		form.setUserTel(loginedUser.getUserTel());
+    	
+    	
+    	
+    	String sqlPath = null;
+    	//上传头像
+    	if(filename!=null && !filename.trim().isEmpty()){
+    		sqlPath = CommonsUtils.uploadImage(request,"/merHeadCreateImage", part,100,100);
+    	}
+    	
+    	try {
+			us.alterInfo(form , sqlPath);
+			
+			loginedUser = us.findUserByUserId(loginedUser.getUserId());
+			session.setAttribute("loginedUser", loginedUser);
+			return "r:/userAlterInfo.jsp";
+		} catch (UserException e) {
+			request.setAttribute("msg", e.getMessage());
+			return "f:/userAlterInfo.jsp";
+		}
+    	
+    }
+
+    /**
+     * 验证邮箱
+     * @param request
+     * @param response
+     * @throws ServletException
+     * @throws IOException
+     */
+    public void regxEmail(HttpServletRequest request, HttpServletResponse response)throws ServletException, IOException {
+    	String email = request.getParameter("inputEmail");  //获取到输入的邮箱
+    	Users loginedUser = (Users)session.getAttribute("loginedUser"); //得到当前登录的用户
+    	try {
+			us.regxEmail(email,loginedUser);
+			response.getWriter().append("yes");
+		} catch (UserException e) {
+			response.getWriter().append(e.getMessage());
+		}
+    }
+    
+    /**
+     * 验证手机号
+     * @param request
+     * @param response
+     * @throws ServletException
+     * @throws IOException
+     */
+    public void regxTel(HttpServletRequest request, HttpServletResponse response)throws ServletException, IOException {
+    	String tel = request.getParameter("inputTel");  //获取到输入的手机号
+    	Users loginedUser = (Users)session.getAttribute("loginedUser"); //得到当前登录的用户
+    	try {
+			us.regxTel(tel,loginedUser);
+			response.getWriter().append("yes");
+		} catch (UserException e) {
+			response.getWriter().append(e.getMessage());
+		}
+    }
+    
+	/**
+	 * 通过年和月获取日
+	 * @param request
+	 * @param response
+	 * @throws ServletException
+	 * @throws IOException
+	 */
+	public void updateDay(HttpServletRequest request, HttpServletResponse response)throws ServletException, IOException {
+			Integer y = Integer.parseInt(request.getParameter("y"));
+			Integer m = Integer.parseInt(request.getParameter("m"));
+			Calendar c = Calendar.getInstance();
+			c.set(Calendar.YEAR, y);
+			c.set(Calendar.MONTH, m - 1);
+			int days = c.getActualMaximum(Calendar.DAY_OF_MONTH);
+			String[] dayArr = getModel(1, days);
+			response.getWriter().append(JSON.toJSONString(dayArr));
+	}
+	/**
+	 * 根据传入参数生成天
+	 * 
+	 * @param start
+	 * @param end
+	 * @return
+	 */
+	private String[] getModel(int start, int end) {
+		String[] m = new String[end - start + 1];
+		for (int i = 0; i < m.length; i++) {
+			m[i] = String.valueOf(i + start);
+		}
+		return m;
+	}
+
+	/**
+	 * 根据市获取县
+	 * @param request
+	 * @param response
+	 * @throws ServletException
+	 * @throws IOException
+	 */
+	public void getDistrictByCity(HttpServletRequest request, HttpServletResponse response)throws ServletException, IOException {
+		String cId = request.getParameter("cId");
+		Map<String,String> dis = CommonsUtils.xmlDistricts(cId,this.getClass());
+		String jsonStr = JSON.toJSONString(dis);
+		response.getWriter().append(jsonStr);
+	}
+	
+	/**
+	 * 根据省ID获取市和县
+	 * @param request
+	 * @param response
+	 * @throws ServletException
+	 * @throws IOException
+	 */
+	public void getCityAndDistrictByProvince(HttpServletRequest request, HttpServletResponse response)throws ServletException, IOException {
+		String pId = request.getParameter("pId");  //获取省id
+		Map<String,String> cityMap = CommonsUtils.xmlCities(pId, this.getClass());
+		String s = null;
+		for(Iterator<Entry<String, String>> it = cityMap.entrySet().iterator();it.hasNext();){
+			Entry<String, String> me = it.next();
+			s = me.getKey();
+			break;
+		}
+		Map<String ,String> dis = CommonsUtils.xmlDistricts(s,this.getClass());
+		List<Map<String,String>> list = new ArrayList<Map<String,String>>();
+		list.add(cityMap);
+		list.add(dis);
+		String jsonStr = JSON.toJSONString(list);
+		response.getWriter().append(jsonStr);
+	}
+	
+	
+	/**
+	 * 生成所有省
+	 * @param request
+	 * @param response
+	 * @return
+	 * @throws ServletException
+	 * @throws IOException
+	 */
+	public String getMapByProvinces(HttpServletRequest request, HttpServletResponse response)throws ServletException, IOException {
+		Map<String,String> map = CommonsUtils.xmlProvince(this.getClass());
+		session.setAttribute("provincesMap", map);
+		return "r:/userAlterInfo.jsp";
+	}
+	/**
+	 * 跳转登录页面
+	 * @param request
+	 * @param response
+	 * @throws ServletException
+	 * @throws IOException
+	 */
+	public String goLogin(HttpServletRequest request, HttpServletResponse response)throws ServletException, IOException {
+		String refererPath = request.getHeader("referer");
+		session.setAttribute("refererPath", refererPath);
+		System.out.println("refererPath:"+refererPath);
+		Users user = (Users)session.getAttribute("loginedUser");
+		if(user == null){
+			return "r:/userLogin.jsp";
+		}else{
+			request.getRequestDispatcher(refererPath).forward(request, response);
+			return null;
+		}
+	}
+	/**
+	 * 当前是否登录    ajax
 	 * @param request
 	 * @param response
 	 * @throws ServletException
@@ -67,17 +316,7 @@ public class UserServlet extends BaseServlet {
     	session.removeAttribute("refererPath");
     	session.removeAttribute("loginedUser");
     }
-    /**
-     * 修改信息
-     * @param request
-     * @param response
-     * @throws ServletException
-     * @throws IOException
-     */
-    public void alterInfo(HttpServletRequest request, HttpServletResponse response)throws ServletException, IOException {
-    	//需求   1.姓名  2.手机号 3.邮箱  4.地址 5.出生日期  7.头像
-    }
-
+    
     /**
      * 发送验证码
      * @param request

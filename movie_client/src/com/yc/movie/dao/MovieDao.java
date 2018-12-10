@@ -56,7 +56,7 @@ public class MovieDao {
 			if(imgList.size() > 0)
 				movie.setImgList(imgList);  //设置图片集合
 		}
-		System.out.println(movieList);
+//		System.out.println(movieList);
 		return movieList;
 	}
 
@@ -381,6 +381,123 @@ public class MovieDao {
 	public void setTicketStatus(Long ticketId, String status) throws SQLException {
 		String sql = "update ticket set ticketStatus=? where ticketId=?";
 		Object[] params = {status,ticketId};
+		qr.update(sql, params);
+	}
+
+	/**
+	 * 访问量+1
+	 * @param id
+	 * @throws SQLException 
+	 */
+	public void addVisitCount(Long id) throws SQLException {
+		String sql = "update movies set movieVisitCount=movieVisitCount+1 where movieId=?";
+		qr.update(sql, id);
+	}
+
+	/**
+	 * 通过类型名查找类型名对象
+	 * @param genreName
+	 * @return
+	 * @throws SQLException 
+	 */
+	public ClassifyName findClassifyNameByName(String genreName) throws SQLException {
+		String sql = "select * from classifyname where classifyNameString=?";
+		List<ClassifyName> list = qr.query(sql, new BeanListHandler<ClassifyName>(ClassifyName.class),genreName);
+		if(list.size() > 0)
+			return list.get(0);
+		return null;
+	}
+
+	/**
+	 * 通过类型名Id查询类型对象
+	 * @param classifyNameId
+	 * @return
+	 * @throws SQLException 
+	 */
+	public List<Classifys> findClassifyByNameId(Long classifyNameId) throws SQLException {
+		String sql = "select * from classifys where classifyName=?";
+		List<Classifys> list = qr.query(sql, new BeanListHandler<Classifys>(Classifys.class),classifyNameId);
+		return list;
+	}
+
+	/**
+	 * 通过类型集合查找电影集合
+	 * @param cList
+	 * @return
+	 * @throws SQLException
+	 */
+	public List<Movies> findMovieByClassify(List<Classifys> cList) throws SQLException {
+		List<Object> params = new ArrayList<Object>();  //参数集
+		StringBuilder sb = new StringBuilder();  //sql语句
+		for(Classifys c : cList){
+			params.add(c.getClassifyMovieId());
+			sb.append(" or movieId=?");
+		}
+		String sql = "select * from movies where 1=2";
+		sql = sql + sb.toString();
+		return qr.query(sql, new BeanListHandler<Movies>(Movies.class),params.toArray());
+	}
+
+	public List<Movies> findMovieByClassifyPage(Integer pc, int ps, List<Classifys> cList) throws SQLException {
+		List<Object> params = new ArrayList<Object>();  //参数集
+		StringBuilder sb = new StringBuilder();  //sql语句
+		for(Classifys c : cList){
+			params.add(c.getClassifyMovieId());
+			sb.append(" or movieId=?");
+		}
+		String sql = "select * from movies where 1=2";
+		sql = sql + sb.toString()+" limit ?,?";
+		params.add((pc-1)*ps);
+		params.add(ps);
+		return qr.query(sql, new BeanListHandler<Movies>(Movies.class),params.toArray());
+	}
+
+	/**
+	 * 设置电影票的ticketBuyBy
+	 * @param ticketId
+	 * @param userId
+	 * @throws SQLException 
+	 */
+	public void setTicketBuyBy(Long ticketId, Long userId) throws SQLException {
+		String sql = "update ticket set ticketBuyBy=? where ticketId=?";
+		Object[] params = {userId,ticketId};
+		qr.update(sql, params);
+	}
+
+	/**
+	 * 根据订单号查找订单
+	 * @param indentNum
+	 * @return
+	 * @throws SQLException 
+	 */
+	public Indent findIndentByIndentNum(String indentNum) throws SQLException {
+		String sql = "select * from indent where indentNum=?";
+		List<Indent> indentList = qr.query(sql, new BeanListHandler<Indent>(Indent.class),indentNum);
+		if(indentList.size() > 0)
+			return indentList.get(0);
+		return null;
+	}
+
+	/**
+	 * 设置电影票的ticketIndentId
+	 * @param indentId
+	 * @throws SQLException 
+	 */
+	public void setTicketIndentId(Long ticketId,Long indentId) throws SQLException {
+		String sql = "update ticket set ticketIndentId=? where ticketId=?";
+		Object[] params = {indentId,ticketId};
+		qr.update(sql, params);
+	}
+
+	/**
+	 * 修改订单状态
+	 * @param indentId
+	 * @param type
+	 * @throws SQLException 
+	 */
+	public void setIndentStatus(Long indentId, String type) throws SQLException {
+		String sql = "update indent set indentStatus=? where indentId=?";
+		Object[] params = {type,indentId};
 		qr.update(sql, params);
 	}
 

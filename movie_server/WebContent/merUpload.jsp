@@ -333,10 +333,10 @@ body{font:12px/180% Arial, Helvetica, sans-serif, "新宋体";}
           function changeMoviePrevue(){
         	  na = form1.moviePrevue.value;
               console.log("电影预告文件名:"+na);
-              if(na.endsWith(".mp4")){
+              if(na.endsWith(".mp4") || na.endsWith(".qsv")){
               	moviePrevueErrorMsg.innerHTML='<font class="tips_true">选择正确</font>';
               }else{
-            	moviePrevueErrorMsg.innerHTML='<font class="tips_false">格式错误,只能上传.mp4文件</font>';
+            	moviePrevueErrorMsg.innerHTML='<font class="tips_false">文件格式错误</font>';
               }
               isCanUpload(); //判断是否可以提交
           }

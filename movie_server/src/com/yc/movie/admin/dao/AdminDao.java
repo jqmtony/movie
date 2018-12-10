@@ -132,5 +132,35 @@ public class AdminDao {
 		Object[] params = {newPwd,email};
 		qr.update(sql,params);
 	}
+
+	/**
+	 * 查找所有的订单
+	 * @return
+	 * @throws SQLException 
+	 */
+	public List<Indent> findAllIndent() throws SQLException {
+		String sql = "select * from indent";
+		List<Indent> list = qr.query(sql, new BeanListHandler<Indent>(Indent.class));
+		list = createIndentList(list);
+		return list;
+	}
+
+	/**
+	 * 加工电影票集合
+	 * @param list
+	 * @return
+	 * @throws SQLException 
+	 */
+	private List<Indent> createIndentList(List<Indent> list) throws SQLException {
+		for(Indent in : list){
+			String sql = "select * from users where userId=?";
+			List<Users> user = qr.query(sql, new BeanListHandler<Users>(Users.class));
+			if(user.size() > 0)
+				in.setUser(user.get(0));
+			
+			sql = "select * from ";
+		}
+		return null;
+	}
 	
 }

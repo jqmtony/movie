@@ -2,6 +2,7 @@ package com.yc.movie.bean;
 
 import java.io.Serializable;
 import java.sql.Timestamp;
+import java.sql.Date;
 import java.util.List;
 
 /**
@@ -19,6 +20,8 @@ public class Users implements Serializable {
 	private String userTel;  //用户手机号
 	private String userAddr;  //用户地址
 	private String userStatus;  //用户状态  0禁用  1正常使用
+	private Date userBirthday;  //出生日期
+	private Long userAge;  //年龄
 	private List<Ticket> ticketList;  //对应的电影票集合
 	private List<Images> imgList;  //对应图片集合
 	private List<Indent> indentList;  //对应订单集合
@@ -72,6 +75,29 @@ public class Users implements Serializable {
 	public void setUserAddr(String userAddr) {
 		this.userAddr = userAddr;
 	}
+	public String getUserStatus() {
+		return userStatus;
+	}
+	public void setUserStatus(String userStatus) {
+		this.userStatus = userStatus;
+	}
+	public Date getUserBirthday() {
+		return userBirthday;
+	}
+	public void setUserBirthday(Date userBirthday) {
+		this.userBirthday = userBirthday;
+	}
+	public Long getUserAge() {
+		return userAge;
+	}
+	
+	/*
+	 * Long time = userBirthday.getTime() - new java.util.Date().getTime();
+		this.userAge = time/1000/60/60/24/365;
+	 */
+	public void setUserAge(Long userAge){
+		this.userAge = userAge;
+	}
 	public List<Ticket> getTicketList() {
 		return ticketList;
 	}
@@ -102,19 +128,13 @@ public class Users implements Serializable {
 	public void setUlrList(List<UserLoginRecord> ulrList) {
 		this.ulrList = ulrList;
 	}
-	public String getUserStatus() {
-		return userStatus;
-	}
-	public void setUserStatus(String userStatus) {
-		this.userStatus = userStatus;
-	}
 	@Override
 	public String toString() {
 		return "Users [userId=" + userId + ", userName=" + userName + ", userAccount=" + userAccount + ", userEmail="
 				+ userEmail + ", userPwd=" + userPwd + ", userCreateTime=" + userCreateTime + ", userTel=" + userTel
-				+ ", userAddr=" + userAddr + ", userStatus=" + userStatus + "]";
+				+ ", userAddr=" + userAddr + ", userStatus=" + userStatus + ", userBirthday=" + userBirthday
+				+ ", userAge=" + userAge + ", ticketList=" + ticketList + ", imgList=" + imgList + ", indentList="
+				+ indentList + ", integral=" + integral + ", ulrList=" + ulrList + "]";
 	}
-	
-	
 	
 }

@@ -21,6 +21,8 @@ import com.yc.utils.CommonsUtils;
 import com.yc.utils.TxQueryRunner;
 
 public class DemoTest {
+	
+	
 	@Test
 	public void fun9(){
 		CommonsUtils.zipWidthHeightImageFile(new File("E:/2.jpg"), new File("E:/3.jpg"), 100, 100);

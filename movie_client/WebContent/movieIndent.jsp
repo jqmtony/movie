@@ -38,7 +38,7 @@
 <body>
 <!--/main-header-->
   <!--/banner-section-->
-	<%-- <%@ include file="head.jsp"%> --%>
+	<%@ include file="head.jsp"%>
 	
 	
 	<!--
@@ -52,7 +52,7 @@
 		</div> -->
 	
 	
-	<div class="catbox" style="margin-top:30px;">
+	<div class="catbox" style="margin-top:30px; margin-bottom: 30px;">
 		<h3>订单号：${indentObj.indentNum }</h3>
 		<table id="cartTable" style="margin-top:20px;">
 			<thead>
@@ -62,27 +62,27 @@
 					<th>单价</th>
 					<th>数量</th>
 					<th>上映时间</th>
+					<th>结束时间</th>
 					<th>座位</th>
-					<th>操作</th>
 				</tr>
 			</thead>
 			<tbody>
 			<c:forEach items="${indentObj.ticketList}" var="ticket">
 				<tr>
-					<td class="goods"><span>${movieBallotTicket.movieName }</span></td>
+					<td class="goods"><h3>${movieBallotTicket.movieName }</h3></td>
 					<td><img style="width:100px;height:150px;" src="<c:url value='${movieBallotTicket.imgList[0].imgPath }' />" alt="不能显示这张图片"/></td>
 					<td class="price">${movieBallotTicket.moviePrice } 元</td>
 					<td class="count">1</td>
-					<td class="update">${fn:substring(ticket.ticketMovieStartTime,0,10) }</td>
+					<td class="update">${fn:substring(ticket.ticketMovieStartTime,0,16) }</td>
+					<td class="update">${fn:substring(ticket.ticketMovieEndTime,0,16) }</td>
 					<td>${ticket.ticketLocation }</td>
-					<td class="operation"><span class="delete">删除</span></td>
 				</tr>
 			</c:forEach>
 			</tbody>
 		</table>
 		
 		<div class="foot" id="foot">
-			<div class="fr closing">结 算</div>
+			<div class="fr closing" onclick="location.href='<c:url value='pay.jsp' />'"><a href="<c:url value='pay.jsp' />">结 算</a></div>
 			<div class="fr total">合计：￥${indentObj.indentPrice}</span></div>
 		</div>
 	
@@ -90,7 +90,7 @@
 	
 	
 	<!--/footer-bottom-->
-	<%-- <%@ include file="footer.jsp"%> --%>
+	<%@ include file="footer.jsp"%>
 
  
 

@@ -18,10 +18,13 @@ import java.util.Properties;
 import java.util.Vector;
 
 import com.yc.exception.MovieException;
+import com.yc.movie.bean.ClassifyName;
+import com.yc.movie.bean.Classifys;
 import com.yc.movie.bean.Comment;
 import com.yc.movie.bean.Indent;
 import com.yc.movie.bean.Merchant;
 import com.yc.movie.bean.Movies;
+import com.yc.movie.bean.PageBean;
 import com.yc.movie.bean.Reply;
 import com.yc.movie.bean.Teleplay;
 import com.yc.movie.bean.Ticket;
@@ -344,7 +347,7 @@ public class MovieService{
 		Indent in = new Indent();
 		in.setUser(loginedUser);  //设置用户
 		in.setIndentUserID(loginedUser.getUserId());  //设置用户ID
-		in.setIndentStatus("0");  //设置订单状态  0是未结算
+		in.setIndentStatus("0");  //设置订单状态  0是未收货
 		in.setIndentNum(CommonsUtils.createIndentNum());  //设置订单号
 		in.setIndentPrice(new BigDecimal((Double.parseDouble(nowMovie.getMoviePrice().toString()) * Double.parseDouble(ticketList.size()+"")) + ""));
 		in.setIndentCreateTime(new Timestamp(new Date().getTime()));  //设置订单创建时间
@@ -353,6 +356,12 @@ public class MovieService{
 		try {
 			JdbcUtils.beginTransaction();
 			md.insertIndent(in);
+			
+			//更改电影票的ticketIndentId
+			Indent indent = md.findIndentByIndentNum(in.getIndentNum());
+			for(Ticket t:ticketList){
+				md.setTicketIndentId(t.getTicketId(),indent.getIndentId());
+			}
 			JdbcUtils.commitTransaction();
 		} catch (SQLException e) {
 			try {
@@ -374,6 +383,103 @@ public class MovieService{
 		try {
 			JdbcUtils.beginTransaction();
 			md.setTicketStatus(t.getTicketId(),status);
+			JdbcUtils.commitTransaction();
+		} catch (SQLException e) {
+			try {
+				JdbcUtils.roolbackTransaction();
+			} catch (SQLException e1) {
+				throw new MovieException("系统异常，请稍后再试");
+			}
+		}
+	}
+
+	/**
+	 * 访问量+1
+	 * @param id
+	 * @throws MovieException 
+	 */
+	public void addVisitCount(Long id) throws MovieException {
+		try {
+			JdbcUtils.beginTransaction();
+			md.addVisitCount(id);
+			JdbcUtils.commitTransaction();
+		} catch (SQLException e) {
+			try {
+				JdbcUtils.roolbackTransaction();
+			} catch (SQLException e1) {
+				throw new MovieException("系统异常，请稍后再试");
+			}
+		}
+	}
+	/**
+	 * 通过分类查找电影集合   (分页查询)
+	 * @param pc
+	 * @param i
+	 * @param genreName
+	 * @return
+	 * @throws MovieException 
+	 */
+	public PageBean<Movies> findMovieByClassify(Integer pc, int ps, String genreName) throws MovieException {
+		try {
+			ClassifyName cn = md.findClassifyNameByName(genreName);
+			
+			List<Classifys> cList = md.findClassifyByNameId(cn.getClassifyNameId());
+			
+			PageBean<Movies> pb = new PageBean<Movies>();
+			pb.setPc(pc);  //当前页
+			
+			pb.setPs(ps);	//每页显示
+			
+			List<Movies> movieList = md.findMovieByClassify(cList);
+			pb.setTr(movieList.size());  //总记录数
+			if(pb.getPc() > pb.getTp()){
+				pb.setPc(pb.getTp());
+			}
+			if(pb.getPc() < 1){
+				pb.setPc(1);
+			}
+			List<Movies> movieList2 = md.findMovieByClassifyPage(pb.getPc(),pb.getPs(),cList);
+			for(Movies m : movieList2){
+				m = md.createMovie(m);
+			}
+			pb.setBeanList(movieList2);
+			return pb;
+		} catch (SQLException e) {
+			e.printStackTrace();
+			throw new MovieException("系统异常，请稍后再试");
+		}
+	}
+
+	/**
+	 * 设置电影票的ticketBuyBy
+	 * @param t
+	 * @param loginedUser
+	 * @throws MovieException 
+	 */
+	public void setTicketBuyBy(Ticket t, Users loginedUser) throws MovieException {
+		try {
+			JdbcUtils.beginTransaction();
+			md.setTicketBuyBy(t.getTicketId(),loginedUser.getUserId());
+			JdbcUtils.commitTransaction();
+		} catch (SQLException e) {
+			try {
+				JdbcUtils.roolbackTransaction();
+			} catch (SQLException e1) {
+				throw new MovieException("系统异常，请稍后再试");
+			}
+		}
+	}
+
+	/**
+	 * 设置订单状态
+	 * @param indentId
+	 * @param type
+	 * @throws MovieException 
+	 */
+	public void setIndentStatus(Long indentId, String type) throws MovieException {
+		try {
+			JdbcUtils.beginTransaction();
+			md.setIndentStatus(indentId,type);
 			JdbcUtils.commitTransaction();
 		} catch (SQLException e) {
 			try {

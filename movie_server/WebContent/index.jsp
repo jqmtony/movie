@@ -68,6 +68,9 @@
 		}
 	</script>
 </head>
+<c:if test="${empty indentList }">
+	<jsp:forward page="admin.s?method=getIndentList" />
+</c:if>
 <body class="easyui-layout" style="margin:0 1px;background-color:#f5f5f5 !important;">  
     <div data-options="region:'north',split:true" style="height:80px;" id="xyy_header">
 	    <div class="easyui-layout" data-options="fit:true">   
@@ -79,8 +82,6 @@
 				<div class="xyy_tool">	
 					<ul style="float:right;position: relative;right:0;margin:0;">
 						<li><a href="#"><i class="xyy-xinxi" style="position: absolute;display:block;width: 16px;height: 16px;top: 50%;margin: -8px 12px;"></i>信息中心</a></li>						
-						<li><a href="#"><i class="xyy-ziliao" style="position: absolute;display:block;width: 16px;height: 16px;top: 50%;margin: -8px 12px;"></i>资料设置</a></li>						
-						<li><a href="javascript:;" onclick = "resetPwd()"><i class="xyy-mima" style="position: absolute;display:block;width: 16px;height: 16px;top: 50%;margin: -8px 12px;"></i>修改密码</a></li>				
 						<li><a href="<c:url value='/admin.s?method=exit' />"><i class="xyy-tuichu" style="position: absolute;display:block;width: 16px;height: 16px;top: 50%;margin: -8px 12px;"></i>退出登录</a></li>
 					</ul>
 				</div>				
@@ -134,12 +135,7 @@
                     </li>  
                 </ul>
             </div>
-            <div title="景区服务商管理" data-options="iconCls:'icon-guanli'" style="padding:10px;">
-                content2
-            </div>
-            <div title="票务信息设置" data-options="iconCls:'icon-shezhi'" style="overflow:auto;padding:10px;">
-                content3
-            </div>
+            
 			<div title="商户管理" data-options="iconCls:'icon-guanli'" style="padding:10px;">
                 content2
             </div>
@@ -197,35 +193,31 @@
 						<div data-options="region:'center',border:false" style="margin-top:20px;">
                             <table id="dg" title="最新订单" iconCls="icon-dingdan" class="easyui-datagrid" style="width:100%;height:400px;"
 								data-options="idField:'id',rownumbers:false,fitColumns:true,pagination:true,singleSelect:true,collapsible:true,toolbar:'#toolbar',url:'datagrid_data.json',method:'get',checkOnSelect:'true',selectOnCheck:'true'">
+							
 							<!---获取数据--->
 							<thead>
 								<tr>
 									<th field="ck" checkbox="true"></th>
 									<th data-options="field:'id',width:80">编 号</th>
-									<th data-options="field:'name',width:100">名 字</th>
-									<th data-options="field:'tel',width:100">电 话</th>
-									<th data-options="field:'add',width:100">地 址</th>
-									<th data-options="field:'beizhu',width:100">备 注</th>
+									<th data-options="field:'name',width:100">用户姓名</th>
+									<th data-options="field:'tel',width:100">用户电话</th>
+									<th data-options="field:'add',width:100">用户地址</th>
 									<th data-options="field:'timet',width:100">购买日期</th>
-									<th data-options="field:'timef',width:100">浏览日期</th>
+									<th data-options="field:'timet',width:100">电影名</th>
 								</tr>
 							</thead>
 							<tbody>
+							<c:forEach items="${indentList }" var="indent">
 								<tr>
-									<td></td><td>001</td><td>顿饭第三季</td><td>15166925589</td><td>乌鲁木齐啦啦啦啦啦</td><td>FI-SW-01</td><td>2014-5-6</td><td>2015-5-6</td>
+									<td></td>
+									<td>${indent.indentId }</td>
+									<td>${indent.user.userName }</td>
+									<td>${indent.user.userTel }</td>
+									<td>${indent.user.userAddr }</td>
+									<td>${indent.indentCreateTime }</td>
+									<td>${indent.ticketList[0].movie.movieName }</td>
 								</tr>
-								<tr>
-									<td></td><td>002</td><td>费点事</td><td>15166925589</td><td>乌鲁木齐啦啦啦啦啦</td><td>K9-DL-01</td><td>2014-5-6</td><td>2015-5-6</td>
-								</tr>
-								<tr>
-									<td></td><td>003</td><td>二位好</td><td>15166925589</td><td>乌鲁木齐啦啦啦啦啦</td><td>RP-SN-01</td><td>2014-5-6</td><td>2015-5-6</td>
-								</tr>
-								<tr>
-									<td></td><td>004</td><td>通过人体</td><td>15166925589</td><td>乌鲁木齐啦啦啦啦啦</td><td>RP-SN-01</td><td>2014-5-6</td><td>2015-5-6</td>
-								</tr>
-								<tr>
-									<td></td><td>005</td><td>太热</td><td>15166925589</td><td>乌鲁木齐啦啦啦啦啦</td><td>RP-LI-02</td><td>2014-5-6</td><td>2015-5-6</td>
-								</tr>
+							</c:forEach>
 							</tbody>
 							</table>
 							<div id="toolbar">
@@ -340,5 +332,10 @@ var pager = $('#dg').datagrid('getPager');    // get the pager of datagrid
 		}
 	});		
 </script>
+<c:if test="${! empty msg }">
+	<script type="text/javascript">
+		alert("${msg}");
+	</script>
+</c:if>
 </body>
 </html>
