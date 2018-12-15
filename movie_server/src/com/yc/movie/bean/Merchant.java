@@ -18,8 +18,10 @@ public class Merchant implements Serializable {
 	private String merIDCard;	//商户身份证号码
 	private String merStatus;  //商户状态  0禁用  1正常使用
 	private String merStoreName; //商户店名
+	private String merIpAddr; //商户当前IP
 	private List<Images> imgList;  //对应图片集合
 	private List<Movies> movieList; //对应多个电影
+	private List<String> dateString; //对应的上映日期  12-01 | 12-02
 	public Long getMerId() {
 		return merId;
 	}
@@ -74,6 +76,12 @@ public class Merchant implements Serializable {
 	public void setMerStoreName(String merStoreName) {
 		this.merStoreName = merStoreName;
 	}
+	public String getMerIpAddr() {
+		return merIpAddr;
+	}
+	public void setMerIpAddr(String merIpAddr) {
+		this.merIpAddr = merIpAddr;
+	}
 	public List<Images> getImgList() {
 		return imgList;
 	}
@@ -86,12 +94,18 @@ public class Merchant implements Serializable {
 	public void setMovieList(List<Movies> movieList) {
 		this.movieList = movieList;
 	}
+	public List<String> getDateString() {
+		return dateString;
+	}
+	public void setDateString(List<String> dateString) {
+		this.dateString = dateString;
+	}
 	@Override
 	public String toString() {
 		return "Merchant [merId=" + merId + ", merName=" + merName + ", merTel=" + merTel + ", merEmail=" + merEmail
 				+ ", merAddr=" + merAddr + ", merPwd=" + merPwd + ", merIDCard=" + merIDCard + ", merStatus="
-				+ merStatus + ", merStoreName=" + merStoreName + ", imgList=" + imgList + ", movieList=" + movieList
-				+ "]";
+				+ merStatus + ", merStoreName=" + merStoreName + ", merIpAddr=" + merIpAddr + ", imgList=" + imgList
+				+ ", movieList=" + movieList + ", dateString=" + dateString + "]";
 	}
 	
 }

@@ -16,7 +16,6 @@
 <body>
 <div class="whole">
 	<div class="movie">
-    	<!-- <div class="back"><img src="image/back.png" /></div> -->
     	<img src="<c:url value='${movieBallotTicket.imgList[3].imgPath }' />" />
         <span>
         	<img src="image/start.png" />
@@ -54,7 +53,7 @@
             </div>
             
             <div class="common stage-photo">
-            	<h3>剧照和视频</h3>
+            	<h3>${lg['stagePhoto'] }</h3>
                 <ul>
                 	<li><img src="<c:url value='${movieBallotTicket.imgList[0].imgPath }' />" /></li>
 					<li><img src="<c:url value='${movieBallotTicket.imgList[1].imgPath }' />" /></li>
@@ -64,7 +63,7 @@
             
         </div>
     </div>
-    <a class="footer" href="film_cinema.jsp">立即订票</a>
+    <a class="footer" href="film_cinema.jsp">${lg['theTicketImmediately'] }</a>
 </div>
 <script type="text/javascript">
 $(document).ready(function() {

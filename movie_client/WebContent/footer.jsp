@@ -7,10 +7,40 @@
 				<p class="para">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Praesent vitae eros eget tellus 
 					tristique bibendum. Donec rutrum sed sem quis venenatis.</p>
 				<div class="footer-contact">
-					<form action="#" method="post">
-						<input type="email" name="Email" placeholder="${lg['foot_24'] }" required=" ">
-						<input type="submit" value="${lg['foot_25']}">
+					<%--订阅  wt=======================================================================2 163 136======== --%>
+					<form action="" method="post">
+						<input type="email" name="Email" id="subEmail" placeholder="${lg['foot_24'] }">
+						<input type="button" value="${lg['foot_25']}" onclick="sub()" style="width:100px;height:45px;background-color:#02a388;color:#fff;"><br/>
+						<font style="color:red;" id="subEmailErrorMsg"></font>
 					</form>
+					<script type="text/javascript">
+						function sub(){
+							var subEmailObj = $('#subEmail');   //这是subEmail对象
+							var data1={/*定义一个js对象*/
+									//name : 'zhangsan',   //name为属性 zhangsan为值
+									email : subEmailObj.val()
+							};
+							$.post("<c:url value='/user.s?method=sub' />",data1,function(data2){   
+								/*
+									//localhost:8080/movie_client/user.s
+									<c:url value='' />   :  他是一个jstl表达式   作用是自动补全url前面的项目名
+								*/
+								/*参数1：发送请求的地址  
+								参数2：当前页面发送给servlet的数据 
+								参数3：servlet返回给当前页面的数据*/
+								
+								if(data2 === "yes"){
+									$("#subEmailErrorMsg").html("");
+									alert("恭喜您订阅成功！我们以后有新的动态都会通过邮箱发送给您");
+									subEmailObj.val("");
+								}else{
+									$("#subEmailErrorMsg").html(" * "+data2);
+								}
+									
+							});
+						}
+					</script>
+					<%--============================================================================= --%>
 				</div>
 					<div class="footer-grids w3-agileits">
 						<div class="col-md-2 footer-grid">
@@ -27,14 +57,12 @@
 							<div class="col-md-2 footer-grid">
 						<h4>${lg["Movies"] }</h4>
 							<ul>
-								
-								<li><a href="genre.html">${lg["foot_4"] }</a></li>
-								<li><a href="comedy.html">${lg["foot_5"] }</a></li>
-								<li><a href="series.html">${lg["foot_6"] }</a></li>
-								<li><a href="series.html">${lg["foot_7"] }  </a></li>
-								<li><a href="genre.html">${lg["foot_8"] }  </a></li>
-								<li><a href="horror.html">${lg["foot_9"] }  </a></li>
-								
+								<li><a href="<c:url value='/movie.s?method=goGenre&op=indexMenuGenreAdventure' />">${lg["indexMenuGenreAdventure"] }</a></li>
+								<li><a href="<c:url value='/movie.s?method=goGenre&op=indexMenuGenreComedy' />">${lg["indexMenuGenreComedy"] }</a></li>
+								<li><a href="<c:url value='/movie.s?method=goGenre&op=indexMenuGenreFantasy' />">${lg["indexMenuGenreFantasy"] }</a></li>
+								<li><a href="<c:url value='/movie.s?method=goGenre&op=foot_7' />">${lg["foot_7"] }  </a></li>
+								<li><a href="<c:url value='/movie.s?method=goGenre&op=foot_8' />">${lg["foot_8"] }  </a></li>
+								<li><a href="<c:url value='/movie.s?method=goGenre&op=foot_9' />">${lg["foot_9"] }  </a></li>
 							</ul>
 						</div>
 				
@@ -42,35 +70,24 @@
 							<div class="col-md-2 footer-grid">
 								<h4>${lg["foot_10"] }</h4>
 									<ul class="w3-tag2">
-									<li><a href="comedy.html">${lg["foot_11"] }</a></li>
-									<li><a href="horror.html">${lg["foot_12"] }</a></li>
-									<li><a href="series.html">${lg["foot_13"] }</a></li>
-									<li><a href="series.html">${lg["foot_14"] }</a></li>
-									<li><a href="series.html">${lg["foot_15"] }</a></li>
-									<li><a href="genre.html">${lg["foot_16"] }</a></li>
-									<li><a href="single.html">${lg["foot_17"] }</a></li>
-									<li><a href="comedy.html">${lg["foot_11"] }</a></li>
-									<li><a href="horror.html">${lg["foot_12"] }</a></li>
-									<li><a href="series.html">${lg["foot_13"] }</a></li>
-									<li><a href="series.html">${lg["foot_14"] }</a></li>
-									<li><a href="genre.html">${lg["foot_15"] }</a></li>
-									<li><a href="comedy.html">${lg["foot_16"] }</a></li>
-									<li><a href="horror.html">${lg["foot_17"] }</a></li>
-									<li><a href="genre.html">${lg["foot_17"] }</a></li>
-									
+									<li><a href="<c:url value='/movie.s?method=goGenre&op=foot_11' />">${lg["foot_11"] }</a></li>
+									<li><a href="<c:url value='/movie.s?method=goGenre&op=foot_12' />">${lg["foot_12"] }</a></li>
+									<li><a href="<c:url value='/movie.s?method=goGenre&op=foot_13' />">${lg["foot_13"] }</a></li>
+									<li><a href="<c:url value='/movie.s?method=goGenre&op=foot_14' />">${lg["foot_14"] }</a></li>
+									<li><a href="<c:url value='/movie.s?method=goGenre&op=foot_16' />">${lg["foot_16"] }</a></li>
 								</ul>
 
 
 						</div>
 								<div class="col-md-2 footer-grid">
 						<h4>${lg["foot_18"] }</h4>
-							<c:forEach items="${movieListByTime }" var="movie">
+							<c:forEach items="${indexTime2 }" var="index" end="3">
 								<div class="footer-grid1">
 									<div class="footer-grid1-left">
-										<a href="single.html"><img src="${movie.imgList[0].imgPath }" alt=" " class="img-responsive"></a>
+										<a href="<c:url value='/movie.s?method=singleShow&type=movie&id=${movieList2[index].movieId }' />"><img src="<c:url value='${movieList2[index].imgList[3].imgPath }' />" alt=" " class="img-responsive"></a>
 									</div>
 									<div class="footer-grid1-right">
-										<a href="single.html">${movie.movieName}</a>
+										<a href="<c:url value='/movie.s?method=singleShow&type=movie&id=${movieList2[index].movieId }' />">${movieList2[index].movieName}</a>
 										
 									</div>
 									<div class="clearfix"> </div>
@@ -79,11 +96,11 @@
 
 						</div>
 						<div class="col-md-2 footer-grid">
-						   <h4 class="b-log"><a href="index.html"><span>${lg["indexTitle_1"] }</span>${lg["indexTitle_2"] } <span>${lg["indexTitle_3"] }</span>${lg["indexTitle_4"] }</a></h4>
+						   <h4 class="b-log"><a href="index.jsp"><span>${lg["indexTitle_1"] }</span>${lg["indexTitle_2"] } <span>${lg["indexTitle_3"] }</span>${lg["indexTitle_4"] }</a></h4>
 							
-							<c:forEach items="${movieListByCount }" var="movie">
+							<c:forEach items="${indexVisit2 }" var="index" end="5">
 								<div class="footer-grid-instagram">
-									<a href="single.html"><img src="${movie.imgList[0].imgPath }" alt=" " class="img-responsive"></a>
+									<a href="<c:url value='/movie.s?method=singleShow&type=movie&id=${movieList2[index].movieId }' />"><img src="<c:url value='${movieList2[index].imgList[0].imgPath }' />" alt=" " class="img-responsive"></a>
 								</div>
 							</c:forEach>
 							<div class="clearfix"> </div>
@@ -272,11 +289,11 @@ fit: true
 	//选择个人管理事件
 	function infoChange(){
 		var selector = $('#infoChange');
-		if(selector.val() == "修改信息"){
+		if(selector.val() === "修改信息" || selector.val() === 'Alter Information'){
 			window.location.href = "userAlterInfo.jsp";
-		}else if(selector.val() == "我的订单"){
-			
-		}else if(selector.val() == "退出登录"){
+		}else if(selector.val() === "我的订单" || selector.val() === 'My Indent'){
+			window.location.href = "userMovieIndent.jsp";
+		}else if(selector.val() === "退出登录" || selector.val() === 'Login Out'){
 			var data;
 			$.post("<c:url value='/user.s?method=exit' />",data,function(data){})
 			window.location.href = "index.jsp";

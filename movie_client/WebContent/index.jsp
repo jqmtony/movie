@@ -31,17 +31,6 @@
 <c:if test="${empty movieList }">
 	<jsp:forward page="movie.s?method=findAllMovie"></jsp:forward>
 </c:if>
-<%-- <%
-	List<Movies> list1 = (List<Movies>)request.getAttribute("movieList");
-	List<Movies> list2 = (List<Movies>)request.getAttribute("movieList");
-	List<Movies> list3 = (List<Movies>)request.getAttribute("movieList");
-	/*System.out.println("jsp1"+list1.hashCode());
-	System.out.println("jsp2"+list2.hashCode());
-	System.out.println("jsp3"+list3.hashCode()); */
-	System.out.println("jsp1"+list1);
-	System.out.println("jsp2"+list2);
-	System.out.println("jsp3"+list1);
-%> --%>
 <body>
 <!--/main-header-->
   <!--/banner-section-->
@@ -126,17 +115,21 @@
 					<div class="clearfix"> </div>	
 				</nav>
 					<div class="w3ls_search">
-									<div class="cd-main-header">
-										<ul class="cd-header-buttons">
-											<li><a class="cd-search-trigger" href="#cd-search"> <span></span></a></li>
-										</ul> <!-- cd-header-buttons -->
-									</div>
-									<div id="cd-search" class="cd-search">
-										<form action="#" method="post">
-											<input name="Search" type="search" placeholder="${lg['Search']}">
-										</form>
-									</div>
-								</div>
+						<div class="cd-main-header">
+							<ul class="cd-header-buttons">
+								<li><a class="cd-search-trigger" href="#cd-search"> <span></span></a></li>
+							</ul> <!-- cd-header-buttons -->
+						</div>
+						<%--搜索框  hzr =========================================================--%>
+						<div id="cd-search" class="cd-search">
+							<form action="<c:url value='/movie.s' />" method="post">
+								<input type="hidden" name="method" value="search">
+								<input name="Search" type="search" placeholder="${lg['Search']}">
+							</form>
+						</div>
+						<%--搜索框  hzr =========================================================--%>
+
+					</div>
 	
 			</div> 
 
@@ -146,9 +139,6 @@
 			   <div class="baner-info">
 			      <h3>${lg["title_1"] } <span>${lg["title_2"] }</span>${lg["title_3"] } <span>${lg["title_4"] }</span>${lg["title_5"] }</h3>
 				  <h4>${lg["indexLastMovieName"]}</h4>
-				 <%--  <a class="w3_play_icon1" href="#small-dialog1">
-											${lg["indexWatchTrailer"]}
-										</a> --%>
 			   </div>
 			<!--/banner-ingo-->		
 		</div>
@@ -160,12 +150,24 @@
 			     <div class="w3_agilits_inner_bottom">
 			            <div class="col-md-6 wthree_agile_login">
 						     <ul>
-									<li><i class="fa fa-phone" aria-hidden="true"></i> (+000) 009 455 4088</li>
-									<%-- <li><a href="#" class="login"  data-toggle="modal" data-target="#myModal4">${lg["indexLogin"]}</a></li>
-									<li><a href="#" class="login reg"  data-toggle="modal" data-target="#myModal5">${lg["indexRegister"]}</a></li> --%>
+									<li style="margin-right:50px;"><i class="fa fa-phone" aria-hidden="true"></i> (+000) 009 455 4088</li>
 									<c:choose>
 										<c:when test="${empty loginedUser }">
 											<li><a href="<c:url value='/user.s?method=loginSetReferer' />" class="login">${lg["indexLogin"]}</a></li>
+										</c:when>
+										<c:when test="${fn:length(loginedUser.imgList) eq 0 }">
+											<li style="margin-left:30px;">
+												<img id="headImg" style="width:20px;height:20px;" src="<c:url value='/images/uploadLogo.png' />" alt="图片">
+												<font>${loginedUser.userAccount}</font>
+											</li>
+											<li style="margin-left:20px;">
+												<select id="infoChange" style="color:#000000;" onchange="infoChange()">
+													<option selected="selected">${lg['personalCenter'] }</option>
+													<option>${lg['alterInfo'] }</option>
+													<option>${lg['myIndent'] }</option>
+													<option>${lg['loginOut'] }</option>
+												</select>
+											</li>
 										</c:when>
 										<c:otherwise>
 											<li style="margin-left:30px;">
@@ -183,21 +185,6 @@
 										</c:otherwise>
 									</c:choose>
 								</ul>
-						</div>
-						 <div class="col-md-6 wthree_share_agile">
-									
-									<div class="single-agile-shar-buttons">
-									<ul>
-								<li>
-									<div class="fb-like" data-href="" data-layout="button_count" data-action="like" data-size="small" data-show-faces="false" data-share="false"></div>
-									
-								</li>
-								<li>
-									<div class="fb-share-button" data-href="" data-layout="button_count" data-size="small" data-mobile-iframe="true"><a class="fb-xfbml-parse-ignore" target="_blank" href="">${lg["indexShare"]}</a></div>
-								</li>
-								
-							</ul>
-								</div>
 						</div>
 				</div>
 			</div>
@@ -237,14 +224,14 @@
 														<p class="fexi_header_para fexi_header_para1"><span>${lg["indexNewOneStarRating"] }<label>:</label></span>
 															<c:set var="starNum" value="${movieList[indexTime[0]].movieGradeNum/2}"/>
 															<c:forEach var="i" begin="1" end="${starNum }">
-																<a href="#"><i class="fa fa-star" aria-hidden="true"></i></a>
+																<a><i class="fa fa-star" aria-hidden="true"></i></a>
 															</c:forEach>
 															<c:if test="${starNum%1 != 0}">
-																<a href="#"><i class="fa fa-star-half-o" aria-hidden="true"></i></a>
+																<a><i class="fa fa-star-half-o" aria-hidden="true"></i></a>
 																<c:set var="starNum" value="${starNum+1}"/>
 															</c:if>
 															<c:forEach var="i" begin="${starNum+1}" end="5">
-																<a href="#"><i class="fa fa-star-o" aria-hidden="true"></i></a>
+																<a><i class="fa fa-star-o" aria-hidden="true"></i></a>
 															</c:forEach>
 														</p>
 													</div>
@@ -266,14 +253,14 @@
 																			<ul class="w3l-ratings">
 																				<c:set var="starNum" value="${movieList[index].movieGradeNum/2}"/>
 																					<c:forEach var="i" begin="1" end="${starNum }">
-																						<a href="#"><i class="fa fa-star" aria-hidden="true"></i></a>
+																						<a><i class="fa fa-star" aria-hidden="true"></i></a>
 																					</c:forEach>
 																					<c:if test="${starNum%1 != 0}">
-																						<a href="#"><i class="fa fa-star-half-o" aria-hidden="true"></i></a>
+																						<a><i class="fa fa-star-half-o" aria-hidden="true"></i></a>
 																						<c:set var="starNum" value="${starNum+1}"/>
 																					</c:if>
 																					<c:forEach var="i" begin="${starNum+1}" end="5">
-																						<a href="#"><i class="fa fa-star-o" aria-hidden="true"></i></a>
+																						<a><i class="fa fa-star-o" aria-hidden="true"></i></a>
 																					</c:forEach>
 																			</ul>
 																		</div>
@@ -320,14 +307,14 @@
 												<p class="fexi_header_para fexi_header_para1"><span>${lg["indexNewOneStarRating"] }<label>:</label></span>
 													<c:set var="starNum" value="${movieList[indexVisit[0]].movieGradeNum/2}"/>
 													<c:forEach var="i" begin="1" end="${starNum }">
-														<a href="#"><i class="fa fa-star" aria-hidden="true"></i></a>
+														<a><i class="fa fa-star" aria-hidden="true"></i></a>
 													</c:forEach>
 													<c:if test="${starNum%1 != 0}">
-														<a href="#"><i class="fa fa-star-half-o" aria-hidden="true"></i></a>
+														<a><i class="fa fa-star-half-o" aria-hidden="true"></i></a>
 														<c:set var="starNum" value="${starNum+1}"/>
 													</c:if>
 													<c:forEach var="i" begin="${starNum+1}" end="5">
-														<a href="#"><i class="fa fa-star-o" aria-hidden="true"></i></a>
+														<a><i class="fa fa-star-o" aria-hidden="true"></i></a>
 													</c:forEach>
 												</p>
 											</div>
@@ -349,14 +336,14 @@
 																			<ul class="w3l-ratings">
 																				<c:set var="starNum" value="${movieList[index].movieGradeNum/2}"/>
 																					<c:forEach var="i" begin="1" end="${starNum }">
-																						<a href="#"><i class="fa fa-star" aria-hidden="true"></i></a>
+																						<a><i class="fa fa-star" aria-hidden="true"></i></a>
 																					</c:forEach>
 																					<c:if test="${starNum%1 != 0}">
-																						<a href="#"><i class="fa fa-star-half-o" aria-hidden="true"></i></a>
+																						<a><i class="fa fa-star-half-o" aria-hidden="true"></i></a>
 																						<c:set var="starNum" value="${starNum+1}"/>
 																					</c:if>
 																					<c:forEach var="i" begin="${starNum+1}" end="5">
-																						<a href="#"><i class="fa fa-star-o" aria-hidden="true"></i></a>
+																						<a><i class="fa fa-star-o" aria-hidden="true"></i></a>
 																					</c:forEach>
 																			</ul>
 																		</div>
@@ -401,14 +388,14 @@
 												<p class="fexi_header_para fexi_header_para1"><span>${lg["indexNewOneStarRating"] }<label>:</label></span>
 													<c:set var="starNum" value="${movieList[indexGrade[0]].movieGradeNum/2}"/>
 													<c:forEach var="i" begin="1" end="${starNum }">
-														<a href="#"><i class="fa fa-star" aria-hidden="true"></i></a>
+														<a><i class="fa fa-star" aria-hidden="true"></i></a>
 													</c:forEach>
 													<c:if test="${starNum%1 != 0}">
-														<a href="#"><i class="fa fa-star-half-o" aria-hidden="true"></i></a>
+														<a><i class="fa fa-star-half-o" aria-hidden="true"></i></a>
 														<c:set var="starNum" value="${starNum+1}"/>
 													</c:if>
 													<c:forEach var="i" begin="${starNum+1}" end="5">
-														<a href="#"><i class="fa fa-star-o" aria-hidden="true"></i></a>
+														<a><i class="fa fa-star-o" aria-hidden="true"></i></a>
 													</c:forEach>
 												</p>
 											</div>
@@ -430,14 +417,14 @@
 																			<ul class="w3l-ratings">
 																				<c:set var="starNum" value="${movieList[index].movieGradeNum/2}"/>
 																					<c:forEach var="i" begin="1" end="${starNum }">
-																						<a href="#"><i class="fa fa-star" aria-hidden="true"></i></a>
+																						<a><i class="fa fa-star" aria-hidden="true"></i></a>
 																					</c:forEach>
 																					<c:if test="${starNum%1 != 0}">
-																						<a href="#"><i class="fa fa-star-half-o" aria-hidden="true"></i></a>
+																						<a><i class="fa fa-star-half-o" aria-hidden="true"></i></a>
 																						<c:set var="starNum" value="${starNum+1}"/>
 																					</c:if>
 																					<c:forEach var="i" begin="${starNum+1}" end="5">
-																						<a href="#"><i class="fa fa-star-o" aria-hidden="true"></i></a>
+																						<a><i class="fa fa-star-o" aria-hidden="true"></i></a>
 																					</c:forEach>
 																			</ul>
 																		</div>
@@ -484,14 +471,14 @@
 										<ul class="w3l-ratings">
 											<c:set var="starNum" value="${movieList[index].movieGradeNum/2}"/>
 												<c:forEach var="i" begin="1" end="${starNum }">
-													<a href="#"><i class="fa fa-star" aria-hidden="true"></i></a>
+													<a><i class="fa fa-star" aria-hidden="true"></i></a>
 												</c:forEach>
 												<c:if test="${starNum%1 != 0}">
-													<a href="#"><i class="fa fa-star-half-o" aria-hidden="true"></i></a>
+													<a><i class="fa fa-star-half-o" aria-hidden="true"></i></a>
 													<c:set var="starNum" value="${starNum+1}"/>
 												</c:if>
 												<c:forEach var="i" begin="${starNum+1}" end="5">
-													<a href="#"><i class="fa fa-star-o" aria-hidden="true"></i></a>
+													<a><i class="fa fa-star-o" aria-hidden="true"></i></a>
 												</c:forEach>
 										</ul>
 									</div>
@@ -510,7 +497,7 @@
 				 <h3 class="agile_w3_title">${lg["Requested"] } <span>${lg["Movies"] }</span> </h3>
 				<!--/requested-movies-->
 				
-					<c:forEach items="${indexVisit }" var="index">
+					<c:forEach items="${indexVisit }" var="index" end="9">
 				     <div class="wthree_agile-requested-movies">
 						<div class="col-md-2 w3l-movie-gride-agile requested-movies">
 							<a href="<c:url value='/movie.s?method=singleShow&type=movie&id=${movieList[index].movieId }' />" class="hvr-sweep-to-bottom"><img src="${pageContext.request.contextPath }${movieList[index].imgList[0].imgPath }" title="Movies Pro" class="img-responsive" alt=" ">
@@ -526,14 +513,14 @@
 											<ul class="w3l-ratings">
 												<c:set var="starNum" value="${movieList[index].movieGradeNum/2}"/>
 												<c:forEach var="i" begin="1" end="${starNum }">
-													<a href="#"><i class="fa fa-star" aria-hidden="true"></i></a>
+													<a><i class="fa fa-star" aria-hidden="true"></i></a>
 												</c:forEach>
 												<c:if test="${starNum%1 != 0}">
-													<a href="#"><i class="fa fa-star-half-o" aria-hidden="true"></i></a>
+													<a><i class="fa fa-star-half-o" aria-hidden="true"></i></a>
 													<c:set var="starNum" value="${starNum+1}"/>
 												</c:if>
 												<c:forEach var="i" begin="${starNum+1}" end="5">
-													<a href="#"><i class="fa fa-star-o" aria-hidden="true"></i></a>
+													<a><i class="fa fa-star-o" aria-hidden="true"></i></a>
 												</c:forEach>
 											</ul>
 										</div>
@@ -571,14 +558,14 @@
 																		<ul class="w3l-ratings">
 																			<c:set var="starNum" value="${movieList[index].movieGradeNum/2}"/>
 																			<c:forEach var="i" begin="1" end="${starNum }">
-																				<a href="#"><i class="fa fa-star" aria-hidden="true"></i></a>
+																				<a><i class="fa fa-star" aria-hidden="true"></i></a>
 																			</c:forEach>
 																			<c:if test="${starNum%1 != 0}">
-																				<a href="#"><i class="fa fa-star-half-o" aria-hidden="true"></i></a>
+																				<a><i class="fa fa-star-half-o" aria-hidden="true"></i></a>
 																				<c:set var="starNum" value="${starNum+1}"/>
 																			</c:if>
 																			<c:forEach var="i" begin="${starNum+1}" end="5">
-																				<a href="#"><i class="fa fa-star-o" aria-hidden="true"></i></a>
+																				<a><i class="fa fa-star-o" aria-hidden="true"></i></a>
 																			</c:forEach>
 																		</ul>
 																	</div>
@@ -613,14 +600,14 @@
 												<p class="fexi_header_para fexi_header_para1"><span>${lg["indexNewOneStarRating"] }<label>:</label></span>
 													<c:set var="starNum" value="${movieList[indexGrade[0]].movieGradeNum/2}"/>
 													<c:forEach var="i" begin="1" end="${starNum }">
-														<a href="#"><i class="fa fa-star" aria-hidden="true"></i></a>
+														<a><i class="fa fa-star" aria-hidden="true"></i></a>
 													</c:forEach>
 													<c:if test="${starNum%1 != 0}">
-														<a href="#"><i class="fa fa-star-half-o" aria-hidden="true"></i></a>
+														<a><i class="fa fa-star-half-o" aria-hidden="true"></i></a>
 														<c:set var="starNum" value="${starNum+1}"/>
 													</c:if>
 													<c:forEach var="i" begin="${starNum+1}" end="5">
-														<a href="#"><i class="fa fa-star-o" aria-hidden="true"></i></a>
+														<a><i class="fa fa-star-o" aria-hidden="true"></i></a>
 													</c:forEach>
 												</p>
 											</div>

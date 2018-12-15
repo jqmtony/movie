@@ -2,8 +2,11 @@ package com.yc.movie.merchant.web.servlet;
 
 import com.alibaba.fastjson.JSON;
 import com.yc.movie.bean.ClassifyName;
+import com.yc.movie.bean.Images;
 import com.yc.movie.bean.Merchant;
 import com.yc.movie.bean.Movies;
+import com.yc.movie.bean.PageBean;
+import com.yc.movie.bean.Users;
 import com.yc.movie.bean.Verification;
 import com.yc.movie.exception.MerchantException;
 import com.yc.movie.merchant.service.MerchantService;
@@ -11,14 +14,25 @@ import com.yc.movie.utils.BaseServlet;
 import com.yc.movie.utils.CommonsUtils;
 
 import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
+import java.net.DatagramPacket;
+import java.net.DatagramSocket;
+import java.net.InetAddress;
 import java.util.ArrayList;
+import java.util.Enumeration;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Properties;
+import java.util.Random;
 import java.util.Map.Entry;
 
+import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.MultipartConfig;
 import javax.servlet.annotation.WebServlet;
@@ -35,7 +49,136 @@ import javax.servlet.http.Part;
 public class MerchantServlet extends BaseServlet {
 	private static final long serialVersionUID = 1L;
 	private MerchantService ms = new MerchantService();
+	private static Long userFlag = 0l;
+	private static Long merFlag = 1l;
 	
+	/**
+	 * 更改电影的状态
+	 * @param request
+	 * @param response
+	 * @return
+	 * @throws ServletException
+	 * @throws IOException
+	 */
+	public void setMovieStatus(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		String type = request.getParameter("type");  //获取到要设置的状态
+		Long movieId = Long.parseLong(request.getParameter("movieId"));  //获取到要设置的电影ID
+		try {
+			ms.setMovieStatus(type,movieId);
+			response.getWriter().append("yes");
+		} catch (MerchantException e) {
+			e.printStackTrace();
+			response.getWriter().append(e.getMessage());
+		}  
+	}
+	/**
+	 * 查找当前登录商户中的电影
+	 * @param request
+	 * @param response
+	 * @throws ServletException
+	 * @throws IOException
+	 */
+	public String findMovieByMer(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		Merchant loginedMer = (Merchant)session.getAttribute("loginedMerchant"); //得到当前登录的商户
+		Integer pc = CommonsUtils.getPageListPc(request);  //得到pc  当前页
+		try {
+			PageBean<Movies> pb = ms.findMovieByMer(loginedMer,pc,3);
+			request.setAttribute("pageBean_movie", pb);
+			return "f:/merProduct_Manage.jsp";
+		} catch (MerchantException e) {
+			e.printStackTrace();
+			request.setAttribute("msg", e.getMessage());
+			return "f:/merProduct_Manage.jsp";
+		}
+	}
+	
+	
+	/**
+	 * 刷新接收信息
+	 * @param request
+	 * @param response
+	 * @throws ServletException
+	 * @throws IOException
+	 */
+	public void revicedContent(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		Merchant loginedMerchant = (Merchant)session.getAttribute("loginedMerchant");  //取出当前登录的用户
+		String str = "userToMer"+loginedMerchant.getMerId();  // userToMer2
+		String fileName = request.getServletContext().getRealPath("/onlineChat/sendUserToMer.properties").replace("movie_server", "movie_client");
+		File file = new File(fileName);
+		Properties p = new Properties();
+		FileInputStream fis = new FileInputStream(file);
+		p.load(fis);
+		fis.close();
+		
+		String text = p.getProperty(str);
+//		System.out.println("商户收到的信息："+text);
+		if(text == null || text.isEmpty()){
+			response.getWriter().append("no");
+			return;
+		}
+		String[] arr = text.split(";");
+//		for(String s:arr)
+//			System.out.println(s);
+		Long flag = Long.parseLong(arr[0]);
+		if(flag.equals(merFlag)){
+			response.getWriter().append("no");
+		}else{
+			String content = arr[1];
+			System.out.println("商户收到的信息："+content);
+			merFlag = flag;
+			response.getWriter().append(content);
+		}
+		
+	}
+	
+	/**
+	 * 将聊天信息发送给服务器
+	 * @param request
+	 * @param response
+	 * @throws ServletException
+	 * @throws IOException
+	 */
+	public void sendContentToChatServer(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		String content = request.getParameter("content");  //获取消息内容
+		String id = request.getParameter("id");  
+		id = id.substring(8);  //获取用户ID
+		Merchant loginedMerchant = (Merchant)session.getAttribute("loginedMerchant");  //取出当前登录的商户
+		
+		String fileName = request.getServletContext().getRealPath("/onlineChat/sendMerToUser.properties").replace("movie_client", "movie_server");
+		File file = new File(fileName);
+		Properties p = new Properties();
+		FileOutputStream fos = new FileOutputStream(file);
+		FileInputStream fis = new FileInputStream(file);
+		p.load(fis);
+		fis.close();
+		
+		p.put("merToUser"+id, userFlag+";"+loginedMerchant.getMerId()+"{[code]}"+content+"{[code]}"+loginedMerchant.getImgList().get(0).getImgPath());
+//		System.out.println("商户向用户发送消息："+userFlag+";"+loginedMerchant.getMerId()+"{[code]}"+content);
+		userFlag++;
+		p.store(fos, "");
+		
+		fos.close();
+	}
+	
+	
+	/**
+	 * 查找所有用户
+	 * @param request
+	 * @param response
+	 * @return
+	 * @throws ServletException
+	 * @throws IOException
+	 */
+	public String findAllUser(HttpServletRequest request, HttpServletResponse response)throws ServletException, IOException {
+		try {
+			List<Users> userList = ms.findAllUser();
+			session.setAttribute("userMerList", userList);
+			return "r:/onlineChat/onlineChat.jsp";
+		} catch (MerchantException e) {
+			request.setAttribute("msg", e.getMessage());
+			return "f:/merIndex.jsp";
+		}
+	}
 	/**
 	 * 添加电影
 	 * @param request
@@ -96,18 +239,6 @@ public class MerchantServlet extends BaseServlet {
 		m.put("moviePrevuePath", moviePrevuePath);
 		m.put("moviePro", moviePro);
 		
-//		System.out.println(form);
-//		System.out.println("类型："+classifyStr);
-//		System.out.println("预告片路径："+moviePrevuePath);
-//		System.out.println("1号厅电影开始时间："+movieStartTime1);
-//		System.out.println("2号厅电影开始时间："+movieStartTime2);
-//		System.out.println("3号厅电影开始时间："+movieStartTime3);
-//		System.out.println("4号厅电影开始时间："+movieStartTime4);
-//		System.out.println("5号厅电影开始时间："+movieStartTime5);
-//		System.out.println("6号厅电影开始时间："+movieStartTime6);
-//		System.out.println("图片1路径"+movieImage1);
-//		System.out.println("图片2路径"+movieImage2);
-//		System.out.println("图片3路径"+movieImage3);
 		
 		try {
 			ms.regxMovieInfo(form,m);  //验证信息
@@ -127,6 +258,9 @@ public class MerchantServlet extends BaseServlet {
 			
 			form.setMoviePrevue(sqlPaths.get(4)); //添加电影预告片的路径
 			ms.addMovie(form, m,sqlPaths,oldMovieMerId,loginedMerchant.getMerId());  //电影上架
+			
+			//上架成功   发送邮件给订阅了我们网站的邮箱
+			ms.sendEmailToSub(form);
 			
 			request.setAttribute("msg", "上架电影成功");
 			return "f:/merUpload.jsp";
@@ -149,6 +283,37 @@ public class MerchantServlet extends BaseServlet {
 		return "r:/merUpload.jsp";
 	}
 	
+	
+	/**
+	 * 上传照片
+	 * @param request
+	 * @param response
+	 * @throws ServletException
+	 * @throws IOException
+	 */
+	public void uploadHeadImg(HttpServletRequest request, HttpServletResponse response)throws ServletException, IOException {
+		Part p = request.getPart("file");
+		String sqlPath = CommonsUtils.uploadImage(request,"/merHeadCreateImage", p,200,200);
+		System.out.println("sqlPath:"+sqlPath);
+		
+		Merchant loginedMerchant = (Merchant)session.getAttribute("loginedMerchant");
+		
+		Images img = new Images();  //创建头像
+		img.setImgMerchantId(loginedMerchant.getMerId());  //设置商户ID
+		img.setImgStatus("头像");
+		img.setImgPath(sqlPath);  //设置图片路径
+		
+		List<Images> imgList = new ArrayList<Images>();
+		imgList.add(img);
+		loginedMerchant.setImgList(imgList);
+		try {
+			ms.setImgPath(img);
+		} catch (MerchantException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+	
 	/**
 	 * 实名认证
 	 * @param request
@@ -158,20 +323,20 @@ public class MerchantServlet extends BaseServlet {
 	 */
 	public void realName(HttpServletRequest request, HttpServletResponse response)throws ServletException, IOException {
 		Merchant form = CommonsUtils.toBean(request, Merchant.class);  // 
+		
+//		System.out.println("商户认证信息："+form);
 		String inVerify = request.getParameter("verify");  //获取到用户输入的验证码
 		String telCode = null;
 		Cookie cookie = CommonsUtils.getCookie(request, "telCode");
 		if(cookie != null)
 			telCode = cookie.getValue();
 		Merchant loginedMerchant = (Merchant)session.getAttribute("loginedMerchant");
-//		if(loginedMerchant == null){
-//			response.getWriter().append("404");
-//			return;
-//		}
+		
 		try {
-			String infoID = ms.realName(form,loginedMerchant,telCode,inVerify);
 			form.setMerId(loginedMerchant.getMerId());
-			request.getServletContext().setAttribute(infoID, form);  //将要审核的信息存在域中
+			String infoID = ms.realName(form,loginedMerchant,telCode,inVerify);
+//			form.setMerId(loginedMerchant.getMerId());
+//			request.getServletContext().setAttribute(infoID, form);  //将要审核的信息存在域中
 			response.getWriter().append("yes");
 		} catch (MerchantException e) {
 			response.getWriter().append(e.getMessage());
@@ -345,6 +510,7 @@ public class MerchantServlet extends BaseServlet {
 	public void login(HttpServletRequest request, HttpServletResponse response)throws ServletException, IOException {
 		//封装表单数据  merEmail  merPwd
 		Merchant form = CommonsUtils.toBean(request, Merchant.class);
+		form.setMerIpAddr(request.getRemoteAddr());  //设置当前登录IP
 		String isRemUser = request.getParameter("isRemUser");  //true/false
 		Verification verify = (Verification)session.getAttribute("session_verify");  //得到验证码对象
 		if(verify != null)

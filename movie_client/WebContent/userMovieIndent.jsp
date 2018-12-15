@@ -59,27 +59,27 @@
 	
 	
 	<div class="catbox" style="width:1300px;margin-top:30px; margin-bottom: 30px;">
-		<h3 align="center">我的订单</h3>
+		<h3 align="center">${lg['myIndent'] }</h3>
 		<table id="cartTable" style="margin-top:20px;">
 			<thead>
 				<tr style="text-align:center;">
-					<th>订单编号</th>
-					<th>电影名</th>
-					<th>商户</th>
-					<th>封面</th>
-					<th>总金额</th>
-					<th>数量</th>
-					<th>上映时间</th>
-					<th>结束时间</th>
-					<th>订单状态</th>
-					<th>操作</th>
-					<th>确认收货</th>
+					<th>${lg['indentNum'] }</th>
+					<th>${lg['movieName'] }</th>
+					<th>${lg['merchant'] }</th>
+					<th>${lg['cover'] }</th>
+					<th>${lg['totalMoney'] }</th>
+					<th>${lg['count'] }</th>
+					<th>${lg['movieStartTime'] }</th>
+					<th>${lg['movieEndTime'] }</th>
+					<th>${lg['indentStatus'] }</th>
+					<th>${lg['operate'] }</th>
+					<th>${lg['confirmReceipt'] }</th>
 				</tr>
 			</thead>
 			<tbody>
 			<c:choose>
 				<c:when test="${fn:length(indentList) eq 0 }">
-					<h1>你还没有订单</h1>
+					<h1>${lg['youHaveNotIndent'] }</h1>
 				</c:when>
 				<c:otherwise>
 					<c:forEach items="${indentList }" var="indent">
@@ -94,14 +94,14 @@
 							<td class="update">${fn:substring(indent.ticketList[0].ticketMovieEndTime,0,16) }</td>
 							<c:choose>
 								<c:when test="${indent.indentStatus == '0' }">
-									<td>未收货</td>
+									<td>${lg['notReceiveTheGoods'] }</td>
 								</c:when>
 								<c:when test="${indent.indentStatus == '1' }">
-									<td>已完成</td>
+									<td>${lg['offTheStocks'] }</td>
 								</c:when>
 							</c:choose>
-							<td><a href="<c:url value='/movie.s?method=setIndentStatus&id=${indent.indentId }&type=1' />">确认收货</a></td>
-							<td><a href="<c:url value='/movie.s?method=setIndentStatus&id=${indent.indentId }&type=-1' />">删除</a></td>
+							<td><a href="<c:url value='/movie.s?method=setIndentStatus&id=${indent.indentId }&type=1' />">${lg['confirmReceipt'] }</a></td>
+							<td><a href="<c:url value='/movie.s?method=setIndentStatus&id=${indent.indentId }&type=-1' />">${lg['delete'] }</a></td>
 						</tr>
 					</c:forEach>
 				</c:otherwise>

@@ -1,4 +1,5 @@
 /res_zh_CN.properties
 /com/
-/regxComment.properties
-/merchantInfo.properties
+/receiveUserToMer.properties
+/sendMerToUser.properties
+/receiveMerToUser.properties

@@ -8,6 +8,10 @@ import com.yc.movie.utils.CommonsUtils;
 
 import java.awt.image.BufferedImage;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.net.ServerSocket;
+import java.net.Socket;
 import java.sql.Timestamp;
 import java.util.Date;
 import java.util.List;
@@ -25,6 +29,17 @@ import javax.servlet.http.HttpServletResponse;
 public class AdminServlet extends BaseServlet {
 	private static final long serialVersionUID = 1L;
 	private AdminService as = new AdminService();
+	
+	/**
+	 * 开启聊天服务
+	 * @param request
+	 * @param response
+	 * @throws ServletException
+	 * @throws IOException
+	 */
+	public void startChatServer(HttpServletRequest request, HttpServletResponse response)throws ServletException, IOException {
+		
+	}
 	
 	/**
 	 * 获取订单集合

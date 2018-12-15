@@ -19,6 +19,9 @@
 <link href="css/easy-responsive-tabs.css" rel='stylesheet' type='text/css'/>
 <link rel="stylesheet" type="text/css" href="css/zoomslider.css" />
 <link rel="stylesheet" type="text/css" href="css/style.css" />
+
+<link href="css/online.css" type="text/css" rel="stylesheet" />
+
 <link href="css/font-awesome.css" rel="stylesheet"> 
 <script type="text/javascript" src="js/modernizr-2.6.2.min.js"></script>
 <!--/web-fonts-->
@@ -65,16 +68,36 @@ span.seatCharts-legendDescription {margin-left: 5px;line-height: 30px;}
 		<div class="w3_breadcrumb">
 			<div class="breadcrumb-inner">	
 				<ul>
-					<li><a href="index.jsp">Home</a><i>//</i></li>
-					<li><a href="${refererPath }">Single</a></li>
+					<li><a href="index.jsp">${lg['indexTitle'] }</a><i>//</i></li>
+					<li><a href="${refererPath }">${lg['single'] }</a><i>//</i></li>
+					<li>${movieBallotTicket.movieName }</li>
 				</ul>
 			</div>
 		</div>
+		
 	<!-- //breadcrumb -->
 <iframe style="height:1000px;width:100%;" src="index/details.jsp">
 </iframe>
 
+<%--在线咨询按钮 --%>
+<div class="consult_contact">
+  <div class="consult_wrap"><a href="javascript:openOnline()" rel="nofollow" target="_blank">
+    <div class="tip">Hello,欢迎来咨询~</div>
+    <img src="img/ball.png" class="ball" alt="">
+    <img src="img/bg_0.png" class="staff_img" alt="">
+    <img src="img/bg_1.png" class="bg-1" alt="">
+    <img src="img/bg_2.png" class="bg-2" alt="">
+    <img src="img/bg_3.png" class="bg-3" alt=""></a>  </div>
+</div>
 
+
+
+<script type="text/javascript">
+	//打开在线聊天窗口
+	function openOnline(){
+		open("<c:url value='/onlineChat/onlineChat.jsp' />",'newwindow',"height=610,width=810,top=50,left=300,fullscreen=yes,menubar=no");
+	}
+</script>
 <%--尾部 --%>
 <%@ include file="footer.jsp"%>
 <%--尾部 --%>

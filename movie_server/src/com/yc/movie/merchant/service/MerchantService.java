@@ -14,6 +14,7 @@ import java.net.SocketException;
 import java.net.UnknownHostException;
 import java.sql.SQLException;
 import java.sql.Timestamp;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
@@ -25,8 +26,11 @@ import com.yc.movie.bean.Classifys;
 import com.yc.movie.bean.Images;
 import com.yc.movie.bean.Merchant;
 import com.yc.movie.bean.Movies;
+import com.yc.movie.bean.PageBean;
 import com.yc.movie.bean.Protagonists;
+import com.yc.movie.bean.Sub;
 import com.yc.movie.bean.Ticket;
+import com.yc.movie.bean.Users;
 import com.yc.movie.bean.Verification;
 import com.yc.movie.exception.MerchantException;
 import com.yc.movie.merchant.dao.MerchantDao;
@@ -39,6 +43,8 @@ import sun.font.CreatedFontTracker;
 
 public class MerchantService {
 	private MerchantDao md = new MerchantDao();
+
+
 
 	/**
 	 * 登录
@@ -145,7 +151,7 @@ public class MerchantService {
 				throw new MerchantException("该邮箱已被注册！");
 			
 			//验证成功
-			form.setMerStatus("0");
+			form.setMerStatus("1");
 			form.setMerPwd(CommonsUtils.parseMD5(form.getMerPwd()));
 			
 			//发邮件
@@ -167,9 +173,18 @@ public class MerchantService {
 	 */
 	public void registerAfter(Merchant me) throws MerchantException {
 		try {
-			me.setMerStatus("0");  //商户账号的初始化状态为禁用   必须实名认证后才可以使用
+			me.setMerStatus("1");  //商户账号的初始化状态为禁用   必须实名认证后才可以使用
 			JdbcUtils.beginTransaction();
-			md.insertMerchant(me);
+			md.insertMerchant(me);  //插入新注册的商户信息到数据库
+			
+			Merchant m = md.findMerchantByEmail(me.getMerEmail());
+			
+			//插入商户默认头像
+			Images im = new Images();
+			im.setImgMerchantId(m.getMerId());  //设置商户ID
+			im.setImgStatus("头像");
+			im.setImgPath("/images/uploadLogo.png");
+			md.insertImage(im);
 			JdbcUtils.commitTransaction();
 		} catch (SQLException e) {
 			try {
@@ -304,19 +319,20 @@ public class MerchantService {
 	 * @throws MerchantException
 	 */
 	public String realName(Merchant form,Merchant loginedMerchant,String telCode,String inVerify) throws MerchantException {
+		String storeName = form.getMerStoreName();
 		String name = form .getMerName();
 		String tel = form.getMerTel();
 		String addr = form.getMerAddr();
 		String card = form.getMerIDCard();
 		boolean flag = true;
-//		System.out.println(inVerify+"+"+telCode);
-//		System.out.println(addr);
-		
-	
 		
 		//判断姓名是否为null
 		if(name == null || name.trim().isEmpty())
 			throw new MerchantException("请输入姓名！");
+		
+		//判断店名是否为null
+		if(storeName == null || storeName.trim().isEmpty())
+			throw new MerchantException("请输入店名！");
 		
 		//判断手机号码是否为Null
 		if(tel == null || tel.trim().isEmpty())
@@ -359,6 +375,7 @@ public class MerchantService {
 		//判断验证码是否正确
 		if(!inVerify.trim().equals(telCode.trim()))
 			throw new MerchantException("验证码错误！");
+		
 		try{
 			//判断身份证是否已经被实名
 			Merchant m = md.findMerchantByIdCard(form.getMerIDCard());
@@ -373,30 +390,43 @@ public class MerchantService {
 			throw new MerchantException("系统异常，请稍后再试！");
 		}
 		
-		//TCP发送给管理员
-		String infoID = CommonsUtils.getUUID();
-//			new Thread(new Send(new DatagramSocket())).start();
-		byte[] buf = infoID.getBytes();
 		try {
-			DatagramSocket rece = new DatagramSocket(10005);
-			new Thread(new Rece(rece)).start();
+			JdbcUtils.beginTransaction();
 			
-			DatagramSocket ds = new DatagramSocket();
-			DatagramPacket dp = new DatagramPacket(buf, buf.length, InetAddress.getByName("localhost"), 10005);
-			ds.send(dp);
-			ds.close();
-		} catch (UnknownHostException e) {
-			e.printStackTrace();
-		} catch (SocketException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			md.saveMerchant(form);  //保存商户认证信息
+			JdbcUtils.commitTransaction();
+		} catch (SQLException e) {
+			try {
+				JdbcUtils.roolbackTransaction();
+			} catch (SQLException e1) {
+				throw new MerchantException("系统异常，请稍后再试！");
+			}
 		}
 		
+		//TCP发送给管理员
+//		String infoID = CommonsUtils.getUUID();
+////			new Thread(new Send(new DatagramSocket())).start();
+//		byte[] buf = infoID.getBytes();
+//		try {
+//			DatagramSocket rece = new DatagramSocket(10005);
+//			new Thread(new Rece(rece)).start();
+//			
+//			DatagramSocket ds = new DatagramSocket();
+//			DatagramPacket dp = new DatagramPacket(buf, buf.length, InetAddress.getByName("localhost"), 10005);
+//			ds.send(dp);
+//			ds.close();
+//		} catch (UnknownHostException e) {
+//			e.printStackTrace();
+//		} catch (SocketException e) {
+//			// TODO Auto-generated catch block
+//			e.printStackTrace();
+//		} catch (IOException e) {
+//			// TODO Auto-generated catch block
+//			e.printStackTrace();
+//		}
 		
-		return infoID;
+		
+		return null;
 	}
 
 	/**
@@ -557,12 +587,39 @@ public class MerchantService {
 					}
 					JdbcUtils.commitTransaction();
 					return;
+				}else if(!m1.getMovieMerId().contains(form.getMovieMerId()+"")){
+					//此商户还没有此电影
+					//1.设置此电影的商户ID   将此商户添加到电影的商户ID中
+					String str = oldMovieMerId+form.getMovieMerId()+";";
+					md.updateMerchantId(form.getMovieName(),str);
+					
+					//2.添加电影票
+					if(movieStartTime1!=null){ 
+						createTicket(movieStartTime1, m1.getMovieId(),1,movieTimeLong,merId);
+					}
+					if(movieStartTime2!=null){
+						createTicket(movieStartTime2, m1.getMovieId(),2,movieTimeLong,merId);
+					}
+					if(movieStartTime3!=null){
+						createTicket(movieStartTime3, m1.getMovieId(),3,movieTimeLong,merId);
+					}
+					if(movieStartTime4!=null){
+						createTicket(movieStartTime4, m1.getMovieId(),4,movieTimeLong,merId);
+					}
+					if(movieStartTime5!=null){
+						createTicket(movieStartTime5, m1.getMovieId(),5,movieTimeLong,merId);
+					}
+					if(movieStartTime6!=null){
+						createTicket(movieStartTime6, m1.getMovieId(),6,movieTimeLong,merId);
+					}
+					JdbcUtils.commitTransaction();
+					return;
 				}
 			}
 			
 				
 			String str = oldMovieMerId+form.getMovieMerId()+";";
-			md.updateMerchantId(oldMovieMerId,str);
+			md.updateMerchantId(form.getMovieName(),str);
 			
 			form.setMovieMerId(str);  //修改电影的商户ID
 			md.addMovie(form); //添加电影
@@ -682,4 +739,109 @@ public class MerchantService {
 			throw new MerchantException("系统异常，请稍后再试");
 		}
 	}
+
+	/**
+	 * 发送邮件给订阅了我们网站的邮箱
+	 * @param form
+	 * @throws MerchantException 
+	 */
+	public void sendEmailToSub(Movies form) throws MerchantException {
+		try {
+			List<Sub> subList = md.findAllSub();  //找到所有的订阅邮箱
+			//您好！您订阅的【影视天堂】更新了，更新内容：上架电影《{0}》。
+			for(Sub s : subList){
+				String to = s.getSubEmail();
+				String fileName = "sub_email.properties";
+				Object[] codes = {form.getMovieName()};
+				CommonsUtils.sendMail(this.getClass(), to, codes, fileName);
+			}
+		} catch (SQLException e) {
+			throw new MerchantException("系统异常，请稍后再试");
+		}
+	}
+
+	/**
+	 * 查找所有用户
+	 * @return
+	 * @throws MerchantException 
+	 */
+	public List<Users> findAllUser() throws MerchantException {
+		try {
+			return md.findAllUser();
+		} catch (SQLException e) {
+			throw new MerchantException("系统异常，请稍后再试");
+		}
+	}
+
+	/**
+	 * 根据用户ID查找用户
+	 * @param userId
+	 * @return
+	 * @throws MerchantException 
+	 */
+	public Users findUserByUserId(Long userId) throws MerchantException {
+		try {
+			return md.findUserByUserId(userId);
+		} catch (SQLException e) {
+			throw new MerchantException("系统异常，请稍后再试");
+		}
+	}
+
+	/**
+	 * 修改头像
+	 * @param img
+	 * @throws MerchantException 
+	 */
+	public void setImgPath(Images img) throws MerchantException {
+		try {
+			md.setImagePath(img);
+		} catch (SQLException e) {
+			throw new MerchantException("系统异常，请稍后再试");
+		}
+	}
+
+	/**
+	 * 查找商户对应的所有电影对象
+	 * @param loginedMer
+	 * @throws MerchantException 
+	 */
+	public PageBean<Movies> findMovieByMer(Merchant loginedMer,int pc,int ps) throws MerchantException {
+		try {
+			PageBean<Movies> pb = new PageBean<Movies>();
+			pb.setPc(pc);
+			pb.setPs(ps);
+			
+			pb = md.createPageBeanByMovie(pb,loginedMer.getMerId());
+			
+			return pb;
+		} catch (SQLException e) {
+			e.printStackTrace();
+			throw new MerchantException("系统异常，请稍后再试");
+		}
+	}
+
+	/**
+	 * 设置电影状态
+	 * @param type
+	 * @param movieId
+	 * @throws MerchantException 
+	 */
+	public void setMovieStatus(String type, Long movieId) throws MerchantException {
+		try {
+			JdbcUtils.beginTransaction();
+			
+			md.setMovieStatus(type,movieId);
+			
+			JdbcUtils.commitTransaction();
+		} catch (SQLException e) {
+			try {
+				JdbcUtils.roolbackTransaction();
+			} catch (SQLException e1) {
+				e1.printStackTrace();
+				throw new MerchantException("系统异常，请稍后再试");
+			}
+		}
+	}
+
+	
 }

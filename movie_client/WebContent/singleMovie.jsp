@@ -39,8 +39,8 @@
 		<div class="w3_breadcrumb">
 			<div class="breadcrumb-inner">	
 				<ul>
-					<li><a href="index.jsp">Home</a><i>//</i></li>
-					<li>Single</li>
+					<li><a href="index.jsp">${lg['indexTitle'] }</a><i>//</i></li>
+					<li>${lg['single'] }</li>
 				</ul>
 			</div>
 		</div>
@@ -62,7 +62,7 @@
 														<div data-video="f2Z65fobH2I" id="video"> <img src="${pageContext.request.contextPath }${singleShow.imgList[2].imgPath }" alt="这里的图片不存在" class="img-responsive" /> </div>
 													</div>
 													 <h4>
-													 	主演 ： <%--这里需要判断主演是否只有一个 --%>
+													 	${lg['protagonist'] } ： <%--这里需要判断主演是否只有一个 --%>
 													 	<c:choose>
 													 		<c:when test="${fn:length(singleShow.proList) eq 1}">
 													 			<a href="${singleShow.proList[fn:length(singleShow.proList)-1].proLink }">${singleShow.proList[fn:length(singleShow.proList)-1].proName }</a>
@@ -123,7 +123,7 @@
 										<!-- <div class="admin-text">
 												<h5>WRITTEN BY ADMIN</h5>
 												<div class="admin-text-left">
-													<a href="#"><img src="images/admin.jpg" alt=""></a>
+													<a href="#"><img src="<c:url value='${comment.user.imgList[0].imgPath }' />" alt=""></a>
 												</div>
 												<div class="admin-text-right">
 													<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit,There are many variations of passages of Lorem Ipsum available, 
@@ -136,14 +136,14 @@
 							<h4>${lg["Comment"] }</h4>
 							<%--所有评论 --%>
 							<c:if test="${fn:length(singleShow.commentList) eq 0}">
-								<h2 style="color:#a3a">当前还没有回复，赶快来抢占沙发</h2>
+								<h2 style="color:#a3a">${lg['noCommentYetGrabTheCouch'] }</h2>
 							</c:if>
 							<c:set var="commenti" value="1"/>
 							<c:forEach items="${singleShow.commentList }" var="comment">
 							<div class="media response-info" style="border-left:7px solid#aabb55;border-top:7px solid#aabb55">
 								<div class="media-left response-text-left">
 									<a href="#">
-										<img class="media-object" src="images/admin.jpg" alt="">
+										<img class="media-object" src="<c:url value='${comment.user.imgList[0].imgPath }' />" alt="">
 									</a>
 									<h5><a href="#">${comment.user.userAccount }</a></h5>
 								</div>
@@ -163,7 +163,7 @@
 									<div class="media response-info" style="border-left:6px solid#aabb55;border-top:6px solid#aabb55">
 										<div class="media-left response-text-left">
 											<a href="#">
-												<img class="media-object" src="images/admin.jpg" alt="">
+												<img class="media-object" src="<c:url value='${comment.user.imgList[0].imgPath }' />" alt="">
 											</a>
 											<h5><a href="#">${reply.user.userAccount } ${lg['Reply'] } ${comment.user.userAccount }</a></h5>
 										</div>
@@ -171,7 +171,7 @@
 											<p>${reply.replyContent }</p>
 											<ul>
 												<li>${reply.replyCreateTime }</li> <%--这是评论下的第一级 --%>
-												<li><a href="javascript:sendReplyToggle(${reply.replyId })"><i class="fa fa-reply" aria-hidden="true"></i> ${lg["Reply"] }</a></li>
+												<li><a href="javascript:sendReplyToggle(${reply.replyId })"><i class="fa fa-reply" aria-hidden="true"></i> ${lg["Reply"] }(${reply.replyNum })</a></li>
 											</ul>	
 										</div>
 										<%--该评论所有的回复 --%>
@@ -190,7 +190,7 @@
 													<div class="media response-info" style="margin-left:50px;border-left:5px solid#aabb55;border-top:5px solid#aabb55">
 														<div class="media-left response-text-left">
 															<a href="#">
-																<img class="media-object" src="images/admin.jpg" alt="">
+																<img class="media-object" src="<c:url value='${comment.user.imgList[0].imgPath }' />" alt="">
 															</a>
 															<h5><a href="#">${sonReply.user.userAccount } ${lg['Reply'] } ${reply.user.userAccount }</a></h5>
 														</div>
@@ -198,7 +198,7 @@
 															<p>${sonReply.replyContent }</p>
 															<ul>
 																<li>${sonReply.replyCreateTime }</li>
-																<li><a href="javascript:sendReplyToReplyToggle(${sonReply.replyId })"><i class="fa fa-reply" aria-hidden="true"></i> ${lg["Reply"] }</a></li>
+																<li><a href="javascript:sendReplyToReplyToggle(${sonReply.replyId })"><i class="fa fa-reply" aria-hidden="true"></i> ${lg["Reply"] }(${sonReply.replyNum })</a></li>
 															</ul>	
 														</div>
 														<%--该回复所有的回复 --%>
@@ -217,7 +217,7 @@
 													<div class="media response-info" style="margin-left:50px;border-left:4px solid#aabb55;border-top:4px solid#aabb55">
 														<div class="media-left response-text-left">
 															<a href="#">
-																<img class="media-object" src="images/admin.jpg" alt="">
+																<img class="media-object" src="<c:url value='${comment.user.imgList[0].imgPath }' />" alt="">
 															</a>
 															<h5><a href="#">${sonReply1.user.userAccount } ${lg['Reply'] } ${sonReply.user.userAccount }</a></h5>
 														</div>
@@ -225,7 +225,7 @@
 															<p>${sonReply1.replyContent }</p>
 															<ul>
 																<li>${sonReply1.replyCreateTime }</li>
-																<li><a href="javascript:sendReplyToReplyToggle(${sonReply1.replyId })"><i class="fa fa-reply" aria-hidden="true"></i> ${lg["Reply"] }</a></li>
+																<li><a href="javascript:sendReplyToReplyToggle(${sonReply1.replyId })"><i class="fa fa-reply" aria-hidden="true"></i> ${lg["Reply"] }(${sonReply1.replyNum })</a></li>
 															</ul>	
 														</div>
 														<%--该回复所有的回复 --%>
@@ -244,7 +244,7 @@
 													<div class="media response-info" style="margin-left:50px;border-left:3px solid#aabb55;border-top:3px solid#aabb55">
 														<div class="media-left response-text-left">
 															<a href="#">
-																<img class="media-object" src="images/admin.jpg" alt="">
+																<img class="media-object" src="<c:url value='${comment.user.imgList[0].imgPath }' />" alt="">
 															</a>
 															<h5><a href="#">${sonReply2.user.userAccount } ${lg['Reply'] } ${sonReply1.user.userAccount }</a></h5>
 														</div>
@@ -252,7 +252,7 @@
 															<p>${sonReply2.replyContent }</p>
 															<ul>
 																<li>${sonReply2.replyCreateTime }</li>
-																<li><a href="javascript:sendReplyToReplyToggle(${sonReply2.replyId })"><i class="fa fa-reply" aria-hidden="true"></i> ${lg["Reply"] }</a></li>
+																<li><a href="javascript:sendReplyToReplyToggle(${sonReply2.replyId })"><i class="fa fa-reply" aria-hidden="true"></i> ${lg["Reply"] }(${sonReply2.replyNum })</a></li>
 															</ul>	
 														</div>
 														<%--该回复所有的回复 --%>

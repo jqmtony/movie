@@ -49,7 +49,7 @@
 			<%--循环遍历电影 --%>
 			<c:choose>
 				<c:when test="${fn:length(pageBean.beanList) eq 0}">
-					<h1>这个分类下还没有电影</h1>
+					<h1>${lg['thereAreNoMoviesUnderThisCategory'] }</h1>
 				</c:when>
 				<c:otherwise>
 					

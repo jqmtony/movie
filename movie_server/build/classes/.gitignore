@@ -2,3 +2,8 @@
 /test/
 /GDP/
 /UDP/
+/sub_email.properties
+/receiveMerToUser.properties
+/receiveUserToMer.properties
+/sendMerToUser.properties
+/sendUserToMer.properties

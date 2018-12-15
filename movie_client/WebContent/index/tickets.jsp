@@ -31,7 +31,7 @@
         <span class="imax">${movieBallotTicket.movieGenre }</span>
     </div>
     
-    <div class="tips">温馨提示：电影开场前30分钟关闭在线售票</div>
+    <div class="tips">温馨提示：电影开场前10分钟关闭在线售票</div>
     
     <div class="tab date">
         <!---tab日期标签滑动--->
@@ -168,6 +168,5 @@ $(function(){
 	
 })
 </script>
-
 </body>
 </html>

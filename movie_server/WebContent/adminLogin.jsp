@@ -585,6 +585,11 @@ animloop();
 		}
 	</script>
 </c:if>
+<c:if test="${! empty msg }">
+	<script type="text/javascript">
+		alert('${msg}');
+	</script>
+</c:if>
 </body>
 </html>
 

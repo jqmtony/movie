@@ -207,7 +207,7 @@
 								</tr>
 							</thead>
 							<tbody>
-							<c:forEach items="${indentList }" var="indent">
+							<%-- <c:forEach items="${indentList }" var="indent">
 								<tr>
 									<td></td>
 									<td>${indent.indentId }</td>
@@ -217,7 +217,7 @@
 									<td>${indent.indentCreateTime }</td>
 									<td>${indent.ticketList[0].movie.movieName }</td>
 								</tr>
-							</c:forEach>
+							</c:forEach> --%>
 							</tbody>
 							</table>
 							<div id="toolbar">

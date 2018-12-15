@@ -13,6 +13,7 @@ import com.yc.movie.bean.Indent;
 import com.yc.movie.bean.Integral;
 import com.yc.movie.bean.Merchant;
 import com.yc.movie.bean.Movies;
+import com.yc.movie.bean.Sub;
 import com.yc.movie.bean.Ticket;
 import com.yc.movie.bean.UserLoginRecord;
 import com.yc.movie.bean.Users;
@@ -28,12 +29,12 @@ public class UserDao {
 	 * @throws SQLException 
 	 */
 	public void insertUser(Users user) throws SQLException {
-		String sql = "insert into users values(?,?,?,?,?,?,?,?,?,?,?)";
+		String sql = "insert into users values(?,?,?,?,?,?,?,?,?,?,?,?)";
 		Object[] params = {user.getUserId(),user.getUserName(),user.getUserAccount(),
 				user.getUserEmail(),user.getUserPwd(),
 				user.getUserCreateTime(),user.getUserTel(),
 				user.getUserAddr(),user.getUserStatus(),
-				user.getUserBirthday(),user.getUserAge()};
+				user.getUserBirthday(),user.getUserAge(),user.getUserIpAddr()};
 		qr.update(sql,params);
 	}
 
@@ -281,5 +282,76 @@ public class UserDao {
 				t.setMerchant(merList.get(0));
 		}
 		return ticketList;
+	}
+	
+	/////wt ////////////////////////////////////////////////
+	/**
+	 * 将邮箱地址插入到订阅邮箱中
+	 * @param email
+	 * @throws SQLException
+	 */
+	public void insertEmailToSub(String email) throws SQLException {
+		String sql="insert into sub values(?,?)";
+		Object[] params={null,email};
+		qr.update(sql,params);
+	}
+	/////////////////////////////////////////////////////
+
+	/**
+	 * 根据邮箱查找订阅对象
+	 * @param email
+	 * @return
+	 * @throws SQLException 
+	 */
+	public Sub findSubByEmail(String email) throws SQLException {
+		String sql = "select * from sub where subEmail=?";
+		List<Sub> subList = qr.query(sql, new BeanListHandler<Sub>(Sub.class),email);
+		if(subList.size() > 0)
+			return subList.get(0);
+		return null;
+	}
+
+	/**
+	 * 根据商户ID查找商户对象
+	 * @param merId
+	 * @return
+	 * @throws SQLException 
+	 */
+	public Merchant findMerByMerId(Long merId) throws SQLException {
+		String sql = "select * from merchant where merId=?";
+		List<Merchant> merList = qr.query(sql, new BeanListHandler<Merchant>(Merchant.class),merId);
+		if(merList.size() > 0){
+			Merchant mer = merList.get(0);
+			mer = createMerchant(mer);
+			return mer;
+		}
+		return null;
+	}
+
+	/**
+	 * 创建商户对象
+	 * @param mer
+	 * @return
+	 * @throws SQLException 
+	 */
+	private Merchant createMerchant(Merchant mer) throws SQLException {
+		String sql = "select * from images where imgMerchantId=?";
+		List<Images> imgList = qr.query(sql, new BeanListHandler<Images>(Images.class),mer.getMerId());
+		mer.setImgList(imgList);
+		return mer;
+	}
+
+	/**
+	 * 插入image对象到数据库
+	 * @param img
+	 * @throws SQLException 
+	 */
+	public void insertImage(Images img) throws SQLException {
+		String sql = "insert into values(?,?,?,?,?,?,?,?,?,?)";
+		Object[] params = {img.getImgId(),img.getImgMovieId(),img.getImgAdminId(),
+				img.getImgUserId(),img.getImgMerchantId(),img.getImgTeleplayId(),
+				img.getImgTicketId(),img.getImgNewId(),img.getImgStatus(),
+				img.getImgPath()};
+		qr.update(sql, params);
 	}
 }

@@ -26,6 +26,7 @@ public class Movies implements Serializable{
 	private List<Images> imgList;  //对应的图片集合
 	private List<Protagonists> proList;  //对应主演集合
 	private List<Comment> commentList;  //评论
+	private Integer allMovieTicketCount;  //剩余电影票数
 	public Long getMovieId() {
 		return movieId;
 	}
@@ -146,6 +147,12 @@ public class Movies implements Serializable{
 	public void setCommentList(List<Comment> commentList) {
 		this.commentList = commentList;
 	}
+	public Integer getAllMovieTicketCount() {
+		return allMovieTicketCount;
+	}
+	public void setAllMovieTicketCount(Integer allMovieTicketCount) {
+		this.allMovieTicketCount = allMovieTicketCount;
+	}
 	@Override
 	public String toString() {
 		return "Movies [movieId=" + movieId + ", merchantList=" + merchantList + ", movieMerId=" + movieMerId
@@ -155,7 +162,7 @@ public class Movies implements Serializable{
 				+ ", movieCreateTime=" + movieCreateTime + ", movieTimeLong=" + movieTimeLong + ", moviePrevue="
 				+ moviePrevue + ", movieGenre=" + movieGenre + ", ticketList=" + ticketList + ", classifysList="
 				+ classifysList + ", imgList=" + imgList + ", proList=" + proList + ", commentList=" + commentList
-				+ "]";
+				+ ", allMovieTicketCount=" + allMovieTicketCount + "]";
 	}
 	
 }

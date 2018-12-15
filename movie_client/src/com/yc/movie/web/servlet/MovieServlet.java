@@ -6,6 +6,7 @@ import com.yc.movie.bean.Indent;
 import com.yc.movie.bean.Merchant;
 import com.yc.movie.bean.Movies;
 import com.yc.movie.bean.PageBean;
+import com.yc.movie.bean.Protagonists;
 import com.yc.movie.bean.Reply;
 import com.yc.movie.bean.Teleplay;
 import com.yc.movie.bean.Ticket;
@@ -40,7 +41,53 @@ import javax.servlet.http.HttpServletResponse;
 public class MovieServlet extends BaseServlet {
 	private static final long serialVersionUID = 1L;
 	private MovieService ms = new MovieService();
-	
+	///////////////////////////////hzr/////////////////////////////////////////////
+	/**
+	 * 全网查找    hzr
+	 * 
+	 * @param request
+	 * @param response
+	 * @return
+	 * @throws ServletException
+	 * @throws IOException
+	 */
+	public String search(HttpServletRequest request, HttpServletResponse response)throws ServletException, IOException {
+		///*System.out.println("1234");*/
+		String text = request.getParameter("Search");  //获取搜索得值    Search是要获取得表单中数据得字段
+		//在 1 电影 2 电视剧 3主演 
+		try {
+			List<Movies> movieList = ms.findSearchByMovie(text);
+			// 1,如果找到了电影
+			if(movieList != null){
+				//把找到的list存在ruquest域中
+				request.setAttribute("searchMovieList", movieList);
+				return "";   //跳转到显示页面
+			}
+			
+			//如果没找到电影  再去查电视剧   
+			List<Teleplay> teleplayList = ms.findSearchByTeleplay(text);
+				// 1,如果找到了电影
+				if(teleplayList != null){
+				request.setAttribute("searchTeleplayList", teleplayList);
+				return "";   //跳转到显示页面
+			}
+			
+			//如果再没查到  再去查主演
+			List<Protagonists> protagonistsList = ms.findSearchByProtagonists(text);
+				// 1,如果找到了电影
+				if(protagonistsList !=null){
+				request.setAttribute("searchProtagonistsList", protagonistsList);
+				return "";  //跳转到显示页面
+			}
+		} catch (MovieException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		return null;
+	}
+	////////////////////////////////////////////////////////////////////////////
+
 	/**
 	 * 设置订单状态
 	 * @param request
@@ -193,7 +240,8 @@ public class MovieServlet extends BaseServlet {
 			Movies movie = (Movies)session.getAttribute("movieBallotTicket");  //得到当前正在浏览的电影
 			Long merId = Long.parseLong(request.getParameter("merId"));  //当前选择的商户的ID
 			
-			List<String> dateArr = ms.createTicketByStartTime(movie.getTicketList()); //过滤掉已经上映了的电影票
+			//过滤掉已经上映了的电影票    还有只有当前merID的日期
+			List<String> dateArr = ms.createTicketByStartTime(movie.getTicketList(),merId); 
 //			System.out.println("dateArr:"+dateArr);
 			
 			
@@ -208,16 +256,7 @@ public class MovieServlet extends BaseServlet {
 				movieByDate.setTicketList(ticketList2);
 				allMovietMap.put(date, movieByDate);  //将当前得到的电影集合存入Map中  键是当前的日期
 			}
-//			System.out.println("allMovietMap的长度:"+allMovietMap.size());
-//			System.out.println("12-18号有："+allMovietMap.get("12-18").getTicketList().size());
 			
-//			String regx = movieByDate.getTicketList().get(0).getTicketStartTime().toString().substring(5, 10);  //12-18
-//			List<Ticket> ticketList2 = ms.createTicketByDate(movieByDate.getTicketList(),regx);  //再次过滤电影票  只显示第一天的电影票
-//			movieByDate.setTicketList(ticketList2);
-			
-			/*for(Ticket t : movie.getTicketList()){
-				System.out.println(t);
-			}*/
 			session.setAttribute("dateArr", dateArr);
 			session.setAttribute("allMovietMap", allMovietMap);
 			  
@@ -248,7 +287,7 @@ public class MovieServlet extends BaseServlet {
 		}
 		Long movieId = Long.parseLong(request.getParameter("movieId"));  //得到要购票的电影ID
 		try {
-			Movies movie = ms.findMovieById(movieId);
+			Movies movie = ms.findMovieById(movieId); //得到电影对象
 			session.setAttribute("movieBallotTicket", movie);
 			return "r:/ballotTicket.jsp";
 		} catch (MovieException e) {
@@ -395,6 +434,10 @@ public class MovieServlet extends BaseServlet {
 			request.setAttribute("indexTime", index1);
 			request.setAttribute("indexGrade", index2);
 			request.setAttribute("indexVisit", index3);
+			session.setAttribute("movieList2",  movieList);
+			session.setAttribute("indexTime2", index1);
+			session.setAttribute("indexGrade2", index2);
+			session.setAttribute("indexVisit2", index3);
 		} catch (MovieException e) {
 			request.setAttribute("msg", e.getMessage());
 		}

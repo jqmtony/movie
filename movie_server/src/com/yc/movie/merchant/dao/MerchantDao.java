@@ -2,6 +2,7 @@ package com.yc.movie.merchant.dao;
 
 import java.sql.SQLException;
 import java.sql.Timestamp;
+import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.commons.dbutils.QueryRunner;
@@ -10,10 +11,16 @@ import org.apache.commons.dbutils.handlers.BeanListHandler;
 import com.yc.movie.bean.ClassifyName;
 import com.yc.movie.bean.Classifys;
 import com.yc.movie.bean.Images;
+import com.yc.movie.bean.Indent;
+import com.yc.movie.bean.Integral;
 import com.yc.movie.bean.Merchant;
 import com.yc.movie.bean.Movies;
+import com.yc.movie.bean.PageBean;
 import com.yc.movie.bean.Protagonists;
+import com.yc.movie.bean.Sub;
 import com.yc.movie.bean.Ticket;
+import com.yc.movie.bean.UserLoginRecord;
+import com.yc.movie.bean.Users;
 import com.yc.movie.utils.TxQueryRunner;
 
 public class MerchantDao {
@@ -72,10 +79,11 @@ public class MerchantDao {
 	 * @throws SQLException 
 	 */
 	public void insertMerchant(Merchant me) throws SQLException {
-		String sql = "insert into merchant values(?,?,?,?,?,?,?,?,?)";
+		String sql = "insert into merchant values(?,?,?,?,?,?,?,?,?,?)";
 		Object[] params = {me.getMerId(),me.getMerName(),me.getMerTel(),
 				me.getMerEmail(),me.getMerAddr(),me.getMerPwd(),
-				me.getMerIDCard(),me.getMerStatus(),me.getMerStoreName()};
+				me.getMerIDCard(),me.getMerStatus(),me.getMerStoreName(),
+				me.getMerIpAddr()};
 		qr.update(sql, params);
 	}
 
@@ -244,9 +252,9 @@ public class MerchantDao {
 	 * @param str
 	 * @throws SQLException 
 	 */
-	public void updateMerchantId(String oldMovieMerId, String newMovieMerId) throws SQLException {
-		String sql = "update movies set movieMerId=? where movieMerId=?";
-		Object[] params = {newMovieMerId,oldMovieMerId};
+	public void updateMerchantId(String movieName, String newMovieMerId) throws SQLException {
+		String sql = "update movies set movieMerId=? where movieName=?";
+		Object[] params = {newMovieMerId,movieName};
 		qr.update(sql, params);
 	}
 
@@ -263,4 +271,213 @@ public class MerchantDao {
 			return list.get(0);
 		return null;
 	}
+	
+	/**
+	 * 将用户数据插入数据库
+	 * @param name
+	 * @param card
+	 * @param addr
+	 * @param tel
+	 * @param id 
+	 * @return
+	 * @throws SQLException
+	 */
+	public void saveMerchant(Merchant form) throws SQLException {
+		String sql = "update merchant set merStoreName=?,merName=?,merIDCard=?,merAddr=?,merTel=? where merId=?";
+		Object[] params={form.getMerStoreName(),form.getMerName(),form.getMerIDCard(),
+				form.getMerAddr(),form.getMerTel(),form.getMerId()} ;
+		qr.update(sql,params);
+	}
+
+	/**
+	 * 查找所有的订阅邮箱
+	 * @return
+	 * @throws SQLException 
+	 */
+	public List<Sub> findAllSub() throws SQLException {
+		String sql = "select * from sub";
+		return qr.query(sql, new BeanListHandler<Sub>(Sub.class));
+	}
+
+	/**
+	 * 查找所有用户
+	 * @return
+	 * @throws SQLException 
+	 */
+	public List<Users> findAllUser() throws SQLException {
+		String sql = "select * from users";
+		List<Users> userList = qr.query(sql, new BeanListHandler<Users>(Users.class));
+		userList = createUserList(userList);
+		return userList;
+	}
+
+	/**
+	 * 填充userList
+	 * @throws SQLException 
+	 */
+	private List<Users> createUserList(List<Users> userList) throws SQLException {
+		for(Users u:userList){
+			//填充图片集合
+			String sql = "select * from images where imgUserId=?";
+			List<Images> imgList = qr.query(sql, new BeanListHandler<Images>(Images.class),u.getUserId());
+			u.setImgList(imgList);
+		}
+		return userList;
+	}
+
+	/**
+	 * 根据用户ID获取用户
+	 * @param userId
+	 * @return
+	 * @throws SQLException 
+	 */
+	public Users findUserByUserId(Long userId) throws SQLException {
+		String sql = "select * from users where userId=?";
+		List<Users> userList = qr.query(sql, new BeanListHandler<Users>(Users.class),userId);
+		if(userList.size() > 0){
+			Users user = userList.get(0);
+			user = createUser(user);
+			return user;
+		}
+		return null;
+	}
+	
+	/**
+	 * 根据ID创建User对象
+	 * @param userId
+	 * @return
+	 * @throws SQLException 
+	 */
+	public Users createUser(Users user) throws SQLException {
+		String sql = "select * from ticket where ticketBuyBy=?";
+		List<Ticket> ticketList = qr.query(sql, new BeanListHandler<Ticket>(Ticket.class),user.getUserId());
+		user.setTicketList(ticketList);
+		
+		sql = "select * from images where imgUserId=?";
+		List<Images> imgList = qr.query(sql, new BeanListHandler<Images>(Images.class),user.getUserId());
+		user.setImgList(imgList);
+		
+		sql = "select * from indent where indentUserId=?";
+		List<Indent> indentList = qr.query(sql, new BeanListHandler<Indent>(Indent.class),user.getUserId());
+		user.setIndentList(indentList);
+		
+		sql = "select * from integral where integralUserId=?";
+		List<Integral> integralList = qr.query(sql, new BeanListHandler<Integral>(Integral.class),user.getUserId());
+		if(integralList.size() > 0) 
+			user.setIntegral(integralList.get(0));
+		
+		sql = "select * from userloginrecord where ulrUserId=?";
+		List<UserLoginRecord> ulrList = qr.query(sql, new BeanListHandler<UserLoginRecord>(UserLoginRecord.class),user.getUserId());
+		user.setUlrList(ulrList);
+		return user;
+	}
+	
+	/**
+	 * 插入image对象到数据库
+	 * @param img
+	 * @throws SQLException 
+	 */
+	public void insertImage(Images img) throws SQLException {
+		String sql = "insert into values(?,?,?,?,?,?,?,?,?,?)";
+		Object[] params = {img.getImgId(),img.getImgMovieId(),img.getImgAdminId(),
+				img.getImgUserId(),img.getImgMerchantId(),img.getImgTeleplayId(),
+				img.getImgTicketId(),img.getImgNewId(),img.getImgStatus(),
+				img.getImgPath()};
+		qr.update(sql, params);
+	}
+
+	/**
+	 * 修改头像
+	 * @param form
+	 * @throws SQLException 
+	 */
+	public void setImagePath(Images img) throws SQLException {
+		String sql = "update images set imgPath=? where imgMerchantId=?";
+		Object[] params = {img.getImgPath(),img.getImgMerchantId()};
+		qr.update(sql, params);
+	}
+
+	/**
+	 * 查找所有的电影
+	 * @return
+	 * @throws SQLException 
+	 */
+	public List<Movies> findAllMovieByMer(Long merId) throws SQLException {
+		//select * from movies where movieMerId like '2;%' or movieMerId like '%;2;%'
+		String sql = "select * from movies where movieMerId like ? or movieMerId like ?";
+		Object[] params = {merId+";%","%;"+merId+";%"};
+		return qr.query(sql, new BeanListHandler<Movies>(Movies.class),params);
+	}
+
+	/**
+	 * 填充电影集合
+	 * @param movieList
+	 * @return
+	 * @throws SQLException 
+	 */
+	public List<Movies> createMovieList(List<Movies> movieList,Long merId) throws SQLException {
+		for(Movies m : movieList){
+			//填充图片
+			String sql = "select * from images where imgMovieId=?";
+			List<Images> imgList = qr.query(sql, new BeanListHandler<Images>(Images.class),m.getMovieId());
+			m.setImgList(imgList);
+			
+			//填充电影票
+			sql = "select * from ticket where ticketMovieId=? and ticketMerId=?";
+			Object[] params = {m.getMovieId(),merId};
+			List<Ticket> ticketList = qr.query(sql, new BeanListHandler<Ticket>(Ticket.class),params);
+			m.setTicketList(ticketList);
+			
+			//填充剩余电影票数
+			int count = 0;
+			for(Ticket t : ticketList){
+				if("1".equals(t.getTicketStatus())){
+					count++;
+				}
+			}
+			m.setAllMovieTicketCount(count);
+		}
+		return movieList;
+	}
+
+	/**
+	 * 分页查询商户所对应的电影
+	 * @param pb
+	 * @param allMovieList
+	 * @param merId
+	 * @return
+	 * @throws SQLException 
+	 */
+	public PageBean<Movies> createPageBeanByMovie(PageBean<Movies> pb, Long merId) throws SQLException {
+		List<Movies> allMovie = findAllMovieByMer(merId);  //查到商户对应的所有的电影
+		
+		int tr = allMovie.size();  //得到总记录数
+		pb.setTr(tr);
+		if(pb.getPc() < 1){   //如果当前页小于1就重置为1
+			pb.setPc(1);
+		}
+		if(pb.getPc() > pb.getTp()){  //如果当前页大于总页数  就重置为最后一页
+			pb.setPc(pb.getTp());
+		}
+		String sql = "select * from movies where movieMerId like ? or movieMerId like ? limit ?,?";
+		Object[] params = {merId+";%","%;"+merId+";%",(pb.getPc()-1)*pb.getPs(),pb.getPs()};
+		List<Movies> beanList = qr.query(sql, new BeanListHandler<Movies>(Movies.class),params);
+		beanList = createMovieList(beanList, merId);  //填充beanList
+		pb.setBeanList(beanList);
+		
+		return pb;
+	}
+
+	/**
+	 * 设置电影状态
+	 * @param type
+	 * @param movieId
+	 * @throws SQLException 
+	 */
+	public void setMovieStatus(String type, Long movieId) throws SQLException {
+		String sql = "update movies set movieStatus=? where movieId=?";
+		Object[] params = {type,movieId};
+		qr.update(sql,params);
+	}
+
 }

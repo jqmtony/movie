@@ -22,6 +22,7 @@ public class Users implements Serializable {
 	private String userStatus;  //用户状态  0禁用  1正常使用
 	private Date userBirthday;  //出生日期
 	private Long userAge;  //年龄
+	private String userIpAddr; //用户当前IP
 	private List<Ticket> ticketList;  //对应的电影票集合
 	private List<Images> imgList;  //对应图片集合
 	private List<Indent> indentList;  //对应订单集合
@@ -87,11 +88,17 @@ public class Users implements Serializable {
 	public void setUserBirthday(Date userBirthday) {
 		this.userBirthday = userBirthday;
 	}
+	public Long getUserAge() {
+		return userAge;
+	}
 	public void setUserAge(Long userAge) {
 		this.userAge = userAge;
 	}
-	public Long getUserAge() {
-		return userAge;
+	public String getUserIpAddr() {
+		return userIpAddr;
+	}
+	public void setUserIpAddr(String userIpAddr) {
+		this.userIpAddr = userIpAddr;
 	}
 	public List<Ticket> getTicketList() {
 		return ticketList;
@@ -128,8 +135,8 @@ public class Users implements Serializable {
 		return "Users [userId=" + userId + ", userName=" + userName + ", userAccount=" + userAccount + ", userEmail="
 				+ userEmail + ", userPwd=" + userPwd + ", userCreateTime=" + userCreateTime + ", userTel=" + userTel
 				+ ", userAddr=" + userAddr + ", userStatus=" + userStatus + ", userBirthday=" + userBirthday
-				+ ", userAge=" + userAge + ", ticketList=" + ticketList + ", imgList=" + imgList + ", indentList="
-				+ indentList + ", integral=" + integral + ", ulrList=" + ulrList + "]";
+				+ ", userAge=" + userAge + ", userIpAddr=" + userIpAddr + ", ticketList=" + ticketList + ", imgList="
+				+ imgList + ", indentList=" + indentList + ", integral=" + integral + ", ulrList=" + ulrList + "]";
 	}
 	
 }

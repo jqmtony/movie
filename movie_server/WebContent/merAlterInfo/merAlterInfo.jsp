@@ -12,41 +12,60 @@
         <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
         <meta name="format-detection" content="telephone=no">
 
-        <title>信息照片上传</title>
+        <title>实名认证</title>
 
         <link rel="stylesheet" type="text/css" href="css/base.css">
         <link rel="stylesheet" type="text/css" href="css/home.css">
 		
     </head>
+   
+
     <c:if test="${empty provincesMap }">
     	<jsp:forward page="/mer.s?method=getMapByProvinces"></jsp:forward>
     </c:if>
     <body>
-        <section class="aui-content">
+        <section class="aui-content" style="display:block" id="realBefore">
             <div style="height:20px;"></div>
             <div class="aui-content-up">
                 <form action="" name="form1" method="post">
                     <div class="aui-content-up-form">
                         <h2>实名认证</h2>
                     </div>
+                    	
+                    <%--商户姓名 --%>
                     <div class="aui-form-group clear">
                         <label class="aui-label-control">
                             姓名 <em>*</em>
                         </label>
                         <div class="aui-form-input">
-                            <input type="text" class="aui-form-control-two" name="yourname" onBlur="checkna()" required id="name" placeholder="请输入您的姓名">
-                            <span class="tips" id="divname">长度1~8个字符</span>
+                            <input type="text" class="aui-form-control-two" name="merName" onBlur="blurMerName()" required id="merName" placeholder="请输入您的姓名">
+                            <span class="tips" id="merNameErrorMsg" style="color:red;"></span>
                         </div>
                     </div>
+                    
+                    <%--商户店名 --%>
+                    <div class="aui-form-group clear">
+                        <label class="aui-label-control">
+                            商户店名 <em>*</em>
+                        </label>
+                        <div class="aui-form-input">
+                            <input type="text" class="aui-form-control-two" name="merStoreName" onBlur="blurMerStoreName()" required id="merStoreName" placeholder="请输入您的店名">
+                            <span class="tips" id="merStoreNameErrorMsg" style="color:red;"></span>
+                        </div>
+                    </div>
+                    
+                    <%--商户身份证号码 --%>
                     <div class="aui-form-group clear">
                         <label class="aui-label-control">
                             身份证号 <em>*</em>
                         </label>
                         <div class="aui-form-input">
-                            <input type="text" class="aui-form-control-two" name="youziz" id="idcard" placeholder="请输入身份证号码" onBlur="checkpsd2()" required/>
-                            <span class="tips" id="zizhi">必须是18位身份证号码</span>
+                            <input type="text" class="aui-form-control-two" name="merIDCard" id="merIDCard" placeholder="请输入身份证号码" onBlur="blurMerIDCard()" required/>
+                            <span class="tips" id="merIDCardErrorMsg" style="color:red;"></span>
                         </div>
                     </div>
+                    
+                    <%--商户所在地址 --%>
                     <div class="aui-form-group clear">
                         <label class="aui-label-control">
                             所在地址 <em>*</em>
@@ -73,13 +92,14 @@
                         </div>
                     </div>
                     
+                    <%--商户手机号码 --%>
                      <div class="aui-form-group clear">
                         <label class="aui-label-control">
                             手机号码 <em>*</em>
                         </label>
                         <div class="aui-form-input">
-                            <input type="text" class="aui-form-control-two" name="youphone" id="telephone" placeholder="请输入11位的手机号码" onBlur="checkpsd1()" required/>
-                            <span class="tips" id="phone"></span>
+                            <input type="text" class="aui-form-control-two" name="merTel" id="merTel" placeholder="请输入11位的手机号码" onBlur="blurMerTel()" required/>
+                            <span class="tips" id="merTelErrorMsg" style="color:red;"></span>
                         </div>
                     </div>
                     
@@ -88,8 +108,8 @@
                            验证码 <em>*</em>
                         </label>
                         <div class="aui-form-input">
-                            <input type="text" class="aui-form-control-two" name="youphone" id="verifyCode" placeholder="请输入验证码" required/>
-                            <span class="tips" id="verifyMsg"></span>
+                            <input type="text" class="aui-form-control-two" name="verifyCode" id="verifyCode" placeholder="请输入验证码" required/>
+                            <span class="tips" id="verifyMsg" style="color:red;"></span>
                         </div>
                     </div>
                 </form>
@@ -100,24 +120,37 @@
             </div>
         </section>
         
+        <section class="aui-content" style="display:none" id="realSucceed">
+        	<div class="aui-content-up">
+        		<div class="aui-content-up-form">
+	                 <h2>实名认证</h2>
+	             </div>
+        		<div style="margin:100px 0 200px 0;color:green;font-size:40px;">
+        			<font>恭喜！ 您认证成功了！</font>
+        		</div>
+        	</div>
+        	
+        </section>
+        
         <!-- mask end -->
         <script type="text/javascript" src="js/jquery.min.js"></script>
         <script type="text/javascript" src="js/up.js"></script>
         <script type="text/javascript">
         	//确定
         	function save(){
-        		var name = $('#name');	//姓名
-        		var tel = $('#telephone');	//电话号码
-        		var idcard = $('#idcard');	//身份证号码
+        		var name = $('#merName');	//姓名
+        		var tel = $('#merTel');	//电话号码
+        		var merStoreName = $('#merStoreName');  //店名
+        		var idcard = $('#merIDCard');	//身份证号码
         		var country = $('#country');	//国家
         		var province = $('#province');	//省
        			var city = $('#city');	//市
        			var district = $('#district');	//县
        			var verifyCode = $('#verifyCode'); //验证码
-       			
        			var data = {
        					merName : name.val(),
        					merTel : tel.val(),
+       					merStoreName : merStoreName.val(),
        					merAddr : country.val()+" "+province.val()+" "+city.val()+" "+district.val(),
        					merIDCard : idcard.val(),
        					verify : verifyCode.val()
@@ -126,17 +159,18 @@
        				if(data === "404"){
        					window.location.href = "<c:url value='/server404.jsp' />";
        				}else if(data === "yes"){
-       					alert("您的信息已成功发送给系统管理员审核，审核时间一般在1~3个工作日，可在个人信息查看审核进度！");
-       					history.go(0);
+       					$('#realSucceed').css("display","block");
+       					$("#realBefore").css("display","none");
        				}else{
-       					var divname = $('#divname');
-       					var zizhi = $('#zizhi');
+       					var merStoreName = $('#merStoreNameErrorMsg');
+       					var merName = $('#merNameErrorMsg');
+       					var zizhi = $('#merIDCardErrorMsg');
        					var address = $('#address');
-       					var phone = $('#phone');
+       					var phone = $('#merTelErrorMsg');
        					var verifyMsg = $('#verifyMsg');
        					address.html("");
        					if(data.indexOf("姓名") != -1){
-       						divname.html(data);
+       						merName.html(data);
        					}else if(data.indexOf("手机号") != -1){
        						phone.html(data);
        					}else if(data.indexOf("身份证") != -1){
@@ -145,44 +179,57 @@
        						address.html(data);
        					}else if(data.indexOf("验证码") != -1){
        						verifyMsg.html(data);
+       					}else if(data.indexOf("店名") != -1){
+       						merStoreName.html(data);
        					}else{
        						alert(data);
        					}
        					
-       					
        				}
        			});
         	}
-            //验证姓名
-            function checkna(){
-                var na=form1.yourname.value;
-                if( na.length <1 || na.length >8){
-                    divname.innerHTML='<font class="tips_false">长度是1~8个字符</font>';
+            //验证商户姓名
+            function blurMerName(){
+                var na=form1.merName.value;
+                if( na.length >1 && na.length <8){
+                	merNameErrorMsg.innerHTML='<font class="tips_true">输入正确</font>';
                 }else{
-                    divname.innerHTML='<font class="tips_true">输入正确</font>';
+                	merNameErrorMsg.innerHTML='<font class="tips_false">长度是1~8个字符</font>';
                 }
             }
 
-             //验证手机号码
-            function checkpsd1(){
-                var na= $("#telephone").val();
-                if( na.length != 11){
-                    phone.innerHTML='<font class="tips_false">必须是11位的数字</font>';
+            //验证商户店名
+            function blurMerStoreName(){
+                var na=form1.merStoreName.value;
+                if( na.length >1 && na.length <20){
+                	merStoreNameErrorMsg.innerHTML='<font class="tips_true">输入正确</font>';
                 }else{
-                    phone.innerHTML='<font class="tips_true">输入正确</font>';
+                	merStoreNameErrorMsg.innerHTML='<font class="tips_false">长度是1~20个字符</font>';
+                }
+            }
+            
+          //验证身份证号码
+            function blurMerIDCard(){
+                var na=form1.merIDCard.value;
+                if(na.length != 18)
+                {
+                    merIDCardErrorMsg.innerHTML='<font class="tips_false">必须是18位身份证号码</font>';
+                }else{
+                	merIDCardErrorMsg.innerHTML='<font class="tips_true">输入正确</font>';
+                }
+            }
+            
+             //验证手机号码
+            function blurMerTel(){
+                var na= form1.merTel.value;
+                if( na.length != 11){
+                    merTelErrorMsg.innerHTML='<font class="tips_false">必须是11位的数字</font>';
+                }else{
+                	merTelErrorMsg.innerHTML='<font class="tips_true">输入正确</font>';
                 }
             } 
 
-            //验证社会统一代码
-            function checkpsd2(){
-                var na=form1.youziz.value;
-                if(na.length != 18)
-                {
-                    zizhi.innerHTML='<font class="tips_false">必须是18位身份证号码</font>';
-                }else{
-                    zizhi.innerHTML='<font class="tips_true">输入正确</font>';
-                }
-            }
+            
             
             
         </script>
@@ -229,7 +276,7 @@
     
     <script type="text/javascript">
     	function sendTelCode(){
-    		var tel = $('#telephone');
+    		var tel = $('#merTel');
     		var data = {
     				telephone : tel.val()
     		};
@@ -259,5 +306,7 @@
 			setTimeout("out("+i+")",1000);
 		}
     </script>
+    
+     
     </body>
 </html>

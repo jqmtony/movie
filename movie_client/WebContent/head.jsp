@@ -1,6 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 <div id="demo-1" class="banner-inner">
 	 <div class="banner-inner-dott">
 		<!--/header-w3l-->
@@ -107,10 +108,24 @@
 			     <div class="w3_agilits_inner_bottom">
 			            <div class="col-md-6 wthree_agile_login">
 						     <ul>
-									<li><i class="fa fa-phone" aria-hidden="true"></i> (+000) 009 455 4088</li>
+									<li style="margin-right:50px;"><i class="fa fa-phone" aria-hidden="true"></i> (+000) 009 455 4088</li>
 									<c:choose>
 										<c:when test="${empty loginedUser }">
 											<li><a href="<c:url value='/user.s?method=loginSetReferer' />" class="login">${lg["indexLogin"]}</a></li>
+										</c:when>
+										<c:when test="${fn:length(loginedUser.imgList) eq 0 }">
+											<li style="margin-left:30px;">
+												<img id="headImg" style="width:20px;height:20px;" src="<c:url value='/images/uploadLogo.png' />" alt="图片">
+												<font>${loginedUser.userAccount}</font>
+											</li>
+											<li style="margin-left:20px;">
+												<select id="infoChange" style="color:#000000;" onchange="infoChange()">
+													<option selected="selected">${lg['personalCenter'] }</option>
+													<option>${lg['alterInfo'] }</option>
+													<option>${lg['myIndent'] }</option>
+													<option>${lg['loginOut'] }</option>
+												</select>
+											</li>
 										</c:when>
 										<c:otherwise>
 											<li style="margin-left:30px;">
@@ -132,86 +147,10 @@
 
 								</ul>
 						</div>
-						 <div class="col-md-6 wthree_share_agile">
-									
-									<div class="single-agile-shar-buttons">
-									<ul>
-								<li>
-									<div class="fb-like" data-href="" data-layout="button_count" data-action="like" data-size="small" data-show-faces="false" data-share="false"></div>
-									
-								</li>
-								<li>
-									<div class="fb-share-button" data-href="" data-layout="button_count" data-size="small" data-mobile-iframe="true"><a class="fb-xfbml-parse-ignore" target="_blank" href="">${lg["indexShare"]}</a></div>
-								</li>
-								
-							</ul>
-								</div>
-						</div>
+						 
 				</div>
 			</div>
 			<!--//banner-bottom-->
-		     <!-- Modal1 -->
-					<div class="modal fade" id="myModal4" tabindex="-1" role="dialog" >
-
-							<div class="modal-dialog">
-							<!-- Modal content-->
-								<div class="modal-content">
-									<div class="modal-header">
-										<button type="button" class="close" data-dismiss="modal">&times;</button>
-										<h4>${lg["indexLogin"]}</h4>
-										<div class="login-form">
-											<form action="#" method="post">
-												<input type="email" name="email" placeholder='${lg["indexLoginEmail"]}' required="">
-												<input type="password" name="password" placeholder='${lg["indexLoginPassword"]}' required="">
-												<div class="tp">
-													<input type="submit" value='${lg["indexLoginString"]}'>
-												</div>
-												<div class="forgot-grid">
-												       <div class="log-check">
-														<label class="checkbox"><input type="checkbox" name="checkbox">${lg["indexLoginRememberMe"]}</label>
-														</div>
-														<div class="forgot">
-															<a href="#" data-toggle="modal" data-target="#myModal2">${lg["indexLoginForgotPassword"]}</a>
-														</div>
-														<div class="clearfix"></div>
-													</div>
-												
-											</form>
-										</div>
-									</div>
-								</div>
-							</div>
-						</div>
-				<!-- //Modal1 -->
-				  <!-- Modal1 -->
-					<div class="modal fade" id="myModal5" tabindex="-1" role="dialog" >
-
-							<div class="modal-dialog">
-							<!-- Modal content-->
-								<div class="modal-content">
-									<div class="modal-header">
-										<button type="button" class="close" data-dismiss="modal">&times;</button>
-										<h4>${lg["indexRegister"] }</h4>
-										<div class="login-form">
-											<form action="#" method="post">
-											    <input type="text" name="name" placeholder='${lg["indexRegisterName"]}' required="">
-												<input type="email" name="email" placeholder='${lg["indexLoginEmail"]}' required="">
-												<input type="password" name="password" placeholder='${lg["indexLoginPassword"]}' required="">
-												<input type="password" name="conform password" placeholder='${lg["indexRegisterConfirmPassword"] }' required="">
-												<div class="signin-rit">
-													<span class="agree-checkbox">
-														<label class="checkbox"><input type="checkbox" name="checkbox">${lg["indexRegisterAgree1"] } <a class="w3layouts-t" href="#" target="_blank">${lg["indexRegisterAgree2"] }</a> ${lg["indexRegisterAgree3"] } <a class="w3layouts-t" href="#" target="_blank">${lg["indexRegisterAgree4"] }</a></label>
-													</span>
-												</div>
-												<div class="tp">
-													<input type="submit" value='${lg["indexRegisterString"] }'>
-												</div>
-											</form>
-										</div>
-									</div>
-								</div>
-							</div>
-						</div>
-				<!-- //Modal1 -->
+		     
 			
 			

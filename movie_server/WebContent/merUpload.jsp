@@ -12,7 +12,7 @@
         <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
         <meta name="format-detection" content="telephone=no">
 
-        <title>电影上架</title>
+        <title>添加电影</title>
 
         <link rel="stylesheet" type="text/css" href="css/base.css">
         <link rel="stylesheet" type="text/css" href="css/home.css">
@@ -74,7 +74,7 @@ body{font:12px/180% Arial, Helvetica, sans-serif, "新宋体";}
             <div class="aui-content-up">
                
                     <div class="aui-content-up-form">
-                        <h2><a href="merProduct_Manage.jsp">商品管理</a> >> 电影上架 </h2>
+                        <h2><a href="merProduct_Manage.jsp">商品管理</a> >> 添加电影</h2>
                     </div>
                     
                     <%--片名输入框 --%>

@@ -205,40 +205,18 @@
 			name: '产品管理',
 		},
 		{
-			id: 3,
-			pid: 0,
-			url: "",
-			icon: 'iconfont icon-suoshuzhiwei',
-			name: '交易管理',
-		},
-		{
-			id: 4,
-			pid: 0,
-			url: "",
-			icon: 'iconfont icon-xiangmuguanli',
-			name: '支付管理',
-		},
-		{
-			id: 5,
-			pid: 0,
-			url: "",
-			icon: 'iconfont icon-yonghuguanli',
-			name: '系统管理',
-		},
-		{
-			id: 7,
-			pid: 0,
-			url: "",
-			icon: 'iconfont icon-system-copy',
-			name: '框架说明',
-		},
-,
-		{
 			id: 8,
 			pid: 0,
 			url: "",
+			icon: 'iconfont icon-yonghuguanli',
+			name: '个人中心',
+		},
+		{
+			id: 9,
+			pid: 0,
+			url: "onlineChat/onlineChat.jsp",
 			icon: 'iconfont icon-xiaoxi1',
-			name: '管理员',
+			name: '消息中心',
 		},
 		{
 			id: 13,
@@ -247,40 +225,7 @@
 			url: 'merProduct_Manage.jsp',
 			name: '商品管理',
 
-		},{
-			id: 46,
-			pid: 5,
-			icon: '',
-			url: 'merSystem_info.jsp',
-			name: '系统设置',
-
 		},
-		{
-			id: 47,
-			pid: 5,
-			icon: '',
-			url: 'merRizhi_list.jsp',
-			name: '字体库',
-
-		},
-		{
-			id: 60,
-			pid:7,
-			icon: '',
-			url: "merExplanation.jsp",
-			name: '结构说明',
-
-		}
-		,
-		{
-			id: 70,
-			pid:7,
-			icon: '',
-			url: "merModule.jsp",
-			name: '模块说明',
-
-		}
-		,
 		{
 			id: 111,
 			pid:8,
@@ -294,7 +239,7 @@
 			id: 112,
 			pid:8,
 			icon: '',
-			url: 'merUserNotes.jsp',
+			url: 'merAlterInfo/merInfo.jsp',
 			name: '个人信息',
 
 		}		

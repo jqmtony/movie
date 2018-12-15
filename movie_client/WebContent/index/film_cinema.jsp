@@ -7,7 +7,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=0;"/>
-<title>电影选购</title>
+<title>商家选择</title>
 <link href="https://cdn.bootcss.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" type="text/css" />
 <link href="css/film_cinema.css" type="text/css" rel="stylesheet" />
 <script type="text/javascript" src="js/jquery-1.7.2.min.js"></script>
@@ -26,14 +26,6 @@
     </header>
     
     <div class="film_content">
-    	<!-- <div class="tab">
-        	<ul>
-            	<li class="active">附近<i class="fa fa-caret-down"></i></li>
-                <li>区域<i class="fa fa-caret-down"></i></li>
-                <li>服务<i class="fa fa-caret-down"></i></li>
-                <li>其他<i class="fa fa-caret-down"></i></li>
-            </ul>
-        </div> -->
         <div class="address">
         	<ul>
         		<c:forEach items="${movieBallotTicket.merchantList }" var="mer">
@@ -48,12 +40,10 @@
 	                            <span>${mer.merAddr }</span>
 	                            <!-- <p>13.77km</p> -->
 	                        </div>
-	                        <div class="session">近期场次：<%--需要后台处理一下 --%>
-	                       ${fn:substring(movieBallotTicket.ticketList[0].ticketStartTime ,11,16) } <%--fn:substring 获取子串 ${fn:substring(zip, 6, -1)}  --%>
-	                        <c:forEach var="i" begin="1" end="${fn:length(movieBallotTicket.ticketList)-1 }">
-	                        	<c:if test="${movieBallotTicket.ticketList[i].ticketMovieTheater != movieBallotTicket.ticketList[i-1].ticketMovieTheater }">
-                        			| ${fn:substring(movieBallotTicket.ticketList[i].ticketStartTime,11,16) }
-                        		</c:if>
+	                        <div class="session">${lg['recentEvents'] }：<%--需要后台处理一下 --%>
+	                       ${mer.dateString[0]} <%--fn:substring 获取子串 ${fn:substring(zip, 6, -1)}  --%>
+	                        <c:forEach var="i" begin="1" end="${fn:length(mer.dateString)-1 }">
+                        			| ${mer.dateString[i]}
 	                        </c:forEach> 
 	                        </div>
 	                    </a>

@@ -147,7 +147,7 @@ function writeImg(url){
 												<c:otherwise>
 													<input class="input__field input__field--ichiro" type="email" disabled="disabled" id="input-27" name="userEmail" value="${loginedUser.userEmail }" placeholder=" " onBlur="blurUserEmail()">
 													<label class="input__label input__label--ichiro" for="input-27">
-														<span class="input__label-content input__label-content--ichiro" id="emailShow">${lg['yourEmail'] }${loginedUser.userEmail } <a href="javascript:emailUnbind()" id="emailUnbind">解绑</a></span>
+														<span class="input__label-content input__label-content--ichiro" id="emailShow">${lg['yourEmail'] }${loginedUser.userEmail } <a href="javascript:emailUnbind()" id="emailUnbind">${lg['unbind'] }</a></span>
 													</label>
 												</c:otherwise>
 											</c:choose>
@@ -164,7 +164,7 @@ function writeImg(url){
 												<c:otherwise>
 													<input class="input__field input__field--ichiro" disabled="disabled" type="text" id="input-28" name="userTel" value="${loginedUser.userTel }" placeholder=" " onBlur="blurUserTel()">
 													<label class="input__label input__label--ichiro" for="input-28">
-														<span class="input__label-content input__label-content--ichiro" id="telShow">${lg['yourPhoneNumer'] }${loginedUser.userTel } <a href="javascript:telUnbind()" id="telUnbind">解绑</a></span>
+														<span class="input__label-content input__label-content--ichiro" id="telShow">${lg['yourPhoneNumer'] }${loginedUser.userTel } <a href="javascript:telUnbind()" id="telUnbind">${lg['unbind'] }</a></span>
 													</label>
 												</c:otherwise>
 											</c:choose>
