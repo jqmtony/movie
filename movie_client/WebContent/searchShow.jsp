@@ -44,17 +44,13 @@
 				<div class="w3_content_agilleinfo_inner">
 					<div class="agile_featured_movies">
 						<!--/comedy-movies-->
-					<h3 class="agile_w3_title hor-t">${genreName} <span>${lg['Movies'] }</span> </h3>
-					
+					<h3 class="agile_w3_title hor-t">${lg['keyWord'] } <span>${search_text}</span> </h3>
+					</div>
+					</div>
+					<c:set var="pb" value="${pageBean_movie }" />
 			<%--循环遍历电影 --%>
-			<c:choose>
-				<c:when test="${fn:length(pageBean.beanList) eq 0}">
-					<h1>这个分类下还没有电影</h1>
-				</c:when>
-				<c:otherwise>
-					
 						 <div class="wthree_agile-requested-movies tv-movies">
-						 <c:forEach items="${pageBean.beanList }" var="movie">
+						 <c:forEach items="${pb.beanList }" var="movie">
 								<div class="col-md-2 w3l-movie-gride-agile requested-movies">
 									<a href="<c:url value='/movie.s?method=singleShow&type=movie&id=${movie.movieId }' />" class="hvr-sweep-to-bottom"><img src="<c:url value='${movie.imgList[0].imgPath }' />" title="Movies Pro" class="img-responsive" alt=" ">
 										<div class="w3l-action-icon"><i class="fa fa-play-circle-o" aria-hidden="true"></i></div>
@@ -90,50 +86,48 @@
 							</c:forEach>
 							<div class="clearfix"></div>
 						</div>
-				</c:otherwise>
-			</c:choose>
-					
+				
 				
 				<%--分页按钮 --%>
 				<div class="blog-pagenat-wthree" style="margin:0 0 20px 0;">
+					
 					<ul>
-						<li><a class="frist" href="<c:url value='/movie.s?method=goGenre&op=${op}&pc=${pageBean.pc-1}' />">Prev</a></li>
+						<li><a class="frist" href="<c:url value='/movie.s?method=search&Search=${search_text}&pc=${pb.pc-1}' />">Prev</a></li>
 						
 						<c:choose>
-			              	<c:when test="${pageBean.tp < 3}">
+			              	<c:when test="${pb.tp < 3}">
 			              		<c:set var="begin" value="1" />
-			              		<c:set var="end" value="${pageBean.tp}"/>
+			              		<c:set var="end" value="${pb.tp}"/>
 			              	</c:when>
 			              	<c:otherwise>
-			              		<c:set var="begin" value="${pageBean.pc-1}"/>
-			              		<c:set var="end" value="${pageBean.pc+1}"/>
+			              		<c:set var="begin" value="${pb.pc-1}"/>
+			              		<c:set var="end" value="${pb.pc+1}"/>
 			              		
 			              		<c:if test="${begin < 1 }">
 				              		<c:set var="begin" value="1"/>
 				              		<c:set var="end" value="3"/>
 				              	</c:if>
 				              	
-				              	<c:if test="${end > pageBean.tp }">
-				              		<c:set var="begin" value="${pageBean.tp-2}"/>
-				              		<c:set var="end" value="${pageBean.tp}"/>
+				              	<c:if test="${end > pb.tp }">
+				              		<c:set var="begin" value="${pb.tp-2}"/>
+				              		<c:set var="end" value="${pb.tp}"/>
 				              	</c:if>
 			              	</c:otherwise>
 			              </c:choose>
 			              <c:forEach var="i" begin="${begin}" end="${end}">
 			              	<c:choose>
-			              		<c:when test="${i eq pageBean.pc}">
-			              			<li><a  style="background:#bbb;" href="<c:url value='/movie.s?method=goGenre&op=${op}&pc=${i}' />">${i }</a></li>
+			              		<c:when test="${i eq pb.pc}">
+			              			<li><a  style="background:#bbb;" href="<c:url value='/movie.s?method=search&Search=${search_text}&pc=${i}' />">${i }</a></li>
 			              		</c:when>
 			              		<c:otherwise>
-			              			<li><a href="<c:url value='/movie.s?method=goGenre&op=${op}&pc=${i}' />">${i }</a></li>
+			              			<li><a href="<c:url value='/movie.s?method=search&Search=${search_text}&pc=${i}' />">${i }</a></li>
 			              		</c:otherwise>
 			              	</c:choose>
 			              </c:forEach>
 						
-						<li><a class="last" href="<c:url value='/movie.s?method=goGenre&op=${op}&pc=${pageBean.pc+1}' />">Next</a></li>
+						<li><a class="last" href="<c:url value='/movie.s?method=search&Search=${search_text}&pc=${pb.pc+1}' />">Next</a></li>
 					</ul>
 				</div>
-				
 			<!--//comedy-movies-->
 		<c:if test="${! empty msg}">		
 			<script type="text/javascript">

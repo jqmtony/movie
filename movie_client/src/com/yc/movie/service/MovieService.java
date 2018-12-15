@@ -515,52 +515,25 @@ public class MovieService {
 		}
 	}
 
-	////////////////////////// hzr/////////////////////////////////////
-	public List<Movies> findSearchByMovie(String text) throws MovieException {
-		// 根据电影名查找movies
+	/**
+	 * 全网查找
+	 * @param text
+	 * @return
+	 * @throws MovieException 
+	 */
+	public PageBean<Movies> findMovieBySearch(String text,int pc,int ps) throws MovieException {
+		PageBean<Movies> pb = new PageBean<Movies>();
+		pb.setPc(pc);
+		pb.setPs(ps);
+		
 		try {
-			List<Movies> movieList = md.findByLikeMovieName(text); // 根据电影名进行模糊查询电影集合
-			// 1，如果查到了
-			if (movieList.size() > 0) {
-				return movieList;
-			}
-			// 2，如果没查到
-			return null;
+			pb = md.findMovieBySearch(pb,text);
 		} catch (SQLException e) {
-			throw new MovieException("系统繁忙请稍后再试");
+			e.printStackTrace();
+			throw new MovieException("系统异常，请稍后再试");
 		}
+		return pb;
 	}
 
-	public List<Teleplay> findSearchByTeleplay(String text) throws MovieException {
-		// 根据电视剧名查找电视
-		try {
-			List<Teleplay> teleplayList = md.findByLikeTeleplay(text);
-			// 1,如果查到了
-			if (teleplayList.size() > 0) {
-				return teleplayList;
-			}
-			// 2,如果没查到
-			return null;
-		} catch (SQLException e) {
-			throw new MovieException("系统繁忙请稍后再试");
-		}
-	}
-
-	public List<Protagonists> findSearchByProtagonists(String text) throws MovieException {
-		// 根据主演名 查找电影
-		try {
-			List<Protagonists> protagonistsList = md.findByLikeProtagonists(text);
-			// 1,如果查到了
-			if (protagonistsList.size() > 0) {
-				return protagonistsList;
-			}
-			// 2,如果没查到
-			return null;
-		} catch (SQLException e) {
-			throw new MovieException("系统繁忙请稍后再试");
-		}
-	}
-
-	///////////////////////////////////////////////////////////////
 
 }

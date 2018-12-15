@@ -52,39 +52,24 @@ public class MovieServlet extends BaseServlet {
 	 * @throws IOException
 	 */
 	public String search(HttpServletRequest request, HttpServletResponse response)throws ServletException, IOException {
-		///*System.out.println("1234");*/
 		String text = request.getParameter("Search");  //获取搜索得值    Search是要获取得表单中数据得字段
-		//在 1 电影 2 电视剧 3主演 
+		session.setAttribute("search_text",text);
+		int pc = CommonsUtils.getPageListPc(request);
+		//在 1 电影名   3电影片种  5描述 
 		try {
-			List<Movies> movieList = ms.findSearchByMovie(text);
-			// 1,如果找到了电影
-			if(movieList != null){
-				//把找到的list存在ruquest域中
-				request.setAttribute("searchMovieList", movieList);
-				return "";   //跳转到显示页面
+			PageBean<Movies> pb = ms.findMovieBySearch(text,pc,10);
+				
+			//如果都没找到  就返回信息
+			if(pb.getBeanList() == null || pb.getBeanList().size() <= 0){
+				request.setAttribute("msg", "你搜索的关键字没有查询到任何信息");
+				return "f:/index.jsp";
 			}
-			
-			//如果没找到电影  再去查电视剧   
-			List<Teleplay> teleplayList = ms.findSearchByTeleplay(text);
-				// 1,如果找到了电影
-				if(teleplayList != null){
-				request.setAttribute("searchTeleplayList", teleplayList);
-				return "";   //跳转到显示页面
-			}
-			
-			//如果再没查到  再去查主演
-			List<Protagonists> protagonistsList = ms.findSearchByProtagonists(text);
-				// 1,如果找到了电影
-				if(protagonistsList !=null){
-				request.setAttribute("searchProtagonistsList", protagonistsList);
-				return "";  //跳转到显示页面
-			}
+			request.setAttribute("pageBean_movie", pb);
+			return "f:/searchShow.jsp";
 		} catch (MovieException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
+			return "f:/index.jsp";
 		}
-		
-		return null;
 	}
 	////////////////////////////////////////////////////////////////////////////
 

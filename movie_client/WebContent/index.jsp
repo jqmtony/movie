@@ -214,11 +214,11 @@
 														<p class="fexi_header">${movieList[indexTime[0]].movieName }</p>
 														<p class="fexi_header_para"><span class="conjuring_w3">${lg["indexNewOneStoryLine"] }<label>:</label></span>
 														${movieList[indexTime[0]].movieDescribe }</p>
-														<p class="fexi_header_para"><span>${lg["indexNewOneReleaseOn"] }<label>:</label></span>${movieList[indexTime[0]].movieCreateTime }</p>
+														<p class="fexi_header_para"><span>${lg["indexNewOneReleaseOn"] }<label>:</label></span>${fn:substring(movieList[indexTime[0]].movieCreateTime,0,10) }</p>
 														<p class="fexi_header_para"><span>${lg["indexNewOneGenres"] }<label>:</label> </span>
-															<a href="genre.jsp">${movieList[indexTime[0]].classifysList[0].classifyNameObj.classifyNameString }</a>  <%--先把第一个打印出来 --%>
+															${movieList[indexTime[0]].classifysList[0].classifyNameObj.classifyNameString }  <%--先把第一个打印出来 --%>
 															<c:forEach items="${movieList[indexTime[0]].classifysList}" var="bean" begin="1">
-																 | <a href="genre.jsp">${bean.classifyNameObj.classifyNameString }</a>
+																 | ${bean.classifyNameObj.classifyNameString }
 															</c:forEach>
 														</p>
 														<p class="fexi_header_para fexi_header_para1"><span>${lg["indexNewOneStarRating"] }<label>:</label></span>
@@ -297,11 +297,11 @@
 												<p class="fexi_header">${movieList[indexVisit[0]].movieName }</p>
 												<p class="fexi_header_para"><span class="conjuring_w3">${lg["indexNewOneStoryLine"] }<label>:</label></span>
 												${movieList[indexVisit[0]].movieDescribe }</p>
-												<p class="fexi_header_para"><span>${lg["indexNewOneReleaseOn"] }<label>:</label></span>${movieList[indexVisit[0]].movieCreateTime }</p>
+												<p class="fexi_header_para"><span>${lg["indexNewOneReleaseOn"] }<label>:</label></span>${fn:substring(movieList[indexVisit[0]].movieCreateTime,0,10) }</p>
 												<p class="fexi_header_para"><span>${lg["indexNewOneGenres"] }<label>:</label> </span>
-													<a href="genre.jsp">${movieList[indexVisit[0]].classifysList[0].classifyNameObj.classifyNameString }</a>  <%--先把第一个打印出来 --%>
+													${movieList[indexVisit[0]].classifysList[0].classifyNameObj.classifyNameString }  <%--先把第一个打印出来 --%>
 													<c:forEach items="${movieList[indexVisit[0]].classifysList}" var="bean" begin="1">
-														 | <a href="genre.jsp">${bean.classifyNameObj.classifyNameString }</a>
+														 | ${bean.classifyNameObj.classifyNameString }
 													</c:forEach>
 												</p>
 												<p class="fexi_header_para fexi_header_para1"><span>${lg["indexNewOneStarRating"] }<label>:</label></span>
@@ -379,11 +379,11 @@
 												<p class="fexi_header">${movieList[indexGrade[0]].movieName }</p>
 												<p class="fexi_header_para"><span class="conjuring_w3">${lg["indexNewOneStoryLine"] }<label>:</label></span>
 												${movieList[indexGrade[0]].movieDescribe }</p>
-												<p class="fexi_header_para"><span>${lg["indexNewOneReleaseOn"] }<label>:</label></span>${movieList[indexGrade[0]].movieCreateTime }</p>
+												<p class="fexi_header_para"><span>${lg["indexNewOneReleaseOn"] }<label>:</label></span>${fn:substring(movieList[indexGrade[0]].movieCreateTime,0,10) }</p>
 												<p class="fexi_header_para"><span>${lg["indexNewOneGenres"] }<label>:</label> </span>
-													<a href="genre.jsp">${movieList[indexGrade[0]].classifysList[0].classifyNameObj.classifyNameString }</a>  <%--先把第一个打印出来 --%>
+													${movieList[indexGrade[0]].classifysList[0].classifyNameObj.classifyNameString }  <%--先把第一个打印出来 --%>
 													<c:forEach items="${movieList[indexGrade[0]].classifysList}" var="bean" begin="1">
-														 | <a href="genre.jsp">${bean.classifyNameObj.classifyNameString }</a>
+														 | ${bean.classifyNameObj.classifyNameString }
 													</c:forEach>												</p>
 												<p class="fexi_header_para fexi_header_para1"><span>${lg["indexNewOneStarRating"] }<label>:</label></span>
 													<c:set var="starNum" value="${movieList[indexGrade[0]].movieGradeNum/2}"/>
@@ -588,13 +588,13 @@
 												<p class="fexi_header">${movieList[indexGrade[0]].movieName } </p>
 												<p class="fexi_header_para"><span class="conjuring_w3">${lg["indexNewOneStoryLine"] }<label>:</label></span>
 												${movieList[indexGrade[0]].movieDescribe } </p>
-									<p class="fexi_header_para"><span>${lg["indexNewOneReleaseOn"] }<label>:</label></span>${movieList[indexGrade[0]].movieCreateTime } </p>
+									<p class="fexi_header_para"><span>${lg["indexNewOneReleaseOn"] }<label>:</label></span>${fn:substring(movieList[indexGrade[0]].movieCreateTime,0,10) } </p>
 												
 												<p class="fexi_header_para">
 													<span>${lg["indexNewOneGenres"] }<label>:</label> </span>
-													<a href="genre.jsp">${movieList[indexGrade[0]].classifysList[0].classifyNameObj.classifyNameString }</a>  <%--先把第一个打印出来 --%>
+													${movieList[indexGrade[0]].classifysList[0].classifyNameObj.classifyNameString }  <%--先把第一个打印出来 --%>
 													<c:forEach items="${movieList[indexGrade[0]].classifysList}" var="bean" begin="1">
-														 | <a href="genre.jsp">${bean.classifyNameObj.classifyNameString }</a>
+														 | ${bean.classifyNameObj.classifyNameString }
 													</c:forEach>
 												</p>
 												<p class="fexi_header_para fexi_header_para1"><span>${lg["indexNewOneStarRating"] }<label>:</label></span>

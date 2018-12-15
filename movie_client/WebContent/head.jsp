@@ -88,11 +88,14 @@
 											<li><a class="cd-search-trigger" href="#cd-search"> <span></span></a></li>
 										</ul> <!-- cd-header-buttons -->
 									</div>
+										<%--搜索框  hzr =========================================================--%>
 										<div id="cd-search" class="cd-search">
-											<form action="#" method="post">
-												<input name="Search" type="search" placeholder="Search...">
+											<form action="<c:url value='/movie.s' />" method="post">
+												<input type="hidden" name="method" value="search">
+												<input name="Search" type="search" placeholder="${lg['Search']}">
 											</form>
 										</div>
+										<%--搜索框  hzr =========================================================--%>
 								</div>
 	
 			</div> 

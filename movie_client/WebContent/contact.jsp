@@ -69,9 +69,9 @@
 								</form>
 								<div class="agileits-get-us">
 									<ul>
-										<li><i class="fa fa-map-marker" aria-hidden="true"></i>United States,Utah 10009, USA</li>
-										<li><i class="fa fa-phone" aria-hidden="true"></i>  +033 111 222 4567</li>
-										<li><i class="fa fa-envelope" aria-hidden="true"></i><a href="mailto:info@example.com"> mail@example.com</a></li>
+										<li><i class="fa fa-map-marker" aria-hidden="true"></i>湖南工学院 源辰 54 班</li>
+										<li><i class="fa fa-phone" aria-hidden="true"></i>  15570906290</li>
+										<li><i class="fa fa-envelope" aria-hidden="true"></i><a href="mailto:info@example.com"> naivestruugle@163.com</a></li>
 									</ul>
 								
 							</div>

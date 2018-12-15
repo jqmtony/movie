@@ -7,6 +7,7 @@ import java.util.Vector;
 
 import org.apache.commons.dbutils.QueryRunner;
 import org.apache.commons.dbutils.handlers.BeanListHandler;
+import org.apache.commons.dbutils.handlers.ScalarHandler;
 
 import com.yc.movie.bean.ClassifyName;
 import com.yc.movie.bean.Classifys;
@@ -15,6 +16,7 @@ import com.yc.movie.bean.Images;
 import com.yc.movie.bean.Indent;
 import com.yc.movie.bean.Merchant;
 import com.yc.movie.bean.Movies;
+import com.yc.movie.bean.PageBean;
 import com.yc.movie.bean.Protagonists;
 import com.yc.movie.bean.Reply;
 import com.yc.movie.bean.Teleplay;
@@ -595,28 +597,46 @@ public class MovieDao {
 		qr.update(sql, params);
 	}
 
-	/////////////////hzr////////////////////////////
-	public List<Movies> findByLikeMovieName(String text) throws SQLException {
-		String sql = "select * from movies where movieName like ?";
-		text = "%" + text + "%";
-		List<Movies> movieList = qr.query(sql, new BeanListHandler<Movies>(Movies.class), text);
+	/**
+	 * 全网查找电影
+	 * @param pb
+	 * @param text
+	 * @return
+	 * @throws SQLException 
+	 */
+	public PageBean<Movies> findMovieBySearch(PageBean<Movies> pb, String text) throws SQLException {
+		String sql = "select count(*) from movies where movieName like ? or movieGenre like ? or movieDescribe like ?";
+		Object[] params = {"%"+text+"%","%"+text+"%","%"+text+"%"};
+		Number num = qr.query(sql, new ScalarHandler<Number>(),params);
+		int tr = num.intValue();  //得到总记录数
+		pb.setTr(tr);
+		
+		if(pb.getPc() < 1){
+			pb.setPc(1);
+		}
+		if(pb.getPc() > pb.getTp()){
+			pb.setPc(pb.getTp());
+		}
+		
+		sql = "select * from movies where movieName like ? or movieGenre like ? or movieDescribe like ? limit ?,?";
+		Object[] params2 = {"%"+text+"%","%"+text+"%","%"+text+"%",(pb.getPc()-1)*pb.getPs(),pb.getPs()};
+		List<Movies> beanList = qr.query(sql, new BeanListHandler<Movies>(Movies.class),params2);
+		beanList = createMovieList(beanList);
+		pb.setBeanList(beanList);
+		return pb;
+	}
+
+	/**
+	 * 创建电影集合
+	 * @param beanList
+	 * @return
+	 * @throws SQLException
+	 */
+	private List<Movies> createMovieList(List<Movies> movieList) throws SQLException {
+		for(Movies movie : movieList){
+			movie = createMovie(movie);
+		}
 		return movieList;
 	}
-	
 
-	public List<Teleplay> findByLikeTeleplay(String text) throws SQLException {
-		String sql = "select * from teleplay where teleplayName like ?";
-		text = "%" + text + "%";
-		List<Teleplay> teleplayList = qr.query(sql, new BeanListHandler<Teleplay>(Teleplay.class), text);
-		return teleplayList;
-	}
-
-	public List<Protagonists> findByLikeProtagonists(String text) throws SQLException {
-		String sql = "select * from protagonists where proName like ?";
-		text = "%" + text + "%";
-		List<Protagonists> protagonistsList = qr.query(sql, new BeanListHandler<Protagonists>(Protagonists.class),
-				text);
-		return protagonistsList;
-	}
-	////////////////////hzr/////////////////////////
 }

@@ -78,6 +78,7 @@
 															 	<a href="${singleShow.proList[fn:length(singleShow.proList)-1].proLink }">${singleShow.proList[fn:length(singleShow.proList)-1].proName }</a>
 													 		</c:otherwise>
 													 	</c:choose>
+														<i class="fa fa-eye" aria-hidden="true"><font style="font-size:15px;">&nbsp;${singleShow.movieVisitCount }</font></i>
 														<a href="<c:url value='movie.s?method=goBallotTicket&movieId=${singleShow.movieId }' />"><i id="goShopping" class="fa fa-shopping-cart" aria-hidden="true" style="cursor:pointer;color:#f83;margin-left:20px;"><font style="font-size:15px;"> ${lg['buyTicket'] }</font></i></a>
 														<i id="giveALike" class="fa fa-heart-o" aria-hidden="true" style="cursor:pointer;margin-left:20px;" onclick="giveALike()"><font style="font-size:17px;"> ${lg['like'] }</font></i><font id="giveALikeAdd"></font>
 													 </h4>
@@ -120,18 +121,6 @@
 														</li>
 													</ul>
 											</div>
-										<!-- <div class="admin-text">
-												<h5>WRITTEN BY ADMIN</h5>
-												<div class="admin-text-left">
-													<a href="#"><img src="<c:url value='${comment.user.imgList[0].imgPath }' />" alt=""></a>
-												</div>
-												<div class="admin-text-right">
-													<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit,There are many variations of passages of Lorem Ipsum available, 
-													sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
-													<span>View all posts by :<a href="#"> Admin </a></span>
-												</div>
-												<div class="clearfix"> </div>
-										</div> -->
 										<div class="response">
 							<h4>${lg["Comment"] }</h4>
 							<%--所有评论 --%>
@@ -143,7 +132,7 @@
 							<div class="media response-info" style="border-left:7px solid#aabb55;border-top:7px solid#aabb55">
 								<div class="media-left response-text-left">
 									<a href="#">
-										<img class="media-object" src="<c:url value='${comment.user.imgList[0].imgPath }' />" alt="">
+										<img class="media-object" src="<c:url value='${comment.user.imgList[0].imgPath }' />" alt="" style="border:1px solid #000;width:100px;height:100;">
 									</a>
 									<h5><a href="#">${comment.user.userAccount }</a></h5>
 								</div>
@@ -163,7 +152,7 @@
 									<div class="media response-info" style="border-left:6px solid#aabb55;border-top:6px solid#aabb55">
 										<div class="media-left response-text-left">
 											<a href="#">
-												<img class="media-object" src="<c:url value='${comment.user.imgList[0].imgPath }' />" alt="">
+												<img class="media-object" src="<c:url value='${comment.user.imgList[0].imgPath }' />" alt="" style="border:1px solid #000;width:100px;height:100;">
 											</a>
 											<h5><a href="#">${reply.user.userAccount } ${lg['Reply'] } ${comment.user.userAccount }</a></h5>
 										</div>
@@ -190,7 +179,7 @@
 													<div class="media response-info" style="margin-left:50px;border-left:5px solid#aabb55;border-top:5px solid#aabb55">
 														<div class="media-left response-text-left">
 															<a href="#">
-																<img class="media-object" src="<c:url value='${comment.user.imgList[0].imgPath }' />" alt="">
+																<img class="media-object" src="<c:url value='${comment.user.imgList[0].imgPath }' />" alt="" style="border:1px solid #000;width:100px;height:100;">
 															</a>
 															<h5><a href="#">${sonReply.user.userAccount } ${lg['Reply'] } ${reply.user.userAccount }</a></h5>
 														</div>
@@ -217,7 +206,7 @@
 													<div class="media response-info" style="margin-left:50px;border-left:4px solid#aabb55;border-top:4px solid#aabb55">
 														<div class="media-left response-text-left">
 															<a href="#">
-																<img class="media-object" src="<c:url value='${comment.user.imgList[0].imgPath }' />" alt="">
+																<img class="media-object" src="<c:url value='${comment.user.imgList[0].imgPath }' />" alt="" style="border:1px solid #000;width:100px;height:100;">
 															</a>
 															<h5><a href="#">${sonReply1.user.userAccount } ${lg['Reply'] } ${sonReply.user.userAccount }</a></h5>
 														</div>
@@ -244,7 +233,7 @@
 													<div class="media response-info" style="margin-left:50px;border-left:3px solid#aabb55;border-top:3px solid#aabb55">
 														<div class="media-left response-text-left">
 															<a href="#">
-																<img class="media-object" src="<c:url value='${comment.user.imgList[0].imgPath }' />" alt="">
+																<img class="media-object" src="<c:url value='${comment.user.imgList[0].imgPath }' />" alt="" style="border:1px solid #000;width:100px;height:100;">
 															</a>
 															<h5><a href="#">${sonReply2.user.userAccount } ${lg['Reply'] } ${sonReply1.user.userAccount }</a></h5>
 														</div>
@@ -320,99 +309,61 @@
 								</div> 
 								   </div>
 								   <div class="col-md-4 latest-news-agile-right-content">
-								   <h4 class="side-t-w3l-agile">For Latest <span>Movies</span></h4>
-										<div class="side-bar-form">
-										 <form action="#" method="post">
-											<input type="search" name="email" placeholder="Search here...." required="required">
-											<input type="submit" value=" ">
-										 </form>
-									    </div>
-								      <h4 class="side-t-w3l-agile">Hot <span>Topics</span></h3>
-									    <ul class="side-bar-agile">
-										   <li><a href="single.jsp">John Abraham, Sonakshi Sinha and Tahir ...</a><p>Sep 29, 2016</p></li>
-										   <li><a href="single.jsp">Romantic drama about two people finding out that love</a><p>Feb 3, 2016</p></li>
-										   <li><a href="single.jsp">Storks have moved on from delivering babies to packages ...</a><p>Aug 1, 2016</p></li>
-										   <li><a href="single.jsp">John Abraham, Sonakshi Sinha and Tahir ...</a><p>Sep 29, 2016</p></li>
-										   <li><a href="single.jsp">John Abraham, Sonakshi Sinha and Tahir ...</a><p>Sep 29, 2016</p></li>
-										</ul>
-										<h4 class="side-t-w3l-agile">Latest <span>Trailer</span></h3>
+										<h4 class="side-t-w3l-agile">${lg['Requested'] } <span>${lg['Movies'] }</span></h4>
 										<div class="video_agile_player sidebar-player">
 										            <div class="video-grid-single-page-agileits">
-														<div data-video="fNKUgX8PhMA" id="video1"> <img src="images/22.jpg" alt="" class="img-responsive"> <div id="play"></div></div>
+														<a href="<c:url value='/movie.s?method=singleShow&type=movie&id=${movieList2[indexVisit2[0]].movieId }' />">
+															<img src="<c:url value='${movieList2[indexVisit2[0]].imgList[2].imgPath}' />" alt="" class="img-responsive">
+														</a>
 													</div>
-
+ 
 
 										        <div class="player-text side-bar-info">
-												<p class="fexi_header">Me Before You </p>
-												<p class="fexi_header_para"><span class="conjuring_w3">Story Line<label>:</label></span>Me Before You Official Trailer #2 (2016) - Emilia Clarke, Sam Claflin Movie HD
-
-A girl in a small town forms an unlikely....</p>
-												<p class="fexi_header_para"><span>Release On<label>:</label></span>Feb 3, 2016 </p>
+												<p class="fexi_header">${movieList2[indexVisit2[0]].movieName } </p>
+												<p class="fexi_header_para"><span class="conjuring_w3">${lg['indexNewOneStoryLine'] }<label>:</label></span>${movieList2[indexVisit2[0]].movieDescribe }</p>
+												<p class="fexi_header_para"><span>${lg['indexNewOneReleaseOn'] }<label>:</label></span>${fn:substring(movieList2[indexVisit2[0]].movieCreateTime,0,10) }</p>
 												<p class="fexi_header_para">
-													<span>Genres<label>:</label> </span>
-													<a href="genre.jsp">Drama</a> | 
-													<a href="genre.jsp">Adventure</a> | 
-													<a href="genre.jsp">Family</a>								
+													<span>${lg['indexNewOneGenres'] }<label>:</label> </span>
+													${movieList2[indexVisit2[0]].classifysList[0].classifyNameObj.classifyNameString }  <%--先把第一个打印出来 --%>
+													<c:forEach items="${movieList2[indexVisit2[0]].classifysList}" var="bean" begin="1">
+														 | ${bean.classifyNameObj.classifyNameString }
+													</c:forEach>								
 												</p>
-												<p class="fexi_header_para fexi_header_para1"><span>Star Rating<label>:</label></span>
-													<a href="#"><i class="fa fa-star" aria-hidden="true"></i></a>
-													<a href="#"><i class="fa fa-star" aria-hidden="true"></i></a>
-													<a href="#"><i class="fa fa-star-half-o" aria-hidden="true"></i></a>
-													<a href="#"><i class="fa fa-star-o" aria-hidden="true"></i></a>
-													<a href="#"><i class="fa fa-star-o" aria-hidden="true"></i></a>
+												<p class="fexi_header_para fexi_header_para1"><span>${lg["indexNewOneStarRating"] }<label>:</label></span>
+													<c:set var="starNum" value="${movieList2[indexVisit2[0]].movieGradeNum/2}"/>
+													<c:forEach var="i" begin="1" end="${starNum }">
+														<a><i class="fa fa-star" aria-hidden="true"></i></a>
+													</c:forEach>
+													<c:if test="${starNum%1 != 0}">
+														<a><i class="fa fa-star-half-o" aria-hidden="true"></i></a>
+														<c:set var="starNum" value="${starNum+1}"/>
+													</c:if>
+													<c:forEach var="i" begin="${starNum+1}" end="5">
+														<a><i class="fa fa-star-o" aria-hidden="true"></i></a>
+													</c:forEach>
 												</p>
 											</div>
 
 										    </div>
 											<div class="clearfix"> </div>
 											<div class="agile-info-recent">
-											<h4 class="side-t-w3l-agile">Latest <span>Trailer</span></h4>
 											<div class="w3ls-recent-grids">
+											<c:forEach items="${indexVisit2}" var="index" begin="1" end="3">
 												<div class="w3l-recent-grid">
 													<div class="wom">
-														<a href="single.jsp"><img src="images/m12.jpg" alt=" " class="img-responsive"></a>
+														<a href="<c:url value='/movie.s?method=singleShow&type=movie&id=${movieList2[index].movieId }' />"><img src="<c:url value='${movieList2[index].imgList[0].imgPath}' />" alt=" " class="img-responsive"></a>
 													</div>
 													<div class="wom-right">
-														<h5><a href="single.jsp">Lorem Integer rutrum</a></h5>
-														<p>Mauris fermentum dictum magna. Sed laoreet aliquam leo. 
-															Ut tellus dolor, dapibus eget.</p>
+														<h5><a href="<c:url value='/movie.s?method=singleShow&type=movie&id=${movieList2[index].movieId }' />">${movieList2[index].movieName }</a></h5>
+														<p>${movieList2[index].movieDescribe }</p>
 															<ul class="w3l-sider-list">
-																<li><i class="fa fa-clock-o" aria-hidden="true"></i>On Jan 12, 2016</li>
-																<li><i class="fa fa-eye" aria-hidden="true"></i> 2602</li>
+																<li><i class="fa fa-clock-o" aria-hidden="true"></i>${fn:substring(movieList2[index].movieCreateTime,0,10) }</li>
+																<li><i class="fa fa-eye" aria-hidden="true"></i> ${movieList2[index].movieVisitCount }</li>
 															</ul>
 													</div>
 													<div class="clearfix"> </div>
 												</div>
-												<div class="w3l-recent-grid">
-													<div class="wom">
-														<a href="single.jsp"><img src="images/m13.jpg" alt=" " class="img-responsive"></a>
-													</div>
-													<div class="wom-right">
-															<h5><a href="single.jsp">Lorem Integer rutrum</a></h5>
-														<p>Mauris fermentum dictum magna. Sed laoreet aliquam leo. 
-															Ut tellus dolor, dapibus eget.</p>
-															<ul class="w3l-sider-list">
-																<li><i class="fa fa-clock-o" aria-hidden="true"></i>On Mar 3, 2016</li>
-																<li><i class="fa fa-eye" aria-hidden="true"></i> 2742</li>
-															</ul>
-													</div>
-													<div class="clearfix"> </div>
-												</div>
-												<div class="w3l-recent-grid">
-													<div class="wom">
-														<a href="single.jsp"><img src="images/m14.jpg" alt=" " class="img-responsive"></a>
-													</div>
-													<div class="wom-right">
-															<h5><a href="single.jsp">Lorem Integer rutrum</a></h5>
-														    <p>Mauris fermentum dictum magna. Sed laoreet aliquam leo. 
-															Ut tellus dolor, dapibus eget.</p>
-															<ul class="w3l-sider-list">
-																<li><i class="fa fa-clock-o" aria-hidden="true"></i>On Oct 13, 2016</li>
-																<li><i class="fa fa-eye" aria-hidden="true"></i> 2802</li>
-															</ul>
-													</div>
-													<div class="clearfix"> </div>
-												</div>
+											</c:forEach>
 											</div>
 										</div>
 										
