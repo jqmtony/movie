@@ -21,9 +21,6 @@
 	<header class="header">
         <a href="javascript:history.back(-1)" class="fa fa-angle-left"></a>
         <span class="names">${movieBallotTicket.movieName }</span>
-        <span class="collect">
-        	<i class="fa fa-star-o"></i>
-        </span>
     </header>
     
     <div class="film-length">

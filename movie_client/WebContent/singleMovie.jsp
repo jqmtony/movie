@@ -52,7 +52,6 @@
 						<div class="agile_featured_movies">
 				            <div class="inner-agile-w3l-part-head">
 					            <h3 class="w3l-inner-h-title">${singleShow.movieName }</h3>
-								<p class="w3ls_head_para">Add short Description</p>
 							</div>
 							   <div class="latest-news-agile-info">
 								   <div class="col-md-8 latest-news-agile-left-content">
