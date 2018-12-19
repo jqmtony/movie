@@ -11,6 +11,7 @@ import com.yc.movie.bean.Reply;
 import com.yc.movie.bean.Teleplay;
 import com.yc.movie.bean.Ticket;
 import com.yc.movie.bean.Users;
+import com.yc.movie.dao.UserDao;
 import com.yc.movie.service.MovieService;
 import com.yc.utils.BaseServlet;
 import com.yc.utils.CommonsUtils;
@@ -19,6 +20,7 @@ import com.yc.utils.PropertiesUtils;
 
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -41,6 +43,7 @@ import javax.servlet.http.HttpServletResponse;
 public class MovieServlet extends BaseServlet {
 	private static final long serialVersionUID = 1L;
 	private MovieService ms = new MovieService();
+	private UserDao ud = new UserDao();
 	///////////////////////////////hzr/////////////////////////////////////////////
 	/**
 	 * 全网查找    hzr
@@ -117,7 +120,7 @@ public class MovieServlet extends BaseServlet {
 //			System.out.println(genreName);
 			
 			Integer pc = CommonsUtils.getPageListPc(request);  //得到pc
-			PageBean<Movies> pb = ms.findMovieByClassify(pc,8,genreName);
+			PageBean<Movies> pb = ms.findMovieByClassify(pc,10,genreName);
 			
 			ResourceBundle rb = (ResourceBundle) session.getAttribute("lg");
 			String genreName2 = rb.getString(op);
@@ -159,10 +162,13 @@ public class MovieServlet extends BaseServlet {
 					if(s.equals(t.getTicketLocationNum()+"")){
 						ms.setTicketStatus(t,"0");  //设置电影票的状态
 						ms.setTicketBuyBy(t,loginedUser);  //设置电影票的ticketBuyBy
+						ms.setIntegralCount(t,loginedUser);  //添加积分
 						ticketList.add(t);
 					}
 				}
 			}
+			Users user = ud.createUser(loginedUser);
+			session.setAttribute("loginedUser", user);
 			
 			Movies nowMovie = (Movies)session.getAttribute("movieBallotTicket");  //得到当前正在浏览的电影
 			
@@ -173,6 +179,9 @@ public class MovieServlet extends BaseServlet {
 		} catch (MovieException e) {
 			response.getWriter().append(e.getMessage());
 			e.printStackTrace();
+		} catch (SQLException e) {
+			e.printStackTrace();
+			response.getWriter().append(e.getMessage());
 		}  
 		
 	}
@@ -186,19 +195,20 @@ public class MovieServlet extends BaseServlet {
 	 * @throws IOException
 	 */
 	public String showTicketChose(HttpServletRequest request, HttpServletResponse response)throws ServletException, IOException {
+		Movies movie = (Movies)session.getAttribute("movieBallotTicket");  //得到当前浏览的电影
 		String date = request.getParameter("date");  //得到日期  11-11
 		String theater = request.getParameter("theater"); //得到厅室
 		Merchant nowMerchant = (Merchant)session.getAttribute("nowMerchant");  //得到当前选择的商户
 		try {
-			List<Ticket> showChoseList = ms.getShowChoseList(nowMerchant.getMerId(),date,theater);//得到204张电影票
-			System.out.println("电影票张数："+showChoseList.size());
+			List<Ticket> showChoseList = ms.getShowChoseList(nowMerchant.getMerId(),date,theater,movie.getMovieId());//得到204张电影票
+//			System.out.println("电影票张数："+showChoseList.size());
 			
 			StringBuilder sb = new StringBuilder();  //得到已卖出的位置
 			for(Ticket t : showChoseList){
 				if("0".equals(t.getTicketStatus()))
 					sb.append(t.getTicketLocationNum()+";");
 			}
-			System.out.println("已卖出的位置："+sb.toString());
+//			System.out.println("已卖出的位置："+sb.toString());
 			
 			session.setAttribute("statusArr", sb.toString());
 			session.setAttribute("showChoseList", showChoseList);
@@ -618,6 +628,33 @@ public class MovieServlet extends BaseServlet {
 	 * @throws IOException
 	 */
 	public void pay(HttpServletRequest request, HttpServletResponse response)throws ServletException, IOException {
+		//发送短信和邮件凭取票码取票
+		Users loginedUser = (Users)session.getAttribute("loginedUser");  //得到当前登录的用户对象
+		Indent in = (Indent)session.getAttribute("indentObj");  //得到当前的订单对象
+		Movies nowMovie = (Movies)session.getAttribute("movieBallotTicket");  //得到当前浏览的电影
+		for(Ticket t : in.getTicketList()){  //遍历订单中的电影票
+			String code = CommonsUtils.createVerifyCode(8, CommonsUtils.VERIFY_CODE_TYPE_EMAIL);  //生成取票码
+			String email = loginedUser.getUserEmail();  //得到要发送到的邮箱地址
+			String tel = loginedUser.getUserTel();   //得到要发送到的手机号
+			if(email != null && !email.isEmpty()){
+				//尊敬的影视天堂用户：{0}！\n\t您刚刚购买了 {1} 在 {2} {3} 上映的 {4} 电影，座位是：{5} ，取票码：\n<font style="color:blue;font-size:25px;">{6}</font>\n请在电影上映前及时取票！
+				Object[] codes = {loginedUser.getUserAccount(),t.getTicketMovieStartTime(),t.getMerchant().getMerStoreName()
+						,t.getTicketMovieTheater(),nowMovie.getMovieName(),t.getTicketLocation(),
+						code};
+				CommonsUtils.sendMail(this.getClass(), loginedUser.getUserEmail(), codes, "buy_ticket_succeed_mail.properties"); //发送邮件
+			}
+			if(tel != null && !tel.isEmpty()){
+				String content = "尊敬的影视天堂用户："+loginedUser.getUserAccount()+
+						"！您刚刚购买了 "+t.getTicketMovieStartTime()+
+						" 在 "+t.getMerchant().getMerStoreName()+" "+t.getTicketMovieTheater()+
+						" 上映的 "+nowMovie.getMovieName()+" 电影，座位是："+t.getTicketLocation()+
+						" ，取票码：【"+code+"】请在电影上映前及时取票！";
+				CommonsUtils.sendTelCode(tel, content);	//发送手机短信
+			}
+		}
+		
+		
+		
 		String p0_Cmd = "Buy"; //业务类型   固定值“Buy” .
         String p1_MerId = PropertiesUtils.getPropertiesByKey("p1_MerId");//商户编号
         String p2_Order = request.getParameter("orderId");// 商户订单号
@@ -642,10 +679,13 @@ public class MovieServlet extends BaseServlet {
                 "p0_Cmd="+p0_Cmd+"&p1_MerId="+p1_MerId+"&p2_Order="+p2_Order+"&p3_Amt="+p3_Amt+"&p4_Cur="+p4_Cur+
                 "&p5_Pid="+p5_Pid+"&p6_Pcat="+p6_Pcat+"&p7_Pdesc="+p7_Pdesc+"&p8_Url="+p8_Url+"&p9_SAF="+p9_SAF+
                 "&pa_MP="+pa_MP+"&pd_FrpId="+pd_FrpId+"&pr_NeedResponse="+pr_NeedResponse+"&hmac="+hmac);
-        System.out.println("https://www.yeepay.com/app-merchant-proxy/node?" +
-                "p0_Cmd="+p0_Cmd+"&p1_MerId="+p1_MerId+"&p2_Order="+p2_Order+"&p3_Amt="+p3_Amt+"&p4_Cur="+p4_Cur+
-                "&p5_Pid="+p5_Pid+"&p6_Pcat="+p6_Pcat+"&p7_Pdesc="+p7_Pdesc+"&p8_Url="+p8_Url+"&p9_SAF="+p9_SAF+
-                "&pa_MP="+pa_MP+"&pd_FrpId="+pd_FrpId+"&pr_NeedResponse="+pr_NeedResponse+"&hmac="+hmac);
+        
+        
+        
+//        System.out.println("https://www.yeepay.com/app-merchant-proxy/node?" +
+//                "p0_Cmd="+p0_Cmd+"&p1_MerId="+p1_MerId+"&p2_Order="+p2_Order+"&p3_Amt="+p3_Amt+"&p4_Cur="+p4_Cur+
+//                "&p5_Pid="+p5_Pid+"&p6_Pcat="+p6_Pcat+"&p7_Pdesc="+p7_Pdesc+"&p8_Url="+p8_Url+"&p9_SAF="+p9_SAF+
+//                "&pa_MP="+pa_MP+"&pd_FrpId="+pd_FrpId+"&pr_NeedResponse="+pr_NeedResponse+"&hmac="+hmac);
         
 	}
 }

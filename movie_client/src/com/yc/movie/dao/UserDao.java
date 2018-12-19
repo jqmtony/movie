@@ -347,7 +347,7 @@ public class UserDao {
 	 * @throws SQLException 
 	 */
 	public void insertImage(Images img) throws SQLException {
-		String sql = "insert into values(?,?,?,?,?,?,?,?,?,?)";
+		String sql = "insert into images values(?,?,?,?,?,?,?,?,?,?)";
 		Object[] params = {img.getImgId(),img.getImgMovieId(),img.getImgAdminId(),
 				img.getImgUserId(),img.getImgMerchantId(),img.getImgTeleplayId(),
 				img.getImgTicketId(),img.getImgNewId(),img.getImgStatus(),

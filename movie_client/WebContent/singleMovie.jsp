@@ -61,65 +61,54 @@
 														<div data-video="f2Z65fobH2I" id="video"> <img src="${pageContext.request.contextPath }${singleShow.imgList[2].imgPath }" alt="这里的图片不存在" class="img-responsive" /> </div>
 													</div>
 													 <h4>
-													 	${lg['protagonist'] } ： <%--这里需要判断主演是否只有一个 --%>
-													 	<c:choose>
-													 		<c:when test="${fn:length(singleShow.proList) eq 1}">
-													 			<a href="${singleShow.proList[fn:length(singleShow.proList)-1].proLink }">${singleShow.proList[fn:length(singleShow.proList)-1].proName }</a>
-													 		</c:when>
-													 		<c:when test="${fn:length(singleShow.proList) eq 2}">
-													 			<a href="${singleShow.proList[fn:length(singleShow.proList)-2].proLink }">${singleShow.proList[fn:length(singleShow.proList)-2].proName }</a> |
-													 			<a href="${singleShow.proList[fn:length(singleShow.proList)-1].proLink }">${singleShow.proList[fn:length(singleShow.proList)-1].proName }</a>
-													 		</c:when>
-													 		<c:otherwise>
-													 			<c:forEach items="${singleShow.proList }" var="pro" begin="0" end="${fn:length(singleShow.proList)-2}">
-															 		<a href="${pro.proLink }">${pro.proName }</a> |
-															 	</c:forEach>
-															 	<a href="${singleShow.proList[fn:length(singleShow.proList)-1].proLink }">${singleShow.proList[fn:length(singleShow.proList)-1].proName }</a>
-													 		</c:otherwise>
-													 	</c:choose>
-														<i class="fa fa-eye" aria-hidden="true"><font style="font-size:15px;">&nbsp;${singleShow.movieVisitCount }</font></i>
+													 	<i class="fa fa-lemon-o" aria-hidden="true"><font style="font-size:15px;">&nbsp;${singleShow.movieIntegralNum }</font></i>
+														<i class="fa fa-eye" aria-hidden="true" style="margin-left:20px;"><font style="font-size:15px;">&nbsp;${singleShow.movieVisitCount }</font></i>
 														<a href="<c:url value='movie.s?method=goBallotTicket&movieId=${singleShow.movieId }' />"><i id="goShopping" class="fa fa-shopping-cart" aria-hidden="true" style="cursor:pointer;color:#f83;margin-left:20px;"><font style="font-size:15px;"> ${lg['buyTicket'] }</font></i></a>
-														<i id="giveALike" class="fa fa-heart-o" aria-hidden="true" style="cursor:pointer;margin-left:20px;" onclick="giveALike()"><font style="font-size:17px;"> ${lg['like'] }</font></i><font id="giveALikeAdd"></font>
+														<i id="giveALike" class="fa fa-heart-o" aria-hidden="true" style="cursor:pointer;margin-left:20px;" onclick="giveALike()"><font style="font-size:17px;"> ${lg['like'] }</font></i>
+														<a href="#addCommentBox"><i class="fa fa-comment" aria-hidden="true" style="margin-left:20px;"><font style="font-size:15px;">&nbsp;${lg["Comment"] }</font></i></a>
 													 </h4>
 													 	
 										    </div>
-											<div class="single-agile-shar-buttons">
-											    <h5 >${lg["ShareThis"] } :</h5>
-													<ul>
-														<li>
-															<div class="fb-like" data-href="" data-layout="button_count" data-action="like" data-size="small" data-show-faces="false" data-share="false"></div>
-															<script>(function(d, s, id) {
-															  var js, fjs = d.getElementsByTagName(s)[0];
-															  if (d.getElementById(id)) return;
-															  js = d.createElement(s); js.id = id;
-															  js.src = "//connect.facebook.net/en_GB/sdk.js#xfbml=1&version=v2.7";
-															  fjs.parentNode.insertBefore(js, fjs);
-															}(document, 'script', 'facebook-jssdk'));</script>
-														</li>
-														<li>
-															<div class="fb-share-button" data-href="" data-layout="button_count" data-size="small" data-mobile-iframe="true"><a class="fb-xfbml-parse-ignore" target="_blank" href="">Share</a></div>
-														</li>
-														<li class="news-twitter">
-															<a href="" class="twitter-follow-button" data-show-count="false">Follow @w3layouts</a><script async src="//platform.twitter.com/widgets.js" charset="utf-8"></script>
-														</li>
-														<li>
-															<a href="https://twitter.com/intent/tweet?screen_name=w3layouts" class="twitter-mention-button" data-show-count="false">Tweet to @w3layouts</a><script async src="//platform.twitter.com/widgets.js" charset="utf-8"></script>
-														</li>
-														<li>
-															<!-- Place this tag where you want the +1 button to render. -->
-															<div class="g-plusone" data-size="medium"></div>
-
-															<!-- Place this tag after the last +1 button tag. -->
-															<script type="text/javascript">
-															  (function() {
-																var po = document.createElement('script'); po.type = 'text/javascript'; po.async = true;
-																po.src = 'https://apis.google.com/js/platform.js';
-																var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(po, s);
-															  })();
-															</script>
-														</li>
-													</ul>
+										    <%--主演 --%>
+										    <div class="single-agile-shar-buttons">
+												<font style="color:red;font-size:15px;">${lg['protagonist'] } ：</font> <%--这里需要判断主演是否只有一个 --%>
+											 	<c:choose>
+											 		<c:when test="${fn:length(singleShow.proList) eq 1}">
+											 			<a href="${singleShow.proList[fn:length(singleShow.proList)-1].proLink }">${singleShow.proList[fn:length(singleShow.proList)-1].proName }</a>
+											 		</c:when>
+											 		<c:when test="${fn:length(singleShow.proList) eq 2}">
+											 			<a href="${singleShow.proList[fn:length(singleShow.proList)-2].proLink }">${singleShow.proList[fn:length(singleShow.proList)-2].proName }</a> |
+											 			<a href="${singleShow.proList[fn:length(singleShow.proList)-1].proLink }">${singleShow.proList[fn:length(singleShow.proList)-1].proName }</a>
+											 		</c:when>
+											 		<c:otherwise>
+											 			<c:forEach items="${singleShow.proList }" var="pro" begin="0" end="${fn:length(singleShow.proList)-2}">
+													 		<a href="${pro.proLink }">${pro.proName }</a> |
+													 	</c:forEach>
+													 	<a href="${singleShow.proList[fn:length(singleShow.proList)-1].proLink }">${singleShow.proList[fn:length(singleShow.proList)-1].proName }</a>
+											 		</c:otherwise>
+											 	</c:choose>
 											</div>
+											
+											<%--类型 --%>
+											<div class="single-agile-shar-buttons" style="margin-top:20px;">
+												<font style="color:red;font-size:15px;">${lg['indexMenuGenre'] } ：</font>
+												<c:forEach items="${singleShow.classifysList }" var="bean">
+													<font style="margin:0 10px 0 10px;">${bean.classifyNameObj.classifyNameString }</font>
+												</c:forEach>
+											</div>
+											
+											<%--发布时间 --%>
+											<div class="single-agile-shar-buttons" style="margin-top:20px;">
+												<font style="color:red;font-size:15px;">${lg['indexNewOneReleaseOn'] } ：</font>
+												<font>${fn:substring(singleShow.movieCreateTime,0,10) }</font>
+											</div>
+											
+											<%--剧情简介 --%>
+											<div class="single-agile-shar-buttons" style="margin-top:20px;">
+												<font style="color:red;font-size:15px;">${lg['indexNewOneStoryLine'] } ：</font>
+												<font>${singleShow.movieDescribe }</font>
+											</div>
+											
 										<div class="response">
 							<h4>${lg["Comment"] }</h4>
 							<%--所有评论 --%>
@@ -151,7 +140,7 @@
 									<div class="media response-info" style="border-left:6px solid#aabb55;border-top:6px solid#aabb55">
 										<div class="media-left response-text-left">
 											<a href="#">
-												<img class="media-object" src="<c:url value='${comment.user.imgList[0].imgPath }' />" alt="" style="border:1px solid #000;width:100px;height:100;">
+												<img class="media-object" src="<c:url value='${reply.user.imgList[0].imgPath }' />" alt="" style="border:1px solid #000;width:100px;height:100;">
 											</a>
 											<h5><a href="#">${reply.user.userAccount } ${lg['Reply'] } ${comment.user.userAccount }</a></h5>
 										</div>
@@ -178,7 +167,7 @@
 													<div class="media response-info" style="margin-left:50px;border-left:5px solid#aabb55;border-top:5px solid#aabb55">
 														<div class="media-left response-text-left">
 															<a href="#">
-																<img class="media-object" src="<c:url value='${comment.user.imgList[0].imgPath }' />" alt="" style="border:1px solid #000;width:100px;height:100;">
+																<img class="media-object" src="<c:url value='${sonReply.user.imgList[0].imgPath }' />" alt="" style="border:1px solid #000;width:100px;height:100;">
 															</a>
 															<h5><a href="#">${sonReply.user.userAccount } ${lg['Reply'] } ${reply.user.userAccount }</a></h5>
 														</div>
@@ -205,7 +194,7 @@
 													<div class="media response-info" style="margin-left:50px;border-left:4px solid#aabb55;border-top:4px solid#aabb55">
 														<div class="media-left response-text-left">
 															<a href="#">
-																<img class="media-object" src="<c:url value='${comment.user.imgList[0].imgPath }' />" alt="" style="border:1px solid #000;width:100px;height:100;">
+																<img class="media-object" src="<c:url value='${sonReply1.user.imgList[0].imgPath }' />" alt="" style="border:1px solid #000;width:100px;height:100;">
 															</a>
 															<h5><a href="#">${sonReply1.user.userAccount } ${lg['Reply'] } ${sonReply.user.userAccount }</a></h5>
 														</div>
@@ -232,7 +221,7 @@
 													<div class="media response-info" style="margin-left:50px;border-left:3px solid#aabb55;border-top:3px solid#aabb55">
 														<div class="media-left response-text-left">
 															<a href="#">
-																<img class="media-object" src="<c:url value='${comment.user.imgList[0].imgPath }' />" alt="" style="border:1px solid #000;width:100px;height:100;">
+																<img class="media-object" src="<c:url value='${sonReply2.user.imgList[0].imgPath }' />" alt="" style="border:1px solid #000;width:100px;height:100;">
 															</a>
 															<h5><a href="#">${sonReply2.user.userAccount } ${lg['Reply'] } ${sonReply1.user.userAccount }</a></h5>
 														</div>
@@ -295,7 +284,7 @@
 						</div>
 						
 								 <%--发表本电影的评论  （已实现）--%>		
-								 <div class="all-comments-info">
+								 <div class="all-comments-info" id="addCommentBox">
 									 <h5 >${lg["addComment"] }  <font id="errorMsg" style="font-size:12px;color:red;"></font></h5>
 									<div class="agile-info-wthree-box">
 										   <input type="hidden" id="commentMovieId" value="${singleShow.movieId }">
@@ -486,44 +475,23 @@
 		}
 		box.toggle();
 	}
-	var i = 1;
 	var flag = true;
 	//点赞
 	function giveALike(){
-		if(!flag){
-			alert("您点击的太快了，请稍后再试！")
-			setTimeout(function(){
-				flag = true;
-			},3000);
-			return;
-		}
-		flag = false;
 		var data;
 		$.post("<c:url value='/user.s?method=isLogin' />",data,function(data){
 			if(data === "yes"){
 				var btn = $('#giveALike');
-				var msg = $('#giveALikeAdd');
-				//alert(btn.attr("class"))
 				if(btn.attr("class") == "fa fa-heart-o"){
 					btn.attr("class","fa fa-heart");
-					msg.html(' + '+i);
-					i++;
-				}else{
-					if(i > 10){
-						alert('每个用户每次只能点赞10次')
-						return;
-					}
-					msg.html(' + '+i);
-					i++;
+					//将电影评分加到数据库中
+					var da = {movieId : "${singleShow.movieId}"};
+					$.post("<c:url value='/movie.s?method=addMovieGradeNum' />",da,function(data){
+						if(data != "yes"){
+							alert(data);
+						}
+					});
 				}
-				
-				//将电影评分加到数据库中
-				var da = {movieId : "${singleShow.movieId}"};
-				$.post("<c:url value='/movie.s?method=addMovieGradeNum' />",da,function(data){
-					if(data != "yes"){
-						alert(data);
-					}
-				});
 			}else if(data === "notLogin"){
 				alert("你还没有登录，必须登录后才能点赞！");
 				location.href = "userLogin.jsp";
@@ -531,6 +499,11 @@
 		});
 	}
  </script>
+ <c:if test="${! empty msg }">
+		<script type="text/javascript">
+			alert('${msg}');
+		</script>
+	</c:if>
 	<!--/footer-bottom-->
 	<%@ include file="footer.jsp"%>
 

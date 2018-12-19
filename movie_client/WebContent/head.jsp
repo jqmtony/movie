@@ -83,20 +83,20 @@
 					<div class="clearfix"> </div>	
 				</nav>
 					<div class="w3ls_search">
-									<div class="cd-main-header">
-										<ul class="cd-header-buttons">
-											<li><a class="cd-search-trigger" href="#cd-search"> <span></span></a></li>
-										</ul> <!-- cd-header-buttons -->
-									</div>
-										<%--搜索框  hzr =========================================================--%>
-										<div id="cd-search" class="cd-search">
-											<form action="<c:url value='/movie.s' />" method="post">
-												<input type="hidden" name="method" value="search">
-												<input name="Search" type="search" placeholder="${lg['Search']}">
-											</form>
-										</div>
-										<%--搜索框  hzr =========================================================--%>
-								</div>
+						<div class="cd-main-header">
+							<ul class="cd-header-buttons">
+								<li><a class="cd-search-trigger" href="#cd-search"> <span></span></a></li>
+							</ul> <!-- cd-header-buttons -->
+						</div>
+						<%--搜索框  hzr =========================================================--%>
+						<div id="cd-search" class="cd-search">
+							<form action="<c:url value='/movie.s' />" method="post">
+								<input type="hidden" name="method" value="search">
+								<input name="Search" type="search" placeholder="${lg['Search']}">
+							</form>
+						</div>
+						<%--搜索框  hzr =========================================================--%>
+					</div>
 	
 			</div> 
 
@@ -107,35 +107,21 @@
   <!--/banner-section-->
  <!--//main-header-->
 	         <!--/banner-bottom-->
-			   <div class="w3_agilits_banner_bootm">
-			     <div class="w3_agilits_inner_bottom">
-			            <div class="col-md-6 wthree_agile_login">
+			   <div class="w3_agilits_banner_bootm" style="width:auto;">
+			     <div class="w3_agilits_inner_bottom" style="width:auto;">
+			            <div class="col-md-6 wthree_agile_login" style="width:auto;">
 						     <ul>
-									<li style="margin-right:50px;"><i class="fa fa-phone" aria-hidden="true"></i> (+000) 009 455 4088</li>
+									<li style="margin-right:10px;"><i class="fa fa-phone" aria-hidden="true"></i> (+000) 009 455 4088</li>
 									<c:choose>
 										<c:when test="${empty loginedUser }">
 											<li><a href="<c:url value='/user.s?method=loginSetReferer' />" class="login">${lg["indexLogin"]}</a></li>
 										</c:when>
-										<c:when test="${fn:length(loginedUser.imgList) eq 0 }">
-											<li style="margin-left:30px;">
-												<img id="headImg" style="width:20px;height:20px;" src="<c:url value='/images/uploadLogo.png' />" alt="图片">
-												<font>${loginedUser.userAccount}</font>
-											</li>
-											<li style="margin-left:20px;">
-												<select id="infoChange" style="color:#000000;" onchange="infoChange()">
-													<option selected="selected">${lg['personalCenter'] }</option>
-													<option>${lg['alterInfo'] }</option>
-													<option>${lg['myIndent'] }</option>
-													<option>${lg['loginOut'] }</option>
-												</select>
-											</li>
-										</c:when>
 										<c:otherwise>
-											<li style="margin-left:30px;">
+											<li style="margin-left:10px;">
 												<img id="headImg" style="width:20px;height:20px;" src="<c:url value='${loginedUser.imgList[0].imgPath }' />" alt="图片">
 												<font>${loginedUser.userAccount}</font>
 											</li>
-											<li style="margin-left:20px;">
+											<li style="margin-left:10px;">
 												<select id="infoChange" style="color:#000000;" onchange="infoChange()">
 													<option selected="selected">${lg['personalCenter'] }</option>
 													<option>${lg['alterInfo'] }</option>
@@ -143,11 +129,12 @@
 													<option>${lg['loginOut'] }</option>
 												</select>
 											</li>
+											<li>
+												<i class="fa fa-lemon-o" aria-hidden="true" style="margin-left:10px;"><font style="font-size:15px;">&nbsp;${lg["grade"]} ${loginedUser.integral.integralCount }</font></i>
+											</li>
 										</c:otherwise>
 									</c:choose>
-									<%-- <li><a href="#" class="login"  data-toggle="modal" data-target="#myModal4">${lg["indexLogin"]}</a></li> --%>
-									<%-- <li><a href="#" class="login reg"  data-toggle="modal" data-target="#myModal5">${lg["indexRegister"]}</a></li> --%>
-
+									
 								</ul>
 						</div>
 						 

@@ -28,7 +28,7 @@
 <link href='http://fonts.googleapis.com/css?family=Montserrat:400,700' rel='stylesheet' type='text/css'>
 <!--//web-fonts-->
 </head>
-<c:if test="${empty movieList }">
+<c:if test="${movieList eq null}">
 	<jsp:forward page="movie.s?method=findAllMovie"></jsp:forward>
 </c:if>
 <body>
@@ -146,41 +146,30 @@
   <!--/banner-section-->
  <!--//main-header-->
 	         <!--/banner-bottom-->
-			  <div class="w3_agilits_banner_bootm">
-			     <div class="w3_agilits_inner_bottom">
-			            <div class="col-md-6 wthree_agile_login">
+			  <div class="w3_agilits_banner_bootm" style="width:auto;">
+			     <div class="w3_agilits_inner_bottom" style="width:auto;">
+			            <div class="col-md-6 wthree_agile_login" style="width:auto;">
 						     <ul>
-									<li style="margin-right:50px;"><i class="fa fa-phone" aria-hidden="true"></i> (+000) 009 455 4088</li>
+									<li style="margin-right:10px;"><i class="fa fa-phone" aria-hidden="true"></i> (+000) 009 455 4088</li>
 									<c:choose>
 										<c:when test="${empty loginedUser }">
 											<li><a href="<c:url value='/user.s?method=loginSetReferer' />" class="login">${lg["indexLogin"]}</a></li>
 										</c:when>
-										<c:when test="${fn:length(loginedUser.imgList) eq 0 }">
-											<li style="margin-left:30px;">
-												<img id="headImg" style="width:20px;height:20px;" src="<c:url value='/images/uploadLogo.png' />" alt="图片">
-												<font>${loginedUser.userAccount}</font>
-											</li>
-											<li style="margin-left:20px;">
-												<select id="infoChange" style="color:#000000;" onchange="infoChange()">
-													<option selected="selected">${lg['personalCenter'] }</option>
-													<option>${lg['alterInfo'] }</option>
-													<option>${lg['myIndent'] }</option>
-													<option>${lg['loginOut'] }</option>
-												</select>
-											</li>
-										</c:when>
 										<c:otherwise>
-											<li style="margin-left:30px;">
+											<li style="margin-left:10px;">
 												<img id="headImg" style="width:20px;height:20px;" src="<c:url value='${loginedUser.imgList[0].imgPath }' />" alt="图片">
 												<font>${loginedUser.userAccount}</font>
 											</li>
-											<li style="margin-left:20px;">
+											<li style="margin-left:10px;">
 												<select id="infoChange" style="color:#000000;" onchange="infoChange()">
 													<option selected="selected">${lg['personalCenter'] }</option>
 													<option>${lg['alterInfo'] }</option>
 													<option>${lg['myIndent'] }</option>
 													<option>${lg['loginOut'] }</option>
 												</select>
+											</li>
+											<li>
+												<i class="fa fa-lemon-o" aria-hidden="true" style="margin-left:10px;"><font style="font-size:15px;">&nbsp;${lg["grade"]} ${loginedUser.integral.integralCount }</font></i>
 											</li>
 										</c:otherwise>
 									</c:choose>
@@ -208,7 +197,11 @@
 										<div class="w3_agile_featured_movies">
 											<div class="col-md-5 video_agile_player">
 										            <div class="video-grid-single-page-agileits">
-														<div data-video="f2Z65fobH2I" id="video"> <img src="<c:url value='${movieList[indexTime[0]].imgList[2].imgPath}' />" alt="" class="img-responsive" /> </div>
+														<div data-video="f2Z65fobH2I" id="video">
+															<a href="<c:url value='/movie.s?method=singleShow&type=movie&id=${movieList[indexTime[0]].movieId }' />">
+																<img src="<c:url value='${movieList[indexTime[0]].imgList[2].imgPath}' />" alt="" class="img-responsive" />
+															</a> 
+														</div>
 													</div>
 			       									 <div class="player-text">
 														<p class="fexi_header">${movieList[indexTime[0]].movieName }</p>
@@ -245,7 +238,7 @@
 															</a>
 																<div class="mid-1 agileits_w3layouts_mid_1_home">
 																	<div class="w3l-movie-text">
-																		<h6><a href="<c:url value='/movie.s?method=singleShow&type=movie&id=${movieList[index].movieId }' />" style="font-size:15px;">${movieList[index].movieName }	</a></h6>						
+																		<h6><a href="<c:url value='/movie.s?method=singleShow&type=movie&id=${movieList[index].movieId }' />" style="font-size:12px;">${movieList[index].movieName }	</a></h6>						
 																	</div>
 																	<div class="mid-2 agile_mid_2_home">
 																		<p>${fn:substring(movieList[index].movieCreateTime,0,4)}</p>
@@ -288,7 +281,11 @@
 										<div class="w3_agile_featured_movies">
 											<div class="col-md-5 video_agile_player">
 										            <div class="video-grid-single-page-agileits">
-														<div data-video="f2Z65fobH2I" id="video"> <img src="<c:url value='${movieList[indexVisit[0]].imgList[2].imgPath}' />" alt="" class="img-responsive" /> </div>
+														<div data-video="f2Z65fobH2I" id="video"> 
+															<a href="<c:url value='/movie.s?method=singleShow&type=movie&id=${movieList[indexVisit[0]].movieId }' />">
+																<img src="<c:url value='${movieList[indexVisit[0]].imgList[2].imgPath}' />" alt="" class="img-responsive" /> 
+															</a>
+														</div>
 													</div>
 
 
@@ -328,7 +325,7 @@
 															</a>
 																<div class="mid-1 agileits_w3layouts_mid_1_home">
 																	<div class="w3l-movie-text">
-																		<h6><a href="<c:url value='/movie.s?method=singleShow&type=movie&id=${movieList[index].movieId }' />" style="font-size:15px;">${movieList[index].movieName }	</a></h6>						
+																		<h6><a href="<c:url value='/movie.s?method=singleShow&type=movie&id=${movieList[index].movieId }' />" style="font-size:12px;">${movieList[index].movieName }	</a></h6>						
 																	</div>
 																	<div class="mid-2 agile_mid_2_home">
 																		<p>${fn:substring(movieList[index].movieCreateTime,0,4)}</p>
@@ -370,7 +367,11 @@
 										<div class="w3_agile_featured_movies">
 											<div class="col-md-5 video_agile_player">
 										            <div class="video-grid-single-page-agileits">
-														<div data-video="f2Z65fobH2I" id="video"> <img src="<c:url value='${movieList[indexGrade[0]].imgList[2].imgPath}' />" alt="" class="img-responsive" /> </div>
+														<div data-video="f2Z65fobH2I" id="video"> 
+															<a href="<c:url value='/movie.s?method=singleShow&type=movie&id=${movieList[indexGrade[0]].movieId }' />">
+																<img src="<c:url value='${movieList[indexGrade[0]].imgList[2].imgPath}' />" alt="" class="img-responsive" />
+															</a> 
+														</div>
 													</div>
 
 
@@ -409,7 +410,7 @@
 															</a>
 																<div class="mid-1 agileits_w3layouts_mid_1_home">
 																	<div class="w3l-movie-text">
-																		<h6><a href="<c:url value='/movie.s?method=singleShow&type=movie&id=${movieList[index].movieId }' />" style="font-size:15px;">${movieList[index].movieName }	</a></h6>						
+																		<h6><a href="<c:url value='/movie.s?method=singleShow&type=movie&id=${movieList[index].movieId }' />" style="font-size:12px;">${movieList[index].movieName }	</a></h6>						
 																	</div>
 																	<div class="mid-2 agile_mid_2_home">
 																		<p>${fn:substring(movieList[index].movieCreateTime,0,4)}</p>
@@ -550,7 +551,7 @@
 														</a>
 															<div class="mid-1 agileits_w3layouts_mid_1_home">
 																<div class="w3l-movie-text">
-																	<h6><a href="<c:url value='/movie.s?method=singleShow&type=movie&id=${movieList[index].movieId }' />" style="font-size:15px;">${movieList[index].movieName }</a></h6>							
+																	<h6><a href="<c:url value='/movie.s?method=singleShow&type=movie&id=${movieList[index].movieId }' />" style="font-size:12px;">${movieList[index].movieName }</a></h6>							
 																</div>
 																<div class="mid-2 agile_mid_2_home">
 																	<p>${fn:substring(movieList[index].movieCreateTime,0,4)}</p>
@@ -581,7 +582,11 @@
 											
 											 	<div class="col-md-5 video_agile_player second-top">
 										            <div class="video-grid-single-page-agileits">
-														<div data-video="BXEZFd0RT5Y" id="video3"> <img src="<c:url value='${movieList[indexGrade[0]].imgList[2].imgPath}' />" alt="" class="img-responsive" /> </div>
+														<div data-video="BXEZFd0RT5Y" id="video3"> 
+															<a href="<c:url value='/movie.s?method=singleShow&type=movie&id=${movieList[indexGrade[0]].movieId }' />">
+																<img src="<c:url value='${movieList[indexGrade[0]].imgList[2].imgPath}' />" alt="" class="img-responsive" /> 
+															</a>
+														</div>
 													</div>
 
         <div class="player-text two">

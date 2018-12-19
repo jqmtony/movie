@@ -48,6 +48,7 @@ public class AdminService {
 			}
 			return admin;
 		}catch(SQLException e){
+			e.printStackTrace();
 			throw new AdminException("系统异常，请稍后再试！");
 		}
 		
@@ -66,9 +67,11 @@ public class AdminService {
 			
 			JdbcUtils.commitTransaction();  //提交事务
 		} catch (SQLException e) {
+			e.printStackTrace();
 			try {
 				JdbcUtils.roolbackTransaction();  //回滚
 			} catch (SQLException e1) {
+				e1.printStackTrace();
 				throw new AdminException("系统异常，请稍后再试！");
 			} 
 		}  
@@ -83,6 +86,7 @@ public class AdminService {
 		try {
 			return ad.findAdminById(alterId);
 		} catch (SQLException e) {
+			e.printStackTrace();
 			throw new AdminException("系统异常，请稍后再试！");
 		}
 	}
@@ -118,6 +122,7 @@ public class AdminService {
 					throw new AdminException("注册码不存在！");
 				}
 			} catch (IOException e) {
+				e.printStackTrace();
 				throw new AdminException("系统异常，请稍后再试！");
 			}
 			
@@ -128,6 +133,7 @@ public class AdminService {
 					throw new AdminException("该注册码已被使用！");
 				}
 			} catch (SQLException e) {
+				e.printStackTrace();
 				throw new AdminException("系统异常，请稍后再试！");
 			}
 	
@@ -146,6 +152,7 @@ public class AdminService {
 					throw new AdminException("该邮箱已被使用！");
 				}
 			} catch (SQLException e) {
+				e.printStackTrace();
 				throw new AdminException("系统异常，请稍后再试！");
 			}
 			
@@ -186,6 +193,7 @@ public class AdminService {
 			if(adm == null)
 				throw new AdminException("此邮箱未注册，请先去注册!");
 		} catch (SQLException e) {
+			e.printStackTrace();
 			throw new AdminException("系统异常，请稍后再试！");
 		}
 		
@@ -228,9 +236,11 @@ public class AdminService {
 			
 			JdbcUtils.commitTransaction();  //提交事务
 		} catch (SQLException e) {
+			e.printStackTrace();
 			try {
 				JdbcUtils.roolbackTransaction();  //回滚
 			} catch (SQLException e1) {
+				e1.printStackTrace();
 				throw new AdminException("系统异常，请稍后再试！");
 			}
 		}
@@ -244,6 +254,7 @@ public class AdminService {
 			String fileName = "register_admin_email.properties";
 			CommonsUtils.sendMail(this.getClass(), to, codes, fileName);
 		}catch(IOException e){
+			e.printStackTrace();
 			throw new AdminException("系统异常，本地配置文件已损坏！");
 		}
 	}
@@ -279,6 +290,7 @@ public class AdminService {
 				if(admin == null)
 					throw new AdminException("注册码与邮箱不匹配！");
 			} catch (SQLException e) {
+				e.printStackTrace();
 				throw new AdminException("系统异常，请稍后再试！");
 			}
 	
@@ -297,6 +309,7 @@ public class AdminService {
 					throw new AdminException("该邮箱未被注册！");
 				}
 			} catch (SQLException e) {
+				e.printStackTrace();
 				throw new AdminException("系统异常，请稍后再试！");
 			}
 			
@@ -346,9 +359,11 @@ public class AdminService {
 			
 			JdbcUtils.commitTransaction();  //提交事务
 		} catch (SQLException e) {
+			e.printStackTrace();
 			try {
 				JdbcUtils.roolbackTransaction();  //回滚
 			} catch (SQLException e1) {
+				e1.printStackTrace();
 				throw new AdminException("系统异常，请稍后再试！");
 			}
 		}
@@ -362,6 +377,7 @@ public class AdminService {
 			String fileName = "reset_password_email.properties";
 			CommonsUtils.sendMail(this.getClass(), to, codes, fileName);
 		}catch(IOException e){
+			e.printStackTrace();
 			throw new AdminException("系统异常，本地配置文件已损坏！");
 		}
 	}
@@ -376,6 +392,7 @@ public class AdminService {
 		try {
 			return ad.findAllIndent();
 		} catch (SQLException e) {
+			e.printStackTrace();
 			throw new AdminException("系统异常，请稍后再试！");
 		}
 	}

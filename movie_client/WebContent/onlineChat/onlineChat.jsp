@@ -121,7 +121,25 @@ $('.sendBtn').on('click',function(){
 		var data1 = {content : news,id : nowObj.attr("name")};
 		//发送给服务器
 		$.post("<c:url value='/user.s?method=sendContentToChatServer' />",data1,function(data){
-			
+			if(data != null && data != ""){
+				var dataArr = data.split("{[code]}");  //得到数组
+				var merId = dataArr[0];
+				
+				merId = "newsList" + merId;
+				var content = dataArr[1];
+				var path = dataArr[2];
+				var str = '<li name='+merId+'>'+
+				'<div class="nesHead"><img src="${pageContext.request.contextPath}'+path+'"/></div>'+
+				'<div class="news"><img class="jiao" src="img/jiao.jpg">'+content+'</div>'+
+				'</li>';
+				
+				//给对应的面板添加回复
+				$('.newsList').each(function(index,data){
+					if($(data).attr('name') === merId){
+						$(data).append(str);
+					}
+				});	
+			}
 		});
 		
 		//将刚才发送的聊天内容显示到页面
@@ -142,8 +160,6 @@ function refresh(){
 			merId = "newsList" + merId;
 			var content = dataArr[1];
 			var path = dataArr[2];
-			alert("数组长度："+dataArr.length)
-			alert("path:"+path);
 			var str = '<li name='+merId+'>'+
 			'<div class="nesHead"><img src="${pageContext.request.contextPath}'+path+'"/></div>'+
 			'<div class="news"><img class="jiao" src="img/jiao.jpg">'+content+'</div>'+
@@ -180,6 +196,10 @@ function answers(){
 }
 
 </script>
-
+<c:if test="${! empty msg }">
+		<script type="text/javascript">
+			alert('${msg}');
+		</script>
+	</c:if>
 </body>
 </html>

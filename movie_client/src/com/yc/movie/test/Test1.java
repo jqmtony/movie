@@ -9,20 +9,18 @@ import java.util.Properties;
 
 import org.junit.Test;
 
+import redis.clients.jedis.Jedis;
+
 public class Test1 {
 	
 	@Test
 	public void fun1() throws IOException{
-		Properties p = new Properties();
-		File file = new File("G:/mer.properties");
-		FileInputStream fis = new FileInputStream(file);
-		FileOutputStream fos = new FileOutputStream(file);
+		Jedis jedis = new Jedis();
+		jedis.sadd("title:"+1, "ÕÅÈý");
+		jedis.close();
 		
-		p.load(fis);
-		p.remove("1");
-		System.out.println(p.getProperty("1"));
-		p.store(fos, "");
-		fis.close();
-		fos.close();
+		jedis = new Jedis();
+		System.out.println(jedis.smembers("title:1"));
 	}
+	
 }

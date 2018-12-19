@@ -67,6 +67,12 @@ body{font:12px/180% Arial, Helvetica, sans-serif, "新宋体";}
 	margin:20px 0 20px 50px;
 }
     </style>
+    <c:if test="${loginedMerchant.merStatus eq '0' }">
+    	<script type="text/javascript">
+    		alert("你还没有认证，无法添加电影！");
+    		location.href="<c:url value='/merAlterInfo/merAlterInfo.jsp' />";
+    	</script>
+    </c:if>
     <body>
     	 <form action="<c:url value='/mer.s?method=addMovie&movieMerId=${loginedMerchant.merId }' />" name="form1" method="post" enctype="multipart/form-data">
         <section class="aui-content">
@@ -122,8 +128,8 @@ body{font:12px/180% Arial, Helvetica, sans-serif, "新宋体";}
                         </label>
                         <div class="aui-form-input">
                             <select style="width:200px;height:30px;" name="movieGenre"> 
-                            	<option style="width:200px;height:30px;">国产2D</option>
-                            	<option style="width:200px;height:30px;">国产3D</option>
+                            	<option style="width:200px;height:30px;">2D</option>
+                            	<option style="width:200px;height:30px;">3D</option>
                             </select>
                         </div>
                     </div>

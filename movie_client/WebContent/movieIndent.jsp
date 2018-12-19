@@ -88,7 +88,11 @@
 	
 	</div>
 	
-	
+	<c:if test="${! empty msg }">
+		<script type="text/javascript">
+			alert('${msg}');
+		</script>
+	</c:if>
 	<!--/footer-bottom-->
 	<%@ include file="footer.jsp"%>
 

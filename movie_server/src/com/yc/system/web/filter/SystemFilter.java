@@ -20,7 +20,7 @@ import com.yc.movie.utils.CommonsUtils;
 /**
  * Servlet Filter implementation class filter
  */
-@WebFilter(urlPatterns={"*.jsp"})
+@WebFilter(urlPatterns={"*.jsp","*.s"})
 public class SystemFilter implements Filter {
 	public void destroy() {
 		// TODO Auto-generated method stub
@@ -38,9 +38,16 @@ public class SystemFilter implements Filter {
 		String proName = p.getProperty("projectName");
 		request.getServletContext().setAttribute("addrIp", addr+proName);
 		
+		String path = httpRequest.getServletPath();	//获取到访问路径   /login.jsp
+		if(!path.endsWith("merLogin.jsp") && !path.endsWith("mer.s") && !path.endsWith("mail/register.jsp")){
+			Object loginedMerchant = session.getAttribute("loginedMerchant");
+			if(loginedMerchant == null){
+				httpRequest.setAttribute("msg", "你还没有登录！请先登录！");
+				httpRequest.getRequestDispatcher("/merLogin.jsp").forward(httpRequest, response);
+			}
+		}
 		
-		// pass the request along the filter chain
-		chain.doFilter(request, response);	//放行
+		chain.doFilter(request, response);
 	}
 	public void init(FilterConfig fConfig) throws ServletException {
 		// TODO Auto-generated method stub

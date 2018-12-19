@@ -107,8 +107,13 @@ public class MerchantDao {
 	public Merchant findMerchantById(Long merId) throws SQLException {
 		String sql = "select * from merchant where merId=?";
 		List<Merchant> list = qr.query(sql, new BeanListHandler<Merchant>(Merchant.class),merId);
-		if(list.size() > 0)
-			return list.get(0);
+		if(list.size() > 0){
+			Merchant mer = list.get(0);
+			sql = "select * from images where imgMerchantId=?";
+			List<Images> imgList = qr.query(sql, new BeanListHandler<Images>(Images.class),merId);
+			mer.setImgList(imgList);
+			return mer;
+		}
 		return null;
 	}
 
@@ -283,9 +288,9 @@ public class MerchantDao {
 	 * @throws SQLException
 	 */
 	public void saveMerchant(Merchant form) throws SQLException {
-		String sql = "update merchant set merStoreName=?,merName=?,merIDCard=?,merAddr=?,merTel=? where merId=?";
+		String sql = "update merchant set merStoreName=?,merName=?,merIDCard=?,merAddr=?,merTel=?,merStatus=? where merId=?";
 		Object[] params={form.getMerStoreName(),form.getMerName(),form.getMerIDCard(),
-				form.getMerAddr(),form.getMerTel(),form.getMerId()} ;
+				form.getMerAddr(),form.getMerTel(),"1",form.getMerId()} ;
 		qr.update(sql,params);
 	}
 
@@ -378,7 +383,7 @@ public class MerchantDao {
 	 * @throws SQLException 
 	 */
 	public void insertImage(Images img) throws SQLException {
-		String sql = "insert into values(?,?,?,?,?,?,?,?,?,?)";
+		String sql = "insert into images values(?,?,?,?,?,?,?,?,?,?)";
 		Object[] params = {img.getImgId(),img.getImgMovieId(),img.getImgAdminId(),
 				img.getImgUserId(),img.getImgMerchantId(),img.getImgTeleplayId(),
 				img.getImgTicketId(),img.getImgNewId(),img.getImgStatus(),

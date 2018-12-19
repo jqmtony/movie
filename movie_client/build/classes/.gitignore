@@ -1,5 +1,3 @@
 /res_zh_CN.properties
 /com/
-/receiveUserToMer.properties
-/sendMerToUser.properties
-/receiveMerToUser.properties
+/user_chat_auto_revice.properties

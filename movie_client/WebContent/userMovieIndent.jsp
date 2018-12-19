@@ -36,7 +36,7 @@
 
 </head>
 <c:choose>
-	<c:when test="${empty indentList}">
+	<c:when test="${indentList eq null}">
 		<jsp:forward page="/user.s?method=findIndentListByLoginedUser" />
 	</c:when>
 </c:choose>
@@ -45,7 +45,16 @@
 <!--/main-header-->
   <!--/banner-section-->
 	<%@ include file="head.jsp"%>
-	
+	<!-- breadcrumb -->
+		<div class="w3_breadcrumb">
+			<div class="breadcrumb-inner">	
+				<ul>
+					<li><a href="index.jsp">${lg['indexTitle'] }</a><i>//</i></li>
+					<li>${lg['myIndent'] }</li>
+				</ul>
+			</div>
+		</div>
+	<!-- //breadcrumb -->
 	
 	<!--
 		<div class="w3_breadcrumb">

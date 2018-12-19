@@ -98,7 +98,7 @@
 						<div class="col-md-2 footer-grid">
 						   <h4 class="b-log"><a href="index.jsp"><span>${lg["indexTitle_1"] }</span>${lg["indexTitle_2"] } <span>${lg["indexTitle_3"] }</span>${lg["indexTitle_4"] }</a></h4>
 							
-							<c:forEach items="${indexVisit2 }" var="index" end="5">
+							<c:forEach items="${indexVisit2 }" var="index" begin="0" end="5">
 								<div class="footer-grid-instagram">
 									<a href="<c:url value='/movie.s?method=singleShow&type=movie&id=${movieList2[index].movieId }' />"><img src="<c:url value='${movieList2[index].imgList[0].imgPath }' />" alt=" " class="img-responsive"></a>
 								</div>

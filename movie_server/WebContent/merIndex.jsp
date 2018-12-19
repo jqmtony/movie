@@ -188,6 +188,11 @@
 			</div>
 		</div>
 	</body>
+	<c:if test="${! empty msg }">
+		<script type="text/javascript">
+			alert('${msg}');
+		</script>
+	</c:if>
 </html>
 <script>
 	var data = [{
@@ -242,7 +247,7 @@
 			url: 'merAlterInfo/merInfo.jsp',
 			name: '个人信息',
 
-		}		
+		}
 	]
 	$(function() {
 		$("#situation").BKframe({

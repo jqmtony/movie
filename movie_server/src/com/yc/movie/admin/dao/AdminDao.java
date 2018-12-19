@@ -158,7 +158,7 @@ public class AdminDao {
 			if(user.size() > 0)
 				in.setUser(user.get(0));
 			
-			sql = "select * from ";
+//			sql = "select * from ";
 		}
 		return null;
 	}

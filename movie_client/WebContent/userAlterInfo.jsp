@@ -158,7 +158,7 @@ function writeImg(url){
 												<c:when test="${empty loginedUser.userTel }">
 													<input class="input__field input__field--ichiro" type="text" id="input-28" name="userTel" placeholder=" " onBlur="blurUserTel()">
 													<label class="input__label input__label--ichiro" for="input-28">
-														<span class="input__label-content input__label-content--ichiro">${lg['yourPhoneNumer'] }</span>
+														<span class="input__label-content input__label-content--ichiro" id="telShow">${lg['yourPhoneNumer'] }</span>
 													</label>
 												</c:when>
 												<c:otherwise>

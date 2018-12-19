@@ -90,7 +90,11 @@ span.seatCharts-legendDescription {margin-left: 5px;line-height: 30px;}
     <img src="img/bg_3.png" class="bg-3" alt=""></a>  </div>
 </div>
 
-
+<c:if test="${! empty msg }">
+	<script type="text/javascript">
+		alert('${msg}');
+	</script>
+</c:if>
 
 <script type="text/javascript">
 	//打开在线聊天窗口

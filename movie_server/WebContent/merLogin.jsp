@@ -122,18 +122,11 @@
 									</fieldset>
 								</form>
 							</div>
-							<!-- <div class="social-or-login center">
-								<span class="bigger-110">通知</span>
-							</div> -->
-							<!-- <div class="social-login ">
-								为了更好的体验性（兼容移动端），本网站系统不再对IE8（含IE8）以下浏览器支持，请见谅。
-							</div> -->
 						</div>
 					</div>
 				</div>
 			</div>
 		</div>
-		<!-- <div class="loginbm">版权所有 2016</div> -->
 	</body>
 	
 	<c:if test="${! empty msg }">

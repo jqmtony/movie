@@ -44,8 +44,6 @@ import sun.font.CreatedFontTracker;
 public class MerchantService {
 	private MerchantDao md = new MerchantDao();
 
-
-
 	/**
 	 * 登录
 	 * @param form
@@ -101,6 +99,7 @@ public class MerchantService {
 			me = md.createMerchant(me);
 			return me;
 		} catch (SQLException e) {
+			e.printStackTrace();
 			throw new MerchantException("系统异常，请稍后再试！");
 		}
 	}
@@ -151,7 +150,7 @@ public class MerchantService {
 				throw new MerchantException("该邮箱已被注册！");
 			
 			//验证成功
-			form.setMerStatus("1");
+			form.setMerStatus("0");
 			form.setMerPwd(CommonsUtils.parseMD5(form.getMerPwd()));
 			
 			//发邮件
@@ -160,8 +159,10 @@ public class MerchantService {
 			CommonsUtils.sendMail(this.getClass(), form.getMerEmail(), codes, "register_merchant_email.properties");
 			return form;
 		} catch(IOException e1){
+			e1.printStackTrace();
 			throw new MerchantException("系统异常，系统文件被损坏！");
 		}catch (SQLException e) {
+			e.printStackTrace();
 			throw new MerchantException("系统异常，请稍后再试！");
 		}
 	}
@@ -173,7 +174,7 @@ public class MerchantService {
 	 */
 	public void registerAfter(Merchant me) throws MerchantException {
 		try {
-			me.setMerStatus("1");  //商户账号的初始化状态为禁用   必须实名认证后才可以使用
+			me.setMerStatus("0");  //商户账号的初始化状态为禁用   必须实名认证后才可以使用
 			JdbcUtils.beginTransaction();
 			md.insertMerchant(me);  //插入新注册的商户信息到数据库
 			
@@ -187,9 +188,11 @@ public class MerchantService {
 			md.insertImage(im);
 			JdbcUtils.commitTransaction();
 		} catch (SQLException e) {
+			e.printStackTrace();
 			try {
 				JdbcUtils.roolbackTransaction();
 			} catch (SQLException e1) {
+				e1.printStackTrace();
 				throw new MerchantException("系统异常，请稍后再试！");
 			}
 		}
@@ -242,8 +245,10 @@ public class MerchantService {
 			CommonsUtils.sendMail(this.getClass(), form.getMerEmail(), codes, "register_forget_email.properties");
 			return form;
 		} catch(IOException e1){
+			e1.printStackTrace();
 			throw new MerchantException("系统异常，系统文件被损坏！");
 		}catch (SQLException e) {
+			e.printStackTrace();
 			throw new MerchantException("系统异常，请稍后再试！");
 		}
 	}
@@ -281,9 +286,11 @@ public class MerchantService {
 			md.updateByPwd(me);
 			JdbcUtils.commitTransaction();
 		} catch (SQLException e) {
+			e.printStackTrace();
 			try {
 				JdbcUtils.roolbackTransaction();
 			} catch (SQLException e1) {
+				e1.printStackTrace();
 				throw new MerchantException("系统异常，请稍后再试！");
 			}
 		}
@@ -379,14 +386,15 @@ public class MerchantService {
 		try{
 			//判断身份证是否已经被实名
 			Merchant m = md.findMerchantByIdCard(form.getMerIDCard());
-			if(m != null)
+			if(m != null && !m.getMerIDCard().equals(loginedMerchant.getMerIDCard()))
 				throw new MerchantException("输入的身份证号码已经实名过了！");
 			
 			//判断手机号是否已经被注册
 			m = md.findMerchantByTel(form.getMerTel());
-			if(m != null)
+			if(m != null && !m.getMerTel().equals(loginedMerchant.getMerTel()))
 				throw new MerchantException("输入的手机号码已经被绑定！");
 		}catch(SQLException e){
+			e.printStackTrace();
 			throw new MerchantException("系统异常，请稍后再试！");
 		}
 		
@@ -396,9 +404,11 @@ public class MerchantService {
 			md.saveMerchant(form);  //保存商户认证信息
 			JdbcUtils.commitTransaction();
 		} catch (SQLException e) {
+			e.printStackTrace();
 			try {
 				JdbcUtils.roolbackTransaction();
 			} catch (SQLException e1) {
+				e1.printStackTrace();
 				throw new MerchantException("系统异常，请稍后再试！");
 			}
 		}
@@ -687,6 +697,7 @@ public class MerchantService {
 			
 			JdbcUtils.commitTransaction();
 		} catch (Exception e) {
+			e.printStackTrace();
 			try {
 				JdbcUtils.roolbackTransaction();
 			} catch (SQLException e1) {
@@ -705,7 +716,6 @@ public class MerchantService {
 	 */
 	private void createTicket(String movieStartTime, Long insertedMovie,int theaterNum ,Long minute,Long merId) throws SQLException {
 		Long num = 1l;
-		System.out.println("正在创造电影票");
 		for(int i=1;i<=12;i++){
 			for(int j=1;j<=17;j++){
 				Ticket t = new Ticket();
@@ -723,7 +733,6 @@ public class MerchantService {
 				md.addTicket(t);
 			}
 		}
-		System.out.println("创造电影票结束");
 	}
 
 	/**
@@ -736,6 +745,7 @@ public class MerchantService {
 		try {
 			return md.getMovieMerIdByMovieName(movieName);
 		} catch (SQLException e) {
+			e.printStackTrace();
 			throw new MerchantException("系统异常，请稍后再试");
 		}
 	}
@@ -756,6 +766,7 @@ public class MerchantService {
 				CommonsUtils.sendMail(this.getClass(), to, codes, fileName);
 			}
 		} catch (SQLException e) {
+			e.printStackTrace();
 			throw new MerchantException("系统异常，请稍后再试");
 		}
 	}
@@ -769,6 +780,7 @@ public class MerchantService {
 		try {
 			return md.findAllUser();
 		} catch (SQLException e) {
+			e.printStackTrace();
 			throw new MerchantException("系统异常，请稍后再试");
 		}
 	}
@@ -783,6 +795,7 @@ public class MerchantService {
 		try {
 			return md.findUserByUserId(userId);
 		} catch (SQLException e) {
+			e.printStackTrace();
 			throw new MerchantException("系统异常，请稍后再试");
 		}
 	}
@@ -796,6 +809,7 @@ public class MerchantService {
 		try {
 			md.setImagePath(img);
 		} catch (SQLException e) {
+			e.printStackTrace();
 			throw new MerchantException("系统异常，请稍后再试");
 		}
 	}
@@ -834,12 +848,28 @@ public class MerchantService {
 			
 			JdbcUtils.commitTransaction();
 		} catch (SQLException e) {
+			e.printStackTrace();
 			try {
 				JdbcUtils.roolbackTransaction();
 			} catch (SQLException e1) {
 				e1.printStackTrace();
 				throw new MerchantException("系统异常，请稍后再试");
 			}
+		}
+	}
+
+	/**
+	 * 根据商户ID查询商户
+	 * @param merId
+	 * @return
+	 * @throws MerchantException 
+	 */
+	public Merchant findMerchantById(Long merId) throws MerchantException {
+		try {
+			return md.findMerchantById(merId);
+		} catch (SQLException e) {
+			e.printStackTrace();
+			throw new MerchantException("系统异常，请稍后再试");
 		}
 	}
 

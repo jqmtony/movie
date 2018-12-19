@@ -36,9 +36,7 @@
 <!--/main-header-->
   <!--/banner-section-->
   <%@ include file="head.jsp"%>
-				<div class="w3_breadcrumb">
-				</div>
-			<!-- //breadcrumb -->
+	
 
 			<!--/content-inner-section-->
 				<div class="w3_content_agilleinfo_inner">

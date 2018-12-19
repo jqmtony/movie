@@ -25,90 +25,6 @@ public class UserService {
 	private UserDao ud = new UserDao();
 	public static final int UPDATE_TYPE_PWD = 1;
 	public static final int UPDATE_TYPE_REGISTER = 2;
-/*
-	*//**
-	 * 注册
-	 * 
-	 * @param user
-	 * @param userPwd2
-	 * @param ura
-	 *            是否选中了同意注册协议
-	 * @throws UserException
-	 *//*
-	public void register(Users user, String userPwd2, String ura) throws UserException {
-		String userName = user.getUserName().trim(); // 获取到输入的姓名
-		String userEmail = user.getUserEmail().trim(); // 获取到输入的Email
-		String userPwd = user.getUserPwd().trim(); // 获取到输入的密码
-		// 判断姓名是否为null
-		if (userName == null || userName.isEmpty())
-			throw new UserException("请输入姓名！");
-
-		// 判断邮箱是否为null
-		if (userEmail == null || userEmail.isEmpty())
-			throw new UserException("请输入邮箱！");
-
-		// 判断密码是否为null
-		if (userPwd == null || userPwd.isEmpty())
-			throw new UserException("请输入密码！");
-
-		// 判断确认密码是否为null
-		if (userPwd2 == null || userPwd2.trim().isEmpty())
-			throw new UserException("请输入确认密码！");
-
-		// 姓名格式校验
-		if (!userName.matches(CommonsUtils.NAME_REGX))
-			throw new UserException("姓名格式不正确！");
-
-		// 邮箱格式校验
-		if (!userEmail.matches(CommonsUtils.EMAIL_REGX))
-			throw new UserException("邮箱格式不正确！");
-
-		// 邮箱是否已被注册
-		try {
-			Users u = ud.findUserBySelectConf(new String[] { "userEmail" }, userEmail);
-			if (u != null)
-				throw new UserException("此邮箱已被注册！");
-		} catch (SQLException e) {
-			throw new UserException("系统错误，请稍后再试！");
-		}
-
-		// 密码格式校验
-		if (!userPwd.matches(CommonsUtils.PWD_REGX))
-			throw new UserException("密码格式不正确！");
-
-		// 判断密码和确认密码是否相同
-		if (!userPwd.equals(userPwd2))
-			throw new UserException("两次输入的密码不一样！");
-
-		// 密码加密
-		user.setUserPwd(CommonsUtils.parseMD5(userPwd));
-
-		// 注册
-		try {
-			JdbcUtils.beginTransaction();
-			ud.insertUser(user); // 插入记录
-			JdbcUtils.commitTransaction();
-		} catch (SQLException e) {
-			try {
-				JdbcUtils.roolbackTransaction();
-			} catch (SQLException e1) {
-				throw new UserException("系统错误，请稍后再试！");
-			}
-		}
-
-		// 发送邮件
-		// {0},你好，你正在注册【电影天堂】账号，点击链接确认注册：<a
-		// href="http://{1}mail/registerSucceed.jsp">点击这里进行激活</a>
-		String fileName = "register_user_email.properties";
-		String to = userEmail;
-		try {
-			String addIp = CommonsUtils.getAddressAndProName(this.getClass());
-			Object[] codes = { userName, addIp };
-			CommonsUtils.sendMail(this.getClass(), to, codes, fileName);
-		} catch (IOException e) {
-			throw new UserException("系统错误，系统文件已被损坏！");
-		}
-	}*/
 
 	/**
 	 * 登录
@@ -180,9 +96,11 @@ public class UserService {
 			ud.insertULR(ulr); // 添加
 			JdbcUtils.commitTransaction(); // 关闭事务
 		} catch (SQLException e) {
+			e.printStackTrace();
 			try {
 				JdbcUtils.roolbackTransaction(); // 回滚
 			} catch (SQLException e1) {
+				e1.printStackTrace();
 				throw new UserException("系统异常，请稍后再试");
 			}
 		}
@@ -190,6 +108,7 @@ public class UserService {
 		try {
 			user = ud.createUser(user);// 将对应的集合装到user对象中
 		} catch (SQLException e) {
+			e.printStackTrace();
 			throw new UserException("系统异常，请稍后再试");
 		}
 
@@ -303,6 +222,7 @@ public class UserService {
 				throw new UserException("验证码不正确");
 
 		} catch (SQLException e) {
+			e.printStackTrace();
 			throw new UserException("系统异常，请稍后再试！");
 		}
 
@@ -331,9 +251,11 @@ public class UserService {
 			}
 			JdbcUtils.commitTransaction();
 		} catch (SQLException e) {
+			e.printStackTrace();
 			try {
 				JdbcUtils.roolbackTransaction();
 			} catch (SQLException e1) {
+				e1.printStackTrace();
 				throw new UserException("系统异常，请稍后再试！");
 			}
 		}
@@ -426,6 +348,7 @@ public class UserService {
 			}
 			return text; // 返回验证码
 		} catch (SQLException e) {
+			e.printStackTrace();
 			throw new UserException("系统异常，请稍后再试！");
 		}
 	}
@@ -453,6 +376,7 @@ public class UserService {
 					throw new UserException("该邮箱已被其他用户绑定");
 			}
 		} catch (SQLException e) {
+			e.printStackTrace();
 			throw new UserException("系统异常，请稍后再试！");
 		}
 	}
@@ -480,6 +404,7 @@ public class UserService {
 					throw new UserException("该手机号已被其他用户绑定");
 			}
 		} catch (SQLException e) {
+			e.printStackTrace();
 			throw new UserException("系统异常，请稍后再试！");
 		}
 	}
@@ -518,9 +443,11 @@ public class UserService {
 
 			JdbcUtils.commitTransaction();
 		} catch (SQLException e) {
+			e.printStackTrace();
 			try {
 				JdbcUtils.roolbackTransaction();
 			} catch (SQLException e1) {
+				e1.printStackTrace();
 				throw new UserException("系统异常，请稍后再试！");
 			}
 		}
@@ -539,6 +466,7 @@ public class UserService {
 			user = ud.createUser(user);
 			return user;
 		} catch (SQLException e) {
+			e.printStackTrace();
 			throw new UserException("系统异常，请稍后再试！");
 		}
 	}
@@ -555,6 +483,7 @@ public class UserService {
 			List<Indent> indentList = ud.findIndentListByUser(loginedUser);
 			return indentList;
 		} catch (SQLException e) {
+			e.printStackTrace();
 			throw new UserException("系统异常，请稍后再试！");
 		}
 	}
@@ -577,6 +506,7 @@ public class UserService {
 			if(sub != null)
 				throw new UserException("您已经订阅过此网站了！");
 		} catch (SQLException e) {
+			e.printStackTrace();
 			throw new UserException("系统异常，请稍后再试！");
 		}
 	}
@@ -596,9 +526,11 @@ public class UserService {
 
 			JdbcUtils.commitTransaction(); // 提交事务
 		} catch (SQLException e) {
+			e.printStackTrace();
 			try {
 				JdbcUtils.roolbackTransaction(); // 事务回滚
 			} catch (SQLException e1) {
+				e1.printStackTrace();
 				throw new UserException("系统异常，请稍后再试！");
 			}
 		}
@@ -614,6 +546,7 @@ public class UserService {
 		try {
 			return ud.findMerByMerId(merId);
 		} catch (SQLException e) {
+			e.printStackTrace();
 			throw new UserException("系统异常，请稍后再试！");
 		}
 	}

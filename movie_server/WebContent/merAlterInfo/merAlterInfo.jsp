@@ -23,6 +23,7 @@
     <c:if test="${empty provincesMap }">
     	<jsp:forward page="/mer.s?method=getMapByProvinces"></jsp:forward>
     </c:if>
+   	 
     <body>
         <section class="aui-content" style="display:block" id="realBefore">
             <div style="height:20px;"></div>
@@ -129,7 +130,6 @@
         			<font>恭喜！ 您认证成功了！</font>
         		</div>
         	</div>
-        	
         </section>
         
         <!-- mask end -->
@@ -307,6 +307,16 @@
 		}
     </script>
     
-     
+    <script type="text/javascript">
+	   	function isRealName(){
+	   		if("${loginedMerchant.merIDCard}" != null && "${loginedMerchant.merIDCard}" != ""){
+	   			$("#realSucceed").css("display","block");
+	   	   		$("#realBefore").css("display","none");
+	   		}
+	   	}
+	   	isRealName();
+  	</script>
+	   	
+	   	
     </body>
 </html>

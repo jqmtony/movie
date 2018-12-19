@@ -96,6 +96,29 @@ public class UserServlet extends BaseServlet {
 		String content = request.getParameter("content");  //获取消息内容
 		String id = request.getParameter("id");  
 		id = id.substring(8);  //获取商户ID
+		Merchant mer = null;
+		try {
+			mer = us.findMerByMerId(Long.parseLong(id));
+		} catch (NumberFormatException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (UserException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		if(content != null){
+			Properties p1 = new Properties();
+			p1.load(this.getClass().getClassLoader().getResourceAsStream("user_chat_auto_revice.properties"));
+			for(Iterator<Entry<Object,Object>> it = p1.entrySet().iterator();it.hasNext();){
+				Entry<Object,Object> me = it.next();
+				String key = String.valueOf(me.getKey());
+				String value = String.valueOf(me.getValue());
+				if(content.trim().equals(key)){
+					response.getWriter().append(id+"{[code]}"+value+"{[code]}"+mer.getImgList().get(0).getImgPath());
+					return;
+				}
+			}
+		}
 		Users loginedUser = (Users)session.getAttribute("loginedUser");  //取出当前登录的用户
 
 		String fileName = request.getServletContext().getRealPath("/onlineChat/sendUserToMer.properties").replace("movie_server", "movie_client");
@@ -107,13 +130,10 @@ public class UserServlet extends BaseServlet {
 		fis.close();
 		
 		p.put("userToMer"+id, merFlag+";"+loginedUser.getUserId()+"{[code]}"+content+"{[code]}"+loginedUser.getImgList().get(0).getImgPath());
-//		System.out.println("用户向商户发送消息："+merFlag+";"+loginedUser.getUserId()+"{[code]}"+content+"{[code]}"+loginedUser.getImgList().get(0).getImgPath());
 		merFlag++;
 		p.store(fos, "");
-		
 		fos.close();
 	}
-	///////////////// wt 订阅////////////////////////////
 	/**
 	 * 订阅
 	 * 

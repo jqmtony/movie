@@ -47,6 +47,7 @@ public class MovieService {
 		try {
 			return md.findAllMovie();
 		} catch (SQLException e) {
+			e.printStackTrace();
 			throw new MovieException("系统异常，请稍后再试！");
 		}
 	}
@@ -64,6 +65,7 @@ public class MovieService {
 			movie = md.createMovie(movie); // 将对应集合添加到movie对象中
 			return movie;
 		} catch (SQLException e) {
+			e.printStackTrace();
 			throw new MovieException("系统异常，请稍后再试！");
 		}
 	}
@@ -81,6 +83,7 @@ public class MovieService {
 			teleplay = md.createTeleplay(teleplay); // 将对应集合添加到电视剧对象中
 			return teleplay;
 		} catch (SQLException e) {
+			e.printStackTrace();
 			throw new MovieException("系统异常，请稍后再试！");
 		}
 	}
@@ -113,6 +116,7 @@ public class MovieService {
 			if (!"".equals(sb.toString()) || !sb.toString().isEmpty())
 				throw new MovieException("你要发送的评论中包含敏感词汇，不能发表。敏感词汇：" + sb.toString());
 		} catch (IOException e) {
+			e.printStackTrace();
 			throw new MovieException("系统异常，本地文件被损坏！");
 		}
 
@@ -128,6 +132,7 @@ public class MovieService {
 			try {
 				JdbcUtils.roolbackTransaction();
 			} catch (SQLException e1) {
+				e.printStackTrace();
 				throw new MovieException("系统异常，请稍后再试！");
 			}
 		}
@@ -161,6 +166,7 @@ public class MovieService {
 			if (!"".equals(sb.toString()) || !sb.toString().isEmpty())
 				throw new MovieException("你要发送的回复中包含敏感词汇，不能发表。敏感词汇：" + sb.toString());
 		} catch (IOException e) {
+			e.printStackTrace();
 			throw new MovieException("系统异常，本地文件被损坏！");
 		}
 
@@ -170,6 +176,7 @@ public class MovieService {
 			form.setReplyUserId(user.getUserId()); // 设置userId
 			form.setReplyCreateTime(new Timestamp(new Date().getTime())); // 设置回复时间
 		} catch (SQLException e) {
+			e.printStackTrace();
 			throw new MovieException("系统异常，本地文件被损坏！");
 		}
 
@@ -179,9 +186,11 @@ public class MovieService {
 			md.insertReply(form);
 			JdbcUtils.commitTransaction();
 		} catch (SQLException e) {
+			e.printStackTrace();
 			try {
 				JdbcUtils.roolbackTransaction();
 			} catch (SQLException e1) {
+				e1.printStackTrace();
 				throw new MovieException("系统异常，本地文件被损坏！");
 			}
 		}
@@ -215,6 +224,7 @@ public class MovieService {
 			if (!"".equals(sb.toString()) || !sb.toString().isEmpty())
 				throw new MovieException("你要发送的回复中包含敏感词汇，不能发表。敏感词汇：" + sb.toString());
 		} catch (IOException e) {
+			e.printStackTrace();
 			throw new MovieException("系统异常，请稍后再试！");
 		}
 
@@ -230,9 +240,11 @@ public class MovieService {
 			md.insertReply(form);
 			JdbcUtils.commitTransaction();
 		} catch (SQLException e) {
+			e.printStackTrace();
 			try {
 				JdbcUtils.roolbackTransaction();
 			} catch (SQLException e1) {
+				e1.printStackTrace();
 				throw new MovieException("系统异常，请稍后再试！");
 			}
 		}
@@ -252,9 +264,11 @@ public class MovieService {
 			md.updateMovieGradeNum(movie); // 更新评分数
 			JdbcUtils.commitTransaction();
 		} catch (SQLException e) {
+			e.printStackTrace();
 			try {
 				JdbcUtils.roolbackTransaction();
 			} catch (SQLException e1) {
+				e1.printStackTrace();
 				throw new MovieException("系统异常，请稍后再试！");
 			}
 		}
@@ -272,6 +286,7 @@ public class MovieService {
 		try {
 			return md.findMerchantById(merId);
 		} catch (SQLException e) {
+			e.printStackTrace();
 			throw new MovieException("系统异常，请稍后再试！");
 		}
 	}
@@ -337,9 +352,9 @@ public class MovieService {
 	 * @return
 	 * @throws MovieException
 	 */
-	public List<Ticket> getShowChoseList(Long merId, String date, String theater) throws MovieException {
+	public List<Ticket> getShowChoseList(Long merId, String date, String theater,Long movieId) throws MovieException {
 		try {
-			List<Ticket> ticketList1 = md.getTicketListByMerIdAndTheater(merId, theater); // 通过商户和厅室查找
+			List<Ticket> ticketList1 = md.getTicketListByMerIdAndTheater(merId, theater,movieId); // 通过商户和厅室查找
 			List<Ticket> ticketList = new ArrayList<Ticket>();
 			for (Ticket t : ticketList1) {
 				if (t.getTicketStartTime().toString().contains(date))
@@ -347,6 +362,7 @@ public class MovieService {
 			}
 			return ticketList;
 		} catch (SQLException e) {
+			e.printStackTrace();
 			throw new MovieException("系统异常，请稍后再试");
 		}
 	}
@@ -383,9 +399,11 @@ public class MovieService {
 			}
 			JdbcUtils.commitTransaction();
 		} catch (SQLException e) {
+			e.printStackTrace();
 			try {
 				JdbcUtils.roolbackTransaction();
 			} catch (SQLException e1) {
+				e1.printStackTrace();
 				throw new MovieException("系统异常，请稍后再试");
 			}
 		}
@@ -405,9 +423,11 @@ public class MovieService {
 			md.setTicketStatus(t.getTicketId(), status);
 			JdbcUtils.commitTransaction();
 		} catch (SQLException e) {
+			e.printStackTrace();
 			try {
 				JdbcUtils.roolbackTransaction();
 			} catch (SQLException e1) {
+				e1.printStackTrace();
 				throw new MovieException("系统异常，请稍后再试");
 			}
 		}
@@ -425,9 +445,11 @@ public class MovieService {
 			md.addVisitCount(id);
 			JdbcUtils.commitTransaction();
 		} catch (SQLException e) {
+			e.printStackTrace();
 			try {
 				JdbcUtils.roolbackTransaction();
 			} catch (SQLException e1) {
+				e1.printStackTrace();
 				throw new MovieException("系统异常，请稍后再试");
 			}
 		}
@@ -486,9 +508,11 @@ public class MovieService {
 			md.setTicketBuyBy(t.getTicketId(), loginedUser.getUserId());
 			JdbcUtils.commitTransaction();
 		} catch (SQLException e) {
+			e.printStackTrace();
 			try {
 				JdbcUtils.roolbackTransaction();
 			} catch (SQLException e1) {
+				e1.printStackTrace();
 				throw new MovieException("系统异常，请稍后再试");
 			}
 		}
@@ -507,9 +531,11 @@ public class MovieService {
 			md.setIndentStatus(indentId, type);
 			JdbcUtils.commitTransaction();
 		} catch (SQLException e) {
+			e.printStackTrace();
 			try {
 				JdbcUtils.roolbackTransaction();
 			} catch (SQLException e1) {
+				e1.printStackTrace();
 				throw new MovieException("系统异常，请稍后再试");
 			}
 		}
@@ -533,6 +559,28 @@ public class MovieService {
 			throw new MovieException("系统异常，请稍后再试");
 		}
 		return pb;
+	}
+
+	/**
+	 * 添加积分
+	 * @param t
+	 * @param loginedUser
+	 * @throws MovieException 
+	 */
+	public void setIntegralCount(Ticket t, Users loginedUser) throws MovieException {
+		try {
+			JdbcUtils.beginTransaction();
+			md.setIntegralCount(t,loginedUser);
+			JdbcUtils.commitTransaction();
+		} catch (SQLException e) {
+			e.printStackTrace();
+			try {
+				JdbcUtils.roolbackTransaction();
+			} catch (SQLException e1) {
+				e1.printStackTrace();
+				throw new MovieException("系统异常，请稍后再试");
+			}
+		}
 	}
 
 

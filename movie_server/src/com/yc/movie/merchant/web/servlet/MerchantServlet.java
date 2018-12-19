@@ -101,6 +101,14 @@ public class MerchantServlet extends BaseServlet {
 	 * @throws IOException
 	 */
 	public void revicedContent(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		List<Users> userList = null;
+		try {
+			userList = ms.findAllUser();
+		} catch (MerchantException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		session.setAttribute("userMerList", userList);
 		Merchant loginedMerchant = (Merchant)session.getAttribute("loginedMerchant");  //取出当前登录的用户
 		String str = "userToMer"+loginedMerchant.getMerId();  // userToMer2
 		String fileName = request.getServletContext().getRealPath("/onlineChat/sendUserToMer.properties").replace("movie_server", "movie_client");
@@ -190,6 +198,17 @@ public class MerchantServlet extends BaseServlet {
 	public String addMovie(HttpServletRequest request, HttpServletResponse response)throws ServletException, IOException {
 		//movieMerId  movieName movieIntegralNum  movieDescribe movieTimeLong moviePrevue moviePrice
 		Movies form = CommonsUtils.toBean(request, Movies.class);
+		
+		//给电影名加《》号
+		String name = form.getMovieName();
+		if(!name.startsWith("《")){
+			name = "《" + name;
+		}
+		if(!name.endsWith("》")){
+			name = name + "》";
+		}
+		form.setMovieName(name);
+		
 		String movieMerId = form.getMovieMerId();  //获取到本次的商户ID
 		Merchant loginedMerchant = (Merchant)session.getAttribute("loginedMerchant");  //得到当前登录商户
 		String oldMovieMerId = null;
@@ -337,6 +356,8 @@ public class MerchantServlet extends BaseServlet {
 			String infoID = ms.realName(form,loginedMerchant,telCode,inVerify);
 //			form.setMerId(loginedMerchant.getMerId());
 //			request.getServletContext().setAttribute(infoID, form);  //将要审核的信息存在域中
+			loginedMerchant = ms.findMerchantById(loginedMerchant.getMerId());
+			session.setAttribute("loginedMerchant", loginedMerchant);
 			response.getWriter().append("yes");
 		} catch (MerchantException e) {
 			response.getWriter().append(e.getMessage());
@@ -510,12 +531,13 @@ public class MerchantServlet extends BaseServlet {
 	public void login(HttpServletRequest request, HttpServletResponse response)throws ServletException, IOException {
 		//封装表单数据  merEmail  merPwd
 		Merchant form = CommonsUtils.toBean(request, Merchant.class);
-		form.setMerIpAddr(request.getRemoteAddr());  //设置当前登录IP
+		
 		String isRemUser = request.getParameter("isRemUser");  //true/false
 		Verification verify = (Verification)session.getAttribute("session_verify");  //得到验证码对象
 		if(verify != null)
 			verify.setInCode(request.getParameter("verify")); //如果有验证码
 		try {
+			form.setMerIpAddr(request.getRemoteAddr());  //设置当前登录IP
 			Merchant me = ms.login(form,verify); 
 //			System.out.println(me.getImgList().size());
 			session.setAttribute("loginedMerchant", me);

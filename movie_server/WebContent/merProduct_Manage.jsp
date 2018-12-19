@@ -67,6 +67,12 @@
 	}
 </style>
 <body id="situation">
+ <c:if test="${loginedMerchant.merStatus eq '0' }">
+	<script type="text/javascript">
+		alert("你还没有认证，无法添加电影！");
+		location.href="<c:url value='/merAlterInfo/merAlterInfo.jsp' />";
+	</script>
+</c:if>
 <c:if test="${empty pageBean_movie}">
 	<jsp:forward page="/mer.s?method=findMovieByMer"></jsp:forward>
 </c:if>

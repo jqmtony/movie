@@ -14,6 +14,7 @@ import com.yc.movie.bean.Classifys;
 import com.yc.movie.bean.Comment;
 import com.yc.movie.bean.Images;
 import com.yc.movie.bean.Indent;
+import com.yc.movie.bean.Integral;
 import com.yc.movie.bean.Merchant;
 import com.yc.movie.bean.Movies;
 import com.yc.movie.bean.PageBean;
@@ -439,10 +440,30 @@ public class MovieDao {
 	 * @return
 	 * @throws SQLException
 	 */
-	public List<Ticket> getTicketListByMerIdAndTheater(Long merId, String theater) throws SQLException {
-		String sql = "select * from ticket where ticketMerId=? and ticketMovieTheater=?";
-		Object[] params = { merId, theater };
+	public List<Ticket> getTicketListByMerIdAndTheater(Long merId, String theater,Long movieId) throws SQLException {
+		String sql = "select * from ticket where ticketMerId=? and ticketMovieTheater=? and ticketMovieId=?";
+		Object[] params = { merId, theater ,movieId};
 		List<Ticket> list = qr.query(sql, new BeanListHandler<Ticket>(Ticket.class), params);
+		list = createTicketList(list);
+		return list;
+	}
+
+	/**
+	 * 创建电影票集合
+	 * @param list
+	 * @return
+	 * @throws SQLException 
+	 */
+	private List<Ticket> createTicketList(List<Ticket> list) throws SQLException {
+		for(Ticket t : list){
+			//添加商户对象
+			String sql = "select * from merchant where merId=?";
+			List<Merchant> merList = qr.query(sql, new BeanListHandler<Merchant>(Merchant.class),t.getTicketMerId());
+			if(merList.size() > 0){
+				Merchant mer = merList.get(0);
+				t.setMerchant(mer);
+			}
+		}
 		return list;
 	}
 
@@ -637,6 +658,31 @@ public class MovieDao {
 			movie = createMovie(movie);
 		}
 		return movieList;
+	}
+
+	/**
+	 * 添加积分
+	 * @param t
+	 * @param loginedUser
+	 * @throws SQLException 
+	 */
+	public void setIntegralCount(Ticket t, Users loginedUser) throws SQLException {
+		String sql = "select * from movies where movieId=?";
+		List<Movies> movieList = qr.query(sql, new BeanListHandler<Movies>(Movies.class),t.getTicketMovieId());
+		if(movieList.size() > 0){
+			Movies movie = movieList.get(0);
+			sql = "select * from integral where integralUserId=?";
+			List<Integral> integralList = qr.query(sql, new BeanListHandler<Integral>(Integral.class),loginedUser.getUserId());
+			if(integralList.size() > 0){
+				Integral in = integralList.get(0);
+				Long oldNum = in.getIntegralCount();  //用户本身有的积分
+				Long num = movie.getMovieIntegralNum() + oldNum; //此部电影对应的积分
+				sql = "update integral set integralCount=? where integralUserId=?";
+				Object[] params = {num,loginedUser.getUserId()};
+				qr.update(sql, params);
+			}
+			
+		}
 	}
 
 }

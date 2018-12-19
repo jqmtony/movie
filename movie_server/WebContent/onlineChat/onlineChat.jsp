@@ -11,7 +11,7 @@
 <link rel="stylesheet" type="text/css" href="css/qq.css"/>
 
 </head>
-<c:if test="${empty userMerList}">
+<c:if test="${userMerList eq null}">
 	<jsp:forward page="/mer.s?method=findAllUser" />
 </c:if>
 <body onload="refresh()">
@@ -128,7 +128,7 @@ function refresh(){
 			userId = "newsList" + userId;
 			var content = dataArr[1];
 			var path = dataArr[2];
-			alert(path);
+			
 			var str = '<li name='+userId+'>'+
 			'<div class="nesHead"><img src="${pageContext.request.contextPath}'+path+'" /></div>'+
 			'<div class="news"><img class="jiao" src="img/jiao.jpg">'+content+'</div>'+
